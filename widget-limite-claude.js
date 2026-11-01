@@ -35,27 +35,45 @@ w.setPadding(14, 14, 14, 14);
 const t = w.addText("Claude · " + d.label);
 t.font = Font.semiboldSystemFont(13);
 t.textColor = Color.white();
-w.addSpacer(6);
+w.addSpacer(4);
 
-const p = w.addText(d.pct + "% utilisé");
-p.font = Font.boldSystemFont(22);
-p.textColor = d.pct >= 90 ? new Color("#ff453a") : d.pct >= 70 ? new Color("#ff9f0a") : new Color("#30d158");
+// Pourcentage précis, couleur unique
+const p = w.addText(d.pct + "%");
+p.font = Font.boldSystemFont(34);
+p.textColor = Color.white();
+const sub = w.addText((100 - d.pct) + "% restant");
+sub.font = Font.systemFont(12);
+sub.textColor = new Color("#8e8e93");
 w.addSpacer(8);
 
-// Barre de progression
-const W = 130, H = 10;
+// Barre avec graduations tous les 10 %
+const W = 130, H = 12;
 const ctx = new DrawContext();
 ctx.size = new Size(W, H);
 ctx.opaque = false;
+const rr = (wd) => { const r = new Path(); r.addRoundedRect(new Rect(0, 0, wd, H), 4, 4); return r; };
 ctx.setFillColor(new Color("#3a3a3c"));
-ctx.fillPath((() => { const r = new Path(); r.addRoundedRect(new Rect(0, 0, W, H), 5, 5); return r; })());
-ctx.setFillColor(p.textColor);
-ctx.fillPath((() => { const r = new Path(); r.addRoundedRect(new Rect(0, 0, Math.max(H, W * d.pct / 100), H), 5, 5); return r; })());
+ctx.fillPath(rr(W));
+ctx.setFillColor(new Color("#0a84ff"));
+ctx.fillPath(rr(Math.max(0, W * d.pct / 100)));
+ctx.setFillColor(new Color("#1c1c1e"));
+for (let k = 1; k < 10; k++) ctx.fillRect(new Rect(W * k / 10 - 0.5, 0, 1, H));
 const img = w.addImage(ctx.getImage());
 img.imageSize = new Size(W, H);
 
+// Temps restant avant reset
+let txt = "Reset " + d.reset;
+const m = /^(\d{1,2}):(\d{2})$/.exec(d.reset);
+if (m) {
+  const now = new Date();
+  const e = new Date(now);
+  e.setHours(+m[1], +m[2], 0, 0);
+  if (e <= now) e.setDate(e.getDate() + 1);
+  const mins = Math.round((e - now) / 60000);
+  txt += " · dans " + Math.floor(mins / 60) + "h" + String(mins % 60).padStart(2, "0");
+}
 w.addSpacer(6);
-const r = w.addText("Reset : " + d.reset);
+const r = w.addText(txt);
 r.font = Font.systemFont(11);
 r.textColor = new Color("#8e8e93");
 
