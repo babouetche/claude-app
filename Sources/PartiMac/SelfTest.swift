@@ -72,6 +72,7 @@ enum SelfTest {
                 doc.score = score
                 let wc = ScoreWindowController(document: doc)
                 if let view = wc.window?.contentView {
+                    wc.window?.setContentSize(NSSize(width: 1180, height: 860))
                     view.layoutSubtreeIfNeeded()
                     wc.scoreView.updateSize()
                     if let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) {

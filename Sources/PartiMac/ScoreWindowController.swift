@@ -171,6 +171,10 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         NSLayoutConstraint.activate([
             top.topAnchor.constraint(equalTo: content.topAnchor),
             top.heightAnchor.constraint(equalToConstant: 44),
+            // Taille minimale explicite : sans elle, la mise en page automatique peut écraser la fenêtre.
+            content.heightAnchor.constraint(greaterThanOrEqualToConstant: 660),
+            content.widthAnchor.constraint(greaterThanOrEqualToConstant: 760),
+            palette.heightAnchor.constraint(greaterThanOrEqualToConstant: 590),
             topSep.heightAnchor.constraint(equalToConstant: 1),
             bottomSep.heightAnchor.constraint(equalToConstant: 1),
             top.leadingAnchor.constraint(equalTo: content.leadingAnchor),
