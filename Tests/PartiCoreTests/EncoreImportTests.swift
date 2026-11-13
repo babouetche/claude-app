@@ -50,7 +50,9 @@ final class EncoreImportTests: XCTestCase {
         let evs = score.events(rh, measure: 0)
         XCTAssertEqual(evs.first?.notes.first?.pitch, Pitch(step: 5, octave: 4))
         XCTAssertEqual(evs.first?.duration, Duration(.quarter))
-        XCTAssertEqual(score.timedEvents(rh, measure: 0).reduce(Fraction.zero) { $0 + $1.event.length(measureLength: Fraction(1)) }, Fraction(1))
+        // Une seule noire dans la 1re mesure : c'est une levée (mesure incomplète).
+        XCTAssertEqual(score.measureLength(0), Fraction(1, 4))
+        XCTAssertEqual(score.timedEvents(rh, measure: 0).reduce(Fraction.zero) { $0 + $1.event.length(measureLength: score.measureLength(0)) }, Fraction(1, 4))
         XCTAssertEqual(score.annotations.first?.text, "Am")
         XCTAssertEqual(score.annotations.first?.above, true)
         XCTAssertEqual(report.notes, 1)
