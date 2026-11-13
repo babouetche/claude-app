@@ -4,13 +4,16 @@ import PartiCore
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
+        LaunchLog.write("willFinishLaunching")
         _ = NSDocumentController.shared
         Fonts.register()
         NSApp.mainMenu = MainMenu.build()
+        LaunchLog.write("menus prêts")
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.activate(ignoringOtherApps: true)
+        LaunchLog.write("didFinishLaunching — fenêtres : \(NSApp.windows.count)")
     }
 
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { true }

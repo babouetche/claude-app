@@ -6,6 +6,7 @@ if let i = args.firstIndex(of: "--selftest") {
     exit(SelfTest.run(outputDir: dir))
 }
 
+LaunchLog.start()
 let app = NSApplication.shared
 let delegate = AppDelegate()
 app.delegate = delegate
