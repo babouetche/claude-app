@@ -1,4 +1,6 @@
-# PARITY.md — Matrice de parité PartiMac ↔ Encore 5
+# PARITY.md — Matrice de parité « Partitions de Titi » (PartiMac) ↔ Encore 5
+
+**État : jalon 1 terminé (13/11/2026).**
 
 Statuts : `à faire` · `en cours` · `fait` · `hors périmètre` (avec raison).
 Colonne **J** = jalon prévu (voir PLAN.md).
@@ -11,20 +13,20 @@ Colonne **J** = jalon prévu (voir PLAN.md).
 
 | # | Fonction Encore 5 | J | Statut |
 |---|---|---|---|
-| S1 | Palette Notes : choix durée (ronde double → 128e) puis clic sur la portée (outil crayon) | 1 | à faire |
-| S2 | Hauteur choisie par position verticale du clic, altération par la palette | 1 | à faire |
-| S3 | Clavier d'ordinateur : touches 0–8 = durées (0 = carrée, 1 = ronde … 8 = 128e) | 1 | à faire |
-| S4 | Touche R : bascule note ↔ silence pour la durée choisie | 1 | à faire |
-| S5 | Saisie des hauteurs au clavier (lettres A–G / Do–Si), ↑↓ demi-ton, ⌥↑↓ octave | 1 | à faire |
-| S6 | Point (.), double point, liaison de prolongation, altérations au clavier (+ / - / =) | 1 | à faire |
-| S7 | Changer la durée d'une sélection (Ctrl/⌘+D dans Encore) | 2 | à faire |
+| S1 | Palette Notes : choix durée (ronde double → 128e) puis clic sur la portée (outil crayon) | 1 | fait |
+| S2 | Hauteur choisie par position verticale du clic, altération par la palette | 1 | fait |
+| S3 | Clavier d'ordinateur : touches 0–8 = durées (0 = carrée, 1 = ronde … 8 = 128e) | 1 | fait |
+| S4 | Touche R : bascule note ↔ silence pour la durée choisie | 1 | fait |
+| S5 | Saisie des hauteurs au clavier (lettres A–G / Do–Si), ↑↓ demi-ton, ⌥↑↓ octave | 1 | fait |
+| S6 | Point (.), double point, liaison de prolongation, altérations au clavier (+ / - / =) | 1 | fait |
+| S7 | Changer la durée d'une sélection (Ctrl/⌘+D dans Encore) | 2 | fait |
 | S8 | Clavier MIDI — saisie pas à pas (durée sur l'ordi, hauteur au clavier MIDI, accords) | 2 | à faire |
 | S9 | Clavier MIDI — enregistrement temps réel avec métronome et quantification | 4 | à faire |
 | S10 | « Guess Durations » / requantification après enregistrement temps réel | 4 | à faire |
-| S11 | Palettes d'outils flottantes (Notes, Clés/armures, Nuances, Articulations, Liaisons, Symboles, Texte, Accords, Graphismes) | 1–3 | à faire |
-| S12 | Outil sélection (flèche), sélection rectangle, sélection de mesures entières | 1 | à faire |
+| S11 | Palettes d'outils flottantes (Notes, Clés/armures, Nuances, Articulations, Liaisons, Symboles, Texte, Accords, Graphismes) | 1–3 | en cours |
+| S12 | Outil sélection (flèche), sélection rectangle, sélection de mesures entières | 1 | en cours |
 | S13 | Édition vélocité MIDI d'une note (raccourci vélocité) | 4 | à faire |
-| S14 | Accord : saisir plusieurs notes à la même position (clic superposé / « Make Chord ») | 2 | à faire |
+| S14 | Accord : saisir plusieurs notes à la même position (clic superposé / « Make Chord ») | 2 | fait |
 
 ## 2. Notation
 
@@ -32,15 +34,15 @@ Colonne **J** = jalon prévu (voir PLAN.md).
 |---|---|---|---|
 | N1 | Plusieurs portées (jusqu'à 64 dans Encore), accolades et crochets | 2 | à faire |
 | N2 | Voix multiples par portée (jusqu'à 8 dans Encore), hampes auto haut/bas | 2 | à faire |
-| N3 | Grand-portée piano (2 portées + accolade) | 1 | à faire |
-| N4 | Clés : sol, fa, ut 3e/4e, sol octaviée, percussion, TAB ; changement de clé en cours de partition | 1 (sol/fa) · 2 | à faire |
-| N5 | Armures (toutes), changement d'armure, annulation par bécarres | 1 · 2 | à faire |
-| N6 | Métriques (simples, composées, C, C barré, irrégulières), changement en cours | 1 · 2 | à faire |
-| N7 | Altérations, altérations de courtoisie, enharmonie (raccourci Encore) | 1 · 2 | à faire |
-| N8 | Points simples/doubles | 1 | à faire |
-| N9 | Silences, silences de mesure entière, silences multi-mesures (parties) | 1 · 4 | à faire |
-| N10 | Ligatures automatiques selon la métrique, ligature/déligature manuelle | 1 · 2 | à faire |
-| N11 | Liaisons de prolongation | 1 | à faire |
+| N3 | Grand-portée piano (2 portées + accolade) | 1 | fait |
+| N4 | Clés : sol, fa, ut 3e/4e, sol octaviée, percussion, TAB ; changement de clé en cours de partition | 1 (sol/fa) · 2 | en cours |
+| N5 | Armures (toutes), changement d'armure, annulation par bécarres | 1 · 2 | en cours |
+| N6 | Métriques (simples, composées, C, C barré, irrégulières), changement en cours | 1 · 2 | en cours |
+| N7 | Altérations, altérations de courtoisie, enharmonie (raccourci Encore) | 1 · 2 | en cours |
+| N8 | Points simples/doubles | 1 | fait |
+| N9 | Silences, silences de mesure entière, silences multi-mesures (parties) | 1 · 4 | en cours |
+| N10 | Ligatures automatiques selon la métrique, ligature/déligature manuelle | 1 · 2 | en cours |
+| N11 | Liaisons de prolongation | 1 | fait |
 | N12 | Liaisons d'expression (phrasé), forme ajustable à la souris | 2 | à faire |
 | N13 | Triolets et n-olets (n:m quelconque) | 2 | à faire |
 | N14 | Notes d'ornement / appoggiatures / acciaccatures (« Make Grace/Cue ») | 2 | à faire |
@@ -61,7 +63,7 @@ Colonne **J** = jalon prévu (voir PLAN.md).
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| T1 | Titre, sous-titre, compositeur, arrangeur, copyright | 1 (titre/compositeur) · 3 | à faire |
+| T1 | Titre, sous-titre, compositeur, arrangeur, copyright | 1 (titre/compositeur) · 3 | en cours |
 | T2 | Paroles syllabe par syllabe (Tab/espace pour avancer, tiret, mélisme) | 3 | à faire |
 | T3 | Paroles multi-couplets (plusieurs lignes) | 3 | à faire |
 | T4 | Symboles d'accords (C, Am7, F/A…) avec transposition automatique | 3 | à faire |
@@ -74,23 +76,23 @@ Colonne **J** = jalon prévu (voir PLAN.md).
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| L1 | Vue page (WYSIWYG) éditable directement | 1 | à faire |
-| L2 | Espacement automatique des notes (proportionnel) | 1 | à faire |
+| L1 | Vue page (WYSIWYG) éditable directement | 1 | fait |
+| L2 | Espacement automatique des notes (proportionnel) | 1 | fait |
 | L3 | Ajustement manuel : déplacer notes/symboles, largeur de mesure à la souris | 3 | à faire |
 | L4 | Mesures par système, systèmes par page (« Fit » / redistribuer) | 3 | à faire |
 | L5 | Sauts de système et de page forcés | 3 | à faire |
-| L6 | Marges, format papier (A4, Letter…), orientation | 1 (format) · 3 | à faire |
+| L6 | Marges, format papier (A4, Letter…), orientation | 1 (format) · 3 | en cours |
 | L7 | Taille de portée globale et par portée | 3 | à faire |
 | L8 | Pages types (master pages) : première page / suivantes | 3 | à faire |
 | L9 | Masquer une portée vide, nommer les portées (nom long / abrégé) | 3 | à faire |
-| L10 | Numéros de mesure (tous / chaque système / tous les N) | 2 | à faire |
+| L10 | Numéros de mesure (tous / chaque système / tous les N) | 2 | en cours |
 | L11 | Vue défilante continue (en plus de la vue page) | 5 | à faire |
 
 ## 5. Instruments
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| I1 | Assistant nouvelle partition (piano, voix+piano, quatuor, big band, vierge…) | 1 (piano) · 2 | à faire |
+| I1 | Assistant nouvelle partition (piano, voix+piano, quatuor, big band, vierge…) | 1 (piano) · 2 | en cours |
 | I2 | Instrument par portée (programme GM), ajout/suppression/réordonnancement de portées | 2 | à faire |
 | I3 | Instruments transpositeurs (Si♭, Mi♭, Fa…) — affichage concert / transposé | 4 | à faire |
 | I4 | Transposition de la partition ou d'une sélection (intervalle, armure) | 2 | à faire |
@@ -103,8 +105,8 @@ Encore 5 n'avait rien de spécifique pour l'accordéon : ces points vont **au-de
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| A1 | Modèle « Accordéon » dans l'assistant : main droite (sol) + main gauche (fa), accolade, son GM accordéon | 1 | à faire |
-| A2 | Choix du son : accordéon, accordéon tango (bandonéon), effet musette (voix doublées légèrement désaccordées) | 1 (accordéon) · 4 | à faire |
+| A1 | Modèle « Accordéon » dans l'assistant : main droite (sol) + main gauche (fa), accolade, son GM accordéon | 1 | fait |
+| A2 | Choix du son : accordéon, accordéon tango (bandonéon), effet musette (voix doublées légèrement désaccordées) | 1 (accordéon) · 4 | en cours |
 | A3 | Symboles de soufflet : tirer / pousser, changement de soufflet (glyphes SMuFL de Bravura) | 2 | à faire |
 | A4 | Symboles de registres (cercles à points, glyphes SMuFL) + nom du registre (Musette, Bandonéon, Clarinette…) | 2 | à faire |
 | A5 | Basses Stradella : notation basse fondamentale / contrebasse et accords M, m, 7, d (dim) | 3 | à faire |
@@ -117,10 +119,10 @@ Encore 5 n'avait rien de spécifique pour l'accordéon : ces points vont **au-de
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| P1 | Lecture audio intégrée avec SoundFont General MIDI embarqué | 1 | à faire |
-| P2 | Lecture depuis la sélection / depuis le début, barre espace = play/stop | 1 | à faire |
-| P3 | Curseur de lecture qui suit la partition (défilement auto) | 1 | à faire |
-| P4 | Tempo global et changements de tempo | 1 · 2 | à faire |
+| P1 | Lecture audio intégrée avec SoundFont General MIDI embarqué | 1 | fait |
+| P2 | Lecture depuis la sélection / depuis le début, barre espace = play/stop | 1 | fait |
+| P3 | Curseur de lecture qui suit la partition (défilement auto) | 1 | fait |
+| P4 | Tempo global et changements de tempo | 1 · 2 | en cours |
 | P5 | Métronome (clic) pendant lecture et enregistrement | 4 | à faire |
 | P6 | Mixeur par portée : volume, pan, instrument, muet/solo | 4 | à faire |
 | P7 | Canal MIDI par voix, sortie vers synthé MIDI externe (CoreMIDI) | 4 | à faire |
@@ -131,27 +133,27 @@ Encore 5 n'avait rien de spécifique pour l'accordéon : ces points vont **au-de
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| F1 | Format natif (.partimac), enregistrement, ouverture, documents récents | 1 | à faire |
-| F2 | Import MIDI (type 0/1) avec quantification et séparation des mains | 1 (base) · 4 | à faire |
-| F3 | Export MIDI (type 1, une piste par portée) | 1 | à faire |
+| F1 | Format natif (.partimac), enregistrement, ouverture, documents récents | 1 | fait |
+| F2 | Import MIDI (type 0/1) avec quantification et séparation des mains | 1 (base) · 4 | en cours |
+| F3 | Export MIDI (type 1, une piste par portée) | 1 | fait |
 | F4 | Import MusicXML (partwise/timewise, .xml/.musicxml/.mxl) | 4 | à faire |
 | F5 | Export MusicXML 4.0 (y compris paroles et accords, absents d'Encore) | 4 | à faire |
 | F6 | Import .enc Encore | 6 | à faire — format propriétaire non documenté : « au mieux » ; repli documenté par MusicXML/MIDI |
-| F7 | Export PDF | 1 | à faire |
+| F7 | Export PDF | 1 | fait |
 | F8 | Export images PNG/SVG (page ou sélection) | 3 | à faire |
-| F9 | Impression (dialogue macOS) | 3 | à faire |
-| F10 | Enregistrement automatique + récupération après plantage | 1 | à faire |
+| F9 | Impression (dialogue macOS) | 3 | fait |
+| F10 | Enregistrement automatique + récupération après plantage | 1 | fait |
 | F11 | Export audio (WAV/AIFF/M4A) | 5 | à faire (bonus, pas dans Encore 5) |
 
 ## 8. Édition
 
 | # | Fonction | J | Statut |
 |---|---|---|---|
-| E1 | Annuler / refaire illimité | 1 | à faire |
+| E1 | Annuler / refaire illimité | 1 | fait |
 | E2 | Copier / couper / coller / supprimer (notes, mesures, portées) | 2 | à faire |
 | E3 | Glisser-déposer de notes (hauteur) et de sélections | 2 | à faire |
-| E4 | Insérer / supprimer des mesures | 1 | à faire |
-| E5 | Raccourcis clavier proches d'Encore (tableau dans l'app, menu Aide) | 1 · 5 | à faire |
+| E4 | Insérer / supprimer des mesures | 1 | fait |
+| E5 | Raccourcis clavier proches d'Encore (tableau dans l'app, menu Aide) | 1 · 5 | en cours |
 | E6 | Rechercher / sélectionner par critère (toutes les notes de la voix 2…) | 5 | à faire |
 | E7 | Palette de commandes ⌘K (en plus d'Encore) | 5 | à faire |
 

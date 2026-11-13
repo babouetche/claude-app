@@ -232,8 +232,10 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     private func paletteButton(symbol: String?, glyph: UInt32?, tip: String, tag: Int, action: Selector) -> NSButton {
         let b = NSButton(title: "", target: self, action: action)
         b.setButtonType(.pushOnPushOff)
-        b.bezelStyle = .regularSquare
-        b.isBordered = true
+        b.isBordered = false
+        b.wantsLayer = true
+        b.layer?.cornerRadius = 8
+        b.layer?.borderWidth = 1
         b.tag = tag
         b.toolTip = tip
         b.refusesFirstResponder = true
@@ -268,6 +270,11 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
                 .font: Fonts.nsMusic(24), .foregroundColor: NSColor.labelColor, .paragraphStyle: para,
                 .baselineOffset: state.restMode ? 0 : -6,
             ])
+        }
+        // Fond des boutons de la palette : bleu pâle si actif.
+        for b in paletteButtons {
+            b.layer?.backgroundColor = (b.state == .on ? NSColor.controlAccentColor.withAlphaComponent(0.28) : NSColor.controlBackgroundColor).cgColor
+            b.layer?.borderColor = (b.state == .on ? NSColor.controlAccentColor : NSColor.separatorColor).cgColor
         }
         let tempo = scoreDocument.score.tempo(at: 0)
         tempoField.doubleValue = tempo

@@ -329,7 +329,7 @@ public struct LayoutEngine {
             let yTop = top + staffOffsets[idx.first!]
             let yBot = top + staffOffsets[idx.last!] + 4 * sp
             let h = yBot - yTop
-            items.append(.glyph(SMuFL.brace, LPoint(x0 - 1.3 * sp, yBot), size: fs, scaleY: h / fs, owner: nil))
+            items.append(.glyph(SMuFL.brace, LPoint(x0 - 0.5 * sp - min(2.2, h / fs * 0.45) * 1.3 * sp, yBot), size: fs, scaleY: h / fs, owner: nil))
         }
         // Numéro de mesure en début de système.
         if first > 0 {

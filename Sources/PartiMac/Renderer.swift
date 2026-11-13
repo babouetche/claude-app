@@ -94,7 +94,8 @@ struct Renderer {
         ctx.textPosition = .zero
         ctx.setFillColor(color.cgColor)
         ctx.translateBy(x: CGFloat(p.x), y: CGFloat(p.y))
-        ctx.scaleBy(x: 1, y: -scaleY)
+        // Accolade étirée : on l'élargit un peu aussi pour garder ses proportions.
+        ctx.scaleBy(x: scaleY == 1 ? 1 : min(2.2, scaleY * 0.45), y: -scaleY)
         var pos = CGPoint.zero
         CTFontDrawGlyphs(font, &glyph, &pos, 1, ctx)
         ctx.restoreGState()
