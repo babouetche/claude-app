@@ -89,6 +89,9 @@ struct Renderer {
         var glyph = CGGlyph()
         guard CTFontGetGlyphsForCharacters(font, &ch, &glyph, 1) else { return }
         ctx.saveGState()
+        // AppKit modifie la matrice de texte en dessinant les titres : on la remet à zéro à chaque glyphe.
+        ctx.textMatrix = .identity
+        ctx.textPosition = .zero
         ctx.setFillColor(color.cgColor)
         ctx.translateBy(x: CGFloat(p.x), y: CGFloat(p.y))
         ctx.scaleBy(x: 1, y: -scaleY)

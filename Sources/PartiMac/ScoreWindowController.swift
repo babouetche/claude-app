@@ -25,7 +25,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1180, height: 860),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
                               backing: .buffered, defer: false)
-        window.minSize = NSSize(width: 760, height: 480)
+        window.minSize = NSSize(width: 760, height: 700)
         window.tabbingMode = .preferred
         super.init(window: window)
         self.document = document
@@ -83,49 +83,57 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         for v in [playButton!, fromStart, tempoLabel, tempoField, tempoStepper, spacer, zoomOut, zoomIn, pdf, midi] as [NSView] { top.addArrangedSubview(v) }
 
         // Palette (outils, durées, altérations).
-        let palette = NSStackView()
-        palette.orientation = .vertical
-        palette.alignment = .centerX
-        palette.spacing = 4
-        palette.edgeInsets = NSEdgeInsets(top: 10, left: 6, bottom: 10, right: 6)
-        palette.addArrangedSubview(sectionLabel("Outils"))
+        // Palette à positions fixes (pas de mise en page automatique : rendu identique partout).
+        let palette = FlippedView()
+        var py: CGFloat = 10
+        func addSection(_ title: String) {
+            let l = sectionLabel(title)
+            l.frame = NSRect(x: 8, y: py, width: 100, height: 14)
+            palette.addSubview(l)
+            py += 18
+        }
+        func addRow(_ buttons: [NSButton]) {
+            for (i, b) in buttons.enumerated() {
+                b.frame = NSRect(x: 8 + CGFloat(i) * 50, y: py, width: 46, height: 46)
+                palette.addSubview(b)
+            }
+            py += 50
+        }
+        addSection("Outils")
         let selectBtn = paletteButton(symbol: "cursorarrow", glyph: nil, tip: "Sélection : cliquer une note pour la choisir, la glisser pour changer sa hauteur (Échap)", tag: 0, action: #selector(toolChosen(_:)))
         let pencilBtn = paletteButton(symbol: "pencil", glyph: nil, tip: "Saisie : cliquer sur la portée pour poser une note (Échap)", tag: 1, action: #selector(toolChosen(_:)))
         toolButtons = [.select: selectBtn, .note: pencilBtn]
-        palette.addArrangedSubview(row([selectBtn, pencilBtn]))
+        addRow([selectBtn, pencilBtn])
 
-        palette.addArrangedSubview(sectionLabel("Durées"))
+        addSection("Durées")
         var durRow: [NSButton] = []
         for base in DurationBase.allCases where base != .breve && base != .hundredTwentyEighth {
             let b = paletteButton(symbol: nil, glyph: SMuFL.metronomeNote(base), tip: "\(base.frenchName) — touche \(base.rawValue)", tag: base.rawValue, action: #selector(durationChosen(_:)))
             durationButtons[base] = b
             durRow.append(b)
-            if durRow.count == 2 { palette.addArrangedSubview(row(durRow)); durRow = [] }
+            if durRow.count == 2 { addRow(durRow); durRow = [] }
         }
-        if !durRow.isEmpty { palette.addArrangedSubview(row(durRow)) }
+        if !durRow.isEmpty { addRow(durRow) }
         restButton = paletteButton(symbol: nil, glyph: SMuFL.rest(.quarter), tip: "Silences au lieu de notes — touche R (Entrée pose un silence)", tag: 0, action: #selector(restToggled(_:)))
         dotButton = paletteButton(symbol: nil, glyph: SMuFL.augmentationDot, tip: "Point — touche .", tag: 0, action: #selector(dotToggled(_:)))
-        palette.addArrangedSubview(row([restButton, dotButton]))
+        addRow([restButton, dotButton])
 
-        palette.addArrangedSubview(sectionLabel("Altérations"))
+        addSection("Altérations")
         let flat = paletteButton(symbol: nil, glyph: SMuFL.flat, tip: "Bémol — touche -", tag: -1, action: #selector(accidentalChosen(_:)))
         let natural = paletteButton(symbol: nil, glyph: SMuFL.natural, tip: "Bécarre — touche =", tag: 0, action: #selector(accidentalChosen(_:)))
         let sharp = paletteButton(symbol: nil, glyph: SMuFL.sharp, tip: "Dièse — touche +", tag: 1, action: #selector(accidentalChosen(_:)))
         accidentalButtons = [-1: flat, 0: natural, 1: sharp]
-        palette.addArrangedSubview(row([flat, natural]))
-        palette.addArrangedSubview(row([sharp]))
+        addRow([flat, natural])
+        addRow([sharp])
 
-        palette.addArrangedSubview(sectionLabel("Liaison"))
+        addSection("Liaison")
         let tie = paletteButton(symbol: nil, glyph: 0xE1FD, tip: "Lier la note sélectionnée à la suivante — touche T", tag: 0, action: #selector(tieChosen(_:)))
-        palette.addArrangedSubview(row([tie]))
+        addRow([tie])
 
-        palette.addArrangedSubview(sectionLabel("Mesures"))
+        addSection("Mesures")
         let addMeasure = paletteButton(symbol: "plus.rectangle", glyph: nil, tip: "Ajouter une mesure à la fin (⌥⌘ M)", tag: 0, action: #selector(appendMeasure(_:)))
         let delMeasure = paletteButton(symbol: "minus.rectangle", glyph: nil, tip: "Supprimer la mesure sélectionnée", tag: 0, action: #selector(deleteMeasure(_:)))
-        palette.addArrangedSubview(row([addMeasure, delMeasure]))
-        let paletteSpacer = NSView()
-        paletteSpacer.setContentHuggingPriority(.defaultLow, for: .vertical)
-        palette.addArrangedSubview(paletteSpacer)
+        addRow([addMeasure, delMeasure])
 
         // Partition.
         scrollView = NSScrollView()
@@ -197,7 +205,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         return l
     }
 
-    private func row(_ views: [NSView]) -> NSStackView {
+    private func unusedRow(_ views: [NSView]) -> NSStackView {
         let r = NSStackView(views: views)
         r.orientation = .horizontal
         r.spacing = 4
@@ -222,9 +230,6 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         b.tag = tag
         b.toolTip = tip
         b.refusesFirstResponder = true
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.widthAnchor.constraint(equalToConstant: 46).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 46).isActive = true
         if let s = symbol {
             b.image = NSImage(systemSymbolName: s, accessibilityDescription: tip)
             b.imagePosition = .imageOnly
@@ -490,4 +495,9 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
         Player.shared.stop()
     }
+}
+
+/// Vue à coordonnées « haut en bas ».
+final class FlippedView: NSView {
+    override var isFlipped: Bool { true }
 }
