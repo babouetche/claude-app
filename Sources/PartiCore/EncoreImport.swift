@@ -78,7 +78,7 @@ public enum EncoreImporter {
     }
 
     struct Meas {
-        var num = 4, den = 4, durTicks = 960, bpm = 0, barStart = 0, barEnd = 0
+        var num = 4, den = 4, durTicks = 960, bpm = 0, barStart = 0, barEnd = 0, alt = 0
         var elems: [Elem] = []
     }
 
@@ -176,6 +176,7 @@ public enum EncoreImporter {
         m.den = r.u8(s + 9)
         m.barStart = r.u8(s + 12)
         m.barEnd = r.u8(s + 13)
+        m.alt = r.u8(s + 15)
         let off = veryOld ? 0x3E : 0x36
         var p = s + off
         let end = s + size + off
@@ -292,6 +293,11 @@ public enum EncoreImporter {
             default: break
             }
             info.repeatStart = m.barStart == 2
+            info.volta = m.alt
+            // Double barre « à gauche » : on la place en fin de mesure précédente.
+            if m.barStart == 3, i > 0, infos[i - 1].barline == .regular { infos[i - 1].barline = .double }
+            // Barre double juste avant une reprise : la barre de reprise suffit.
+            if m.barStart == 2, i > 0, infos[i - 1].barline == .double { infos[i - 1].barline = .regular }
             infos.append(info)
         }
         if let last = infos.indices.last, infos[last].barline == .regular { infos[last].barline = .final }
@@ -366,8 +372,15 @@ public enum EncoreImporter {
                 score.writeVoice(slots, staff: ref, measure: mi, voice: voice)
             }
 
-            // Textes (accords, basses, doigtés, indications).
+            // Textes (accords, basses, doigtés, indications) et symboles.
             for e in m.elems {
+                // 0xF7 : petit cercle barré (⊗), utilisé en accordéon.
+                if e.type == 5 && e.ornament == 0xF7, let ref = staffRef[e.staff] {
+                    let offset = min(Fraction(e.tick, ticksPerWhole), ml - Fraction(1, 64))
+                    score.annotations.append(Annotation(staff: ref, measure: mi, offset: max(.zero, offset), text: "⊗",
+                                                        above: e.yPos > 4, staffPosition: e.yPos, glyph: 0xE0B3))
+                    continue
+                }
                 var text = ""
                 if e.type == 5 && e.textIndex >= 0 && e.textIndex < p.texts.count { text = p.texts[e.textIndex] }
                 if e.type == 7 { text = e.chordText }
@@ -384,7 +397,8 @@ public enum EncoreImporter {
                 }
                 let offset = min(Fraction(e.tick, ticksPerWhole), ml - Fraction(1, 64))
                 score.annotations.append(Annotation(staff: ref, measure: mi, offset: max(.zero, offset), text: text,
-                                                    above: e.type == 5 ? e.yPos > 0 : false))
+                                                    above: e.type == 5 ? e.yPos > 4 : false,
+                                                    staffPosition: e.type == 5 ? e.yPos : nil))
                 report.texts += 1
             }
         }

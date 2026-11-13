@@ -387,6 +387,26 @@ public struct LayoutEngine {
             placed.measures.append(pm)
             mx = mEnd
         }
+        // Cases de 1re/2e/3e fois au-dessus de la première portée.
+        var k = 0
+        let pms = placed.measures
+        while k < pms.count {
+            let v = score.measures[pms[k].index].volta
+            guard v != 0 else { k += 1; continue }
+            var j = k
+            while j + 1 < pms.count && score.measures[pms[j + 1].index].volta == v { j += 1 }
+            let y = top - 4.2 * sp
+            let xa = pms[k].x0 + 0.4 * sp, xb = pms[j].x1 - 0.6 * sp
+            let lw = SMuFL.thinBarline * sp
+            items.append(.line(LPoint(xa, y + 1.6 * sp), LPoint(xa, y), width: lw, owner: nil))
+            items.append(.line(LPoint(xa, y), LPoint(xb, y), width: lw, owner: nil))
+            let lastIndex = pms[j].index
+            let endsHere = lastIndex + 1 >= score.measureCount || score.measures[lastIndex + 1].volta != v
+            if endsHere { items.append(.line(LPoint(xb, y), LPoint(xb, y + 1.6 * sp), width: lw, owner: nil)) }
+            let label = (0..<8).filter { v & (1 << $0) != 0 }.map { "\($0 + 1)." }.joined(separator: ",")
+            items.append(.text(label, LPoint(xa + 0.5 * sp, y + 0.25 * sp), size: sp * 1.6, bold: true, italic: false, align: .left))
+            k = j + 1
+        }
         return placed
     }
 
@@ -563,7 +583,20 @@ public struct LayoutEngine {
             let ax = pm.x(at: a.offset.doubleValue)
             let slot = Int(ax / sp)
             let isFinger = a.text.count <= 2 && a.text.allSatisfy(\.isNumber)
-            let size = isFinger ? sp * 1.5 : sp * 1.85
+            let isChord = a.text.count >= 2 && a.text == a.text.uppercased() && a.text.contains(where: \.isLetter)
+            let size = isFinger ? sp * 1.45 : isChord ? sp * 2.0 : sp * 1.7
+            if let g = a.glyph {
+                let y = yPos(staffTop, a.staffPosition ?? -3, sp)
+                items.append(.glyph(g, LPoint(ax, y), size: 4 * sp, scaleY: 1, owner: nil))
+                continue
+            }
+            if let pos = a.staffPosition {
+                // Position exacte choisie dans Encore.
+                let y = yPos(staffTop, pos, sp)
+                let top = a.above ? y - size : y + 0.2 * sp
+                items.append(.text(a.text, LPoint(ax, top), size: size, bold: isFinger || isChord, italic: false, align: .left))
+                continue
+            }
             if a.above {
                 let n = stackAbove[slot, default: 0]; stackAbove[slot] = n + 1
                 let highest = min(staffTop - 1.2 * sp, notes.filter { abs($0.x - ax) < 2 * sp }.map { yPos(staffTop, $0.positions.last!, sp) - 3.8 * sp }.min() ?? staffTop)

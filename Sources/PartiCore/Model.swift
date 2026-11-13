@@ -280,12 +280,14 @@ public struct MeasureInfo: Hashable, Codable {
     public var repeatStart: Bool = false
     /// Longueur réelle si différente de la métrique (mesure de levée).
     public var lengthOverride: Fraction?
+    /// Case de 1re/2e/3e fois : un bit par passage (1 = 1re fois, 2 = 2e fois, 4 = 3e fois…).
+    public var volta: Int = 0
 
     public init(time: TimeSignature, key: KeySignature, tempo: Double? = nil, barline: Barline = .regular) {
         self.time = time; self.key = key; self.tempo = tempo; self.barline = barline
     }
 
-    enum CodingKeys: String, CodingKey { case time, key, tempo, barline, repeatStart, lengthOverride }
+    enum CodingKeys: String, CodingKey { case time, key, tempo, barline, repeatStart, lengthOverride, volta }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -295,6 +297,7 @@ public struct MeasureInfo: Hashable, Codable {
         barline = try c.decodeIfPresent(Barline.self, forKey: .barline) ?? .regular
         repeatStart = try c.decodeIfPresent(Bool.self, forKey: .repeatStart) ?? false
         lengthOverride = try c.decodeIfPresent(Fraction.self, forKey: .lengthOverride)
+        volta = try c.decodeIfPresent(Int.self, forKey: .volta) ?? 0
     }
 }
 
@@ -307,9 +310,15 @@ public struct Annotation: Hashable, Codable, Identifiable {
     public var text: String
     /// Au-dessus (true) ou au-dessous (false) de la portée.
     public var above: Bool
+    /// Hauteur précise (demi-interlignes depuis la ligne du bas), si connue.
+    public var staffPosition: Int?
+    /// Symbole musical (point de code SMuFL) à dessiner à la place du texte.
+    public var glyph: UInt32?
 
-    public init(id: UUID = UUID(), staff: StaffRef, measure: Int, offset: Fraction, text: String, above: Bool) {
+    public init(id: UUID = UUID(), staff: StaffRef, measure: Int, offset: Fraction, text: String, above: Bool,
+                staffPosition: Int? = nil, glyph: UInt32? = nil) {
         self.id = id; self.staff = staff; self.measure = measure; self.offset = offset; self.text = text; self.above = above
+        self.staffPosition = staffPosition; self.glyph = glyph
     }
 }
 
