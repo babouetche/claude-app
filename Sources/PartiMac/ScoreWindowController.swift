@@ -49,6 +49,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     override func windowDidLoad() { super.windowDidLoad() }
 
     override func showWindow(_ sender: Any?) {
+        LaunchLog.write("affichage de la fenêtre…")
         super.showWindow(sender)
         LaunchLog.write("fenêtre de partition affichée")
         window?.makeFirstResponder(scoreView)
