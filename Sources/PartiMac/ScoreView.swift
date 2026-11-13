@@ -66,7 +66,7 @@ final class ScoreView: NSView {
     // MARK: Dessin
 
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.underPageBackgroundColor.setFill()
+        Theme.desk.setFill()
         dirtyRect.fill()
         guard let l = layout, let ctx = NSGraphicsContext.current?.cgContext, let doc = document else { return }
         var selectedKeys = Set<EventKey>()

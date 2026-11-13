@@ -61,6 +61,16 @@ jobs:
           pgrep -x PartiMac
           pkill -x PartiMac || true
 
+      - name: Lien de téléchargement (version « titi-latest »)
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete titi-latest --yes --cleanup-tag || true
+          gh release create titi-latest build/Partitions-de-Titi.dmg --target "$GITHUB_SHA" --prerelease \
+            --title "Partitions de Titi — dernière version" \
+            --notes "Version compilée automatiquement le $(date '+%d/%m/%Y à %H:%M') (Apple Silicon et Intel, macOS 13 ou plus récent). Installation : ouvrir le .dmg, glisser l'app dans Applications, puis suivre la fiche « Lisez-moi - premier lancement »."
+
       - name: Captures d'écran dans le dépôt (docs/captures)
         if: github.event_name == 'push'
         run: |

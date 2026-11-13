@@ -18,6 +18,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     private var dotButton: NSButton!
     private var accidentalButtons: [Int: NSButton] = [:]
     private var transientStatus: String?
+    private var glyphs: [ObjectIdentifier: UInt32] = [:]
 
     var scoreDocument: ScoreDocument { document as! ScoreDocument }
 
@@ -27,6 +28,8 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
                               backing: .buffered, defer: false)
         window.minSize = NSSize(width: 760, height: 700)
         window.tabbingMode = .preferred
+        window.titlebarAppearsTransparent = true
+        window.backgroundColor = Theme.bar
         super.init(window: window)
         self.document = document
         window.delegate = self
@@ -64,10 +67,16 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         top.orientation = .horizontal
         top.spacing = 8
         top.edgeInsets = NSEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
+        top.wantsLayer = true
+        top.layer?.backgroundColor = Theme.bar.cgColor
         playButton = symbolButton("play.fill", title: "Écouter", tip: "Écouter / arrêter (barre d'espace)", action: #selector(togglePlayback(_:)))
         let fromStart = symbolButton("backward.end.fill", title: "Début", tip: "Écouter depuis le début", action: #selector(playFromStart(_:)))
         let tempoLabel = NSTextField(labelWithString: "♩ =")
-        tempoLabel.font = .systemFont(ofSize: 14)
+        tempoLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        tempoLabel.textColor = Theme.ink
+        playButton.bezelColor = Theme.accent
+        playButton.contentTintColor = .white
+        playButton.keyEquivalent = ""
         tempoField.formatter = { let f = NumberFormatter(); f.minimum = 20; f.maximum = 400; f.maximumFractionDigits = 0; return f }()
         tempoField.widthAnchor.constraint(equalToConstant: 48).isActive = true
         tempoField.target = self; tempoField.action = #selector(tempoEdited(_:))
@@ -86,15 +95,18 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         // Palette à positions fixes (pas de mise en page automatique : rendu identique partout).
         let palette = FlippedView()
         var py: CGFloat = 10
+        palette.wantsLayer = true
+        palette.layer?.backgroundColor = Theme.palette.cgColor
         func addSection(_ title: String) {
+            if py > 10 { py += 6 }
             let l = sectionLabel(title)
-            l.frame = NSRect(x: 8, y: py, width: 100, height: 14)
+            l.frame = NSRect(x: 12, y: py, width: 96, height: 14)
             palette.addSubview(l)
-            py += 18
+            py += 19
         }
         func addRow(_ buttons: [NSButton]) {
             for (i, b) in buttons.enumerated() {
-                b.frame = NSRect(x: 8 + CGFloat(i) * 50, y: py, width: 46, height: 46)
+                b.frame = NSRect(x: 12 + CGFloat(i) * 50, y: py, width: 44, height: 44)
                 palette.addSubview(b)
             }
             py += 50
@@ -107,32 +119,28 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
 
         addSection("Durées")
         var durRow: [NSButton] = []
-        for base in DurationBase.allCases where base != .breve && base != .hundredTwentyEighth {
+        for base in [DurationBase.whole, .half, .quarter, .eighth, .sixteenth, .thirtySecond] {
             let b = paletteButton(symbol: nil, glyph: SMuFL.metronomeNote(base), tip: "\(base.frenchName) — touche \(base.rawValue)", tag: base.rawValue, action: #selector(durationChosen(_:)))
             durationButtons[base] = b
             durRow.append(b)
             if durRow.count == 2 { addRow(durRow); durRow = [] }
         }
-        if !durRow.isEmpty { addRow(durRow) }
         restButton = paletteButton(symbol: nil, glyph: SMuFL.rest(.quarter), tip: "Silences au lieu de notes — touche R (Entrée pose un silence)", tag: 0, action: #selector(restToggled(_:)))
-        dotButton = paletteButton(symbol: nil, glyph: SMuFL.augmentationDot, tip: "Point — touche .", tag: 0, action: #selector(dotToggled(_:)))
+        dotButton = paletteButton(symbol: nil, glyph: SMuFL.augmentationDot, tip: "Note pointée — touche .", tag: 0, action: #selector(dotToggled(_:)))
         addRow([restButton, dotButton])
 
         addSection("Altérations")
         let flat = paletteButton(symbol: nil, glyph: SMuFL.flat, tip: "Bémol — touche -", tag: -1, action: #selector(accidentalChosen(_:)))
-        let natural = paletteButton(symbol: nil, glyph: SMuFL.natural, tip: "Bécarre — touche =", tag: 0, action: #selector(accidentalChosen(_:)))
         let sharp = paletteButton(symbol: nil, glyph: SMuFL.sharp, tip: "Dièse — touche +", tag: 1, action: #selector(accidentalChosen(_:)))
+        let natural = paletteButton(symbol: nil, glyph: SMuFL.natural, tip: "Bécarre — touche =", tag: 0, action: #selector(accidentalChosen(_:)))
+        let tie = paletteButton(symbol: "link", glyph: nil, tip: "Liaison : lier la note sélectionnée à la suivante — touche T", tag: 0, action: #selector(tieChosen(_:)))
         accidentalButtons = [-1: flat, 0: natural, 1: sharp]
-        addRow([flat, natural])
-        addRow([sharp])
-
-        addSection("Liaison")
-        let tie = paletteButton(symbol: nil, glyph: 0xE1FD, tip: "Lier la note sélectionnée à la suivante — touche T", tag: 0, action: #selector(tieChosen(_:)))
-        addRow([tie])
+        addRow([flat, sharp])
+        addRow([natural, tie])
 
         addSection("Mesures")
-        let addMeasure = paletteButton(symbol: "plus.rectangle", glyph: nil, tip: "Ajouter une mesure à la fin (⌥⌘ M)", tag: 0, action: #selector(appendMeasure(_:)))
-        let delMeasure = paletteButton(symbol: "minus.rectangle", glyph: nil, tip: "Supprimer la mesure sélectionnée", tag: 0, action: #selector(deleteMeasure(_:)))
+        let addMeasure = paletteButton(symbol: "plus", glyph: nil, tip: "Ajouter une mesure à la fin (⌥⌘ M)", tag: 0, action: #selector(appendMeasure(_:)))
+        let delMeasure = paletteButton(symbol: "minus", glyph: nil, tip: "Supprimer la mesure sélectionnée", tag: 0, action: #selector(deleteMeasure(_:)))
         addRow([addMeasure, delMeasure])
 
         // Partition.
@@ -145,7 +153,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         scrollView.minMagnification = 0.4
         scrollView.maxMagnification = 4
         scrollView.drawsBackground = true
-        scrollView.backgroundColor = .underPageBackgroundColor
+        scrollView.backgroundColor = Theme.desk
         scoreView = ScoreView(document: doc, state: state)
         scrollView.documentView = scoreView
         scrollView.magnification = 1.3
@@ -159,6 +167,8 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         statusLabel.textColor = .secondaryLabelColor
         statusLabel.lineBreakMode = .byTruncatingTail
         let status = NSStackView(views: [statusLabel])
+        status.wantsLayer = true
+        status.layer?.backgroundColor = Theme.bar.cgColor
         status.edgeInsets = NSEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 
         let topSep = NSBox(); topSep.boxType = .separator
@@ -185,7 +195,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
             palette.topAnchor.constraint(equalTo: topSep.bottomAnchor),
             palette.leadingAnchor.constraint(equalTo: content.leadingAnchor),
             palette.bottomAnchor.constraint(equalTo: bottomSep.topAnchor),
-            palette.widthAnchor.constraint(equalToConstant: 112),
+            palette.widthAnchor.constraint(equalToConstant: 118),
             leftSep.topAnchor.constraint(equalTo: topSep.bottomAnchor),
             leftSep.bottomAnchor.constraint(equalTo: bottomSep.topAnchor),
             leftSep.leadingAnchor.constraint(equalTo: palette.trailingAnchor),
@@ -207,8 +217,8 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
 
     private func sectionLabel(_ s: String) -> NSView {
         let l = NSTextField(labelWithString: s.uppercased())
-        l.font = .systemFont(ofSize: 10, weight: .semibold)
-        l.textColor = .secondaryLabelColor
+        l.font = .systemFont(ofSize: 10, weight: .bold)
+        l.textColor = Theme.accent
         return l
     }
 
@@ -224,6 +234,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         b.image = NSImage(systemSymbolName: symbol, accessibilityDescription: tip)
         b.imagePosition = title.isEmpty ? .imageOnly : .imageLeading
         b.bezelStyle = .rounded
+        b.contentTintColor = Theme.accent
         b.toolTip = tip
         b.refusesFirstResponder = true
         return b
@@ -234,15 +245,18 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         b.setButtonType(.pushOnPushOff)
         b.isBordered = false
         b.wantsLayer = true
-        b.layer?.cornerRadius = 8
+        b.layer?.cornerRadius = 10
         b.layer?.borderWidth = 1
+        b.imageScaling = .scaleProportionallyDown
         b.tag = tag
         b.toolTip = tip
         b.refusesFirstResponder = true
         if let s = symbol {
-            b.image = NSImage(systemSymbolName: s, accessibilityDescription: tip)
+            b.image = NSImage(systemSymbolName: s, accessibilityDescription: tip)?
+                .withSymbolConfiguration(.init(pointSize: 17, weight: .medium))
             b.imagePosition = .imageOnly
         } else if let g = glyph {
+            glyphs[ObjectIdentifier(b)] = g
             let para = NSMutableParagraphStyle()
             para.alignment = .center
             b.attributedTitle = NSAttributedString(string: Fonts.string(g), attributes: [
@@ -263,24 +277,30 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         dotButton.state = state.duration.dots > 0 ? .on : .off
         for (a, b) in accidentalButtons { b.state = state.pendingAlter == a ? .on : .off }
         // Les silences ont un autre glyphe dans la palette.
-        for (d, b) in durationButtons {
-            let para = NSMutableParagraphStyle(); para.alignment = .center
-            let g = state.restMode ? SMuFL.rest(d) : SMuFL.metronomeNote(d)
-            b.attributedTitle = NSAttributedString(string: Fonts.string(g), attributes: [
-                .font: Fonts.nsMusic(24), .foregroundColor: NSColor.labelColor, .paragraphStyle: para,
-                .baselineOffset: state.restMode ? 0 : -6,
-            ])
-        }
-        // Fond des boutons de la palette : bleu pâle si actif.
+        for (d, b) in durationButtons { glyphs[ObjectIdentifier(b)] = state.restMode ? SMuFL.rest(d) : SMuFL.metronomeNote(d) }
+        // Bouton actif : fond bleu, symbole blanc. Inactif : fond clair, symbole bleu nuit.
         for b in paletteButtons {
-            b.layer?.backgroundColor = (b.state == .on ? NSColor.controlAccentColor.withAlphaComponent(0.28) : NSColor.controlBackgroundColor).cgColor
-            b.layer?.borderColor = (b.state == .on ? NSColor.controlAccentColor : NSColor.separatorColor).cgColor
+            let on = b.state == .on
+            b.layer?.backgroundColor = (on ? Theme.accent : Theme.button).cgColor
+            b.layer?.borderColor = (on ? Theme.accent : Theme.buttonBorder).cgColor
+            let ink = on ? NSColor.white : Theme.ink
+            b.contentTintColor = ink
+            if let g = glyphs[ObjectIdentifier(b)] {
+                let para = NSMutableParagraphStyle(); para.alignment = .center
+                let isRest = (0xE4E2...0xE4EA).contains(g)
+                let isNote = (0xECA0...0xECB7).contains(g)
+                b.attributedTitle = NSAttributedString(string: Fonts.string(g), attributes: [
+                    .font: Fonts.nsMusic(isNote ? 22 : 24), .foregroundColor: ink, .paragraphStyle: para,
+                    .baselineOffset: isNote ? -5 : (isRest ? 0 : -2),
+                ])
+            }
         }
         let tempo = scoreDocument.score.tempo(at: 0)
         tempoField.doubleValue = tempo
         tempoStepper.doubleValue = tempo
         playButton.image = NSImage(systemSymbolName: Player.shared.isPlaying ? "stop.fill" : "play.fill", accessibilityDescription: nil)
-        playButton.title = Player.shared.isPlaying ? "Arrêter" : "Écouter"
+        playButton.attributedTitle = NSAttributedString(string: Player.shared.isPlaying ? " Arrêter" : " Écouter", attributes: [
+            .foregroundColor: NSColor.white, .font: NSFont.systemFont(ofSize: 13, weight: .semibold)])
         updateStatus()
         scoreView?.needsDisplay = true
     }
@@ -514,4 +534,20 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
 /// Vue à coordonnées « haut en bas ».
 final class FlippedView: NSView {
     override var isFlipped: Bool { true }
+}
+
+/// Couleurs de l'app (bleu, clair et sombre).
+enum Theme {
+    static func dynamic(_ light: NSColor, _ dark: NSColor) -> NSColor {
+        NSColor(name: nil) { $0.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? dark : light }
+    }
+    static func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> NSColor { NSColor(srgbRed: r / 255, green: g / 255, blue: b / 255, alpha: 1) }
+
+    static let accent = dynamic(rgb(31, 102, 214), rgb(64, 140, 255))
+    static let ink = dynamic(rgb(22, 44, 84), rgb(214, 226, 248))
+    static let bar = dynamic(rgb(232, 240, 253), rgb(28, 36, 52))
+    static let palette = dynamic(rgb(242, 246, 253), rgb(22, 27, 38))
+    static let button = dynamic(.white, rgb(36, 44, 62))
+    static let buttonBorder = dynamic(rgb(200, 214, 238), rgb(58, 70, 96))
+    static let desk = dynamic(rgb(214, 223, 237), rgb(14, 17, 24))
 }
