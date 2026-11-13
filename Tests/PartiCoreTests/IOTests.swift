@@ -23,7 +23,7 @@ final class IOTests: XCTestCase {
 
     func testCorruptDocument() {
         XCTAssertThrowsError(try ScoreCodec.decode(Data("pas une partition".utf8))) { e in
-            XCTAssertTrue((e as? DocumentError)?.errorDescription?.contains("PartiMac") ?? false)
+            XCTAssertTrue((e as? DocumentError)?.errorDescription?.contains("partition") ?? false)
         }
         XCTAssertThrowsError(try ScoreCodec.decode(Data(#"{"formatVersion": 99}"#.utf8)))
     }

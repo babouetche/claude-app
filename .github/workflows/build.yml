@@ -1,4 +1,4 @@
-name: PartiMac — compilation universelle
+name: Partitions de Titi — compilation universelle
 
 on:
   push:
@@ -35,28 +35,28 @@ jobs:
 
       - name: Vérification universelle (lipo)
         run: |
-          INFO=$(lipo -info build/PartiMac.app/Contents/MacOS/PartiMac)
+          INFO=$(lipo -info "build/Partitions de Titi.app/Contents/MacOS/PartiMac")
           echo "$INFO"
           echo "$INFO" | grep -q arm64
           echo "$INFO" | grep -q x86_64
-          vtool -show-build build/PartiMac.app/Contents/MacOS/PartiMac | grep -E "minos|platform" | head -4
+          vtool -show-build "build/Partitions de Titi.app/Contents/MacOS/PartiMac" | grep -E "minos|platform" | head -4
 
       - name: Auto-test (arm64)
         run: |
           set -o pipefail
-          build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-arm64 | tee build/selftest-arm64.log
+          "build/Partitions de Titi.app/Contents/MacOS/PartiMac" --selftest build/selftest-arm64 | tee build/selftest-arm64.log
 
       - name: Auto-test (x86_64 via Rosetta)
         run: |
           if arch -x86_64 /usr/bin/true 2>/dev/null; then
-            arch -x86_64 build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-x86_64
+            arch -x86_64 "build/Partitions de Titi.app/Contents/MacOS/PartiMac" --selftest build/selftest-x86_64
           else
             echo "Rosetta indisponible sur ce runner : test x86_64 ignoré"
           fi
 
       - name: Lancement par double-clic (open)
         run: |
-          open build/PartiMac.app
+          open "build/Partitions de Titi.app"
           sleep 10
           pgrep -x PartiMac
           pkill -x PartiMac || true
@@ -68,7 +68,8 @@ jobs:
           for f in build/selftest-arm64/*.png; do
             sips -s format jpeg -s formatOptions 70 "$f" --out "docs/captures/$(basename "${f%.png}").jpg" >/dev/null
           done
-          git config user.name "PartiMac CI"
+          sips -s format png build/AppIcon.iconset/icon_256x256@2x.png --out docs/captures/icone.png >/dev/null
+          git config user.name "CI Partitions de Titi"
           git config user.email "ci@partimac.invalid"
           git add docs/captures
           if ! git diff --cached --quiet; then
@@ -78,8 +79,8 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: PartiMac-dmg
-          path: build/PartiMac.dmg
+          name: Partitions-de-Titi-dmg
+          path: build/Partitions-de-Titi.dmg
 
       - uses: actions/upload-artifact@v4
         if: always()

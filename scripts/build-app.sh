@@ -1,12 +1,12 @@
 #!/bin/bash
-# Construit PartiMac.app (universel arm64 + x86_64) puis PartiMac.dmg.
+# Construit « Partitions de Titi.app » (universel arm64 + x86_64) puis Partitions-de-Titi.dmg.
 # Usage : scripts/build-app.sh            (signature ad hoc, sans compte Apple)
 #         SIGN_IDENTITY="Developer ID Application: …" scripts/build-app.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
 VERSION=${VERSION:-0.1.0}
 BUILD=${BUILD:-$(git rev-list --count HEAD 2>/dev/null || echo 1)}
-APP=build/PartiMac.app
+APP="build/Partitions de Titi.app"
 
 swift build -c release --arch arm64 --arch x86_64
 BIN_DIR=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)
@@ -42,6 +42,6 @@ mkdir -p build/dmg
 cp -R "$APP" build/dmg/
 ln -s /Applications build/dmg/Applications
 cp docs/PREMIER-LANCEMENT.md "build/dmg/Lisez-moi - premier lancement.txt"
-hdiutil create -volname "PartiMac" -srcfolder build/dmg -ov -format UDZO build/PartiMac.dmg
+hdiutil create -volname "Partitions de Titi" -srcfolder build/dmg -ov -format UDZO build/Partitions-de-Titi.dmg
 rm -rf build/dmg
-echo "Terminé : build/PartiMac.dmg"
+echo "Terminé : build/Partitions-de-Titi.dmg"

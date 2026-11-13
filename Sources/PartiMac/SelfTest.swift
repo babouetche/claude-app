@@ -18,7 +18,7 @@ enum SelfTest {
 
         for template in [ScoreTemplate.piano, .accordion] {
             var score = Score.make(template: template, title: template == .piano ? "Au clair de la lune" : "Petite valse",
-                                   composer: "Auto-test PartiMac", time: template == .piano ? TimeSignature(4, 4) : TimeSignature(3, 4),
+                                   composer: "Auto-test", time: template == .piano ? TimeSignature(4, 4) : TimeSignature(3, 4),
                                    key: KeySignature(template == .piano ? 0 : -1), tempo: 110, measures: 8)
             let rh = StaffRef(part: 0, staff: 0), lh = StaffRef(part: 0, staff: 1)
             func put(_ staff: StaffRef, _ m: Int, _ off: Fraction, _ d: Duration, _ p: [Pitch], tie: Bool = false) {

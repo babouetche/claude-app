@@ -5,9 +5,9 @@ public enum DocumentError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .unreadable:
-            return "Ce fichier n'est pas une partition PartiMac valide, ou il est endommagé."
+            return "Ce fichier n'est pas une partition valide, ou il est endommagé."
         case .tooNew(let v):
-            return "Cette partition a été créée avec une version plus récente de PartiMac (format \(v)). Mettez PartiMac à jour pour l'ouvrir."
+            return "Cette partition a été créée avec une version plus récente de l'application (format \(v)). Mettez l'application à jour pour l'ouvrir."
         }
     }
 }

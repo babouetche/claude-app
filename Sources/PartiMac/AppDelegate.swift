@@ -43,7 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func showShortcuts(_ sender: Any?) {
         let a = NSAlert()
-        a.messageText = "Raccourcis clavier de PartiMac"
+        a.messageText = "Raccourcis clavier — Partitions de Titi"
         a.informativeText = """
         SAISIE
         1 à 7 : ronde, blanche, noire, croche, double, triple, quadruple croche (0 = carrée, 8 = quintuple)
@@ -75,19 +75,19 @@ enum MainMenu {
         let main = NSMenu()
 
         // PartiMac
-        let app = submenu(main, "PartiMac")
-        app.addItem(withTitle: "À propos de PartiMac", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        let app = submenu(main, "Partitions de Titi")
+        app.addItem(withTitle: "À propos de Partitions de Titi", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
         app.addItem(.separator())
         let services = NSMenu(title: "Services")
         app.addItem(withTitle: "Services", action: nil, keyEquivalent: "").submenu = services
         NSApp.servicesMenu = services
         app.addItem(.separator())
-        app.addItem(withTitle: "Masquer PartiMac", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        app.addItem(withTitle: "Masquer Partitions de Titi", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         let others = app.addItem(withTitle: "Masquer les autres", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
         others.keyEquivalentModifierMask = [.command, .option]
         app.addItem(withTitle: "Tout afficher", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
         app.addItem(.separator())
-        app.addItem(withTitle: "Quitter PartiMac", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        app.addItem(withTitle: "Quitter Partitions de Titi", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
 
         // Fichier
         let file = submenu(main, "Fichier")

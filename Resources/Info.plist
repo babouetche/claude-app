@@ -6,8 +6,8 @@
 	<key>CFBundleLocalizations</key><array><string>fr</string></array>
 	<key>CFBundleExecutable</key><string>PartiMac</string>
 	<key>CFBundleIdentifier</key><string>app.partimac.PartiMac</string>
-	<key>CFBundleName</key><string>PartiMac</string>
-	<key>CFBundleDisplayName</key><string>PartiMac</string>
+	<key>CFBundleName</key><string>Partitions de Titi</string>
+	<key>CFBundleDisplayName</key><string>Partitions de Titi</string>
 	<key>CFBundleIconFile</key><string>AppIcon</string>
 	<key>CFBundlePackageType</key><string>APPL</string>
 	<key>CFBundleShortVersionString</key><string>__VERSION__</string>
@@ -17,13 +17,13 @@
 	<key>LSApplicationCategoryType</key><string>public.app-category.music</string>
 	<key>NSHighResolutionCapable</key><true/>
 	<key>NSPrincipalClass</key><string>NSApplication</string>
-	<key>NSHumanReadableCopyright</key><string>PartiMac — logiciel libre de notation musicale. Police Bravura (SIL OFL).</string>
+	<key>NSHumanReadableCopyright</key><string>Partitions de Titi — notation musicale pour accordéon, piano et mélodie. Police Bravura (SIL OFL).</string>
 	<key>NSSupportsAutomaticTermination</key><false/>
 	<key>NSSupportsSuddenTermination</key><false/>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeName</key><string>Partition PartiMac</string>
+			<key>CFBundleTypeName</key><string>Partition (Partitions de Titi)</string>
 			<key>CFBundleTypeRole</key><string>Editor</string>
 			<key>LSHandlerRank</key><string>Owner</string>
 			<key>LSItemContentTypes</key><array><string>com.partimac.score</string></array>
@@ -35,7 +35,7 @@
 	<array>
 		<dict>
 			<key>UTTypeIdentifier</key><string>com.partimac.score</string>
-			<key>UTTypeDescription</key><string>Partition PartiMac</string>
+			<key>UTTypeDescription</key><string>Partition (Partitions de Titi)</string>
 			<key>UTTypeConformsTo</key><array><string>public.data</string><string>public.content</string></array>
 			<key>UTTypeIconFile</key><string>AppIcon</string>
 			<key>UTTypeTagSpecification</key>
