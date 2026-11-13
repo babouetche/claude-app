@@ -97,6 +97,22 @@ Colonne **J** = jalon prévu (voir PLAN.md).
 | I5 | Extraction des parties individuelles (liées à la partition) | 4 | à faire |
 | I6 | Partition complète et réduction (conducteur condensé) | 4 | à faire |
 
+## 5 bis. Accordéon (prioritaire : l'utilisateur final est accordéoniste)
+
+Encore 5 n'avait rien de spécifique pour l'accordéon : ces points vont **au-delà** de la parité.
+
+| # | Fonction | J | Statut |
+|---|---|---|---|
+| A1 | Modèle « Accordéon » dans l'assistant : main droite (sol) + main gauche (fa), accolade, son GM accordéon | 1 | à faire |
+| A2 | Choix du son : accordéon, accordéon tango (bandonéon), effet musette (voix doublées légèrement désaccordées) | 1 (accordéon) · 4 | à faire |
+| A3 | Symboles de soufflet : tirer / pousser, changement de soufflet (glyphes SMuFL de Bravura) | 2 | à faire |
+| A4 | Symboles de registres (cercles à points, glyphes SMuFL) + nom du registre (Musette, Bandonéon, Clarinette…) | 2 | à faire |
+| A5 | Basses Stradella : notation basse fondamentale / contrebasse et accords M, m, 7, d (dim) | 3 | à faire |
+| A6 | Lecture des basses Stradella : un accord « M » sur Do joue réellement l'accord de Do majeur dans le bon registre | 4 | à faire |
+| A7 | Doigtés (1–5) au-dessus/dessous des notes | 2 | à faire |
+| A8 | Grilles d'accords pour la main gauche (symboles au-dessus de la portée, transposables) | 3 | à faire |
+| A9 | Basses libres (free bass) : notation standard en clé de fa | 2 | à faire |
+
 ## 6. Lecture
 
 | # | Fonction | J | Statut |

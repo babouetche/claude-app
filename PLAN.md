@@ -63,9 +63,9 @@ Principes : identifiants stables (UUID) ; temps en `Fraction` (pas de flottants)
 | J | Contenu | Critère de sortie |
 |---|---|---|
 | **0** | PARITY.md, PLAN.md | Ton OK. |
-| **1** | Socle : projet, CI macOS universelle, modèle, `.partimac`, gravure de base (grand-portée piano, clés sol/fa, armure, métrique, notes/silences/points/altérations, ligatures auto, liaisons de prolongation), saisie souris (palette Notes) + clavier (0–8, R, A–G, flèches), insérer/supprimer mesures, annuler illimité, lecture SoundFont + curseur, export PDF, import/export MIDI, autosave, icône, `.dmg` | Ton scénario : double-clic → partition piano → mélodie souris + clavier → écoute → PDF + MIDI → réouverture. Tests modèle + MIDI. |
-| **2** | Notation complète : multi-portées, 8 voix, accords, n-olets, ornements, liaisons, ottava, barres/reprises/voltas, nuances, articulations, tempo, copier/coller, glisser-déposer, transposition, saisie MIDI pas à pas, assistant de partition | Partition orchestrale simple saisissable sans manuel. |
-| **3** | Texte & mise en page : paroles multi-couplets, accords, textes, en-têtes/pieds, ajustements manuels, sauts, marges, taille portée, pages types, export PNG/SVG, impression | Chanson voix+piano avec paroles imprimable. |
+| **1** | Socle : projet, CI macOS universelle, modèle, `.partimac`, gravure de base (modèles **Piano** et **Accordéon**, grand-portée, clés sol/fa, armure, métrique, notes/silences/points/altérations, ligatures auto, liaisons de prolongation), saisie souris (palette Notes) + clavier (0–8, R, A–G, flèches), insérer/supprimer mesures, annuler illimité, lecture SoundFont + curseur, export PDF, import/export MIDI, autosave, icône, `.dmg` | Ton scénario : double-clic → partition piano **ou accordéon** → mélodie souris + clavier → écoute → PDF + MIDI → réouverture. Tests modèle + MIDI. |
+| **2** | Notation complète + accordéon (soufflet, registres, doigtés) : multi-portées, 8 voix, accords, n-olets, ornements, liaisons, ottava, barres/reprises/voltas, nuances, articulations, tempo, copier/coller, glisser-déposer, transposition, saisie MIDI pas à pas, assistant de partition | Partition orchestrale simple saisissable sans manuel. |
+| **3** | Texte & mise en page + basses Stradella (M, m, 7, d) : paroles multi-couplets, accords, textes, en-têtes/pieds, ajustements manuels, sauts, marges, taille portée, pages types, export PNG/SVG, impression | Chanson voix+piano avec paroles imprimable. |
 | **4** | MusicXML import/export, transpositeurs, parties extraites, réduction, mixeur, métronome, MIDI temps réel quantifié, sortie MIDI externe, percussions, lecture des reprises | Aller-retour MusicXML avec MuseScore/Finale ; tests MusicXML. |
 | **5** | Tablature, diagrammes d'accords, ⌘K, tous les raccourcis Encore, vue défilante, perf 20 pages, export audio | Fluide sur 20 pages ; parité ≥ 95 % hors .enc/OMR. |
 | **6** | Import `.enc` best effort | Ouvre les notes/portées des fichiers de test ; limites documentées. |
@@ -84,6 +84,8 @@ Principes : identifiants stables (UUID) ; temps en `Fraction` (pas de flottants)
 **Honnêteté :** aucun moteur libre n'est entraîné sérieusement sur le **manuscrit**. Attends-toi à un taux d'erreur élevé sur une écriture à la main (bon sur une copie propre et régulière, mauvais sur un brouillon). C'est pourquoi l'écran de correction rapide est prioritaire dans ce jalon.
 
 ## 6. Distribution et Gatekeeper
+
+**Décision : sans compte Apple payant.** L'app est pour un seul utilisateur (ton père) : un « Ouvrir quand même » unique au premier lancement suffit, inutile de payer 99 €/an. Une fiche illustrée d'une page (`docs/PREMIER-LANCEMENT.md`) est fournie. La notarisation reste prête si besoin plus tard.
 
 - Sans compte Apple Developer (99 €/an), l'app est signée « ad hoc » : elle tourne sur tous les Mac, mais au **premier** lancement d'une app téléchargée, macOS bloque. Il faut alors aller une fois dans **Réglages Système → Confidentialité et sécurité → « Ouvrir quand même »** (sur macOS 15+, le clic droit → Ouvrir ne suffit plus). Ensuite, double-clic normal.
 - Avec le compte : signature Developer ID + notarisation → double-clic direct, aucun avertissement. Procédure et script fournis (`scripts/notarize.sh`, `docs/SIGNATURE.md`) dès le jalon 1.
