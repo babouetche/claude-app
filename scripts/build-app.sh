@@ -23,8 +23,11 @@ else
 fi
 cp LICENSES.md "$APP/Contents/Resources/"
 
-# Icône originale générée par script.
-swift scripts/make-icon.swift build/AppIcon.iconset
+# Icône : logo « Thierry » (Resources/AppIcon-1024.png, fond transparent) décliné en toutes tailles.
+mkdir -p build/AppIcon.iconset
+for spec in 16:16x16 32:16x16@2x 32:32x32 64:32x32@2x 128:128x128 256:128x128@2x 256:256x256 512:256x256@2x 512:512x512 1024:512x512@2x; do
+  sips -z "${spec%%:*}" "${spec%%:*}" Resources/AppIcon-1024.png --out "build/AppIcon.iconset/icon_${spec#*:}.png" >/dev/null
+done
 iconutil -c icns build/AppIcon.iconset -o "$APP/Contents/Resources/AppIcon.icns"
 
 # Signature : hardened runtime + entitlements. « - » = ad hoc (aucun compte requis).
