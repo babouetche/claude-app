@@ -74,9 +74,14 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         let tempoLabel = NSTextField(labelWithString: "♩ =")
         tempoLabel.font = .systemFont(ofSize: 14, weight: .medium)
         tempoLabel.textColor = Theme.ink
-        playButton.bezelColor = Theme.accent
+        // Bouton « Écouter » : pastille bleue pleine, texte blanc (rendu identique partout).
+        playButton.isBordered = false
+        playButton.wantsLayer = true
+        playButton.layer?.backgroundColor = Theme.accent.cgColor
+        playButton.layer?.cornerRadius = 7
         playButton.contentTintColor = .white
-        playButton.keyEquivalent = ""
+        playButton.widthAnchor.constraint(equalToConstant: 104).isActive = true
+        playButton.heightAnchor.constraint(equalToConstant: 28).isActive = true
         tempoField.formatter = { let f = NumberFormatter(); f.minimum = 20; f.maximum = 400; f.maximumFractionDigits = 0; return f }()
         tempoField.widthAnchor.constraint(equalToConstant: 48).isActive = true
         tempoField.target = self; tempoField.action = #selector(tempoEdited(_:))
