@@ -233,8 +233,8 @@ public struct KeySignature: Hashable, Codable {
 
     /// Altération implicite du degré `step`.
     public func alter(forStep step: Int) -> Int {
-        if fifths > 0 { return sharpOrder.prefix(fifths).contains(step) ? 1 : 0 }
-        if fifths < 0 { return flatOrder.prefix(-fifths).contains(step) ? -1 : 0 }
+        if fifths > 0 { return KeySignature.sharpOrder.prefix(fifths).contains(step) ? 1 : 0 }
+        if fifths < 0 { return KeySignature.flatOrder.prefix(-fifths).contains(step) ? -1 : 0 }
         return 0
     }
 
