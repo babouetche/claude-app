@@ -27,8 +27,8 @@ enum SelfTest {
             }
             let c5 = Pitch(step: 0, octave: 5), d5 = Pitch(step: 1, octave: 5), e5 = Pitch(step: 2, octave: 5)
             let q = Duration(.quarter), h = Duration(.half), e8 = Duration(.eighth)
-            put(rh, 0, .zero, q, [c5]); put(rh, 0, Fraction(1, 4), q, [c5]); put(rh, 0, Fraction(1, 2), q, [c5]); put(rh, 0, Fraction(3, 4), e8, [d5]); put(rh, 0, Fraction(7, 8), e8, [Pitch(step: 3, alter: 1, octave: 5)])
-            put(rh, 1, .zero, h, [e5]); put(rh, 1, Fraction(1, 2), Duration(.quarter, dots: 1), [d5], tie: false)
+            put(rh, 0, .zero, q, [c5]); put(rh, 0, Fraction(1, 4), q, [c5]); put(rh, 0, Fraction(1, 2), e8, [d5]); put(rh, 0, Fraction(5, 8), e8, [Pitch(step: 3, alter: 1, octave: 5)])
+            put(rh, 1, .zero, h, [e5]); put(rh, 1, Fraction(1, 2), e8, [d5])
             put(rh, 2, .zero, Duration(.sixteenth), [c5]); put(rh, 2, Fraction(1, 16), Duration(.sixteenth), [d5]); put(rh, 2, Fraction(1, 8), e8, [e5])
             put(rh, 2, Fraction(1, 4), q, [Pitch(step: 6, alter: -1, octave: 4)], tie: true); put(rh, 3, .zero, q, [Pitch(step: 6, alter: -1, octave: 4)])
             put(lh, 0, .zero, h, [Pitch(step: 0, octave: 3), Pitch(step: 2, octave: 3), Pitch(step: 4, octave: 3)])
@@ -62,9 +62,6 @@ enum SelfTest {
 
             if let png = Exporter.png(layout.pages[0], scale: 1) {
                 try? png.write(to: out.appendingPathComponent("\(name)-page1.png"))
-                print("BEGIN_PNG \(name)-page1")
-                print(png.base64EncodedString())
-                print("END_PNG")
             }
 
             // Capture de la fenêtre réelle.
@@ -81,9 +78,6 @@ enum SelfTest {
                         view.cacheDisplay(in: view.bounds, to: rep)
                         if let png = rep.representation(using: .png, properties: [:]) {
                             try? png.write(to: out.appendingPathComponent("window.png"))
-                            print("BEGIN_PNG window")
-                            print(png.base64EncodedString())
-                            print("END_PNG")
                             check(true, "Fenêtre construite et capturée")
                         }
                     }

@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
@@ -39,12 +42,14 @@ jobs:
           vtool -show-build build/PartiMac.app/Contents/MacOS/PartiMac | grep -E "minos|platform" | head -4
 
       - name: Auto-test (arm64)
-        run: build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-arm64 | tee build/selftest-arm64.log
+        run: |
+          set -o pipefail
+          build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-arm64 | tee build/selftest-arm64.log
 
       - name: Auto-test (x86_64 via Rosetta)
         run: |
           if arch -x86_64 /usr/bin/true 2>/dev/null; then
-            arch -x86_64 build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-x86_64 | grep -v -A1 BEGIN_PNG | grep -v "^[A-Za-z0-9+/=]\{200,\}$"
+            arch -x86_64 build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-x86_64
           else
             echo "Rosetta indisponible sur ce runner : test x86_64 ignoré"
           fi
@@ -55,6 +60,21 @@ jobs:
           sleep 10
           pgrep -x PartiMac
           pkill -x PartiMac || true
+
+      - name: Captures d'écran dans le dépôt (docs/captures)
+        if: github.event_name == 'push'
+        run: |
+          mkdir -p docs/captures
+          for f in build/selftest-arm64/*.png; do
+            sips -s format jpeg -s formatOptions 70 "$f" --out "docs/captures/$(basename "${f%.png}").jpg" >/dev/null
+          done
+          git config user.name "PartiMac CI"
+          git config user.email "ci@partimac.invalid"
+          git add docs/captures
+          if ! git diff --cached --quiet; then
+            git commit -m "Captures de l'auto-test [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" || echo "Captures non poussées (branche modifiée entre-temps)"
+          fi
 
       - uses: actions/upload-artifact@v4
         with:
