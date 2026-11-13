@@ -56,6 +56,8 @@ jobs:
 
       - name: Lancement par double-clic (open)
         run: |
+          # Barres de défilement toujours visibles (cas d'un Mac avec souris) : configuration la plus exigeante.
+          defaults write -g AppleShowScrollBars -string Always
           rm -f "$HOME/Library/Logs/Partitions de Titi.log"
           open "build/Partitions de Titi.app"
           sleep 12
