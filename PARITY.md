@@ -138,7 +138,7 @@ Encore 5 n'avait rien de spécifique pour l'accordéon : ces points vont **au-de
 | F3 | Export MIDI (type 1, une piste par portée) | 1 | fait |
 | F4 | Import MusicXML (partwise/timewise, .xml/.musicxml/.mxl) | 4 | à faire |
 | F5 | Export MusicXML 4.0 (y compris paroles et accords, absents d'Encore) | 4 | à faire |
-| F6 | Import .enc Encore | 6 | à faire — format propriétaire non documenté : « au mieux » ; repli documenté par MusicXML/MIDI |
+| F6 | Import .enc Encore | 1 | fait — notes, accords, silences, points, triolets, liaisons, clés, armures, métriques, tempo, reprises, levée, textes (accords/basses/doigtés). Voix secondaires et notes d'ornement : pas encore affichées |
 | F7 | Export PDF | 1 | fait |
 | F8 | Export images PNG/SVG (page ou sélection) | 3 | à faire |
 | F9 | Impression (dialogue macOS) | 3 | fait |

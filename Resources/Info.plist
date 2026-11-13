@@ -30,6 +30,32 @@
 			<key>NSDocumentClass</key><string>ScoreDocument</string>
 			<key>CFBundleTypeIconFile</key><string>AppIcon</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeName</key><string>Partition Encore</string>
+			<key>CFBundleTypeRole</key><string>Viewer</string>
+			<key>LSHandlerRank</key><string>Alternate</string>
+			<key>LSItemContentTypes</key><array><string>com.passport.encore.score</string></array>
+			<key>NSDocumentClass</key><string>ScoreDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key><string>Fichier MIDI</string>
+			<key>CFBundleTypeRole</key><string>Viewer</string>
+			<key>LSHandlerRank</key><string>Alternate</string>
+			<key>LSItemContentTypes</key><array><string>public.midi-audio</string></array>
+			<key>NSDocumentClass</key><string>ScoreDocument</string>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key><string>com.passport.encore.score</string>
+			<key>UTTypeDescription</key><string>Partition Encore</string>
+			<key>UTTypeConformsTo</key><array><string>public.data</string><string>public.content</string></array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key><array><string>enc</string><string>ENC</string></array>
+			</dict>
+		</dict>
 	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>

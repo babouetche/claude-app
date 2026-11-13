@@ -267,7 +267,7 @@ public struct TimeSignature: Hashable, Codable {
     public var description: String { "\(beats)/\(beatType)" }
 }
 
-public enum Barline: String, Codable { case regular, double, final }
+public enum Barline: String, Codable { case regular, double, final, repeatEnd }
 
 /// Données globales d'une mesure (communes à toutes les portées).
 public struct MeasureInfo: Hashable, Codable {
@@ -276,9 +276,40 @@ public struct MeasureInfo: Hashable, Codable {
     /// Tempo (noires par minute) qui démarre à cette mesure ; nil = inchangé.
     public var tempo: Double?
     public var barline: Barline
+    /// Barre de reprise au début de la mesure.
+    public var repeatStart: Bool = false
+    /// Longueur réelle si différente de la métrique (mesure de levée).
+    public var lengthOverride: Fraction?
 
     public init(time: TimeSignature, key: KeySignature, tempo: Double? = nil, barline: Barline = .regular) {
         self.time = time; self.key = key; self.tempo = tempo; self.barline = barline
+    }
+
+    enum CodingKeys: String, CodingKey { case time, key, tempo, barline, repeatStart, lengthOverride }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        time = try c.decode(TimeSignature.self, forKey: .time)
+        key = try c.decode(KeySignature.self, forKey: .key)
+        tempo = try c.decodeIfPresent(Double.self, forKey: .tempo)
+        barline = try c.decodeIfPresent(Barline.self, forKey: .barline) ?? .regular
+        repeatStart = try c.decodeIfPresent(Bool.self, forKey: .repeatStart) ?? false
+        lengthOverride = try c.decodeIfPresent(Fraction.self, forKey: .lengthOverride)
+    }
+}
+
+/// Texte attaché à une position (accord, basse, doigté, indication…).
+public struct Annotation: Hashable, Codable, Identifiable {
+    public var id: UUID
+    public var staff: StaffRef
+    public var measure: Int
+    public var offset: Fraction
+    public var text: String
+    /// Au-dessus (true) ou au-dessous (false) de la portée.
+    public var above: Bool
+
+    public init(id: UUID = UUID(), staff: StaffRef, measure: Int, offset: Fraction, text: String, above: Bool) {
+        self.id = id; self.staff = staff; self.measure = measure; self.offset = offset; self.text = text; self.above = above
     }
 }
 
@@ -345,9 +376,22 @@ public struct Score: Hashable, Codable {
     public var page: PageSettings
     public var measures: [MeasureInfo]
     public var parts: [Part]
+    public var annotations: [Annotation] = []
 
     public init(metadata: ScoreMetadata = ScoreMetadata(), page: PageSettings = PageSettings(), measures: [MeasureInfo], parts: [Part]) {
         self.metadata = metadata; self.page = page; self.measures = measures; self.parts = parts
+    }
+
+    enum CodingKeys: String, CodingKey { case formatVersion, metadata, page, measures, parts, annotations }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        formatVersion = try c.decodeIfPresent(Int.self, forKey: .formatVersion) ?? 1
+        metadata = try c.decodeIfPresent(ScoreMetadata.self, forKey: .metadata) ?? ScoreMetadata()
+        page = try c.decodeIfPresent(PageSettings.self, forKey: .page) ?? PageSettings()
+        measures = try c.decode([MeasureInfo].self, forKey: .measures)
+        parts = try c.decode([Part].self, forKey: .parts)
+        annotations = try c.decodeIfPresent([Annotation].self, forKey: .annotations) ?? []
     }
 
     public var measureCount: Int { measures.count }
@@ -361,7 +405,7 @@ public struct Score: Hashable, Codable {
         set { parts[ref.part].staves[ref.staff] = newValue }
     }
 
-    public func measureLength(_ m: Int) -> Fraction { measures[m].time.measureLength }
+    public func measureLength(_ m: Int) -> Fraction { measures[m].lengthOverride ?? measures[m].time.measureLength }
 
     /// Tempo en vigueur à la mesure `m`.
     public func tempo(at m: Int) -> Double {
@@ -374,7 +418,7 @@ public struct Score: Hashable, Codable {
     public var measureStartBeats: [Double] {
         var out: [Double] = []
         var acc = 0.0
-        for m in measures { out.append(acc); acc += m.time.measureLength.doubleValue * 4 }
+        for m in measures.indices { out.append(acc); acc += measureLength(m).doubleValue * 4 }
         out.append(acc)
         return out
     }

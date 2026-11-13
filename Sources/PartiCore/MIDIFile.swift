@@ -78,7 +78,7 @@ public enum MIDIExporter {
                 conductor.append((tick, meta(0x59, [UInt8(bitPattern: Int8(info.key.fifths)), 0])))
                 lastKey = info.key
             }
-            t += info.time.measureLength
+            t += score.measureLength(i)
         }
         tracks.append(encodeTrack(conductor))
 

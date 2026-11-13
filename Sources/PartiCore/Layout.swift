@@ -274,7 +274,7 @@ public struct LayoutEngine {
             }
         }
         plan.slots = minDelta.keys.sorted()
-        var x = plan.prefix + 1.3 * sp
+        var x = plan.prefix + 1.3 * sp + (info.repeatStart ? 1.6 * sp : 0)
         for s in plan.slots {
             if accidentals.contains(s) { x += 1.2 * sp }
             plan.slotRel.append(x)
@@ -283,6 +283,7 @@ public struct LayoutEngine {
         if plan.slots.count == 1 && minDelta[plan.slots[0]] == ml && score.staffRefs.allSatisfy({ score.events($0, measure: m).first?.isMeasureRest ?? true }) {
             x = max(x, plan.prefix + 9 * sp)
         }
+        if info.barline == .repeatEnd { x += 1.4 * sp }
         plan.width = max(x + 0.4 * sp, plan.prefix + 6 * sp)
         return plan
     }
@@ -370,7 +371,18 @@ public struct LayoutEngine {
                 let idx = refs.indices.filter { refs[$0].part == p }
                 guard let a = idx.first, let b = idx.last else { continue }
                 let yA = top + staffOffsets[a], yB = top + staffOffsets[b] + 4 * sp
+                let tops = idx.map { top + staffOffsets[$0] }
                 drawBarline(barline, x: mEnd, yTop: yA, yBottom: yB, sp: sp, items: &items)
+                if barline == .repeatEnd {
+                    for t in tops { drawRepeatDots(x: mEnd - SMuFL.thickBarline * sp - 1.2 * sp, staffTop: t, sp: sp, items: &items) }
+                }
+                if score.measures[m].repeatStart {
+                    let rx = mx + (m == first ? 0 : prefix * factor) + 0.1 * sp
+                    let thick = SMuFL.thickBarline * sp
+                    items.append(.line(LPoint(rx + thick / 2, yA), LPoint(rx + thick / 2, yB), width: thick, owner: nil))
+                    items.append(.line(LPoint(rx + thick + 0.4 * sp, yA), LPoint(rx + thick + 0.4 * sp, yB), width: SMuFL.thinBarline * sp, owner: nil))
+                    for t in tops { drawRepeatDots(x: rx + thick + 0.8 * sp, staffTop: t, sp: sp, items: &items) }
+                }
             }
             placed.measures.append(pm)
             mx = mEnd
@@ -413,10 +425,16 @@ public struct LayoutEngine {
         case .double:
             items.append(.line(LPoint(x - thin / 2, yTop), LPoint(x - thin / 2, yBottom), width: thin, owner: nil))
             items.append(.line(LPoint(x - 0.6 * sp, yTop), LPoint(x - 0.6 * sp, yBottom), width: thin, owner: nil))
-        case .final:
+        case .final, .repeatEnd:
             let thick = SMuFL.thickBarline * sp
             items.append(.line(LPoint(x - thick / 2, yTop), LPoint(x - thick / 2, yBottom), width: thick, owner: nil))
             items.append(.line(LPoint(x - thick - 0.4 * sp, yTop), LPoint(x - thick - 0.4 * sp, yBottom), width: thin, owner: nil))
+        }
+    }
+
+    func drawRepeatDots(x: Double, staffTop: Double, sp: Double, items: inout [DrawItem]) {
+        for y in [staffTop + 1.5 * sp, staffTop + 2.5 * sp] {
+            items.append(.glyph(0xE044, LPoint(x, y), size: 4 * sp, scaleY: 1, owner: nil))
         }
     }
 
@@ -537,6 +555,26 @@ public struct LayoutEngine {
             }
 
             notes.append(NoteDraw(key: key, event: e, start: te.start, x: x, positions: sortedPos, stemUp: up, beamed: groupOf[i] != nil))
+        }
+
+        // Textes attachés (accords, basses, doigtés…).
+        var stackAbove: [Int: Int] = [:], stackBelow: [Int: Int] = [:]
+        for a in score.annotations where a.staff == ref && a.measure == m {
+            let ax = pm.x(at: a.offset.doubleValue)
+            let slot = Int(ax / sp)
+            let isFinger = a.text.count <= 2 && a.text.allSatisfy(\.isNumber)
+            let size = isFinger ? sp * 1.5 : sp * 1.85
+            if a.above {
+                let n = stackAbove[slot, default: 0]; stackAbove[slot] = n + 1
+                let highest = min(staffTop - 1.2 * sp, notes.filter { abs($0.x - ax) < 2 * sp }.map { yPos(staffTop, $0.positions.last!, sp) - 3.8 * sp }.min() ?? staffTop)
+                items.append(.text(a.text, LPoint(ax, min(staffTop - 1.2 * sp, highest) - size - Double(n) * size * 1.1),
+                                   size: size, bold: false, italic: isFinger, align: .left))
+            } else {
+                let n = stackBelow[slot, default: 0]; stackBelow[slot] = n + 1
+                let lowest = max(staffTop + 5.2 * sp, notes.filter { abs($0.x - ax) < 2 * sp }.map { yPos(staffTop, $0.positions.first!, sp) + 1.5 * sp }.max() ?? 0)
+                items.append(.text(a.text, LPoint(ax, lowest + Double(n) * size * 1.1),
+                                   size: size, bold: !isFinger, italic: false, align: .left))
+            }
         }
 
         // Hampes et crochets des notes isolées.

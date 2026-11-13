@@ -221,6 +221,7 @@ extension Score {
         for ref in staffRefs {
             for _ in 0..<count { self[ref].measures.insert(StaffMeasure(), at: i) }
         }
+        for k in annotations.indices where annotations[k].measure >= i { annotations[k].measure += count }
     }
 
     public mutating func appendMeasures(_ count: Int = 1) { insertMeasures(at: measureCount, count: count) }
@@ -232,6 +233,12 @@ extension Score {
         let firstInfo = measures[r.lowerBound]
         measures.removeSubrange(r)
         for ref in staffRefs { self[ref].measures.removeSubrange(r) }
+        annotations = annotations.compactMap { a in
+            if r.contains(a.measure) { return nil }
+            var a = a
+            if a.measure >= r.upperBound { a.measure -= r.count }
+            return a
+        }
         if wasFinal { measures[measureCount - 1].barline = .final }
         if r.lowerBound == 0 && measures[0].tempo == nil { measures[0].tempo = firstInfo.tempo }
     }

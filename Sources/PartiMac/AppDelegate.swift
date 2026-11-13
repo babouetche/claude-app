@@ -17,7 +17,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
         LaunchLog.write("didFinishLaunching — fenêtres : \(NSApp.windows.count), documents : \(NSDocumentController.shared.documents.count)")
         // Si aucune partition n'a été ouverte (fichier double-cliqué, restauration), on en crée une nous-mêmes.
-        DispatchQueue.main.async { AppDelegate.ensureWindow() }
+        // Léger délai : si l'app a été ouverte par un double-clic sur un fichier, il arrive juste après.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { AppDelegate.ensureWindow() }
     }
 
     static func ensureWindow() {
@@ -55,6 +56,54 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { true }
 
     // MARK: Commandes globales
+
+    /// Crée une partition à partir d'un fichier Encore (.enc) ou MIDI, et l'affiche.
+    @discardableResult
+    static func importDocument(from url: URL) throws -> ScoreDocument {
+        let data = try Data(contentsOf: url)
+        let name = url.deletingPathExtension().lastPathComponent
+        let doc = ScoreDocument()
+        doc.importedContent = true
+        var message = ""
+        if url.pathExtension.lowercased() == "enc" {
+            let (score, report) = try EncoreImporter.importScore(from: data, fileName: name)
+            doc.score = score
+            message = "Partition Encore importée : \(report.measures) mesures, \(report.notes) notes, \(report.texts) textes."
+            if report.hiddenVoiceNotes > 0 { message += " \(report.hiddenVoiceNotes) notes de voix secondaires ne sont pas encore affichées." }
+            if report.skippedGraceNotes > 0 { message += " \(report.skippedGraceNotes) notes d'ornement ignorées." }
+        } else {
+            doc.score = try MIDIImporter.score(from: data, title: name)
+            message = "Fichier MIDI importé."
+        }
+        doc.fileType = ScoreDocument.typeIdentifier
+        doc.displayName = name
+        NSDocumentController.shared.addDocument(doc)
+        doc.makeWindowControllers()
+        doc.showWindows()
+        doc.updateChangeCount(.changeDone)
+        (doc.windowControllers.first as? ScoreWindowController)?.showStatus(message + " Enregistrez-la (⌘S) pour la garder au format de l'app.", isError: false)
+        LaunchLog.write("import \(url.lastPathComponent) : \(message)")
+        return doc
+    }
+
+    @objc func importEncore(_ sender: Any?) {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [UTType(filenameExtension: "enc") ?? .data]
+        panel.allowsMultipleSelection = true
+        panel.message = "Choisissez une ou plusieurs partitions Encore (.enc) à ouvrir"
+        panel.prompt = "Importer"
+        guard panel.runModal() == .OK else { return }
+        var failures: [String] = []
+        for url in panel.urls {
+            do { try AppDelegate.importDocument(from: url) } catch { failures.append("\(url.lastPathComponent) : \(error.localizedDescription)") }
+        }
+        if !failures.isEmpty {
+            let a = NSAlert()
+            a.messageText = "Certaines partitions n'ont pas pu être importées."
+            a.informativeText = failures.joined(separator: "\n")
+            a.runModal()
+        }
+    }
 
     @objc func importMIDI(_ sender: Any?) {
         let panel = NSOpenPanel()
@@ -141,6 +190,8 @@ enum MainMenu {
         saveAs.keyEquivalentModifierMask = [.command, .shift]
         file.addItem(withTitle: "Revenir à…", action: #selector(NSDocument.revertToSaved(_:)), keyEquivalent: "")
         file.addItem(.separator())
+        let enc = file.addItem(withTitle: "Importer des partitions Encore (.enc)…", action: #selector(AppDelegate.importEncore(_:)), keyEquivalent: "i")
+        enc.keyEquivalentModifierMask = [.command, .shift]
         file.addItem(withTitle: "Importer un fichier MIDI…", action: #selector(AppDelegate.importMIDI(_:)), keyEquivalent: "")
         file.addItem(withTitle: "Exporter en PDF…", action: #selector(ScoreWindowController.exportPDF(_:)), keyEquivalent: "e")
         file.addItem(withTitle: "Exporter en MIDI…", action: #selector(ScoreWindowController.exportMIDI(_:)), keyEquivalent: "")
@@ -208,8 +259,34 @@ enum MainMenu {
 
 /// Contrôleur de documents : type et classe déclarés dans le code, sans dépendre de la lecture d'Info.plist.
 final class DocumentController: NSDocumentController {
+    static let encoreType = "com.passport.encore.score"
+    static let midiType = "public.midi-audio"
+
     override var defaultType: String? { ScoreDocument.typeIdentifier }
     override var documentClassNames: [String] { [NSStringFromClass(ScoreDocument.self)] }
     override func documentClass(forType typeName: String) -> AnyClass? { ScoreDocument.self }
-    override func typeForContents(of url: URL) throws -> String { ScoreDocument.typeIdentifier }
+    override func typeForContents(of url: URL) throws -> String {
+        switch url.pathExtension.lowercased() {
+        case "enc": return DocumentController.encoreType
+        case "mid", "midi": return DocumentController.midiType
+        default: return ScoreDocument.typeIdentifier
+        }
+    }
+
+    /// Les fichiers Encore et MIDI s'ouvrent comme une nouvelle partition (l'original n'est jamais modifié).
+    override func openDocument(withContentsOf url: URL, display displayDocument: Bool,
+                               completionHandler: @escaping (NSDocument?, Bool, Error?) -> Void) {
+        let ext = url.pathExtension.lowercased()
+        guard ["enc", "mid", "midi"].contains(ext) else {
+            super.openDocument(withContentsOf: url, display: displayDocument, completionHandler: completionHandler)
+            return
+        }
+        do {
+            let doc = try AppDelegate.importDocument(from: url)
+            completionHandler(doc, false, nil)
+        } catch {
+            LaunchLog.write("ERREUR import \(url.lastPathComponent) : \(error)")
+            completionHandler(nil, false, error)
+        }
+    }
 }
