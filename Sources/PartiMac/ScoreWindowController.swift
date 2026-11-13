@@ -163,10 +163,6 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         scoreView = ScoreView(document: doc, state: state)
         scrollView.documentView = scoreView
         scrollView.magnification = 1.3
-        scrollView.contentView.postsFrameChangedNotifications = true
-        NotificationCenter.default.addObserver(forName: NSView.frameDidChangeNotification, object: scrollView.contentView, queue: .main) { [weak self] _ in
-            self?.scoreView.updateSize()
-        }
 
         // Barre d'état.
         statusLabel.font = .systemFont(ofSize: 12)

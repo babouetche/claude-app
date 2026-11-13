@@ -58,8 +58,9 @@ final class ScoreView: NSView {
         guard let l = layout else { return }
         let w = (l.pages.map { CGFloat($0.width) }.max() ?? 600) + 2 * pageGap
         let h = l.pages.reduce(pageGap) { $0 + CGFloat($1.height) + pageGap }
-        let width = max(w, superview?.bounds.width ?? w)
-        if frame.size != NSSize(width: width, height: h) { setFrameSize(NSSize(width: width, height: h)) }
+        // Taille fixe, indépendante de la fenêtre : le centrage est fait par CenteringClipView.
+        // (Lier la largeur à la zone visible créait une boucle infinie avec les barres de défilement.)
+        if frame.size != NSSize(width: w, height: h) { setFrameSize(NSSize(width: w, height: h)) }
         needsDisplay = true
     }
 
