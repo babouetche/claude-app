@@ -56,10 +56,16 @@ jobs:
 
       - name: Lancement par double-clic (open)
         run: |
+          rm -f "$HOME/Library/Logs/Partitions de Titi.log"
           open "build/Partitions de Titi.app"
-          sleep 10
+          sleep 12
           pgrep -x PartiMac
+          echo "--- Journal de démarrage ---"
+          cat "$HOME/Library/Logs/Partitions de Titi.log" || true
           pkill -x PartiMac || true
+          # Le lancement doit aller jusqu'au bout (fin du démarrage + fenêtre affichée).
+          grep -q "didFinishLaunching" "$HOME/Library/Logs/Partitions de Titi.log"
+          grep -q "fenêtre de partition affichée" "$HOME/Library/Logs/Partitions de Titi.log"
 
       - name: Lien de téléchargement (version « titi-latest »)
         if: github.event_name == 'push'
