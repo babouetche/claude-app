@@ -20,9 +20,11 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     private var transientStatus: String?
     private var glyphs: [ObjectIdentifier: UInt32] = [:]
 
-    var scoreDocument: ScoreDocument { document as! ScoreDocument }
+    /// La partition de cette fenêtre (gardée ici : `document` n'est rempli qu'au moment où macOS rattache la fenêtre).
+    let scoreDocument: ScoreDocument
 
     init(document: ScoreDocument) {
+        self.scoreDocument = document
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1180, height: 860),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
                               backing: .buffered, defer: false)
@@ -31,7 +33,8 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         window.titlebarAppearsTransparent = true
         window.backgroundColor = Theme.bar
         super.init(window: window)
-        self.document = document
+        // Ne pas faire « self.document = document » ici : c'est addWindowController() qui doit le faire,
+        // sinon macOS considère la fenêtre déjà rattachée et ne l'affiche jamais.
         window.delegate = self
         buildUI(document)
         window.center()

@@ -28,7 +28,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         do {
             let doc = try dc.openUntitledDocumentAndDisplay(true)
-            LaunchLog.write("nouvelle partition créée : \(type(of: doc))")
+            LaunchLog.write("nouvelle partition créée : \(type(of: doc)), fenêtres liées : \(doc.windowControllers.count)")
+            // Ceinture et bretelles : on s'assure que la fenêtre est bien montrée.
+            if doc.windowControllers.isEmpty { doc.makeWindowControllers() }
+            doc.showWindows()
+            for wc in doc.windowControllers where wc.window?.isVisible != true { wc.showWindow(nil) }
         } catch {
             LaunchLog.write("ERREUR création partition (méthode standard) : \(error)")
             // Repli : création directe, sans passer par les types de documents.
