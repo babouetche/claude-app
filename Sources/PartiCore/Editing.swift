@@ -211,14 +211,13 @@ extension Score {
     public mutating func insertMeasures(at index: Int, count: Int = 1) {
         let i = max(0, min(index, measureCount))
         let template = measures[max(0, min(i, measureCount - 1))]
-        var info = MeasureInfo(time: template.time, key: template.key)
-        if i == measureCount, measureCount > 0 {
-            // Ajout en fin : la barre finale passe à la nouvelle dernière mesure.
-            info.barline = measures[measureCount - 1].barline
-            measures[measureCount - 1].barline = .regular
-        }
+        let info = MeasureInfo(time: template.time, key: template.key)
+        let appendingAtEnd = i == measureCount && measureCount > 0
+        let endBarline = appendingAtEnd ? measures[measureCount - 1].barline : .regular
+        if appendingAtEnd { measures[measureCount - 1].barline = .regular }
         for _ in 0..<count { measures.insert(info, at: i) }
-        if i < measureCount - count { measures[i].barline = .regular }
+        // Ajout en fin : seule la nouvelle dernière mesure reçoit la barre finale.
+        if appendingAtEnd { measures[measureCount - 1].barline = endBarline }
         for ref in staffRefs {
             for _ in 0..<count { self[ref].measures.insert(StaffMeasure(), at: i) }
         }

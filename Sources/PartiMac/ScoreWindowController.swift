@@ -170,6 +170,9 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         }
         NSLayoutConstraint.activate([
             top.topAnchor.constraint(equalTo: content.topAnchor),
+            top.heightAnchor.constraint(equalToConstant: 44),
+            topSep.heightAnchor.constraint(equalToConstant: 1),
+            bottomSep.heightAnchor.constraint(equalToConstant: 1),
             top.leadingAnchor.constraint(equalTo: content.leadingAnchor),
             top.trailingAnchor.constraint(equalTo: content.trailingAnchor),
             topSep.topAnchor.constraint(equalTo: top.bottomAnchor),

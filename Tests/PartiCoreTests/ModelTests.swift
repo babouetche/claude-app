@@ -121,6 +121,7 @@ final class EditingTests: XCTestCase {
         s.appendMeasures(2)
         XCTAssertEqual(s.measureCount, 5)
         XCTAssertEqual(s.measures.last?.barline, .final)
+        XCTAssertEqual(s.measures.filter { $0.barline == .final }.count, 1)
         XCTAssertEqual(s.measures[2].barline, .regular)
         s.insertMeasures(at: 0)
         XCTAssertEqual(s.measureCount, 6)
