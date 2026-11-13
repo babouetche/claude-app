@@ -5,7 +5,9 @@ import PartiCore
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         LaunchLog.write("willFinishLaunching")
-        _ = NSDocumentController.shared
+        // Le premier contrôleur créé devient le contrôleur partagé : on impose le nôtre.
+        _ = DocumentController()
+        LaunchLog.write("contrôleur de documents : \(type(of: NSDocumentController.shared))")
         Fonts.register()
         NSApp.mainMenu = MainMenu.build()
         LaunchLog.write("menus prêts")
@@ -13,10 +15,39 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.activate(ignoringOtherApps: true)
-        LaunchLog.write("didFinishLaunching — fenêtres : \(NSApp.windows.count)")
+        LaunchLog.write("didFinishLaunching — fenêtres : \(NSApp.windows.count), documents : \(NSDocumentController.shared.documents.count)")
+        // Si aucune partition n'a été ouverte (fichier double-cliqué, restauration), on en crée une nous-mêmes.
+        DispatchQueue.main.async { AppDelegate.ensureWindow() }
     }
 
-    func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { true }
+    static func ensureWindow() {
+        let dc = NSDocumentController.shared
+        guard dc.documents.isEmpty else {
+            for d in dc.documents where d.windowControllers.isEmpty { d.makeWindowControllers(); d.showWindows() }
+            return
+        }
+        do {
+            let doc = try dc.openUntitledDocumentAndDisplay(true)
+            LaunchLog.write("nouvelle partition créée : \(type(of: doc))")
+        } catch {
+            LaunchLog.write("ERREUR création partition (méthode standard) : \(error)")
+            // Repli : création directe, sans passer par les types de documents.
+            let doc = ScoreDocument()
+            doc.fileType = ScoreDocument.typeIdentifier
+            dc.addDocument(doc)
+            doc.makeWindowControllers()
+            doc.showWindows()
+            LaunchLog.write("partition créée par la méthode de secours")
+        }
+    }
+
+    /// La partition de départ est créée par ensureWindow() (plus fiable que le mécanisme automatique).
+    func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { false }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag { AppDelegate.ensureWindow() }
+        return true
+    }
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { true }
 
     // MARK: Commandes globales
@@ -169,4 +200,12 @@ enum MainMenu {
         main.addItem(item)
         return menu
     }
+}
+
+/// Contrôleur de documents : type et classe déclarés dans le code, sans dépendre de la lecture d'Info.plist.
+final class DocumentController: NSDocumentController {
+    override var defaultType: String? { ScoreDocument.typeIdentifier }
+    override var documentClassNames: [String] { [NSStringFromClass(ScoreDocument.self)] }
+    override func documentClass(forType typeName: String) -> AnyClass? { ScoreDocument.self }
+    override func typeForContents(of url: URL) throws -> String { ScoreDocument.typeIdentifier }
 }

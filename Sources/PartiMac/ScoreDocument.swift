@@ -33,6 +33,7 @@ final class ScoreDocument: NSDocument {
         if fileURL == nil && autosavedContentsFileURL == nil && !isDocumentEdited && !importedContent {
             needsSetup = true
         }
+        LaunchLog.write("création de la fenêtre de partition")
         addWindowController(ScoreWindowController(document: self))
     }
 
