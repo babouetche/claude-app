@@ -1,0 +1,169 @@
+import AppKit
+import UniformTypeIdentifiers
+import PartiCore
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        _ = NSDocumentController.shared
+        Fonts.register()
+        NSApp.mainMenu = MainMenu.build()
+    }
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { true }
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { true }
+
+    // MARK: Commandes globales
+
+    @objc func importMIDI(_ sender: Any?) {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [UTType(filenameExtension: "mid") ?? .midi, UTType(filenameExtension: "midi") ?? .midi, .midi]
+        panel.message = "Choisissez un fichier MIDI à transformer en partition"
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            let data = try Data(contentsOf: url)
+            let score = try MIDIImporter.score(from: data, title: url.deletingPathExtension().lastPathComponent)
+            let doc = ScoreDocument()
+            doc.importedContent = true
+            doc.score = score
+            NSDocumentController.shared.addDocument(doc)
+            doc.makeWindowControllers()
+            doc.showWindows()
+            doc.updateChangeCount(.changeDone)
+        } catch {
+            let a = NSAlert()
+            a.messageText = "Impossible d'importer ce fichier MIDI."
+            a.informativeText = error.localizedDescription
+            a.runModal()
+        }
+    }
+
+    @objc func showShortcuts(_ sender: Any?) {
+        let a = NSAlert()
+        a.messageText = "Raccourcis clavier de PartiMac"
+        a.informativeText = """
+        SAISIE
+        1 à 7 : ronde, blanche, noire, croche, double, triple, quadruple croche (0 = carrée, 8 = quintuple)
+        A B C D E F G : poser la note la, si, do, ré, mi, fa, sol (à la hauteur la plus proche)
+        Maj + lettre : ajouter la note à l'accord
+        Entrée : poser un silence  ·  R : mode silences pour la souris
+        . : point  ·  + dièse  ·  - bémol  ·  = bécarre  ·  T : liaison
+        Clic sur la portée : poser une note  ·  Maj + clic : ajouter à l'accord
+
+        MODIFIER
+        Échap : passer de la saisie (crayon) à la sélection (flèche)
+        ← → : note précédente / suivante
+        ↑ ↓ : un demi-ton  ·  Maj ↑↓ : un degré  ·  ⌥ ↑↓ : une octave
+        Suppr : remplacer par un silence
+        Glisser une note (flèche) : changer sa hauteur
+        ⌘ Z : annuler  ·  ⇧⌘ Z : rétablir
+
+        LECTURE ET FICHIERS
+        Espace : écouter / arrêter (à partir de la note sélectionnée)
+        ⌘ S : enregistrer  ·  ⌘ E : exporter en PDF  ·  ⌘ P : imprimer
+        ⌘ + / ⌘ - : zoom
+        """
+        a.runModal()
+    }
+}
+
+enum MainMenu {
+    static func build() -> NSMenu {
+        let main = NSMenu()
+
+        // PartiMac
+        let app = submenu(main, "PartiMac")
+        app.addItem(withTitle: "À propos de PartiMac", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        app.addItem(.separator())
+        let services = NSMenu(title: "Services")
+        app.addItem(withTitle: "Services", action: nil, keyEquivalent: "").submenu = services
+        NSApp.servicesMenu = services
+        app.addItem(.separator())
+        app.addItem(withTitle: "Masquer PartiMac", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        let others = app.addItem(withTitle: "Masquer les autres", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+        others.keyEquivalentModifierMask = [.command, .option]
+        app.addItem(withTitle: "Tout afficher", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
+        app.addItem(.separator())
+        app.addItem(withTitle: "Quitter PartiMac", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+
+        // Fichier
+        let file = submenu(main, "Fichier")
+        file.addItem(withTitle: "Nouvelle partition…", action: #selector(NSDocumentController.newDocument(_:)), keyEquivalent: "n")
+        file.addItem(withTitle: "Ouvrir…", action: #selector(NSDocumentController.openDocument(_:)), keyEquivalent: "o")
+        let recent = NSMenu(title: "Ouvrir récent")
+        recent.addItem(withTitle: "Effacer le menu", action: #selector(NSDocumentController.clearRecentDocuments(_:)), keyEquivalent: "")
+        file.addItem(withTitle: "Ouvrir récent", action: nil, keyEquivalent: "").submenu = recent
+        file.addItem(.separator())
+        file.addItem(withTitle: "Fermer", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+        file.addItem(withTitle: "Enregistrer…", action: #selector(NSDocument.save(_:)), keyEquivalent: "s")
+        let saveAs = file.addItem(withTitle: "Enregistrer sous…", action: #selector(NSDocument.saveAs(_:)), keyEquivalent: "s")
+        saveAs.keyEquivalentModifierMask = [.command, .shift]
+        file.addItem(withTitle: "Revenir à…", action: #selector(NSDocument.revertToSaved(_:)), keyEquivalent: "")
+        file.addItem(.separator())
+        file.addItem(withTitle: "Importer un fichier MIDI…", action: #selector(AppDelegate.importMIDI(_:)), keyEquivalent: "")
+        file.addItem(withTitle: "Exporter en PDF…", action: #selector(ScoreWindowController.exportPDF(_:)), keyEquivalent: "e")
+        file.addItem(withTitle: "Exporter en MIDI…", action: #selector(ScoreWindowController.exportMIDI(_:)), keyEquivalent: "")
+        file.addItem(.separator())
+        file.addItem(withTitle: "Imprimer…", action: #selector(ScoreWindowController.printScore(_:)), keyEquivalent: "p")
+
+        // Édition
+        let edit = submenu(main, "Édition")
+        edit.addItem(withTitle: "Annuler", action: Selector(("undo:")), keyEquivalent: "z")
+        let redo = edit.addItem(withTitle: "Rétablir", action: Selector(("redo:")), keyEquivalent: "z")
+        redo.keyEquivalentModifierMask = [.command, .shift]
+        edit.addItem(.separator())
+        edit.addItem(withTitle: "Couper", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        edit.addItem(withTitle: "Copier", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        edit.addItem(withTitle: "Coller", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        edit.addItem(withTitle: "Tout sélectionner", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+
+        // Mesures
+        let measures = submenu(main, "Mesures")
+        let add = measures.addItem(withTitle: "Ajouter une mesure à la fin", action: #selector(ScoreWindowController.appendMeasure(_:)), keyEquivalent: "m")
+        add.keyEquivalentModifierMask = [.command, .option]
+        measures.addItem(withTitle: "Insérer une mesure avant la sélection", action: #selector(ScoreWindowController.insertMeasure(_:)), keyEquivalent: "")
+        measures.addItem(withTitle: "Supprimer la mesure sélectionnée", action: #selector(ScoreWindowController.deleteMeasure(_:)), keyEquivalent: "")
+
+        // Partition
+        let score = submenu(main, "Partition")
+        score.addItem(withTitle: "Titre et compositeur…", action: #selector(ScoreWindowController.editScoreInfo(_:)), keyEquivalent: "")
+
+        // Lecture
+        let play = submenu(main, "Lecture")
+        play.addItem(withTitle: "Écouter / arrêter (Espace)", action: #selector(ScoreWindowController.togglePlayback(_:)), keyEquivalent: "")
+        play.addItem(withTitle: "Écouter depuis le début", action: #selector(ScoreWindowController.playFromStart(_:)), keyEquivalent: "")
+
+        // Présentation
+        let view = submenu(main, "Présentation")
+        view.addItem(withTitle: "Zoom avant", action: #selector(ScoreWindowController.zoomIn(_:)), keyEquivalent: "+")
+        view.addItem(withTitle: "Zoom arrière", action: #selector(ScoreWindowController.zoomOut(_:)), keyEquivalent: "-")
+        view.addItem(withTitle: "Taille normale", action: #selector(ScoreWindowController.zoomActual(_:)), keyEquivalent: "0")
+        view.addItem(.separator())
+        let fs = view.addItem(withTitle: "Plein écran", action: #selector(NSWindow.toggleFullScreen(_:)), keyEquivalent: "f")
+        fs.keyEquivalentModifierMask = [.command, .control]
+
+        // Fenêtre
+        let window = submenu(main, "Fenêtre")
+        window.addItem(withTitle: "Placer dans le Dock", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        window.addItem(withTitle: "Réduire/agrandir", action: #selector(NSWindow.performZoom(_:)), keyEquivalent: "")
+        NSApp.windowsMenu = window
+
+        // Aide
+        let help = submenu(main, "Aide")
+        help.addItem(withTitle: "Raccourcis clavier", action: #selector(AppDelegate.showShortcuts(_:)), keyEquivalent: "?")
+        NSApp.helpMenu = help
+
+        return main
+    }
+
+    private static func submenu(_ main: NSMenu, _ title: String) -> NSMenu {
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        let menu = NSMenu(title: title)
+        item.submenu = menu
+        main.addItem(item)
+        return menu
+    }
+}

@@ -1,0 +1,68 @@
+name: PartiMac — compilation universelle
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Versions (macOS, Xcode, SDK)
+        run: |
+          sw_vers
+          xcodebuild -version
+          echo "SDK macOS : $(xcrun --sdk macosx --show-sdk-version)"
+          swift --version
+          uname -m
+
+      - name: Banque de sons
+        run: scripts/fetch-soundfont.sh
+
+      - name: Tests unitaires
+        run: swift test
+
+      - name: Application universelle + DMG
+        run: scripts/build-app.sh
+
+      - name: Vérification universelle (lipo)
+        run: |
+          INFO=$(lipo -info build/PartiMac.app/Contents/MacOS/PartiMac)
+          echo "$INFO"
+          echo "$INFO" | grep -q arm64
+          echo "$INFO" | grep -q x86_64
+          vtool -show-build build/PartiMac.app/Contents/MacOS/PartiMac | grep -E "minos|platform" | head -4
+
+      - name: Auto-test (arm64)
+        run: build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-arm64 | tee build/selftest-arm64.log
+
+      - name: Auto-test (x86_64 via Rosetta)
+        run: |
+          if arch -x86_64 /usr/bin/true 2>/dev/null; then
+            arch -x86_64 build/PartiMac.app/Contents/MacOS/PartiMac --selftest build/selftest-x86_64 | grep -v -A1 BEGIN_PNG | grep -v "^[A-Za-z0-9+/=]\{200,\}$"
+          else
+            echo "Rosetta indisponible sur ce runner : test x86_64 ignoré"
+          fi
+
+      - name: Lancement par double-clic (open)
+        run: |
+          open build/PartiMac.app
+          sleep 10
+          pgrep -x PartiMac
+          pkill -x PartiMac || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PartiMac-dmg
+          path: build/PartiMac.dmg
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: autotest
+          path: build/selftest-*
