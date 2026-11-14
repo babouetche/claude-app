@@ -113,8 +113,10 @@ final class EditingTests: XCTestCase {
         try s.setEvent(at: pos(0, .zero), duration: Duration(.eighth), pitches: [Pitch(step: 0, octave: 5)], tuplet: t)
         let evs = s.timedEvents(rh, measure: 0)
         XCTAssertEqual(evs.prefix(3).map { $0.event.tuplet }, [t, t, t])
-        XCTAssertEqual(evs.map(\.start), [.zero, Fraction(1, 12), Fraction(2, 12), Fraction(1, 4)])
-        XCTAssertEqual(evs.last?.event.duration, Duration(.half))
+        // 3/4 : triolet sur le 1er temps, puis deux soupirs (2e et 3e temps).
+        XCTAssertEqual(evs.map(\.start), [.zero, Fraction(1, 12), Fraction(2, 12), Fraction(1, 4), Fraction(1, 2)])
+        XCTAssertEqual(evs.last?.event.duration, Duration(.quarter))
+        XCTAssertNil(evs.last?.event.tuplet)
         try s.setEvent(at: pos(0, Fraction(1, 12)), duration: Duration(.eighth), pitches: [Pitch(step: 1, octave: 5)], tuplet: t)
         XCTAssertEqual(s.events(rh, measure: 0).filter { !$0.isRest }.count, 2)
     }
