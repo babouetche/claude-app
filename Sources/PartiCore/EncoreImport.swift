@@ -309,7 +309,7 @@ public enum EncoreImporter {
         // Retours à la ligne identiques à ceux d'Encore.
         for start in p.lineStarts where start > 0 && start < infos.count { infos[start].systemBreak = true }
 
-        var score = Score(metadata: ScoreMetadata(title: p.title.isEmpty ? fileName : p.title.capitalizedTitle),
+        var score = Score(metadata: ScoreMetadata(title: p.title.isEmpty ? fileName : p.title),
                           measures: infos, parts: parts)
         if !p.authors.isEmpty { score.metadata.composer = p.authors.joined(separator: ", ") }
 

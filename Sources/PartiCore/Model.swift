@@ -414,7 +414,23 @@ public struct PageSettings: Hashable, Codable {
     public var marginRight: Double = 42
     /// Interligne en points (taille de portée).
     public var staffSpace: Double = 6.2
+    /// Police des textes (titre, accords, doigtés…). Times New Roman, comme dans Encore.
+    public var textFont: String = "Times New Roman"
     public init() {}
+
+    enum CodingKeys: String, CodingKey { case width, height, marginTop, marginBottom, marginLeft, marginRight, staffSpace, textFont }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        width = try c.decodeIfPresent(Double.self, forKey: .width) ?? width
+        height = try c.decodeIfPresent(Double.self, forKey: .height) ?? height
+        marginTop = try c.decodeIfPresent(Double.self, forKey: .marginTop) ?? marginTop
+        marginBottom = try c.decodeIfPresent(Double.self, forKey: .marginBottom) ?? marginBottom
+        marginLeft = try c.decodeIfPresent(Double.self, forKey: .marginLeft) ?? marginLeft
+        marginRight = try c.decodeIfPresent(Double.self, forKey: .marginRight) ?? marginRight
+        staffSpace = try c.decodeIfPresent(Double.self, forKey: .staffSpace) ?? staffSpace
+        textFont = try c.decodeIfPresent(String.self, forKey: .textFont) ?? textFont
+    }
 }
 
 /// Référence d'une portée : partie + indice de portée dans la partie.

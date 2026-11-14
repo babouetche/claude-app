@@ -77,7 +77,7 @@ struct Renderer {
                              control2: CGPoint(x: a.x + span * 0.25, y: a.y + t))
                 ctx.fillPath()
             case let .text(string, p, size, bold, italic, align):
-                drawText(string, at: p, size: CGFloat(size), bold: bold, italic: italic, align: align)
+                drawText(string, at: p, size: CGFloat(size), bold: bold, italic: italic, align: align, family: page.textFont)
             }
         }
         ctx.restoreGState()
@@ -101,9 +101,13 @@ struct Renderer {
         ctx.restoreGState()
     }
 
-    func drawText(_ s: String, at p: LPoint, size: CGFloat, bold: Bool, italic: Bool, align: TextAlign) {
-        var font = bold ? NSFont.boldSystemFont(ofSize: size) : NSFont.systemFont(ofSize: size)
-        if italic { font = NSFontManager.shared.convert(font, toHaveTrait: .italicFontMask) }
+    func drawText(_ s: String, at p: LPoint, size: CGFloat, bold: Bool, italic: Bool, align: TextAlign, family: String = "Times New Roman") {
+        // Police de la partition (Times New Roman par défaut, comme Encore), sinon police système.
+        var font = NSFont(name: family, size: size) ?? NSFont.systemFont(ofSize: size)
+        var traits: NSFontTraitMask = []
+        if bold { traits.insert(.boldFontMask) }
+        if italic { traits.insert(.italicFontMask) }
+        if !traits.isEmpty { font = NSFontManager.shared.convert(font, toHaveTrait: traits) }
         let attrs: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: ink]
         let str = NSAttributedString(string: s, attributes: attrs)
         let w = str.size().width

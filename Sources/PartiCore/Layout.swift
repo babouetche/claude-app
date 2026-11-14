@@ -95,6 +95,8 @@ public struct LayoutPage {
     public var width: Double
     public var height: Double
     public var items: [DrawItem]
+    /// Police des textes.
+    public var textFont: String = "Times New Roman"
 }
 
 public struct HitResult {
@@ -211,15 +213,15 @@ public struct LayoutEngine {
         var pageIndex = 0
         var cursorY = page.marginTop
         func newPage() {
-            pages.append(LayoutPage(width: page.width, height: page.height, items: items))
+            pages.append(LayoutPage(width: page.width, height: page.height, items: items, textFont: page.textFont))
             items = []; pageIndex += 1; cursorY = page.marginTop
         }
 
         // Titre et compositeur sur la première page.
         let md = score.metadata
         if !md.title.isEmpty || !md.composer.isEmpty || !md.subtitle.isEmpty {
-            if !md.title.isEmpty { items.append(.text(md.title, LPoint(page.width / 2, cursorY), size: 22, bold: true, italic: false, align: .center)) }
-            cursorY += 32
+            if !md.title.isEmpty { items.append(.text(md.title, LPoint(page.width / 2, cursorY), size: 26, bold: true, italic: false, align: .center)) }
+            cursorY += 36
             if !md.subtitle.isEmpty { items.append(.text(md.subtitle, LPoint(page.width / 2, cursorY), size: 13, bold: false, italic: false, align: .center)); cursorY += 18 }
             if !md.composer.isEmpty { items.append(.text(md.composer, LPoint(page.width - page.marginRight, cursorY), size: 11, bold: false, italic: false, align: .right)) }
             cursorY += 20
@@ -236,7 +238,7 @@ public struct LayoutEngine {
             systems.append(sys)
             cursorY = top + systemHeight + 4 * sp + 2 * sp
         }
-        pages.append(LayoutPage(width: page.width, height: page.height, items: items))
+        pages.append(LayoutPage(width: page.width, height: page.height, items: items, textFont: page.textFont))
 
         var result = ScoreLayout(pages: pages, systems: systems, staffSpace: sp)
         addTies(score, layout: &result, sp: sp)
