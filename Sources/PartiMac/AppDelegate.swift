@@ -88,11 +88,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func importEncore(_ sender: Any?) {
         let panel = NSOpenPanel()
-        panel.allowedContentTypes = [UTType(filenameExtension: "enc") ?? .data]
+        // Pas de filtre par type : Encore déclare ses propres types de fichiers, qui seraient grisés.
+        // On filtre par extension.
+        let filter = ExtensionFilter(["enc"])
+        panel.delegate = filter
         panel.allowsMultipleSelection = true
         panel.message = "Choisissez une ou plusieurs partitions Encore (.enc) à ouvrir"
         panel.prompt = "Importer"
-        guard panel.runModal() == .OK else { return }
+        let response = panel.runModal()
+        withExtendedLifetime(filter) {}
+        guard response == .OK else { return }
         var failures: [String] = []
         for url in panel.urls {
             do { try AppDelegate.importDocument(from: url) } catch { failures.append("\(url.lastPathComponent) : \(error.localizedDescription)") }
@@ -273,6 +278,22 @@ final class DocumentController: NSDocumentController {
         }
     }
 
+    /// Fenêtre « Ouvrir » : on accepte nos partitions, Encore et MIDI, reconnus par leur extension.
+    let openFilter = ExtensionFilter(["partimac", "enc", "mid", "midi"])
+
+    override func beginOpenPanel(_ openPanel: NSOpenPanel, forTypes inTypes: [String]?, completionHandler: @escaping (Int) -> Void) {
+        openPanel.delegate = openFilter
+        openPanel.allowsMultipleSelection = true
+        openPanel.message = "Choisissez une partition (Partitions de Titi, Encore .enc ou MIDI)"
+        super.beginOpenPanel(openPanel, forTypes: nil, completionHandler: completionHandler)
+    }
+
+    override func runModalOpenPanel(_ openPanel: NSOpenPanel, forTypes types: [String]?) -> Int {
+        openPanel.delegate = openFilter
+        openPanel.allowsMultipleSelection = true
+        return super.runModalOpenPanel(openPanel, forTypes: nil)
+    }
+
     /// Les fichiers Encore et MIDI s'ouvrent comme une nouvelle partition (l'original n'est jamais modifié).
     override func openDocument(withContentsOf url: URL, display displayDocument: Bool,
                                completionHandler: @escaping (NSDocument?, Bool, Error?) -> Void) {
@@ -288,5 +309,14 @@ final class DocumentController: NSDocumentController {
             LaunchLog.write("ERREUR import \(url.lastPathComponent) : \(error)")
             completionHandler(nil, false, error)
         }
+    }
+}
+
+/// Filtre des fenêtres d'ouverture par extension (insensible à la casse).
+final class ExtensionFilter: NSObject, NSOpenSavePanelDelegate {
+    let extensions: Set<String>
+    init(_ extensions: [String]) { self.extensions = Set(extensions) }
+    func panel(_ sender: Any, shouldEnable url: URL) -> Bool {
+        url.hasDirectoryPath || extensions.contains(url.pathExtension.lowercased())
     }
 }

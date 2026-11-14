@@ -38,6 +38,14 @@
 			<key>NSDocumentClass</key><string>ScoreDocument</string>
 		</dict>
 		<dict>
+			<!-- Fichiers .enc revendiqués par Encore lui-même : acceptés par extension (glisser sur l'icône, Ouvrir avec…). -->
+			<key>CFBundleTypeName</key><string>Partition Encore (extension)</string>
+			<key>CFBundleTypeRole</key><string>Viewer</string>
+			<key>LSHandlerRank</key><string>Alternate</string>
+			<key>CFBundleTypeExtensions</key><array><string>enc</string><string>ENC</string></array>
+			<key>NSDocumentClass</key><string>ScoreDocument</string>
+		</dict>
+		<dict>
 			<key>CFBundleTypeName</key><string>Fichier MIDI</string>
 			<key>CFBundleTypeRole</key><string>Viewer</string>
 			<key>LSHandlerRank</key><string>Alternate</string>
