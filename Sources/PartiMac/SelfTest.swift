@@ -34,6 +34,25 @@ enum SelfTest {
             put(lh, 0, .zero, h, [Pitch(step: 0, octave: 3), Pitch(step: 2, octave: 3), Pitch(step: 4, octave: 3)])
             put(lh, 1, .zero, q, [Pitch(step: 4, octave: 2)]); put(lh, 1, Fraction(1, 4), q, [Pitch(step: 0, octave: 2)])
             score.appendMeasures(2)
+            if template == .accordion {
+                // Symboles du jalon 2 : articulations, liaison de phrasé, soufflet, nuance, triolets, case de fin.
+                let refs = score.events(rh, measure: 0).filter { !$0.isRest }.map { EventRef(staff: rh, measure: 0, eventID: $0.id) }
+                if refs.count >= 3 {
+                    try? score.toggleArticulation(.staccato, on: refs[0])
+                    try? score.toggleArticulation(.accent, on: refs[1])
+                    try? score.addSpanner(.slur, from: refs[0], to: refs[2])
+                    score.addAnnotation(Annotation(staff: rh, measure: 0, offset: .zero, text: "mf", above: false, staffPosition: -5, glyph: 0xE52D))
+                }
+                let m1 = score.events(rh, measure: 1).filter { !$0.isRest }.map { EventRef(staff: rh, measure: 1, eventID: $0.id) }
+                if m1.count >= 2 { try? score.addSpanner(.crescendo, from: m1[0], to: m1[1]) }
+                let t = Tuplet(actual: 3, normal: 2)
+                for k in 0..<3 {
+                    _ = try? score.setEvent(at: TimePosition(staff: rh, measure: 4, offset: Fraction(k, 12)), duration: Duration(.eighth), pitches: [Pitch(step: k, octave: 5)], tuplet: t)
+                }
+                score.measures[3].volta = 1
+                score.measures[3].barline = .repeatEnd
+                score.measures[4].volta = 2
+            }
 
             let name = template.rawValue
             let layout = LayoutEngine().layout(score)
@@ -80,6 +99,12 @@ enum SelfTest {
                         if let png = rep.representation(using: .png, properties: [:]) {
                             try? png.write(to: out.appendingPathComponent("window.png"))
                             check(true, "Fenêtre construite et capturée")
+                            for (pi, panel) in wc.palettes.enumerated() {
+                                guard let pv = panel.contentView, let prep = pv.bitmapImageRepForCachingDisplay(in: pv.bounds) else { continue }
+                                pv.cacheDisplay(in: pv.bounds, to: prep)
+                                try? prep.representation(using: .png, properties: [:])?.write(to: out.appendingPathComponent("palette-\(pi + 1)-\(panel.title).png"))
+                            }
+                            check(wc.palettes.count == 3, "Palettes Notes, Symboles et Graphismes construites")
                         }
                     }
                 }

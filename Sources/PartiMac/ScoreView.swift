@@ -13,6 +13,12 @@ final class EditorState {
     var pendingAlter: Int?
     var selection: EventRef?
     var selectedNote: Int?
+    /// Fin d'une plage de notes (Maj+clic avec la flèche).
+    var rangeEnd: EventRef?
+    /// Texte ou signe sélectionné.
+    var selectedAnnotation: UUID?
+    /// Saisie en n-olets (triolets).
+    var tuplet: Tuplet?
     /// Curseur de saisie au clavier.
     var cursor: TimePosition?
     var onChange: (() -> Void)?
@@ -71,8 +77,8 @@ final class ScoreView: NSView {
         dirtyRect.fill()
         guard let l = layout, let ctx = NSGraphicsContext.current?.cgContext, let doc = document else { return }
         var selectedKeys = Set<EventKey>()
-        if let sel = state.selection {
-            selectedKeys.insert(EventKey(staff: sel.staff, measure: sel.measure, voice: sel.voice, eventID: sel.eventID))
+        for r in selectedRange() {
+            selectedKeys.insert(EventKey(staff: r.staff, measure: r.measure, voice: r.voice, eventID: r.eventID))
         }
         for (i, page) in l.pages.enumerated() {
             let o = pageOrigin(i)
@@ -87,6 +93,14 @@ final class ScoreView: NSView {
             ctx.translateBy(x: o.x, y: o.y)
             Renderer().draw(page, in: ctx, selected: selectedKeys)
             drawCursors(page: i, ctx: ctx, layout: l, score: doc.score)
+            if let id = state.selectedAnnotation, let box = l.systems.first(where: { $0.page == i && $0.annotationBoxes[id] != nil })?.annotationBoxes[id] {
+                let r = CGRect(x: box.x, y: box.y, width: box.width, height: box.height).insetBy(dx: -2, dy: -2)
+                ctx.setFillColor(NSColor.systemBlue.withAlphaComponent(0.18).cgColor)
+                ctx.fill(r)
+                ctx.setStrokeColor(NSColor.systemBlue.cgColor)
+                ctx.setLineWidth(1)
+                ctx.stroke(r)
+            }
             ctx.restoreGState()
         }
     }
@@ -139,8 +153,31 @@ final class ScoreView: NSView {
 
     // MARK: Souris
 
+    /// Texte ou signe sous le pointeur.
+    func annotationHit(_ event: NSEvent) -> UUID? {
+        guard let l = layout else { return nil }
+        let p = convert(event.locationInWindow, from: nil)
+        for (i, page) in l.pages.enumerated() {
+            let o = pageOrigin(i)
+            let local = LPoint(Double(p.x - o.x), Double(p.y - o.y))
+            guard local.y >= 0 && local.y <= page.height else { continue }
+            for sys in l.systems where sys.page == i {
+                if let hit = sys.annotationBoxes.first(where: { $0.value.contains(local) }) { return hit.key }
+            }
+        }
+        return nil
+    }
+
     override func mouseDown(with event: NSEvent) {
         window?.makeFirstResponder(self)
+        if state.tool == .select, let id = annotationHit(event) {
+            state.selectedAnnotation = id
+            state.selection = nil; state.rangeEnd = nil
+            state.changed(); needsDisplay = true
+            if event.clickCount == 2 { (window?.windowController as? ScoreWindowController)?.editAnnotation(id) }
+            return
+        }
+        state.selectedAnnotation = nil
         guard let doc = document, let h = hit(event) else {
             state.selection = nil; state.changed(); return
         }
@@ -160,7 +197,12 @@ final class ScoreView: NSView {
             }
             return
         }
-        // Outil sélection.
+        // Outil sélection : Maj+clic étend la sélection à une plage de notes.
+        if event.modifierFlags.contains(.shift), state.selection != nil, let key = h.event {
+            state.rangeEnd = EventRef(staff: key.staff, measure: key.measure, voice: key.voice, eventID: key.eventID)
+            state.changed(); needsDisplay = true
+            return
+        }
         if let key = h.event {
             select(EventRef(staff: key.staff, measure: key.measure, voice: key.voice, eventID: key.eventID), note: h.noteIndex)
             dragStartPosition = h.position
@@ -204,6 +246,8 @@ final class ScoreView: NSView {
     func select(_ ref: EventRef?, note: Int?) {
         state.selection = ref
         state.selectedNote = note
+        state.rangeEnd = nil
+        state.selectedAnnotation = nil
         state.changed()
         needsDisplay = true
     }
@@ -213,7 +257,7 @@ final class ScoreView: NSView {
         guard let doc = document else { return }
         var newRef: EventRef?
         let ok = doc.apply(pitches.isEmpty ? "Saisir un silence" : "Saisir une note") { s in
-            newRef = try s.setEvent(at: pos, duration: state.duration, pitches: pitches)
+            newRef = try s.setEvent(at: pos, duration: state.duration, pitches: pitches, tuplet: state.tuplet)
         }
         guard ok, let ref = newRef else { return }
         state.pendingAlter = nil
@@ -303,7 +347,17 @@ final class ScoreView: NSView {
             insert(at: currentInputPosition(), pitches: [])
             return
         case 51, 117: // Effacer
-            if let sel = state.selection { doc.apply("Effacer") { try $0.makeRest(sel) }; relayout() }
+            if let id = state.selectedAnnotation {
+                doc.apply("Supprimer le texte") { $0.removeAnnotation(id) }
+                state.selectedAnnotation = nil; state.changed(); relayout()
+                return
+            }
+            let refs = selectedRange()
+            if !refs.isEmpty {
+                doc.apply("Effacer") { s in for r in refs { s.removeSpanners(touching: r); try? s.makeRest(r) } }
+                state.rangeEnd = nil
+                relayout()
+            }
             return
         case 123, 124: // ← →
             moveSelection(forward: event.keyCode == 124)
@@ -360,6 +414,25 @@ final class ScoreView: NSView {
         case "t", "T": toggleTie()
         default: super.keyDown(with: event)
         }
+    }
+
+    /// Notes sélectionnées : la note choisie, ou toute la plage jusqu'au Maj+clic.
+    func selectedRange() -> [EventRef] {
+        guard let doc = document, let a = state.selection else { return [] }
+        guard let b = state.rangeEnd, b.staff == a.staff,
+              let ta = doc.score.absoluteOffset(a), let tb = doc.score.absoluteOffset(b) else { return [a] }
+        let (lo, hi) = ta <= tb ? (ta, tb) : (tb, ta)
+        var out: [EventRef] = []
+        var start = Fraction.zero
+        for m in 0..<doc.score.measureCount {
+            for te in doc.score.timedEvents(a.staff, measure: m, voice: a.voice) {
+                let t = start + te.start
+                if t >= lo && t <= hi { out.append(EventRef(staff: a.staff, measure: m, voice: a.voice, eventID: te.event.id)) }
+            }
+            start += doc.score.measureLength(m)
+            if start > hi { break }
+        }
+        return out
     }
 
     func setDuration(_ base: DurationBase) {

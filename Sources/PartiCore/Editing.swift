@@ -97,12 +97,13 @@ extension Score {
 
     /// Place une note / un accord / un silence à la position donnée, en remplaçant ce qui s'y trouve.
     @discardableResult
-    public mutating func setEvent(at pos: TimePosition, duration: Duration, pitches: [Pitch], tie: Bool = false) throws -> EventRef {
+    public mutating func setEvent(at pos: TimePosition, duration: Duration, pitches: [Pitch], tie: Bool = false, tuplet: Tuplet? = nil) throws -> EventRef {
         guard pos.measure >= 0, pos.measure < measureCount else { throw EditError.invalidPosition }
         let ml = measureLength(pos.measure)
-        let len = duration.fraction
+        var len = duration.fraction
+        if let t = tuplet { len = len * Fraction(t.normal, t.actual) }
         guard pos.offset >= .zero, pos.offset + len <= ml else { throw EditError.doesNotFit(remaining: ml - pos.offset) }
-        let new = Event(duration: duration, notes: pitches.map { Note(pitch: $0, tie: tie) })
+        let new = Event(duration: duration, notes: pitches.map { Note(pitch: $0, tie: tie) }, tuplet: tuplet)
         let end = pos.offset + len
         var slots: [(Fraction, Event)] = []
         for (s, e) in timedEvents(pos.staff, measure: pos.measure, voice: pos.voice) {
@@ -222,6 +223,10 @@ extension Score {
             for _ in 0..<count { self[ref].measures.insert(StaffMeasure(), at: i) }
         }
         for k in annotations.indices where annotations[k].measure >= i { annotations[k].measure += count }
+        for k in spanners.indices {
+            if spanners[k].startMeasure >= i { spanners[k].startMeasure += count }
+            if spanners[k].endMeasure >= i { spanners[k].endMeasure += count }
+        }
     }
 
     public mutating func appendMeasures(_ count: Int = 1) { insertMeasures(at: measureCount, count: count) }
@@ -233,6 +238,13 @@ extension Score {
         let firstInfo = measures[r.lowerBound]
         measures.removeSubrange(r)
         for ref in staffRefs { self[ref].measures.removeSubrange(r) }
+        spanners = spanners.compactMap { s in
+            if r.contains(s.startMeasure) || r.contains(s.endMeasure) { return nil }
+            var s = s
+            if s.startMeasure >= r.upperBound { s.startMeasure -= r.count }
+            if s.endMeasure >= r.upperBound { s.endMeasure -= r.count }
+            return s
+        }
         annotations = annotations.compactMap { a in
             if r.contains(a.measure) { return nil }
             var a = a
@@ -241,6 +253,55 @@ extension Score {
         }
         if wasFinal { measures[measureCount - 1].barline = .final }
         if r.lowerBound == 0 && measures[0].tempo == nil { measures[0].tempo = firstInfo.tempo }
+    }
+
+    // MARK: Symboles, textes, reprises
+
+    public mutating func toggleArticulation(_ a: Articulation, on ref: EventRef) throws {
+        guard let e = locate(ref)?.event, !e.isRest else { throw EditError.nothingSelected }
+        try modifyEvent(ref) { ev in
+            var list = ev.articulations ?? []
+            if let i = list.firstIndex(of: a) { list.remove(at: i) } else { list.append(a) }
+            ev.articulations = list.isEmpty ? nil : list
+        }
+        _ = e
+    }
+
+    /// Position absolue d'un événement (pour ordonner deux notes).
+    public func absoluteOffset(_ ref: EventRef) -> Fraction? {
+        guard let loc = locate(ref) else { return nil }
+        var t = Fraction.zero
+        for m in 0..<ref.measure { t += measureLength(m) }
+        return t + loc.start
+    }
+
+    /// Ajoute une liaison de phrasé ou un soufflet entre deux notes (dans l'ordre).
+    public mutating func addSpanner(_ kind: SpannerKind, from a: EventRef, to b: EventRef) throws {
+        guard let ta = absoluteOffset(a), let tb = absoluteOffset(b), a.staff == b.staff else { throw EditError.nothingSelected }
+        let (s, e) = ta <= tb ? (a, b) : (b, a)
+        spanners.removeAll { $0.kind == kind && $0.startEvent == s.eventID && $0.endEvent == e.eventID }
+        spanners.append(Spanner(kind: kind, staff: s.staff, startMeasure: s.measure, startEvent: s.eventID, endMeasure: e.measure, endEvent: e.eventID))
+    }
+
+    public mutating func removeSpanners(touching ref: EventRef) {
+        spanners.removeAll { $0.startEvent == ref.eventID || $0.endEvent == ref.eventID }
+    }
+
+    public mutating func addAnnotation(_ a: Annotation) { annotations.append(a) }
+    public mutating func removeAnnotation(_ id: UUID) { annotations.removeAll { $0.id == id } }
+    public mutating func setAnnotationText(_ id: UUID, _ text: String) {
+        if let i = annotations.firstIndex(where: { $0.id == id }) { annotations[i].text = text }
+    }
+
+    public mutating func toggleRepeatStart(_ m: Int) { measures[m].repeatStart.toggle() }
+    public mutating func toggleRepeatEnd(_ m: Int) {
+        measures[m].barline = measures[m].barline == .repeatEnd ? (m == measureCount - 1 ? .final : .regular) : .repeatEnd
+    }
+    /// Case de fin : aucune → 1re → 2e → 1re et 2e → 3e → aucune.
+    public mutating func cycleVolta(_ m: Int) {
+        let order = [0, 1, 2, 3, 4]
+        let i = order.firstIndex(of: measures[m].volta) ?? 0
+        measures[m].volta = order[(i + 1) % order.count]
     }
 
     public mutating func setTempo(_ bpm: Double, at measure: Int = 0) {

@@ -19,6 +19,9 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     private var accidentalButtons: [Int: NSButton] = [:]
     private var transientStatus: String?
     private var glyphs: [ObjectIdentifier: UInt32] = [:]
+    private var labels: [ObjectIdentifier: String] = [:]
+    private var tupletButton: NSButton!
+    private(set) var palettes: [NSPanel] = []
 
     /// La partition de cette fenêtre (gardée ici : `document` n'est rempli qu'au moment où macOS rattache la fenêtre).
     let scoreDocument: ScoreDocument
@@ -101,57 +104,83 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         let midi = symbolButton("pianokeys", title: "MIDI", tip: "Exporter en MIDI", action: #selector(exportMIDI(_:)))
         for v in [playButton!, fromStart, tempoLabel, tempoField, tempoStepper, spacer, zoomOut, zoomIn, pdf, midi] as [NSView] { top.addArrangedSubview(v) }
 
-        // Palette (outils, durées, altérations).
-        // Palette à positions fixes (pas de mise en page automatique : rendu identique partout).
-        let palette = FlippedView()
-        var py: CGFloat = 10
-        palette.wantsLayer = true
-        palette.layer?.backgroundColor = Theme.palette.cgColor
-        func addSection(_ title: String) {
-            if py > 10 { py += 6 }
-            let l = sectionLabel(title)
-            l.frame = NSRect(x: 12, y: py, width: 96, height: 14)
-            palette.addSubview(l)
-            py += 19
-        }
-        func addRow(_ buttons: [NSButton]) {
-            for (i, b) in buttons.enumerated() {
-                b.frame = NSRect(x: 12 + CGFloat(i) * 50, y: py, width: 44, height: 44)
-                palette.addSubview(b)
-            }
-            py += 50
-        }
-        addSection("Outils")
-        let selectBtn = paletteButton(symbol: "cursorarrow", glyph: nil, tip: "Sélection : cliquer une note pour la choisir, la glisser pour changer sa hauteur (Échap)", tag: 0, action: #selector(toolChosen(_:)))
+        // Palettes flottantes façon Encore : Notes, Symboles, Graphismes.
+        let selectBtn = paletteButton(symbol: "cursorarrow", glyph: nil, tip: "Sélection : cliquer une note pour la choisir (Maj+clic pour une plage), la glisser pour changer sa hauteur (Échap)", tag: 0, action: #selector(toolChosen(_:)))
         let pencilBtn = paletteButton(symbol: "pencil", glyph: nil, tip: "Saisie : cliquer sur la portée pour poser une note (Échap)", tag: 1, action: #selector(toolChosen(_:)))
         toolButtons = [.select: selectBtn, .note: pencilBtn]
-        addRow([selectBtn, pencilBtn])
-
-        addSection("Durées")
-        var durRow: [NSButton] = []
+        var durations: [NSButton] = []
         for base in [DurationBase.whole, .half, .quarter, .eighth, .sixteenth, .thirtySecond] {
             let b = paletteButton(symbol: nil, glyph: SMuFL.metronomeNote(base), tip: "\(base.frenchName) — touche \(base.rawValue)", tag: base.rawValue, action: #selector(durationChosen(_:)))
             durationButtons[base] = b
-            durRow.append(b)
-            if durRow.count == 2 { addRow(durRow); durRow = [] }
+            durations.append(b)
         }
         restButton = paletteButton(symbol: nil, glyph: SMuFL.rest(.quarter), tip: "Silences au lieu de notes — touche R (Entrée pose un silence)", tag: 0, action: #selector(restToggled(_:)))
         dotButton = paletteButton(symbol: nil, glyph: SMuFL.augmentationDot, tip: "Note pointée — touche .", tag: 0, action: #selector(dotToggled(_:)))
-        addRow([restButton, dotButton])
-
-        addSection("Altérations")
+        tupletButton = labelButton("3", tip: "Triolet : les prochaines notes saisies sont des triolets", tag: 0, action: #selector(tupletToggled(_:)))
+        let tie = paletteButton(symbol: "link", glyph: nil, tip: "Liaison de prolongation : lier la note sélectionnée à la suivante — touche T", tag: 0, action: #selector(tieChosen(_:)))
         let flat = paletteButton(symbol: nil, glyph: SMuFL.flat, tip: "Bémol — touche -", tag: -1, action: #selector(accidentalChosen(_:)))
         let sharp = paletteButton(symbol: nil, glyph: SMuFL.sharp, tip: "Dièse — touche +", tag: 1, action: #selector(accidentalChosen(_:)))
         let natural = paletteButton(symbol: nil, glyph: SMuFL.natural, tip: "Bécarre — touche =", tag: 0, action: #selector(accidentalChosen(_:)))
-        let tie = paletteButton(symbol: "link", glyph: nil, tip: "Liaison : lier la note sélectionnée à la suivante — touche T", tag: 0, action: #selector(tieChosen(_:)))
+        let enharm = labelButton("♯♭", tip: "Enharmonie : écrire la note sélectionnée autrement (do♯ ↔ ré♭)", tag: 0, action: #selector(enharmonicChosen(_:)))
         accidentalButtons = [-1: flat, 0: natural, 1: sharp]
-        addRow([flat, sharp])
-        addRow([natural, tie])
-
-        addSection("Mesures")
         let addMeasure = paletteButton(symbol: "plus", glyph: nil, tip: "Ajouter une mesure à la fin (⌥⌘ M)", tag: 0, action: #selector(appendMeasure(_:)))
         let delMeasure = paletteButton(symbol: "minus", glyph: nil, tip: "Supprimer la mesure sélectionnée", tag: 0, action: #selector(deleteMeasure(_:)))
-        addRow([addMeasure, delMeasure])
+        let notesView = paletteView([
+            ("Outils", [selectBtn, pencilBtn]),
+            ("Durées", durations + [restButton, dotButton, tupletButton, tie]),
+            ("Altérations", [flat, sharp, natural, enharm]),
+            ("Mesures", [addMeasure, delMeasure]),
+        ])
+
+        func act(_ i: Int, _ tip: String) -> NSButton {
+            let a = Articulation.allCases[i]
+            let glyphs: [Articulation: UInt32] = [.staccato: 0xE4A2, .accent: 0xE4A0, .tenuto: 0xE4A4, .marcato: 0xE4AC, .fermata: 0xE4C0, .staccatissimo: 0xE4A6]
+            return paletteButton(symbol: nil, glyph: glyphs[a], tip: tip, tag: i, action: #selector(articulationChosen(_:)), momentary: true)
+        }
+        let symbolsView = paletteView([
+            ("Liaisons", [
+                labelButton("⌒", tip: "Liaison de phrasé : sélectionnez la 1re note, puis Maj+clic sur la dernière", tag: 0, action: #selector(spannerChosen(_:)), momentary: true),
+                labelButton("<", tip: "Crescendo (soufflet) : 1re note puis Maj+clic sur la dernière", tag: 1, action: #selector(spannerChosen(_:)), momentary: true),
+                labelButton(">", tip: "Decrescendo (soufflet) : 1re note puis Maj+clic sur la dernière", tag: 2, action: #selector(spannerChosen(_:)), momentary: true),
+                paletteButton(symbol: "eraser", glyph: nil, tip: "Effacer les liaisons, articulations et signes de la note sélectionnée", tag: 0, action: #selector(eraseSymbols(_:)), momentary: true),
+            ]),
+            ("Nuances", Dynamics.all.enumerated().map { i, d in
+                paletteButton(symbol: nil, glyph: d.glyph, tip: "Nuance \(d.name) (jouée plus ou moins fort)", tag: i, action: #selector(dynamicChosen(_:)), momentary: true)
+            }),
+            ("Articulations", [act(0, "Staccato (piqué)"), act(1, "Accent"), act(2, "Tenuto"), act(3, "Marcato"), act(4, "Point d'orgue"), act(5, "Staccatissimo")]),
+            ("Reprises", [
+                paletteButton(symbol: nil, glyph: 0xE040, tip: "Barre de reprise au début de la mesure sélectionnée", tag: 0, action: #selector(repeatChosen(_:)), momentary: true),
+                paletteButton(symbol: nil, glyph: 0xE041, tip: "Barre de reprise à la fin de la mesure sélectionnée", tag: 1, action: #selector(repeatChosen(_:)), momentary: true),
+                labelButton("1. 2.", tip: "Case de 1re / 2e fois sur la mesure sélectionnée (cliquer plusieurs fois pour changer)", tag: 2, action: #selector(repeatChosen(_:)), momentary: true),
+                paletteButton(symbol: nil, glyph: 0xE047, tip: "Segno", tag: 0, action: #selector(markChosen(_:)), momentary: true),
+                paletteButton(symbol: nil, glyph: 0xE048, tip: "Coda", tag: 1, action: #selector(markChosen(_:)), momentary: true),
+                labelButton("D.C.", tip: "Da capo", tag: 2, action: #selector(markChosen(_:)), momentary: true),
+                labelButton("D.S.", tip: "Dal segno", tag: 3, action: #selector(markChosen(_:)), momentary: true),
+                labelButton("Fine", tip: "Fine", tag: 4, action: #selector(markChosen(_:)), momentary: true),
+            ]),
+            ("Accordéon", [
+                paletteButton(symbol: nil, glyph: 0xE0B3, tip: "⊗ sous la note sélectionnée", tag: 5, action: #selector(markChosen(_:)), momentary: true),
+                paletteButton(symbol: nil, glyph: 0xE8CB, tip: "Pousser le soufflet", tag: 6, action: #selector(markChosen(_:)), momentary: true),
+                paletteButton(symbol: nil, glyph: 0xE8CC, tip: "Tirer le soufflet", tag: 7, action: #selector(markChosen(_:)), momentary: true),
+                paletteButton(symbol: nil, glyph: 0xE4CE, tip: "Respiration", tag: 8, action: #selector(markChosen(_:)), momentary: true),
+            ]),
+        ])
+
+        let graphicsView = paletteView([
+            ("Textes", [
+                paletteButton(symbol: "textformat", glyph: nil, tip: "Texte libre au-dessus de la note sélectionnée", tag: 0, action: #selector(textChosen(_:)), momentary: true),
+                labelButton("SOL7", tip: "Accord (en dessous, en gras) sous la note sélectionnée", tag: 1, action: #selector(textChosen(_:)), momentary: true),
+                labelButton("Do", tip: "Basse (sous la portée) sous la note sélectionnée", tag: 2, action: #selector(textChosen(_:)), momentary: true),
+                labelButton("1‑5", tip: "Doigté au-dessus de la note sélectionnée", tag: 3, action: #selector(textChosen(_:)), momentary: true),
+                paletteButton(symbol: "info.circle", glyph: nil, tip: "Titre et compositeur", tag: 0, action: #selector(editScoreInfo(_:)), momentary: true),
+                paletteButton(symbol: "trash", glyph: nil, tip: "Supprimer le texte ou le signe sélectionné (cliquez dessus avec la flèche)", tag: 0, action: #selector(deleteAnnotation(_:)), momentary: true),
+            ]),
+        ])
+        palettes = [
+            makePanel("Notes", notesView, autosave: "PaletteNotes"),
+            makePanel("Symboles", symbolsView, autosave: "PaletteSymboles"),
+            makePanel("Graphismes", graphicsView, autosave: "PaletteGraphismes"),
+        ]
 
         // Partition.
         scrollView = NSScrollView()
@@ -178,9 +207,8 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         status.edgeInsets = NSEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 
         let topSep = NSBox(); topSep.boxType = .separator
-        let leftSep = NSBox(); leftSep.boxType = .separator
         let bottomSep = NSBox(); bottomSep.boxType = .separator
-        for v in [top, topSep, palette, leftSep, scrollView!, bottomSep, status] as [NSView] {
+        for v in [top, topSep, scrollView!, bottomSep, status] as [NSView] {
             v.translatesAutoresizingMaskIntoConstraints = false
             content.addSubview(v)
         }
@@ -190,7 +218,6 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
             // Taille minimale explicite : sans elle, la mise en page automatique peut écraser la fenêtre.
             content.heightAnchor.constraint(greaterThanOrEqualToConstant: 660),
             content.widthAnchor.constraint(greaterThanOrEqualToConstant: 760),
-            palette.heightAnchor.constraint(greaterThanOrEqualToConstant: 590),
             topSep.heightAnchor.constraint(equalToConstant: 1),
             bottomSep.heightAnchor.constraint(equalToConstant: 1),
             top.leadingAnchor.constraint(equalTo: content.leadingAnchor),
@@ -198,16 +225,8 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
             topSep.topAnchor.constraint(equalTo: top.bottomAnchor),
             topSep.leadingAnchor.constraint(equalTo: content.leadingAnchor),
             topSep.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            palette.topAnchor.constraint(equalTo: topSep.bottomAnchor),
-            palette.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            palette.bottomAnchor.constraint(equalTo: bottomSep.topAnchor),
-            palette.widthAnchor.constraint(equalToConstant: 118),
-            leftSep.topAnchor.constraint(equalTo: topSep.bottomAnchor),
-            leftSep.bottomAnchor.constraint(equalTo: bottomSep.topAnchor),
-            leftSep.leadingAnchor.constraint(equalTo: palette.trailingAnchor),
-            leftSep.widthAnchor.constraint(equalToConstant: 1),
             scrollView.topAnchor.constraint(equalTo: topSep.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leftSep.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: content.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomSep.topAnchor),
             bottomSep.leadingAnchor.constraint(equalTo: content.leadingAnchor),
@@ -246,9 +265,9 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         return b
     }
 
-    private func paletteButton(symbol: String?, glyph: UInt32?, tip: String, tag: Int, action: Selector) -> NSButton {
+    private func paletteButton(symbol: String?, glyph: UInt32?, tip: String, tag: Int, action: Selector, momentary: Bool = false) -> NSButton {
         let b = NSButton(title: "", target: self, action: action)
-        b.setButtonType(.pushOnPushOff)
+        b.setButtonType(momentary ? .momentaryChange : .pushOnPushOff)
         b.isBordered = false
         b.wantsLayer = true
         b.layer?.cornerRadius = 10
@@ -274,6 +293,71 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         return b
     }
 
+    private func labelButton(_ text: String, tip: String, tag: Int, action: Selector, momentary: Bool = false) -> NSButton {
+        let b = paletteButton(symbol: nil, glyph: nil, tip: tip, tag: tag, action: action, momentary: momentary)
+        labels[ObjectIdentifier(b)] = text
+        return b
+    }
+
+    /// Construit le contenu d'une palette : sections titrées, boutons sur 2 colonnes.
+    private func paletteView(_ sections: [(String, [NSButton])]) -> NSView {
+        let v = FlippedView()
+        var y: CGFloat = 8
+        for (title, buttons) in sections {
+            let l = sectionLabel(title)
+            l.frame = NSRect(x: 8, y: y, width: 92, height: 14)
+            v.addSubview(l)
+            y += 17
+            for (i, b) in buttons.enumerated() {
+                b.frame = NSRect(x: 8 + CGFloat(i % 2) * 46, y: y + CGFloat(i / 2) * 46, width: 42, height: 42)
+                v.addSubview(b)
+            }
+            y += CGFloat((buttons.count + 1) / 2) * 46 + 6
+        }
+        v.frame = NSRect(x: 0, y: 0, width: 104, height: y)
+        v.wantsLayer = true
+        v.layer?.backgroundColor = Theme.palette.cgColor
+        return v
+    }
+
+    private func makePanel(_ title: String, _ content: NSView, autosave: String) -> NSPanel {
+        let panel = NSPanel(contentRect: NSRect(origin: .zero, size: content.frame.size),
+                            styleMask: [.titled, .closable, .utilityWindow, .nonactivatingPanel],
+                            backing: .buffered, defer: true)
+        panel.title = title
+        panel.isFloatingPanel = true
+        panel.becomesKeyOnlyIfNeeded = true
+        panel.hidesOnDeactivate = true
+        panel.contentView = content
+        if !panel.setFrameUsingName(autosave) {
+            // Première fois : en colonne à gauche de l'écran, comme les palettes d'Encore.
+            let screen = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1400, height: 900)
+            let index = CGFloat(["PaletteNotes", "PaletteSymboles", "PaletteGraphismes"].firstIndex(of: autosave) ?? 0)
+            panel.setFrameTopLeftPoint(NSPoint(x: screen.minX + 12 + index * 116, y: screen.maxY - 12))
+        }
+        panel.setFrameAutosaveName(autosave)
+        return panel
+    }
+
+    func showPalettes() {
+        for p in palettes where !UserDefaults.standard.bool(forKey: "hidden-" + p.title) { p.orderFront(nil) }
+    }
+
+    func hidePalettes() { for p in palettes { p.orderOut(nil) } }
+
+    @objc func togglePalette(_ sender: NSMenuItem) {
+        guard sender.tag < palettes.count else { return }
+        let p = palettes[sender.tag]
+        if p.isVisible { p.orderOut(nil) } else { p.orderFront(nil) }
+        UserDefaults.standard.set(!p.isVisible, forKey: "hidden-" + p.title)
+    }
+
+    func windowDidBecomeMain(_ notification: Notification) { showPalettes() }
+    func windowDidResignMain(_ notification: Notification) {
+        // Une autre partition prend la main : ses propres palettes s'affichent.
+        if let w = NSApp.mainWindow, w != window, w.windowController is ScoreWindowController { hidePalettes() }
+    }
+
     // MARK: État des contrôles
 
     func refreshControls() {
@@ -285,12 +369,18 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         // Les silences ont un autre glyphe dans la palette.
         for (d, b) in durationButtons { glyphs[ObjectIdentifier(b)] = state.restMode ? SMuFL.rest(d) : SMuFL.metronomeNote(d) }
         // Bouton actif : fond bleu, symbole blanc. Inactif : fond clair, symbole bleu nuit.
+        tupletButton.state = state.tuplet != nil ? .on : .off
         for b in paletteButtons {
             let on = b.state == .on
             b.layer?.backgroundColor = (on ? Theme.accent : Theme.button).cgColor
             b.layer?.borderColor = (on ? Theme.accent : Theme.buttonBorder).cgColor
             let ink = on ? NSColor.white : Theme.ink
             b.contentTintColor = ink
+            if let text = labels[ObjectIdentifier(b)] {
+                let para = NSMutableParagraphStyle(); para.alignment = .center
+                b.attributedTitle = NSAttributedString(string: text, attributes: [
+                    .font: NSFont.systemFont(ofSize: text.count > 3 ? 11 : 15, weight: .bold), .foregroundColor: ink, .paragraphStyle: para])
+            }
             if let g = glyphs[ObjectIdentifier(b)] {
                 let para = NSMutableParagraphStyle(); para.alignment = .center
                 let isRest = (0xE4E2...0xE4EA).contains(g)
@@ -534,6 +624,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
         Player.shared.stop()
+        for p in palettes { p.close() }
     }
 }
 

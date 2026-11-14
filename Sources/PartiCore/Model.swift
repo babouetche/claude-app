@@ -131,6 +131,47 @@ public struct Note: Hashable, Codable, Identifiable {
     }
 }
 
+/// Articulations attachées à une note.
+public enum Articulation: String, Codable, CaseIterable {
+    case staccato, accent, tenuto, marcato, fermata, staccatissimo
+
+    public var frenchName: String {
+        switch self {
+        case .staccato: return "Staccato"
+        case .accent: return "Accent"
+        case .tenuto: return "Tenuto"
+        case .marcato: return "Marcato"
+        case .fermata: return "Point d'orgue"
+        case .staccatissimo: return "Staccatissimo"
+        }
+    }
+}
+
+/// Signe qui relie deux notes : liaison de phrasé, soufflet de crescendo / decrescendo.
+public enum SpannerKind: String, Codable { case slur, crescendo, diminuendo }
+
+public struct Spanner: Hashable, Codable, Identifiable {
+    public var id: UUID
+    public var kind: SpannerKind
+    public var staff: StaffRef
+    public var startMeasure: Int
+    public var startEvent: UUID
+    public var endMeasure: Int
+    public var endEvent: UUID
+    public init(id: UUID = UUID(), kind: SpannerKind, staff: StaffRef, startMeasure: Int, startEvent: UUID, endMeasure: Int, endEvent: UUID) {
+        self.id = id; self.kind = kind; self.staff = staff
+        self.startMeasure = startMeasure; self.startEvent = startEvent; self.endMeasure = endMeasure; self.endEvent = endEvent
+    }
+}
+
+/// Nuances et vélocités MIDI correspondantes.
+public enum Dynamics {
+    public static let all: [(name: String, glyph: UInt32, velocity: Int)] = [
+        ("pp", 0xE52B, 36), ("p", 0xE520, 50), ("mp", 0xE52C, 64), ("mf", 0xE52D, 80), ("f", 0xE522, 96), ("ff", 0xE52F, 112),
+    ]
+    public static func velocity(_ text: String) -> Int? { all.first { $0.name == text }?.velocity }
+}
+
 /// n-olet : `actual` notes dans le temps de `normal`.
 public struct Tuplet: Hashable, Codable {
     public var actual: Int
@@ -146,6 +187,7 @@ public struct Event: Hashable, Codable, Identifiable {
     /// Silence de mesure entière (pause centrée, durée = la mesure).
     public var isMeasureRest: Bool
     public var tuplet: Tuplet?
+    public var articulations: [Articulation]?
 
     public init(id: UUID = UUID(), duration: Duration, notes: [Note] = [], isMeasureRest: Bool = false, tuplet: Tuplet? = nil) {
         self.id = id; self.duration = duration; self.notes = notes; self.isMeasureRest = isMeasureRest; self.tuplet = tuplet
@@ -389,12 +431,13 @@ public struct Score: Hashable, Codable {
     public var measures: [MeasureInfo]
     public var parts: [Part]
     public var annotations: [Annotation] = []
+    public var spanners: [Spanner] = []
 
     public init(metadata: ScoreMetadata = ScoreMetadata(), page: PageSettings = PageSettings(), measures: [MeasureInfo], parts: [Part]) {
         self.metadata = metadata; self.page = page; self.measures = measures; self.parts = parts
     }
 
-    enum CodingKeys: String, CodingKey { case formatVersion, metadata, page, measures, parts, annotations }
+    enum CodingKeys: String, CodingKey { case formatVersion, metadata, page, measures, parts, annotations, spanners }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -404,6 +447,7 @@ public struct Score: Hashable, Codable {
         measures = try c.decode([MeasureInfo].self, forKey: .measures)
         parts = try c.decode([Part].self, forKey: .parts)
         annotations = try c.decodeIfPresent([Annotation].self, forKey: .annotations) ?? []
+        spanners = try c.decodeIfPresent([Spanner].self, forKey: .spanners) ?? []
     }
 
     public var measureCount: Int { measures.count }

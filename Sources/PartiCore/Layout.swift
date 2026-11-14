@@ -84,6 +84,8 @@ public struct PlacedSystem {
     public var staves: [PlacedStaff]
     public var measures: [PlacedMeasure]
     public var events: [EventKey: PlacedEvent]
+    /// Rectangles des textes et symboles posés (pour les sélectionner au clic).
+    public var annotationBoxes: [UUID: LRect] = [:]
 
     public func staff(_ ref: StaffRef) -> PlacedStaff? { staves.first { $0.ref == ref } }
     public func measure(_ i: Int) -> PlacedMeasure? { measures.first { $0.index == i } }
@@ -238,6 +240,7 @@ public struct LayoutEngine {
 
         var result = ScoreLayout(pages: pages, systems: systems, staffSpace: sp)
         addTies(score, layout: &result, sp: sp)
+        addSpanners(score, layout: &result, sp: sp)
         if !md.copyright.isEmpty {
             result.pages[0].items.append(.text(md.copyright, LPoint(page.width / 2, page.height - page.marginBottom + 14), size: 8, bold: false, italic: false, align: .center))
         }
@@ -365,7 +368,7 @@ public struct LayoutEngine {
             if pm.slotX.isEmpty { pm.slotX = [mx + 1.3 * sp] ; pm.slots = [.zero] }
             for (i, r) in refs.enumerated() {
                 drawStaffMeasure(score, ref: r, measure: m, placed: pm, staffTop: top + staffOffsets[i], sp: sp,
-                                 items: &items, events: &placed.events)
+                                 items: &items, events: &placed.events, boxes: &placed.annotationBoxes)
             }
             // Barre de mesure (par partie).
             let barline = score.measures[m].barline
@@ -475,7 +478,7 @@ public struct LayoutEngine {
     }
 
     func drawStaffMeasure(_ score: Score, ref: StaffRef, measure m: Int, placed pm: PlacedMeasure, staffTop: Double, sp: Double,
-                          items: inout [DrawItem], events: inout [EventKey: PlacedEvent]) {
+                          items: inout [DrawItem], events: inout [EventKey: PlacedEvent], boxes: inout [UUID: LRect]) {
         let fs = 4 * sp
         let clef = score[ref].clef
         let info = score.measures[m]
@@ -579,7 +582,7 @@ public struct LayoutEngine {
             notes.append(NoteDraw(key: key, event: e, start: te.start, x: x, positions: sortedPos, stemUp: up, beamed: groupOf[i] != nil))
         }
 
-        // Textes attachés (accords, basses, doigtés…).
+        // Textes attachés (accords, basses, doigtés, nuances, symboles…).
         var stackAbove: [Int: Int] = [:], stackBelow: [Int: Int] = [:]
         for a in score.annotations where a.staff == ref && a.measure == m {
             let ax = pm.x(at: a.offset.doubleValue)
@@ -588,28 +591,29 @@ public struct LayoutEngine {
             let isChord = a.text.count >= 2 && a.text == a.text.uppercased() && a.text.contains(where: \.isLetter)
             let size = isFinger ? sp * 1.45 : isChord ? sp * 2.0 : sp * 1.7
             if let g = a.glyph {
-                let y = yPos(staffTop, a.staffPosition ?? -3, sp)
+                let y = yPos(staffTop, a.staffPosition ?? (a.above ? 12 : -4), sp)
                 items.append(.glyph(g, LPoint(ax, y), size: 4 * sp, scaleY: 1, owner: nil))
+                boxes[a.id] = LRect(x: ax - 0.2 * sp, y: y - 1.6 * sp, width: 2.6 * sp, height: 2.4 * sp)
                 continue
             }
+            var top: Double
+            var bold = isFinger || isChord
             if let pos = a.staffPosition {
-                // Position exacte choisie dans Encore.
+                // Position exacte (choisie dans Encore ou à la saisie).
                 let y = yPos(staffTop, pos, sp)
-                let top = a.above ? y - size : y + 0.2 * sp
-                items.append(.text(a.text, LPoint(ax, top), size: size, bold: isFinger || isChord, italic: false, align: .left))
-                continue
-            }
-            if a.above {
+                top = a.above ? y - size : y + 0.2 * sp
+            } else if a.above {
                 let n = stackAbove[slot, default: 0]; stackAbove[slot] = n + 1
                 let highest = min(staffTop - 1.2 * sp, notes.filter { abs($0.x - ax) < 2 * sp }.map { yPos(staffTop, $0.positions.last!, sp) - 3.8 * sp }.min() ?? staffTop)
-                items.append(.text(a.text, LPoint(ax, min(staffTop - 1.2 * sp, highest) - size - Double(n) * size * 1.1),
-                                   size: size, bold: false, italic: isFinger, align: .left))
+                top = min(staffTop - 1.2 * sp, highest) - size - Double(n) * size * 1.1
             } else {
                 let n = stackBelow[slot, default: 0]; stackBelow[slot] = n + 1
                 let lowest = max(staffTop + 5.2 * sp, notes.filter { abs($0.x - ax) < 2 * sp }.map { yPos(staffTop, $0.positions.first!, sp) + 1.5 * sp }.max() ?? 0)
-                items.append(.text(a.text, LPoint(ax, lowest + Double(n) * size * 1.1),
-                                   size: size, bold: !isFinger, italic: false, align: .left))
+                top = lowest + Double(n) * size * 1.1
+                bold = bold || !isFinger
             }
+            items.append(.text(a.text, LPoint(ax, top), size: size, bold: bold, italic: false, align: .left))
+            boxes[a.id] = LRect(x: ax - 0.2 * sp, y: top - 0.2 * sp, width: Double(max(1, a.text.count)) * size * 0.62 + 0.4 * sp, height: size * 1.3)
         }
 
         // Hampes et crochets des notes isolées.
@@ -636,6 +640,51 @@ public struct LayoutEngine {
                     items.append(.glyph(SMuFL.flag(base, up: n.stemUp), LPoint(notes[i].stemX - stemW / 2, notes[i].stemEndY), size: fs, scaleY: 1, owner: n.key))
                 }
             }
+        }
+
+        // Articulations (côté tête de note, point d'orgue toujours au-dessus).
+        for n in notes {
+            guard let arts = n.event.articulations, !arts.isEmpty else { continue }
+            let headW = SMuFL.noteheadWidth(n.event.duration.base) * sp
+            let cx = n.x + headW / 2
+            var stackIndex = 0
+            for a in arts.sorted(by: { $0.rawValue < $1.rawValue }) {
+                if a == .fermata {
+                    let y = min(staffTop - 1.0 * sp, yPos(staffTop, n.positions.last!, sp) - 2.4 * sp)
+                    items.append(.glyph(0xE4C0, LPoint(cx - 1.18 * sp, y), size: fs, scaleY: 1, owner: n.key))
+                    continue
+                }
+                let below = n.stemUp
+                let (glyph, width): (UInt32, Double) = {
+                    switch a {
+                    case .staccato: return (below ? 0xE4A3 : 0xE4A2, 0.38)
+                    case .accent: return (below ? 0xE4A1 : 0xE4A0, 1.36)
+                    case .tenuto: return (below ? 0xE4A5 : 0xE4A4, 1.34)
+                    case .marcato: return (below ? 0xE4AD : 0xE4AC, 0.96)
+                    case .staccatissimo: return (below ? 0xE4A7 : 0xE4A6, 0.42)
+                    case .fermata: return (0xE4C0, 2.36)
+                    }
+                }()
+                let step = Double(stackIndex) * 1.1 * sp
+                let y = below ? yPos(staffTop, n.positions.first!, sp) + 1.5 * sp + step
+                              : yPos(staffTop, n.positions.last!, sp) - 1.5 * sp - step
+                items.append(.glyph(glyph, LPoint(cx - width * sp / 2, y), size: fs, scaleY: 1, owner: n.key))
+                stackIndex += 1
+            }
+        }
+
+        // Chiffres de n-olets (« 3 » au-dessus du groupe).
+        var k = 0
+        let tupletEvents = timed.filter { $0.event.tuplet != nil }
+        while k < tupletEvents.count {
+            let t = tupletEvents[k].event.tuplet!
+            let group = Array(tupletEvents[k..<min(tupletEvents.count, k + t.actual)])
+            let xs = group.map { pm.x(at: $0.start.doubleValue) }
+            let mid = (xs.min()! + xs.max()!) / 2 + 0.6 * sp
+            let highest = group.flatMap { g in g.event.notes.map { yPos(staffTop, $0.pitch.diatonic - clef.bottomLineDiatonic, sp) } }.min() ?? staffTop
+            let y = min(staffTop - 1.2 * sp, highest - 4.2 * sp)
+            items.append(.text("\(t.actual)", LPoint(mid, y), size: sp * 1.6, bold: true, italic: true, align: .center))
+            k += max(1, group.count)
         }
 
         // Ligatures.
@@ -703,6 +752,54 @@ public struct LayoutEngine {
     func drawDots(_ count: Int, x: Double, y: Double, sp: Double, owner: EventKey?, items: inout [DrawItem]) {
         for d in 0..<count {
             items.append(.glyph(SMuFL.augmentationDot, LPoint(x + Double(d) * 0.55 * sp, y), size: 4 * sp, scaleY: 1, owner: owner))
+        }
+    }
+
+    // MARK: Liaisons de phrasé et soufflets
+
+    func addSpanners(_ score: Score, layout: inout ScoreLayout, sp: Double) {
+        for s in score.spanners {
+            let ka = EventKey(staff: s.staff, measure: s.startMeasure, voice: 0, eventID: s.startEvent)
+            let kb = EventKey(staff: s.staff, measure: s.endMeasure, voice: 0, eventID: s.endEvent)
+            guard let a = layout.placedEvent(ka), let b = layout.placedEvent(kb),
+                  let sa = a.system.staff(s.staff), let sb = b.system.staff(s.staff) else { continue }
+            let sameSystem = a.system.top == b.system.top && a.system.page == b.system.page
+            switch s.kind {
+            case .slur:
+                // Au-dessus si les notes sont hautes (hampes en bas), sinon en dessous.
+                let posA = a.event.positions.max() ?? 4, posB = b.event.positions.max() ?? 4
+                let up = (posA + posB) / 2 >= 4
+                func y(_ st: PlacedStaff, _ e: PlacedEvent) -> Double {
+                    up ? yPos(st.top, (e.positions.max() ?? 4), sp) - 1.3 * sp : yPos(st.top, (e.positions.min() ?? 4), sp) + 1.3 * sp
+                }
+                let xa = a.event.x + a.event.width / 2, xb = b.event.x + b.event.width / 2
+                if sameSystem {
+                    let ya = y(sa, a.event), yb = y(sb, b.event)
+                    let yy = up ? min(ya, yb) : max(ya, yb)
+                    layout.pages[a.system.page].items.append(.tie(LPoint(xa, yy), LPoint(xb, yy), up: up, owner: nil))
+                } else {
+                    let ya = y(sa, a.event), yb = y(sb, b.event)
+                    layout.pages[a.system.page].items.append(.tie(LPoint(xa, ya), LPoint(a.system.x1 - 0.5 * sp, ya), up: up, owner: nil))
+                    layout.pages[b.system.page].items.append(.tie(LPoint(b.system.x0 + 4 * sp, yb), LPoint(xb, yb), up: up, owner: nil))
+                }
+            case .crescendo, .diminuendo:
+                let cresc = s.kind == .crescendo
+                let lw = SMuFL.thinBarline * sp
+                func hairpin(page: Int, x1: Double, x2: Double, y: Double, openStart: Bool, openEnd: Bool) {
+                    let h = 0.7 * sp
+                    let h1 = cresc ? (openStart ? h * 0.5 : 0) : h
+                    let h2 = cresc ? h : (openEnd ? h * 0.5 : 0)
+                    layout.pages[page].items.append(.line(LPoint(x1, y - h1), LPoint(x2, y - h2), width: lw, owner: nil))
+                    layout.pages[page].items.append(.line(LPoint(x1, y + h1), LPoint(x2, y + h2), width: lw, owner: nil))
+                }
+                let ya = sa.top + 4 * sp + 2.6 * sp
+                if sameSystem {
+                    hairpin(page: a.system.page, x1: a.event.x, x2: max(b.event.x + b.event.width, a.event.x + 3 * sp), y: ya, openStart: false, openEnd: false)
+                } else {
+                    hairpin(page: a.system.page, x1: a.event.x, x2: a.system.x1 - 0.5 * sp, y: ya, openStart: false, openEnd: true)
+                    hairpin(page: b.system.page, x1: b.system.x0 + 4 * sp, x2: b.event.x + b.event.width, y: sb.top + 6.6 * sp, openStart: true, openEnd: false)
+                }
+            }
         }
     }
 

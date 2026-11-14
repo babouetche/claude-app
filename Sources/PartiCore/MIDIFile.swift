@@ -34,16 +34,24 @@ public enum MIDIExporter {
         var out: [PlayedNote] = []
         var pending: [Int: PlayedNote] = [:]   // notes liées en attente, par touche
         var measureStart = Fraction.zero
+        var velocity = 80
+        var dynamicsAt: [Int: [(Fraction, Int)]] = [:]
+        for a in score.annotations where a.staff == ref {
+            if let v = Dynamics.velocity(a.text) { dynamicsAt[a.measure, default: []].append((a.offset, v)) }
+        }
         for m in 0..<score.measureCount {
             let ml = score.measureLength(m)
             for (s, e) in score.timedEvents(ref, measure: m) {
+                if let d = dynamicsAt[m]?.filter({ $0.0 <= s }).max(by: { $0.0 < $1.0 }) { velocity = d.1 }
                 let start = ticks(measureStart + s)
-                let end = ticks(measureStart + s + e.length(measureLength: ml))
+                var end = ticks(measureStart + s + e.length(measureLength: ml))
+                if let arts = e.articulations, arts.contains(.staccato) || arts.contains(.staccatissimo) { end = start + max(1, (end - start) / 2) }
+                let accent = (e.articulations ?? []).contains(where: { $0 == .accent || $0 == .marcato }) ? 20 : 0
                 let keys = Set(e.notes.map(\.pitch.midi))
                 for (k, p) in pending where !keys.contains(k) { out.append(p); pending[k] = nil }
                 for n in e.notes {
                     let k = n.pitch.midi
-                    var pn = pending[k] ?? PlayedNote(start: start, end: end, key: k, velocity: n.velocity)
+                    var pn = pending[k] ?? PlayedNote(start: start, end: end, key: k, velocity: min(127, velocity + accent))
                     pn.end = end
                     if n.tie { pending[k] = pn } else { out.append(pn); pending[k] = nil }
                 }

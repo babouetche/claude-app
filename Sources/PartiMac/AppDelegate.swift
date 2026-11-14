@@ -246,6 +246,11 @@ enum MainMenu {
 
         // Fenêtre
         let window = submenu(main, "Fenêtre")
+        for (i, name) in ["Palette Notes", "Palette Symboles", "Palette Graphismes"].enumerated() {
+            let item = window.addItem(withTitle: name, action: #selector(ScoreWindowController.togglePalette(_:)), keyEquivalent: "\(i + 1)")
+            item.tag = i
+        }
+        window.addItem(.separator())
         window.addItem(withTitle: "Placer dans le Dock", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
         window.addItem(withTitle: "Réduire/agrandir", action: #selector(NSWindow.performZoom(_:)), keyEquivalent: "")
         NSApp.windowsMenu = window
