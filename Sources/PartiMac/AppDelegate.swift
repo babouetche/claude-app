@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Si aucune partition n'a été ouverte (fichier double-cliqué, restauration), on en crée une nous-mêmes.
         // Léger délai : si l'app a été ouverte par un double-clic sur un fichier, il arrive juste après.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { AppDelegate.ensureWindow() }
+        // Vérification discrète des mises à jour (une fois par jour).
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { Updater.checkAutomatically() }
     }
 
     static func ensureWindow() {
@@ -85,6 +87,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         LaunchLog.write("import \(url.lastPathComponent) : \(message)")
         return doc
     }
+
+    @objc func checkForUpdates(_ sender: Any?) { Updater.check(userInitiated: true) }
 
     @objc func importEncore(_ sender: Any?) {
         let panel = NSOpenPanel()
@@ -169,6 +173,7 @@ enum MainMenu {
         // PartiMac
         let app = submenu(main, "Partitions de Titi")
         app.addItem(withTitle: "À propos de Partitions de Titi", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        app.addItem(withTitle: "Rechercher les mises à jour…", action: #selector(AppDelegate.checkForUpdates(_:)), keyEquivalent: "")
         app.addItem(.separator())
         let services = NSMenu(title: "Services")
         app.addItem(withTitle: "Services", action: nil, keyEquivalent: "").submenu = services

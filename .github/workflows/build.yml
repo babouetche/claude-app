@@ -77,8 +77,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          BUILD=$(git rev-list --count HEAD)
+          printf '{"build": %s, "version": "0.1.0", "date": "%s"}\n' "$BUILD" "$(date '+%d/%m/%Y %H:%M')" > build/latest.json
+          cat build/latest.json
           gh release delete titi-latest --yes --cleanup-tag || true
-          gh release create titi-latest build/Partitions-de-Titi.dmg --target "$GITHUB_SHA" --prerelease \
+          gh release create titi-latest build/Partitions-de-Titi.dmg build/latest.json --target "$GITHUB_SHA" --prerelease \
             --title "Partitions de Titi — dernière version" \
             --notes "Version compilée automatiquement le $(date '+%d/%m/%Y à %H:%M') (Apple Silicon et Intel, macOS 13 ou plus récent). Installation : ouvrir le .dmg, glisser l'app dans Applications, puis suivre la fiche « Lisez-moi - premier lancement »."
 
