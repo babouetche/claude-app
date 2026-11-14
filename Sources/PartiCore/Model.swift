@@ -176,6 +176,7 @@ public enum Dynamics {
 public struct Tuplet: Hashable, Codable {
     public var actual: Int
     public var normal: Int
+    public init(actual: Int, normal: Int) { self.actual = actual; self.normal = normal }
 }
 
 /// Note, accord ou silence.
