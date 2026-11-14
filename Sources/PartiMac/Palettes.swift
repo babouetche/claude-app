@@ -70,7 +70,7 @@ extension ScoreWindowController {
             ("Clés", clefs.enumerated().map { i, c in
                 paletteButton(symbol: nil, glyph: c.1, tip: "\(c.2) pour la portée de la note sélectionnée", tag: i, action: #selector(clefChosen(_:)), momentary: true)
             } + [labelButton("♩=", tip: "Tempo de la mesure sélectionnée", tag: 0, action: #selector(tempoDialog(_:)), momentary: true)]),
-            ("Armure, mesure", [
+            ("Tonalité", [
                 labelButton("♯ ♭", tip: "Armure (tonalité) à partir de la mesure sélectionnée", tag: 0, action: #selector(keyDialog(_:)), momentary: true),
                 labelButton("3/4", tip: "Chiffrage de mesure à partir de la mesure sélectionnée", tag: 0, action: #selector(timeDialog(_:)), momentary: true),
             ]),
