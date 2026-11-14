@@ -282,12 +282,14 @@ public struct MeasureInfo: Hashable, Codable {
     public var lengthOverride: Fraction?
     /// Case de 1re/2e/3e fois : un bit par passage (1 = 1re fois, 2 = 2e fois, 4 = 3e fois…).
     public var volta: Int = 0
+    /// Commence une nouvelle ligne (système) à cette mesure.
+    public var systemBreak: Bool = false
 
     public init(time: TimeSignature, key: KeySignature, tempo: Double? = nil, barline: Barline = .regular) {
         self.time = time; self.key = key; self.tempo = tempo; self.barline = barline
     }
 
-    enum CodingKeys: String, CodingKey { case time, key, tempo, barline, repeatStart, lengthOverride, volta }
+    enum CodingKeys: String, CodingKey { case time, key, tempo, barline, repeatStart, lengthOverride, volta, systemBreak }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -298,6 +300,7 @@ public struct MeasureInfo: Hashable, Codable {
         repeatStart = try c.decodeIfPresent(Bool.self, forKey: .repeatStart) ?? false
         lengthOverride = try c.decodeIfPresent(Fraction.self, forKey: .lengthOverride)
         volta = try c.decodeIfPresent(Int.self, forKey: .volta) ?? 0
+        systemBreak = try c.decodeIfPresent(Bool.self, forKey: .systemBreak) ?? false
     }
 }
 

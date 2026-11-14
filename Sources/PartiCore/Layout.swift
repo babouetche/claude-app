@@ -186,6 +186,8 @@ public struct LayoutEngine {
             return w
         }
         var systemsRanges: [Range<Int>] = []
+        // Si la partition impose ses retours à la ligne (import Encore), on les respecte à la lettre.
+        let hasBreaks = score.measures.contains { $0.systemBreak }
         var m = 0
         while m < score.measureCount {
             let avail = contentWidth - header(m)
@@ -193,7 +195,7 @@ public struct LayoutEngine {
             var used = 0.0
             while end < score.measureCount {
                 let w = plans[end].width - (end == m ? plans[end].prefix : 0)
-                if end > m && used + w > avail { break }
+                if end > m && (score.measures[end].systemBreak || (!hasBreaks && used + w > avail)) { break }
                 used += w; end += 1
             }
             systemsRanges.append(m..<end)

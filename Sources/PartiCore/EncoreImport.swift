@@ -70,6 +70,8 @@ public enum EncoreImporter {
 
     struct Elem {
         var tick: Int, type: Int, voice: Int, staff: Int, size: Int
+        /// Position horizontale dans la mesure (unités Encore).
+        var x = 0
         var face = 0, grace1 = 0, grace2 = 0, tuplet = 0, dots = 0, pitch = 0, accidental = 0
         var ornament = 0, textIndex = -1, yPos = 0
         var tieStart = false
@@ -92,6 +94,7 @@ public enum EncoreImporter {
         var instrumentCount = 1
         var veryOld = false
         var lineStaves: [LineStaff] = []
+        var lineStarts: [Int] = []
         var measures: [Meas] = []
         var texts: [String] = []
         var title = ""
@@ -122,6 +125,7 @@ public enum EncoreImporter {
             let body = pos + 8
             switch t {
             case "LINE":
+                p.lineStarts.append(r.u16(body + 10))
                 if p.lineStaves.isEmpty {
                     for i in 0..<p.staffPerSystem {
                         let o = body + 13 + 30 * i
@@ -188,6 +192,7 @@ public enum EncoreImporter {
             if tick == 0xFFFF || tv == 0xFF { break }
             let size = r.u8(p + 3)
             var e = Elem(tick: tick, type: tv >> 4, voice: tv & 0x0F, staff: r.u8(p + 4) & 0x3F, size: size)
+            e.x = r.u8(p + 11)
             let q = p + 5
             switch e.type {
             case 9: // note
@@ -301,6 +306,8 @@ public enum EncoreImporter {
             infos.append(info)
         }
         if let last = infos.indices.last, infos[last].barline == .regular { infos[last].barline = .final }
+        // Retours à la ligne identiques à ceux d'Encore.
+        for start in p.lineStarts where start > 0 && start < infos.count { infos[start].systemBreak = true }
 
         var score = Score(metadata: ScoreMetadata(title: p.title.isEmpty ? fileName : p.title.capitalizedTitle),
                           measures: infos, parts: parts)
@@ -372,12 +379,19 @@ public enum EncoreImporter {
                 score.writeVoice(slots, staff: ref, measure: mi, voice: voice)
             }
 
-            // Textes (accords, basses, doigtés, indications) et symboles.
+            // Textes (accords, basses, doigtés, indications) et symboles :
+            // Encore les place par position horizontale ; on les rattache à la note la plus proche.
+            let anchors = m.elems.filter { $0.type == 8 || ($0.type == 9 && ($0.grace1 & 0x30) < 0x20) }
+            func anchoredOffset(_ e: Elem) -> Fraction {
+                let sameStaff = anchors.filter { $0.staff == e.staff }
+                let pool = sameStaff.isEmpty ? anchors : sameStaff
+                let tick = pool.min(by: { abs($0.x - e.x) < abs($1.x - e.x) })?.tick ?? e.tick
+                return max(.zero, min(Fraction(tick, ticksPerWhole), ml - Fraction(1, 64)))
+            }
             for e in m.elems {
                 // 0xF7 : petit cercle barré (⊗), utilisé en accordéon.
                 if e.type == 5 && e.ornament == 0xF7, let ref = staffRef[e.staff] {
-                    let offset = min(Fraction(e.tick, ticksPerWhole), ml - Fraction(1, 64))
-                    score.annotations.append(Annotation(staff: ref, measure: mi, offset: max(.zero, offset), text: "⊗",
+                    score.annotations.append(Annotation(staff: ref, measure: mi, offset: anchoredOffset(e), text: "⊗",
                                                         above: e.yPos > 4, staffPosition: e.yPos, glyph: 0xE0B3))
                     continue
                 }
@@ -395,8 +409,7 @@ public enum EncoreImporter {
                     score.metadata.copyright = score.metadata.copyright.isEmpty ? text : score.metadata.copyright + " — " + text
                     continue
                 }
-                let offset = min(Fraction(e.tick, ticksPerWhole), ml - Fraction(1, 64))
-                score.annotations.append(Annotation(staff: ref, measure: mi, offset: max(.zero, offset), text: text,
+                score.annotations.append(Annotation(staff: ref, measure: mi, offset: anchoredOffset(e), text: text,
                                                     above: e.type == 5 ? e.yPos > 4 : false,
                                                     staffPosition: e.type == 5 ? e.yPos : nil))
                 report.texts += 1
