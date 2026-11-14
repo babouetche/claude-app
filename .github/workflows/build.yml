@@ -46,6 +46,12 @@ jobs:
           set -o pipefail
           "build/Partitions de Titi.app/Contents/MacOS/PartiMac" --selftest build/selftest-arm64 | tee build/selftest-arm64.log
 
+      - name: Rapport de plantage (si l'auto-test a planté)
+        if: failure()
+        run: |
+          R=$(ls -t ~/Library/Logs/DiagnosticReports/PartiMac* 2>/dev/null | head -n 1)
+          [ -n "$R" ] && head -c 12000 "$R" || echo "Aucun rapport"
+
       - name: Auto-test (x86_64 via Rosetta)
         run: |
           if arch -x86_64 /usr/bin/true 2>/dev/null; then

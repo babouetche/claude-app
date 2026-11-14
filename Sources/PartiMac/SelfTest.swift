@@ -5,6 +5,7 @@ import PartiCore
 /// Rejoue le scénario du jalon 1 : partition piano, saisie, PDF, MIDI, enregistrement, réouverture.
 enum SelfTest {
     static func run(outputDir: String) -> Int32 {
+        setvbuf(stdout, nil, _IONBF, 0)   // messages visibles même en cas de plantage
         var failures = 0
         func check(_ ok: Bool, _ label: String) {
             print(ok ? "✅ \(label)" : "❌ \(label)")
@@ -55,6 +56,7 @@ enum SelfTest {
             }
 
             let name = template.rawValue
+            print("… [\(name)] mise en page")
             let layout = LayoutEngine().layout(score)
             check(!layout.pages.isEmpty && layout.pages[0].items.count > 50, "[\(name)] mise en page : \(layout.pages.count) page(s), \(layout.pages[0].items.count) éléments")
 
@@ -83,6 +85,7 @@ enum SelfTest {
                 try? png.write(to: out.appendingPathComponent("\(name)-page1.png"))
             }
 
+            print("… [\(name)] fenêtre et palettes")
             // Capture de la fenêtre réelle.
             if template == .accordion {
                 _ = NSApplication.shared
