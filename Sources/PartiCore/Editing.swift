@@ -119,6 +119,18 @@ extension Score {
             }
         }
         slots.append((pos.offset, new))
+        // Triolet commencé : on complète le groupe avec des silences de triolet (sinon des silences minuscules).
+        if let t = tuplet {
+            let group = duration.fraction * Fraction(t.normal, 1)
+            let groupStart = Fraction(Int((pos.offset / group).doubleValue.rounded(.down)), 1) * group
+            if groupStart + group <= ml {
+                for k in 0..<t.actual {
+                    let at = groupStart + len * Fraction(k, 1)
+                    let covered = slots.contains { s in s.0 <= at && at < s.0 + s.1.length(measureLength: ml) }
+                    if !covered { slots.append((at, Event(duration: duration, tuplet: t))) }
+                }
+            }
+        }
         writeVoice(slots, staff: pos.staff, measure: pos.measure, voice: pos.voice)
         return EventRef(staff: pos.staff, measure: pos.measure, voice: pos.voice, eventID: new.id)
     }

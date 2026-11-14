@@ -107,6 +107,18 @@ final class EditingTests: XCTestCase {
         XCTAssertEqual(s.locate(r)?.event.notes.map(\.pitch.midi), [85, 89])
     }
 
+    func testTripletFillsGroupWithTripletRests() throws {
+        var s = Score.make(template: .piano, time: TimeSignature(3, 4), measures: 1)
+        let t = Tuplet(actual: 3, normal: 2)
+        try s.setEvent(at: pos(0, .zero), duration: Duration(.eighth), pitches: [Pitch(step: 0, octave: 5)], tuplet: t)
+        let evs = s.timedEvents(rh, measure: 0)
+        XCTAssertEqual(evs.prefix(3).map { $0.event.tuplet }, [t, t, t])
+        XCTAssertEqual(evs.map(\.start), [.zero, Fraction(1, 12), Fraction(2, 12), Fraction(1, 4)])
+        XCTAssertEqual(evs.last?.event.duration, Duration(.half))
+        try s.setEvent(at: pos(0, Fraction(1, 12)), duration: Duration(.eighth), pitches: [Pitch(step: 1, octave: 5)], tuplet: t)
+        XCTAssertEqual(s.events(rh, measure: 0).filter { !$0.isRest }.count, 2)
+    }
+
     func testDotAndDuration() throws {
         var s = Score.make(template: .piano, measures: 1)
         var r = try s.setEvent(at: pos(0, .zero), duration: Duration(.quarter), pitches: [Pitch(step: 0, octave: 5)])
