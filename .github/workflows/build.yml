@@ -1,0 +1,119 @@
+name: Partitions de Titi — compilation universelle
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Versions (macOS, Xcode, SDK)
+        run: |
+          sw_vers
+          xcodebuild -version
+          echo "SDK macOS : $(xcrun --sdk macosx --show-sdk-version)"
+          swift --version
+          uname -m
+
+      - name: Banque de sons
+        run: scripts/fetch-soundfont.sh
+
+      - name: Tests unitaires
+        run: swift test
+
+      - name: Application universelle + DMG
+        run: scripts/build-app.sh
+
+      - name: Vérification universelle (lipo)
+        run: |
+          INFO=$(lipo -info "build/Partitions de Titi.app/Contents/MacOS/PartiMac")
+          echo "$INFO"
+          echo "$INFO" | grep -q arm64
+          echo "$INFO" | grep -q x86_64
+          vtool -show-build "build/Partitions de Titi.app/Contents/MacOS/PartiMac" | grep -E "minos|platform" | head -4
+
+      - name: Auto-test (arm64)
+        run: |
+          set -o pipefail
+          "build/Partitions de Titi.app/Contents/MacOS/PartiMac" --selftest build/selftest-arm64 | tee build/selftest-arm64.log
+
+      - name: Rapport de plantage (si l'auto-test a planté)
+        if: failure()
+        run: |
+          R=$(ls -t ~/Library/Logs/DiagnosticReports/PartiMac* 2>/dev/null | head -n 1)
+          [ -n "$R" ] && head -c 12000 "$R" || echo "Aucun rapport"
+
+      - name: Auto-test (x86_64 via Rosetta)
+        run: |
+          if arch -x86_64 /usr/bin/true 2>/dev/null; then
+            arch -x86_64 "build/Partitions de Titi.app/Contents/MacOS/PartiMac" --selftest build/selftest-x86_64
+          else
+            echo "Rosetta indisponible sur ce runner : test x86_64 ignoré"
+          fi
+
+      - name: Lancement par double-clic (open)
+        run: |
+          # Barres de défilement toujours visibles (cas d'un Mac avec souris) : configuration la plus exigeante.
+          defaults write -g AppleShowScrollBars -string Always
+          rm -f "$HOME/Library/Logs/Partitions de Titi.log"
+          open "build/Partitions de Titi.app"
+          sleep 12
+          pgrep -x PartiMac
+          echo "--- Où en est le fil principal (sample) ---"
+          sample PartiMac 2 -file build/sample.txt >/dev/null 2>&1 || true
+          grep -A60 "Thread_.*main-thread\|com.apple.main-thread" build/sample.txt | grep -v "^ *+ *[0-9]* *???" | head -90 || true
+          echo "--- Journal de démarrage ---"
+          cat "$HOME/Library/Logs/Partitions de Titi.log" || true
+          pkill -x PartiMac || true
+          # Le lancement doit aller jusqu'au bout (fin du démarrage + fenêtre affichée).
+          grep -q "didFinishLaunching" "$HOME/Library/Logs/Partitions de Titi.log"
+          grep -q "fenêtre de partition affichée" "$HOME/Library/Logs/Partitions de Titi.log"
+
+      - name: Lien de téléchargement (version « titi-latest »)
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BUILD=$(git rev-list --count HEAD)
+          printf '{"build": %s, "version": "0.1.0", "date": "%s"}\n' "$BUILD" "$(date '+%d/%m/%Y %H:%M')" > build/latest.json
+          cat build/latest.json
+          gh release delete titi-latest --yes --cleanup-tag || true
+          gh release create titi-latest build/Partitions-de-Titi.dmg build/latest.json --target "$GITHUB_SHA" --prerelease \
+            --title "Partitions de Titi — dernière version" \
+            --notes "Version compilée automatiquement le $(date '+%d/%m/%Y à %H:%M') (Apple Silicon et Intel, macOS 13 ou plus récent). Installation : ouvrir le .dmg, glisser l'app dans Applications, puis suivre la fiche « Lisez-moi - premier lancement »."
+
+      - name: Captures d'écran dans le dépôt (docs/captures)
+        if: github.event_name == 'push'
+        run: |
+          mkdir -p docs/captures
+          for f in build/selftest-arm64/*.png; do
+            sips -s format jpeg -s formatOptions 70 "$f" --out "docs/captures/$(basename "${f%.png}").jpg" >/dev/null
+          done
+          sips -s format png build/AppIcon.iconset/icon_256x256@2x.png --out docs/captures/icone.png >/dev/null
+          git config user.name "CI Partitions de Titi"
+          git config user.email "ci@partimac.invalid"
+          git add docs/captures
+          if ! git diff --cached --quiet; then
+            git commit -m "Captures de l'auto-test [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" || echo "Captures non poussées (branche modifiée entre-temps)"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Partitions-de-Titi-dmg
+          path: build/Partitions-de-Titi.dmg
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: autotest
+          path: build/selftest-*
