@@ -246,8 +246,10 @@ enum MainMenu {
 
         // Fenêtre
         let window = submenu(main, "Fenêtre")
-        for (i, name) in ["Palette Notes", "Palette Symboles", "Palette Graphismes"].enumerated() {
-            let item = window.addItem(withTitle: name, action: #selector(ScoreWindowController.togglePalette(_:)), keyEquivalent: "\(i + 1)")
+        let palettesMenu = NSMenu(title: "Palettes")
+        window.addItem(withTitle: "Palettes", action: nil, keyEquivalent: "").submenu = palettesMenu
+        for (i, name) in ScoreWindowController.paletteNames.enumerated() {
+            let item = palettesMenu.addItem(withTitle: name, action: #selector(ScoreWindowController.togglePalette(_:)), keyEquivalent: i < 9 ? "\(i + 1)" : "")
             item.tag = i
         }
         window.addItem(.separator())

@@ -305,6 +305,39 @@ extension Score {
         if let i = annotations.firstIndex(where: { $0.id == id }) { annotations[i].text = text }
     }
 
+    // MARK: Clés, armures, métriques, couleurs
+
+    public mutating func setClef(_ clef: Clef, staff: StaffRef) { self[staff].clef = clef }
+
+    /// Change l'armure à partir de la mesure m (jusqu'au prochain changement d'armure).
+    public mutating func setKey(_ key: KeySignature, from m: Int) {
+        let old = measures[m].key
+        var i = m
+        while i < measureCount && (i == m || measures[i].key == old) { measures[i].key = key; i += 1 }
+    }
+
+    /// Change la métrique à partir de la mesure m ; les notes qui ne tiennent plus sont retirées.
+    public mutating func setTime(_ time: TimeSignature, from m: Int) {
+        let old = measures[m].time
+        var i = m
+        while i < measureCount && (i == m || measures[i].time == old) {
+            measures[i].time = time
+            measures[i].lengthOverride = nil
+            let ml = measureLength(i)
+            for ref in staffRefs {
+                for v in self[ref].measures[i].voices.indices {
+                    let kept = timedEvents(ref, measure: i, voice: v).filter { !$0.event.isMeasureRest && $0.start + $0.event.length(measureLength: ml) <= ml }
+                    writeVoice(kept.map { ($0.start, $0.event) }, staff: ref, measure: i, voice: v)
+                }
+            }
+            i += 1
+        }
+    }
+
+    public mutating func setColor(_ color: UInt32?, on ref: EventRef) throws {
+        try modifyEvent(ref) { $0.color = color }
+    }
+
     public mutating func toggleRepeatStart(_ m: Int) { measures[m].repeatStart.toggle() }
     public mutating func toggleRepeatEnd(_ m: Int) {
         measures[m].barline = measures[m].barline == .repeatEnd ? (m == measureCount - 1 ? .final : .regular) : .repeatEnd

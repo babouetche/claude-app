@@ -167,7 +167,8 @@ public struct Spanner: Hashable, Codable, Identifiable {
 /// Nuances et vélocités MIDI correspondantes.
 public enum Dynamics {
     public static let all: [(name: String, glyph: UInt32, velocity: Int)] = [
-        ("pp", 0xE52B, 36), ("p", 0xE520, 50), ("mp", 0xE52C, 64), ("mf", 0xE52D, 80), ("f", 0xE522, 96), ("ff", 0xE52F, 112),
+        ("ppp", 0xE52A, 24), ("pp", 0xE52B, 36), ("p", 0xE520, 50), ("mp", 0xE52C, 64), ("mf", 0xE52D, 80), ("f", 0xE522, 96),
+        ("ff", 0xE52F, 112), ("fff", 0xE530, 124), ("fp", 0xE534, 96), ("sfz", 0xE539, 112),
     ]
     public static func velocity(_ text: String) -> Int? { all.first { $0.name == text }?.velocity }
 }
@@ -189,6 +190,8 @@ public struct Event: Hashable, Codable, Identifiable {
     public var isMeasureRest: Bool
     public var tuplet: Tuplet?
     public var articulations: [Articulation]?
+    /// Couleur d'affichage (0xRRGGBB), nil = noir.
+    public var color: UInt32?
 
     public init(id: UUID = UUID(), duration: Duration, notes: [Note] = [], isMeasureRest: Bool = false, tuplet: Tuplet? = nil) {
         self.id = id; self.duration = duration; self.notes = notes; self.isMeasureRest = isMeasureRest; self.tuplet = tuplet

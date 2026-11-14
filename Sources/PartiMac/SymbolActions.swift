@@ -129,6 +129,7 @@ extension ScoreWindowController {
         case 5: item = annotation(at: sel, text: "⊗", above: false, position: min(-3, low - 3), glyph: 0xE0B3)
         case 6: item = annotation(at: sel, text: "Pousser", above: true, position: above, glyph: 0xE8CB)
         case 7: item = annotation(at: sel, text: "Tirer", above: true, position: above, glyph: 0xE8CC)
+        case 9: item = annotation(at: sel, text: "Césure", above: true, position: max(10, high + 2), glyph: 0xE4D1)
         default: item = annotation(at: sel, text: "Respiration", above: true, position: max(10, high + 2), glyph: 0xE4CE)
         }
         if let a = item { doc.apply("Ajouter « \(a.text) »") { $0.addAnnotation(a) } }

@@ -104,7 +104,7 @@ enum SelfTest {
                                 pv.cacheDisplay(in: pv.bounds, to: prep)
                                 try? prep.representation(using: .png, properties: [:])?.write(to: out.appendingPathComponent("palette-\(pi + 1)-\(panel.title).png"))
                             }
-                            check(wc.palettes.count == 3, "Palettes Notes, Symboles et Graphismes construites")
+                            check(wc.palettes.count == 11, "Les 11 palettes d'Encore construites")
                         }
                     }
                 }

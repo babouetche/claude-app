@@ -91,7 +91,7 @@ final class ScoreView: NSView {
             ctx.restoreGState()
             ctx.saveGState()
             ctx.translateBy(x: o.x, y: o.y)
-            Renderer().draw(page, in: ctx, selected: selectedKeys)
+            Renderer().draw(page, in: ctx, selected: selectedKeys, colors: l.colors)
             drawCursors(page: i, ctx: ctx, layout: l, score: doc.score)
             if let id = state.selectedAnnotation, let box = l.systems.first(where: { $0.page == i && $0.annotationBoxes[id] != nil })?.annotationBoxes[id] {
                 let r = CGRect(x: box.x, y: box.y, width: box.width, height: box.height).insetBy(dx: -2, dy: -2)

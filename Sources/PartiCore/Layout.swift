@@ -115,6 +115,8 @@ public struct HitResult {
 
 public struct ScoreLayout {
     public var pages: [LayoutPage]
+    /// Couleurs des notes colorées (palette Couleur).
+    public var colors: [EventKey: UInt32] = [:]
     public var systems: [PlacedSystem]
     public var staffSpace: Double
 
@@ -243,6 +245,13 @@ public struct LayoutEngine {
         var result = ScoreLayout(pages: pages, systems: systems, staffSpace: sp)
         addTies(score, layout: &result, sp: sp)
         addSpanners(score, layout: &result, sp: sp)
+        for ref in score.staffRefs {
+            for m in 0..<score.measureCount {
+                for e in score.events(ref, measure: m) where e.color != nil {
+                    result.colors[EventKey(staff: ref, measure: m, voice: 0, eventID: e.id)] = e.color
+                }
+            }
+        }
         if !md.copyright.isEmpty {
             result.pages[0].items.append(.text(md.copyright, LPoint(page.width / 2, page.height - page.marginBottom + 14), size: 8, bold: false, italic: false, align: .center))
         }

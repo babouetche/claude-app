@@ -41,16 +41,23 @@ struct Renderer {
     var ink = NSColor.black
     var highlight = NSColor.systemBlue
 
-    func draw(_ page: LayoutPage, in ctx: CGContext, selected: Set<EventKey> = []) {
+    func draw(_ page: LayoutPage, in ctx: CGContext, selected: Set<EventKey> = [], colors: [EventKey: UInt32] = [:]) {
+        func color(_ owner: EventKey?) -> NSColor {
+            guard let o = owner else { return ink }
+            if selected.contains(o) { return highlight }
+            if let c = colors[o] {
+                return NSColor(srgbRed: CGFloat((c >> 16) & 0xFF) / 255, green: CGFloat((c >> 8) & 0xFF) / 255, blue: CGFloat(c & 0xFF) / 255, alpha: 1)
+            }
+            return ink
+        }
         ctx.saveGState()
         ctx.textMatrix = .identity
         for item in page.items {
             switch item {
             case let .glyph(cp, p, size, scaleY, owner):
-                let color = owner.map { selected.contains($0) } == true ? highlight : ink
-                drawGlyph(cp, at: p, size: CGFloat(size), scaleY: CGFloat(scaleY), color: color, ctx: ctx)
+                drawGlyph(cp, at: p, size: CGFloat(size), scaleY: CGFloat(scaleY), color: color(owner), ctx: ctx)
             case let .line(a, b, width, owner):
-                ctx.setStrokeColor((owner.map { selected.contains($0) } == true ? highlight : ink).cgColor)
+                ctx.setStrokeColor(color(owner).cgColor)
                 ctx.setLineWidth(CGFloat(width))
                 ctx.setLineCap(.butt)
                 ctx.move(to: CGPoint(x: a.x, y: a.y))
@@ -58,13 +65,13 @@ struct Renderer {
                 ctx.strokePath()
             case let .polygon(points, owner):
                 guard let f = points.first else { continue }
-                ctx.setFillColor((owner.map { selected.contains($0) } == true ? highlight : ink).cgColor)
+                ctx.setFillColor(color(owner).cgColor)
                 ctx.move(to: CGPoint(x: f.x, y: f.y))
                 for p in points.dropFirst() { ctx.addLine(to: CGPoint(x: p.x, y: p.y)) }
                 ctx.closePath()
                 ctx.fillPath()
             case let .tie(a, b, up, owner):
-                ctx.setFillColor((owner.map { selected.contains($0) } == true ? highlight : ink).cgColor)
+                ctx.setFillColor(color(owner).cgColor)
                 let span = b.x - a.x
                 let h = min(max(span * 0.18, 3), 10) * (up ? -1 : 1)
                 let t = h * 0.55
@@ -136,7 +143,7 @@ enum Exporter {
             ctx.scaleBy(x: 1, y: -1)
             NSGraphicsContext.saveGraphicsState()
             NSGraphicsContext.current = NSGraphicsContext(cgContext: ctx, flipped: true)
-            Renderer().draw(page, in: ctx)
+            Renderer().draw(page, in: ctx, colors: layout.colors)
             NSGraphicsContext.restoreGraphicsState()
             ctx.restoreGState()
             ctx.endPDFPage()
