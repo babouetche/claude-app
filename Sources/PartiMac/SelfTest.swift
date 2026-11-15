@@ -62,6 +62,15 @@ enum SelfTest {
                 score.measures[3].volta = 1
                 score.measures[3].barline = .repeatEnd
                 score.measures[4].volta = 2
+                // Deux voix, petite note, mesures copiées.
+                put(rh, 5, .zero, q, [e5]); put(rh, 5, Fraction(1, 4), q, [d5]); put(rh, 5, Fraction(1, 2), q, [c5])
+                _ = try? score.setEvent(at: TimePosition(staff: rh, measure: 5, voice: 1, offset: .zero), duration: Duration(.half, dots: 1), pitches: [Pitch(step: 4, octave: 4)])
+                if let first = score.events(rh, measure: 5).first {
+                    try? score.addGraceNote(EventRef(staff: rh, measure: 5, eventID: first.id), above: true)
+                }
+                score.pasteMeasures(score.copyMeasures(0..<2), at: 6, insert: false)
+                check(score.events(rh, measure: 5, voice: 1).contains { !$0.isRest }, "[accordion] deuxième voix")
+                check(score.events(rh, measure: 6).count == score.events(rh, measure: 0).count, "[accordion] mesures copiées-collées")
             }
 
             let name = template.rawValue

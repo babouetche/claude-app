@@ -21,6 +21,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
     private var glyphs: [ObjectIdentifier: UInt32] = [:]
     var labels: [ObjectIdentifier: String] = [:]
     var tupletButton: NSButton!
+    var voiceButtons: [NSButton] = []
     var palettes: [NSPanel] = []
 
     /// La partition de cette fenêtre (gardée ici : `document` n'est rempli qu'au moment où macOS rattache la fenêtre).
@@ -307,6 +308,7 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         for (d, b) in durationButtons { glyphs[ObjectIdentifier(b)] = state.restMode ? SMuFL.rest(d) : SMuFL.metronomeNote(d) }
         // Bouton actif : fond bleu, symbole blanc. Inactif : fond clair, symbole bleu nuit.
         tupletButton.state = state.tuplet != nil ? .on : .off
+        for b in voiceButtons { b.state = b.tag == state.voice ? .on : .off }
         for b in paletteButtons {
             let on = b.state == .on
             b.layer?.backgroundColor = (on ? Theme.accent : Theme.button).cgColor

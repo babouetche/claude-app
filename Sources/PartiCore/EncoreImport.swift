@@ -313,15 +313,25 @@ public enum EncoreImporter {
                           measures: infos, parts: parts)
         if !p.authors.isEmpty { score.metadata.composer = p.authors.joined(separator: ", ") }
 
+        // Voix utilisées par portée, renumérotées 0, 1, 2… (la plus basse devient la voix principale).
+        var voiceMap: [Int: [Int: Int]] = [:]
+        do {
+            var used: [Int: Set<Int>] = [:]
+            for m in p.measures { for e in m.elems where e.type == 8 || e.type == 9 { used[e.staff, default: []].insert(e.voice) } }
+            for (st, set) in used { voiceMap[st] = Dictionary(uniqueKeysWithValues: set.sorted().enumerated().map { ($1, $0) }) }
+        }
+        func mappedVoice(_ e: Elem) -> Int { voiceMap[e.staff]?[e.voice] ?? 0 }
+
         // Notes et silences.
         for (mi, m) in p.measures.enumerated() {
             let fullLength = score.measureLength(mi)
             let measureKey = score.measures[mi].key
             var groups: [Int: [Elem]] = [:]   // portée*16+voix
+            var graces: [Int: [Elem]] = [:]
             for e in m.elems where e.type == 8 || e.type == 9 {
-                if e.type == 9 && (e.grace1 & 0x30) >= 0x20 { report.skippedGraceNotes += 1; continue }
                 guard staffRef[e.staff] != nil else { continue }
-                groups[e.staff * 16 + e.voice, default: []].append(e)
+                if e.type == 9 && (e.grace1 & 0x30) >= 0x20 { graces[e.staff * 16 + mappedVoice(e), default: []].append(e); continue }
+                groups[e.staff * 16 + mappedVoice(e), default: []].append(e)
             }
             // Mesure de levée : première mesure incomplète.
             if mi == 0, let total = groups.values.map(writtenTotal).max(), total > .zero, total < fullLength {
@@ -331,7 +341,6 @@ public enum EncoreImporter {
             for (key, elems) in groups {
                 let ref = staffRef[key / 16]!
                 let voice = key % 16
-                if voice > 0 { report.hiddenVoiceNotes += elems.filter { $0.type == 9 }.count }
                 let ticks = Array(Set(elems.map(\.tick))).sorted()
                 var onsets: [[Elem]] = []
                 for t in ticks {
@@ -375,6 +384,14 @@ public enum EncoreImporter {
                         for i in ev.notes.indices { ev.notes[i].tie = true }
                     }
                     slots.append((start, ev))
+                }
+                // Petites notes : rattachées à la note qui les suit.
+                for g in (graces[key] ?? []).sorted(by: { ($0.tick, $0.x) < ($1.tick, $1.x) }) {
+                    let gt = Fraction(g.tick, ticksPerWhole)
+                    guard let k = slots.indices.filter({ slots[$0].0 >= gt && !slots[$0].1.notes.isEmpty }).min(by: { slots[$0].0 < slots[$1].0 }) else {
+                        report.skippedGraceNotes += 1; continue
+                    }
+                    slots[k].1.graceNotes = (slots[k].1.graceNotes ?? []) + [spell(g.pitch, accidental: g.accidental, key: measureKey)]
                 }
                 score.writeVoice(slots, staff: ref, measure: mi, voice: voice)
             }

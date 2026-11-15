@@ -32,22 +32,33 @@ public enum MIDIExporter {
     /// Notes jouées d'une portée (liaisons de prolongation fusionnées).
     public static func playedNotes(_ score: Score, staff ref: StaffRef) -> [PlayedNote] {
         var out: [PlayedNote] = []
-        var pending: [Int: PlayedNote] = [:]   // notes liées en attente, par touche
-        var measureStart = Fraction.zero
-        var velocity = 80
         var dynamicsAt: [Int: [(Fraction, Int)]] = [:]
         for a in score.annotations where a.staff == ref {
             if let v = Dynamics.velocity(a.text) { dynamicsAt[a.measure, default: []].append((a.offset, v)) }
         }
+        let order = score.performanceOrder()
+        let nVoices = max(1, score[ref].measures.map(\.voices.count).max() ?? 1)
+        for voice in 0..<nVoices {
+        var pending: [Int: PlayedNote] = [:]   // notes liées en attente, par touche
+        var measureStart = Fraction.zero
+        var velocity = 80
         // Interprétation : reprises, cases de fin, D.C./Fine.
-        for m in score.performanceOrder() {
+        for m in order {
             let ml = score.measureLength(m)
-            for (s, e) in score.timedEvents(ref, measure: m) {
+            for (s, e) in score.timedEvents(ref, measure: m, voice: voice) {
                 if let d = dynamicsAt[m]?.filter({ $0.0 <= s }).max(by: { $0.0 < $1.0 }) { velocity = d.1 }
-                let start = ticks(measureStart + s)
+                var start = ticks(measureStart + s)
                 var end = ticks(measureStart + s + e.length(measureLength: ml))
                 if let arts = e.articulations, arts.contains(.staccato) || arts.contains(.staccatissimo) { end = start + max(1, (end - start) / 2) }
                 let accent = (e.articulations ?? []).contains(where: { $0 == .accent || $0 == .marcato }) ? 20 : 0
+                // Petites notes : jouées très vite sur le temps, la note principale part juste après.
+                if let graces = e.graceNotes, !graces.isEmpty {
+                    let g = max(1, ticks(Fraction(1, 32)))
+                    for (k, p) in graces.enumerated() where start + (k + 1) * g < end {
+                        out.append(PlayedNote(start: start + k * g, end: start + (k + 1) * g, key: p.midi, velocity: min(127, velocity)))
+                    }
+                    if start + graces.count * g < end { start += graces.count * g }
+                }
                 let keys = Set(e.notes.map(\.pitch.midi))
                 for (k, p) in pending where !keys.contains(k) { out.append(p); pending[k] = nil }
                 for n in e.notes {
@@ -60,6 +71,7 @@ public enum MIDIExporter {
             measureStart += ml
         }
         out += pending.values
+        }
         return out.sorted { ($0.start, $0.key) < ($1.start, $1.key) }
     }
 

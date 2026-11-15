@@ -19,6 +19,8 @@ final class EditorState {
     var selectedAnnotation: UUID?
     /// Saisie en n-olets (triolets).
     var tuplet: Tuplet?
+    /// Voix de saisie (0 = voix 1, hampes en haut quand il y en a deux ; 1 = voix 2).
+    var voice = 0
     /// Curseur de saisie au clavier.
     var cursor: TimePosition?
     var onChange: (() -> Void)?
@@ -187,7 +189,8 @@ final class ScoreView: NSView {
             let diatonic = h.clef.bottomLineDiatonic + h.position
             var pitch = Pitch(diatonic: diatonic)
             pitch.alter = state.pendingAlter ?? score.measures[h.measure].key.alter(forStep: pitch.step)
-            let pos = TimePosition(staff: h.staff, measure: h.measure, offset: h.offset)
+            let pos = state.voice == 0 ? TimePosition(staff: h.staff, measure: h.measure, offset: h.offset)
+                                       : TimePosition(staff: h.staff, measure: h.measure, voice: state.voice, offset: h.slot)
             if event.modifierFlags.contains(.shift), let target = score.event(at: pos), !state.restMode {
                 // Maj+clic : ajoute la note à l'accord.
                 doc.apply("Ajouter une note à l'accord") { try $0.addPitch(pitch, to: target) }
@@ -315,7 +318,65 @@ final class ScoreView: NSView {
         if let sel = state.selection, let loc = document?.score.locate(sel) {
             return TimePosition(staff: sel.staff, measure: sel.measure, voice: sel.voice, offset: loc.start)
         }
-        return TimePosition(staff: StaffRef(part: 0, staff: 0), measure: 0, offset: .zero)
+        return TimePosition(staff: StaffRef(part: 0, staff: 0), measure: 0, voice: state.voice, offset: .zero)
+    }
+
+    // MARK: Copier / coller
+
+    @objc func copy(_ sender: Any?) {
+        guard let doc = document else { return }
+        let refs = selectedRange()
+        guard !refs.isEmpty, let clip = doc.score.copyNotes(refs) else {
+            status("Choisissez d'abord les notes avec la flèche (clic sur la 1re, Maj+clic sur la dernière).", isError: true)
+            NSSound.beep(); return
+        }
+        AppClipboard.content = .notes(clip)
+        status("\(refs.count) note\(refs.count > 1 ? "s" : "") copiée\(refs.count > 1 ? "s" : ""). Cliquez où coller, puis ⌘V.")
+    }
+
+    @objc func cut(_ sender: Any?) {
+        guard let doc = document else { return }
+        let refs = selectedRange()
+        guard !refs.isEmpty else { copy(sender); return }
+        copy(sender)
+        doc.apply("Couper") { s in for r in refs { s.removeSpanners(touching: r); try? s.makeRest(r) } }
+        state.rangeEnd = nil
+        relayout()
+    }
+
+    @objc func paste(_ sender: Any?) {
+        guard let doc = document else { return }
+        switch AppClipboard.content {
+        case .none:
+            status("Rien à coller : copiez d'abord des notes (⌘C) ou des mesures (⌥⌘C).", isError: true); NSSound.beep()
+        case .notes(let clip)?:
+            let pos = currentInputPosition()
+            var first: EventRef?
+            let ok = doc.apply("Coller") { first = try $0.pasteNotes(clip, at: pos) }
+            guard ok else { return }
+            if let f = first { select(f, note: nil) }
+            status("Notes collées.")
+        case .measures(let clip)?:
+            let m = state.selection?.measure ?? state.cursor?.measure ?? 0
+            doc.apply("Coller les mesures") { $0.pasteMeasures(clip, at: m, insert: false) }
+            state.selection = nil; state.rangeEnd = nil; state.changed()
+            status("\(clip.count) mesure\(clip.count > 1 ? "s" : "") collée\(clip.count > 1 ? "s" : "") à partir de la mesure \(m + 1).")
+        }
+        relayout()
+    }
+
+    /// ⌘A : toutes les notes de la portée (de la note choisie, sinon la 1re portée).
+    @objc func selectAll(_ sender: Any?) {
+        guard let doc = document, doc.score.measureCount > 0 else { return }
+        let staff = state.selection?.staff ?? StaffRef(part: 0, staff: 0)
+        let voice = state.selection?.voice ?? 0
+        guard let a = doc.score.events(staff, measure: 0, voice: voice).first,
+              let b = doc.score.events(staff, measure: doc.score.measureCount - 1, voice: voice).last else { return }
+        state.tool = .select
+        select(EventRef(staff: staff, measure: 0, voice: voice, eventID: a.id), note: nil)
+        state.rangeEnd = EventRef(staff: staff, measure: doc.score.measureCount - 1, voice: voice, eventID: b.id)
+        state.changed(); needsDisplay = true
+        status("Toute la portée est sélectionnée.")
     }
 
     // MARK: Clavier (raccourcis proches d'Encore)

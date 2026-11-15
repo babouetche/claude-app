@@ -111,6 +111,8 @@ public struct HitResult {
     /// Événement + note sous le pointeur, s'il y en a un.
     public var event: EventKey?
     public var noteIndex: Int?
+    /// Position rythmique (toutes voix confondues) la plus proche du clic.
+    public var slot: Fraction = .zero
 }
 
 public struct ScoreLayout {
@@ -139,7 +141,10 @@ public struct ScoreLayout {
             ?? (p.x < sys.x0 + 1 ? sys.measures.first : p.x >= sys.x1 - 1 ? sys.measures.last : nil)
         guard let m = measure else { return nil }
         let position = Int(((staff.top + 4 * sp - p.y) / (sp / 2)).rounded())
-        let evs = sys.events.values.filter { $0.key.staff == staff.ref && $0.key.measure == m.index && $0.key.voice == 0 }
+        let all = sys.events.values.filter { $0.key.staff == staff.ref && $0.key.measure == m.index }
+        // Voix secondaire seulement si le clic tombe sur une de ses notes.
+        let onNote = all.filter { $0.key.voice > 0 && $0.positions.contains { abs($0 - position) <= 1 } && p.x >= $0.x - 0.6 * sp && p.x <= $0.x + $0.width + 0.6 * sp }
+        let evs = onNote.isEmpty ? all.filter { $0.key.voice == 0 } : onNote
         let nearest = evs.min { abs($0.x + $0.width / 2 - p.x) < abs($1.x + $1.width / 2 - p.x) }
         var hitKey: EventKey?
         var noteIndex: Int?
@@ -147,8 +152,10 @@ public struct ScoreLayout {
            let ni = e.positions.firstIndex(where: { abs($0 - position) <= 1 }) {
             hitKey = e.key; noteIndex = ni
         }
+        let slotIndex = m.slotX.indices.min { abs(m.slotX[$0] - p.x) < abs(m.slotX[$1] - p.x) }
         return HitResult(page: page, staff: staff.ref, measure: m.index, offset: nearest?.start ?? .zero,
-                         position: position, clef: staff.clef, event: hitKey, noteIndex: noteIndex)
+                         position: position, clef: staff.clef, event: hitKey, noteIndex: noteIndex,
+                         slot: slotIndex.map { m.slots[$0] } ?? .zero)
     }
 }
 
@@ -330,23 +337,28 @@ public struct LayoutEngine {
         var minDelta: [Fraction: Fraction] = [:]
         var accidentals: Set<Fraction> = []
         var lyricWidth: [Fraction: Double] = [:]
-        for r in refs {
-            let evs = score.timedEvents(r, measure: m)
+        var graceRoom: [Fraction: Double] = [:]
+        for r in refs { for v in 0..<max(1, score[r].measures[m].voices.count) {
+            let evs = score.timedEvents(r, measure: m, voice: v)
             for (i, te) in evs.enumerated() {
                 let next = i + 1 < evs.count ? evs[i + 1].start : ml
                 let d = next - te.start
                 minDelta[te.start] = min(minDelta[te.start] ?? d, d)
                 if te.event.notes.contains(where: { $0.pitch.alter != info.key.alter(forStep: $0.pitch.step) }) { accidentals.insert(te.start) }
+                if let g = te.event.graceNotes, !g.isEmpty {
+                    graceRoom[te.start] = max(graceRoom[te.start] ?? 0, Double(g.count) * 1.35 * sp + 0.5 * sp)
+                }
                 if let l = te.event.lyrics {
                     let w = l.map { LayoutEngine.lyricWidth($0, sp) }.max() ?? 0
                     lyricWidth[te.start] = max(lyricWidth[te.start] ?? 0, w)
                 }
             }
-        }
+        } }
         plan.slots = minDelta.keys.sorted()
         var x = plan.prefix + 1.3 * sp + (info.repeatStart ? 1.6 * sp : 0)
         for s in plan.slots {
             if accidentals.contains(s) { x += 1.2 * sp }
+            x += graceRoom[s] ?? 0
             plan.slotRel.append(x)
             x += max(spacing(minDelta[s]!, sp), (lyricWidth[s] ?? 0) + 0.8 * sp)
         }
@@ -549,104 +561,251 @@ public struct LayoutEngine {
         let clef = score[ref].clef
         let info = score.measures[m]
         let ml = score.measureLength(m)
-        let timed = score.timedEvents(ref, measure: m)
         let middle = 4
 
         // État des altérations dans la mesure : indice diatonique -> altération courante.
         var accState: [Int: Int] = [:]
         func currentAlter(_ p: Pitch) -> Int { accState[p.diatonic] ?? info.key.alter(forStep: p.step) }
 
-        // Groupes de ligatures.
-        let group = info.time.beamGroup
-        var beamGroups: [[Int]] = []
-        var cur: [Int] = []
-        var curBeat = -1
-        for (i, te) in timed.enumerated() {
-            let beat = Int((te.start / group).doubleValue.rounded(.down))
-            let beamable = !te.event.isRest && te.event.duration.base.flagCount > 0
-            if beamable && beat == curBeat && !cur.isEmpty {
-                cur.append(i)
-            } else {
-                if cur.count > 1 { beamGroups.append(cur) }
-                cur = beamable ? [i] : []
-                curBeat = beat
-            }
-        }
-        if cur.count > 1 { beamGroups.append(cur) }
-        var groupOf: [Int: Int] = [:]
-        for (g, list) in beamGroups.enumerated() { for i in list { groupOf[i] = g } }
-        var groupUp: [Int: Bool] = [:]
-        for (g, list) in beamGroups.enumerated() {
-            let all = list.flatMap { i in timed[i].event.notes.map { $0.pitch.diatonic - clef.bottomLineDiatonic } }
-            let avg = Double(all.reduce(0, +)) / Double(max(1, all.count))
-            groupUp[g] = avg < Double(middle)
-        }
-
-        var notes: [NoteDraw] = []
-        for (i, te) in timed.enumerated() {
-            let e = te.event
-            let key = EventKey(staff: ref, measure: m, voice: 0, eventID: e.id)
-            let x = e.isMeasureRest ? (pm.x0 + pm.x1) / 2 - 0.56 * sp : pm.x(at: te.start.doubleValue)
-            let base = e.duration.base
-            if e.isRest {
-                let restBase: DurationBase = e.isMeasureRest ? (ml > Fraction(1) ? .breve : .whole) : base
-                let ry = staffTop + (restBase == .whole || restBase == .breve ? 1 : 2) * sp
-                items.append(.glyph(SMuFL.rest(restBase), LPoint(x, ry), size: fs, scaleY: 1, owner: key))
-                drawDots(e.duration.dots, x: x + SMuFL.restWidth(restBase) * sp + 0.35 * sp, y: staffTop + 1.5 * sp, sp: sp, owner: key, items: &items)
-                events[key] = PlacedEvent(key: key, x: x, width: SMuFL.restWidth(restBase) * sp, start: te.start, positions: [])
-                continue
-            }
-            let positions = e.notes.map { $0.pitch.diatonic - clef.bottomLineDiatonic }
-            let sortedPos = positions.sorted()
-            let up: Bool
-            if let g = groupOf[i] { up = groupUp[g]! } else {
-                up = Double(sortedPos.first! + sortedPos.last!) / 2 < Double(middle)
-            }
-            let headW = SMuFL.noteheadWidth(base) * sp
-            events[key] = PlacedEvent(key: key, x: x, width: headW, start: te.start, positions: positions)
-
-            // Lignes supplémentaires.
-            let ledgerExtra = 0.4 * sp
-            if sortedPos.first! <= -2 {
-                for q in stride(from: -2, through: sortedPos.first!, by: -2) {
-                    let ly = yPos(staffTop, q, sp)
-                    items.append(.line(LPoint(x - ledgerExtra, ly), LPoint(x + headW + ledgerExtra, ly), width: SMuFL.ledger * sp, owner: nil))
+        // Voix : la 1re hampes en haut, la 2e hampes en bas quand les deux sont écrites.
+        let voiceCount = score[ref].measures[m].voices.count
+        let active = (0..<voiceCount).filter { v in v == 0 || score.events(ref, measure: m, voice: v).contains { !$0.isRest } }
+        let multi = active.count > 1
+        var allNotes: [NoteDraw] = []
+        for v in active {
+            let forcedUp: Bool? = multi ? (v % 2 == 0) : nil
+            let timed = score.timedEvents(ref, measure: m, voice: v)
+            // Groupes de ligatures.
+            let group = info.time.beamGroup
+            var beamGroups: [[Int]] = []
+            var cur: [Int] = []
+            var curBeat = -1
+            for (i, te) in timed.enumerated() {
+                let beat = Int((te.start / group).doubleValue.rounded(.down))
+                let beamable = !te.event.isRest && te.event.duration.base.flagCount > 0
+                if beamable && beat == curBeat && !cur.isEmpty {
+                    cur.append(i)
+                } else {
+                    if cur.count > 1 { beamGroups.append(cur) }
+                    cur = beamable ? [i] : []
+                    curBeat = beat
                 }
             }
-            if sortedPos.last! >= 10 {
-                for q in stride(from: 10, through: sortedPos.last!, by: 2) {
-                    let ly = yPos(staffTop, q, sp)
-                    items.append(.line(LPoint(x - ledgerExtra, ly), LPoint(x + headW + ledgerExtra, ly), width: SMuFL.ledger * sp, owner: nil))
+            if cur.count > 1 { beamGroups.append(cur) }
+            var groupOf: [Int: Int] = [:]
+            for (g, list) in beamGroups.enumerated() { for i in list { groupOf[i] = g } }
+            var groupUp: [Int: Bool] = [:]
+            for (g, list) in beamGroups.enumerated() {
+                let all = list.flatMap { i in timed[i].event.notes.map { $0.pitch.diatonic - clef.bottomLineDiatonic } }
+                let avg = Double(all.reduce(0, +)) / Double(max(1, all.count))
+                groupUp[g] = forcedUp ?? (avg < Double(middle))
+            }
+
+            var notes: [NoteDraw] = []
+            for (i, te) in timed.enumerated() {
+                let e = te.event
+                let key = EventKey(staff: ref, measure: m, voice: v, eventID: e.id)
+                let x = e.isMeasureRest ? (pm.x0 + pm.x1) / 2 - 0.56 * sp : pm.x(at: te.start.doubleValue)
+                let base = e.duration.base
+                if e.isRest {
+                    let restBase: DurationBase = e.isMeasureRest ? (ml > Fraction(1) ? .breve : .whole) : base
+                    let ry = staffTop + (restBase == .whole || restBase == .breve ? 1 : 2) * sp
+                        + (forcedUp == nil ? 0 : forcedUp! ? -1.0 * sp : 2.0 * sp)
+                    items.append(.glyph(SMuFL.rest(restBase), LPoint(x, ry), size: fs, scaleY: 1, owner: key))
+                    drawDots(e.duration.dots, x: x + SMuFL.restWidth(restBase) * sp + 0.35 * sp, y: staffTop + 1.5 * sp, sp: sp, owner: key, items: &items)
+                    events[key] = PlacedEvent(key: key, x: x, width: SMuFL.restWidth(restBase) * sp, start: te.start, positions: [])
+                    continue
+                }
+                let positions = e.notes.map { $0.pitch.diatonic - clef.bottomLineDiatonic }
+                let sortedPos = positions.sorted()
+                let up: Bool
+                if let g = groupOf[i] { up = groupUp[g]! } else {
+                    up = forcedUp ?? (Double(sortedPos.first! + sortedPos.last!) / 2 < Double(middle))
+                }
+                let headW = SMuFL.noteheadWidth(base) * sp
+                events[key] = PlacedEvent(key: key, x: x, width: headW, start: te.start, positions: positions)
+
+                // Lignes supplémentaires.
+                let ledgerExtra = 0.4 * sp
+                if sortedPos.first! <= -2 {
+                    for q in stride(from: -2, through: sortedPos.first!, by: -2) {
+                        let ly = yPos(staffTop, q, sp)
+                        items.append(.line(LPoint(x - ledgerExtra, ly), LPoint(x + headW + ledgerExtra, ly), width: SMuFL.ledger * sp, owner: nil))
+                    }
+                }
+                if sortedPos.last! >= 10 {
+                    for q in stride(from: 10, through: sortedPos.last!, by: 2) {
+                        let ly = yPos(staffTop, q, sp)
+                        items.append(.line(LPoint(x - ledgerExtra, ly), LPoint(x + headW + ledgerExtra, ly), width: SMuFL.ledger * sp, owner: nil))
+                    }
+                }
+
+                // Têtes de notes (secondes décalées), altérations, points.
+                var shifted = Set<Int>()
+                var prev: Int?
+                for p in (up ? sortedPos : sortedPos.reversed()) {
+                    if let q = prev, abs(q - p) == 1, !shifted.contains(q) { shifted.insert(p) }
+                    prev = p
+                }
+                var accX = x - 0.25 * sp
+                for (ni, note) in e.notes.enumerated().sorted(by: { $0.element.pitch.diatonic > $1.element.pitch.diatonic }) {
+                    let p = positions[ni]
+                    let hx = shifted.contains(p) ? (up ? x + headW - SMuFL.stem * sp : x - headW + SMuFL.stem * sp) : x
+                    let ny = yPos(staffTop, p, sp)
+                    items.append(.glyph(SMuFL.notehead(base), LPoint(hx, ny), size: fs, scaleY: 1, owner: key))
+                    let a = note.pitch.alter
+                    if a != currentAlter(note.pitch) {
+                        let aw = SMuFL.accidentalWidth(a) * sp
+                        items.append(.glyph(SMuFL.accidental(a), LPoint(accX - aw, ny), size: fs, scaleY: 1, owner: key))
+                        accState[note.pitch.diatonic] = a
+                        if e.notes.count > 2 { accX -= aw + 0.15 * sp }
+                    }
+                    let dotY = p % 2 == 0 ? yPos(staffTop, p + 1, sp) : ny
+                    let dotX = x + headW + (shifted.isEmpty || !up ? 0 : headW) + 0.3 * sp
+                    drawDots(e.duration.dots, x: dotX, y: dotY, sp: sp, owner: key, items: &items)
+                }
+
+                if let graces = e.graceNotes, !graces.isEmpty {
+                    drawGraceNotes(graces, beforeX: x - (e.notes.contains { $0.pitch.alter != info.key.alter(forStep: $0.pitch.step) } ? 1.2 * sp : 0),
+                                   clef: clef, key: info.key, staffTop: staffTop, sp: sp, owner: key, items: &items)
+                }
+                notes.append(NoteDraw(key: key, event: e, start: te.start, x: x, positions: sortedPos, stemUp: up, beamed: groupOf[i] != nil))
+            }
+
+            // Hampes et crochets des notes isolées.
+            for i in notes.indices where notes[i].event.duration.base.hasStem {
+                let n = notes[i]
+                let base = n.event.duration.base
+                let headW = SMuFL.noteheadWidth(base) * sp
+                let stemW = SMuFL.stem * sp
+                let lowY = yPos(staffTop, n.positions.first!, sp)
+                let highY = yPos(staffTop, n.positions.last!, sp)
+                let midY = yPos(staffTop, middle, sp)
+                let extra = Double(max(0, base.flagCount - 1)) * 0.75 * sp
+                if n.stemUp {
+                    notes[i].stemX = n.x + headW - stemW / 2
+                    notes[i].stemEndY = min(highY - 3.5 * sp - extra, midY)
+                } else {
+                    notes[i].stemX = n.x + stemW / 2
+                    notes[i].stemEndY = max(lowY + 3.5 * sp + extra, midY)
+                }
+                if !n.beamed {
+                    let from = n.stemUp ? lowY - 0.17 * sp : highY + 0.17 * sp
+                    items.append(.line(LPoint(notes[i].stemX, from), LPoint(notes[i].stemX, notes[i].stemEndY), width: stemW, owner: n.key))
+                    if base.flagCount > 0 {
+                        items.append(.glyph(SMuFL.flag(base, up: n.stemUp), LPoint(notes[i].stemX - stemW / 2, notes[i].stemEndY), size: fs, scaleY: 1, owner: n.key))
+                    }
                 }
             }
 
-            // Têtes de notes (secondes décalées), altérations, points.
-            var shifted = Set<Int>()
-            var prev: Int?
-            for p in (up ? sortedPos : sortedPos.reversed()) {
-                if let q = prev, abs(q - p) == 1, !shifted.contains(q) { shifted.insert(p) }
-                prev = p
-            }
-            var accX = x - 0.25 * sp
-            for (ni, note) in e.notes.enumerated().sorted(by: { $0.element.pitch.diatonic > $1.element.pitch.diatonic }) {
-                let p = positions[ni]
-                let hx = shifted.contains(p) ? (up ? x + headW - SMuFL.stem * sp : x - headW + SMuFL.stem * sp) : x
-                let ny = yPos(staffTop, p, sp)
-                items.append(.glyph(SMuFL.notehead(base), LPoint(hx, ny), size: fs, scaleY: 1, owner: key))
-                let a = note.pitch.alter
-                if a != currentAlter(note.pitch) {
-                    let aw = SMuFL.accidentalWidth(a) * sp
-                    items.append(.glyph(SMuFL.accidental(a), LPoint(accX - aw, ny), size: fs, scaleY: 1, owner: key))
-                    accState[note.pitch.diatonic] = a
-                    if e.notes.count > 2 { accX -= aw + 0.15 * sp }
+            // Articulations (côté tête de note, point d'orgue toujours au-dessus).
+            for n in notes {
+                guard let arts = n.event.articulations, !arts.isEmpty else { continue }
+                let headW = SMuFL.noteheadWidth(n.event.duration.base) * sp
+                let cx = n.x + headW / 2
+                var stackIndex = 0
+                for a in arts.sorted(by: { $0.rawValue < $1.rawValue }) {
+                    if a == .fermata {
+                        let y = min(staffTop - 1.0 * sp, yPos(staffTop, n.positions.last!, sp) - 2.4 * sp)
+                        items.append(.glyph(0xE4C0, LPoint(cx - 1.18 * sp, y), size: fs, scaleY: 1, owner: n.key))
+                        continue
+                    }
+                    let below = n.stemUp
+                    let (glyph, width): (UInt32, Double) = {
+                        switch a {
+                        case .staccato: return (below ? 0xE4A3 : 0xE4A2, 0.38)
+                        case .accent: return (below ? 0xE4A1 : 0xE4A0, 1.36)
+                        case .tenuto: return (below ? 0xE4A5 : 0xE4A4, 1.34)
+                        case .marcato: return (below ? 0xE4AD : 0xE4AC, 0.96)
+                        case .staccatissimo: return (below ? 0xE4A7 : 0xE4A6, 0.42)
+                        case .fermata: return (0xE4C0, 2.36)
+                        }
+                    }()
+                    let step = Double(stackIndex) * 1.1 * sp
+                    let y = below ? yPos(staffTop, n.positions.first!, sp) + 1.5 * sp + step
+                                  : yPos(staffTop, n.positions.last!, sp) - 1.5 * sp - step
+                    items.append(.glyph(glyph, LPoint(cx - width * sp / 2, y), size: fs, scaleY: 1, owner: n.key))
+                    stackIndex += 1
                 }
-                let dotY = p % 2 == 0 ? yPos(staffTop, p + 1, sp) : ny
-                let dotX = x + headW + (shifted.isEmpty || !up ? 0 : headW) + 0.3 * sp
-                drawDots(e.duration.dots, x: dotX, y: dotY, sp: sp, owner: key, items: &items)
             }
 
-            notes.append(NoteDraw(key: key, event: e, start: te.start, x: x, positions: sortedPos, stemUp: up, beamed: groupOf[i] != nil))
+            // Chiffres de n-olets (« 3 » au-dessus du groupe).
+            var k = 0
+            let tupletEvents = timed.filter { $0.event.tuplet != nil }
+            while k < tupletEvents.count {
+                let t = tupletEvents[k].event.tuplet!
+                let group = Array(tupletEvents[k..<min(tupletEvents.count, k + t.actual)])
+                let xs = group.map { pm.x(at: $0.start.doubleValue) }
+                let mid = (xs.min()! + xs.max()!) / 2 + 0.6 * sp
+                let highest = group.flatMap { g in g.event.notes.map { yPos(staffTop, $0.pitch.diatonic - clef.bottomLineDiatonic, sp) } }.min() ?? staffTop
+                let y = min(staffTop - 1.2 * sp, highest - 4.2 * sp)
+                items.append(.text("\(t.actual)", LPoint(mid, y), size: sp * 1.6, bold: true, italic: true, align: .center))
+                k += max(1, group.count)
+            }
+
+            // Ligatures.
+            for list in beamGroups {
+                let members = list.compactMap { idx in notes.firstIndex { $0.key.eventID == timed[idx].event.id } }
+                guard members.count > 1 else { continue }
+                let up = notes[members[0]].stemUp
+                let firstN = notes[members.first!], lastN = notes[members.last!]
+                let x1 = firstN.stemX, x2 = lastN.stemX
+                var y1 = firstN.stemEndY, y2 = lastN.stemEndY
+                let maxSlope = 1.0 * sp
+                if abs(y2 - y1) > maxSlope { y2 = y1 + (y2 > y1 ? maxSlope : -maxSlope) }
+                let slope = (y2 - y1) / max(1, x2 - x1)
+                // Longueur minimale des hampes.
+                var shift = 0.0
+                for idx in members {
+                    let n = notes[idx]
+                    let by = y1 + slope * (n.stemX - x1)
+                    let extra = Double(max(0, n.event.duration.base.flagCount - 1)) * 0.75 * sp
+                    if up {
+                        let limit = yPos(staffTop, n.positions.last!, sp) - 2.6 * sp - extra
+                        shift = min(shift, limit - by)
+                    } else {
+                        let limit = yPos(staffTop, n.positions.first!, sp) + 2.6 * sp + extra
+                        shift = max(shift, limit - by)
+                    }
+                }
+                y1 += shift
+                func beamY(_ x: Double) -> Double { y1 + slope * (x - x1) }
+                let t = SMuFL.beam * sp
+                let stemW = SMuFL.stem * sp
+                for idx in members {
+                    let n = notes[idx]
+                    let from = up ? yPos(staffTop, n.positions.first!, sp) - 0.17 * sp : yPos(staffTop, n.positions.last!, sp) + 0.17 * sp
+                    items.append(.line(LPoint(n.stemX, from), LPoint(n.stemX, beamY(n.stemX)), width: stemW, owner: n.key))
+                }
+                func beamSegment(_ xa: Double, _ xb: Double, level: Int) {
+                    let off = Double(level) * 0.75 * sp * (up ? 1 : -1)
+                    let ya = beamY(xa) + off, yb = beamY(xb) + off
+                    let d = up ? t : -t
+                    items.append(.polygon([LPoint(xa, ya), LPoint(xb, yb), LPoint(xb, yb + d), LPoint(xa, ya + d)], owner: nil))
+                }
+                beamSegment(x1 - stemW / 2, x2 + stemW / 2, level: 0)
+                let maxLevel = members.map { notes[$0].event.duration.base.flagCount }.max() ?? 1
+                if maxLevel > 1 {
+                    for level in 1..<maxLevel {
+                        for (k, idx) in members.enumerated() {
+                            let n = notes[idx]
+                            guard n.event.duration.base.flagCount > level else { continue }
+                            let nextHas = k + 1 < members.count && notes[members[k + 1]].event.duration.base.flagCount > level
+                            let prevHas = k > 0 && notes[members[k - 1]].event.duration.base.flagCount > level
+                            if nextHas {
+                                beamSegment(n.stemX - stemW / 2, notes[members[k + 1]].stemX + stemW / 2, level: level)
+                            } else if !prevHas {
+                                let stub = 1.1 * sp
+                                if k + 1 < members.count { beamSegment(n.stemX, n.stemX + stub, level: level) }
+                                else { beamSegment(n.stemX - stub, n.stemX, level: level) }
+                            }
+                        }
+                    }
+                }
+            }
+            allNotes += notes
         }
+        let notes = allNotes
 
         // Textes attachés (accords, basses, doigtés, nuances, symboles…).
         var stackAbove: [Int: Int] = [:], stackBelow: [Int: Int] = [:]
@@ -681,137 +840,42 @@ public struct LayoutEngine {
             items.append(.text(a.text, LPoint(ax, top), size: size, bold: bold, italic: false, align: .left))
             boxes[a.id] = LRect(x: ax - 0.2 * sp, y: top - 0.2 * sp, width: Double(max(1, a.text.count)) * size * 0.62 + 0.4 * sp, height: size * 1.3)
         }
+    }
 
-        // Hampes et crochets des notes isolées.
-        for i in notes.indices where notes[i].event.duration.base.hasStem {
-            let n = notes[i]
-            let base = n.event.duration.base
-            let headW = SMuFL.noteheadWidth(base) * sp
-            let stemW = SMuFL.stem * sp
-            let lowY = yPos(staffTop, n.positions.first!, sp)
-            let highY = yPos(staffTop, n.positions.last!, sp)
-            let midY = yPos(staffTop, middle, sp)
-            let extra = Double(max(0, base.flagCount - 1)) * 0.75 * sp
-            if n.stemUp {
-                notes[i].stemX = n.x + headW - stemW / 2
-                notes[i].stemEndY = min(highY - 3.5 * sp - extra, midY)
-            } else {
-                notes[i].stemX = n.x + stemW / 2
-                notes[i].stemEndY = max(lowY + 3.5 * sp + extra, midY)
+    /// Petites notes : têtes réduites, hampes en haut, barrées si seules, ligaturées sinon.
+    func drawGraceNotes(_ graces: [Pitch], beforeX: Double, clef: Clef, key: KeySignature, staffTop: Double, sp: Double,
+                        owner: EventKey, items: inout [DrawItem]) {
+        let scale = 0.65
+        let fs = 4 * sp * scale
+        let headW = SMuFL.noteheadWidth(.quarter) * sp * scale
+        let stemW = SMuFL.stem * sp
+        let step = 1.35 * sp
+        var tops: [LPoint] = []
+        for (i, g) in graces.enumerated() {
+            let gx = beforeX - Double(graces.count - i) * step - 0.2 * sp
+            let pos = g.diatonic - clef.bottomLineDiatonic
+            let gy = yPos(staffTop, pos, sp)
+            if pos <= -2 { for q in stride(from: -2, through: pos, by: -2) { let ly = yPos(staffTop, q, sp); items.append(.line(LPoint(gx - 0.25 * sp, ly), LPoint(gx + headW + 0.25 * sp, ly), width: SMuFL.ledger * sp, owner: nil)) } }
+            if pos >= 10 { for q in stride(from: 10, through: pos, by: 2) { let ly = yPos(staffTop, q, sp); items.append(.line(LPoint(gx - 0.25 * sp, ly), LPoint(gx + headW + 0.25 * sp, ly), width: SMuFL.ledger * sp, owner: nil)) } }
+            items.append(.glyph(SMuFL.notehead(.quarter), LPoint(gx, gy), size: fs, scaleY: 1, owner: owner))
+            if g.alter != key.alter(forStep: g.step) {
+                let aw = SMuFL.accidentalWidth(g.alter) * sp * scale
+                items.append(.glyph(SMuFL.accidental(g.alter), LPoint(gx - aw - 0.1 * sp, gy), size: fs, scaleY: 1, owner: owner))
             }
-            if !n.beamed {
-                let from = n.stemUp ? lowY - 0.17 * sp : highY + 0.17 * sp
-                items.append(.line(LPoint(notes[i].stemX, from), LPoint(notes[i].stemX, notes[i].stemEndY), width: stemW, owner: n.key))
-                if base.flagCount > 0 {
-                    items.append(.glyph(SMuFL.flag(base, up: n.stemUp), LPoint(notes[i].stemX - stemW / 2, notes[i].stemEndY), size: fs, scaleY: 1, owner: n.key))
-                }
-            }
+            let sx = gx + headW - stemW / 2
+            let top = LPoint(sx, min(gy - 2.6 * sp, yPos(staffTop, 6, sp)))
+            items.append(.line(LPoint(sx, gy - 0.1 * sp), top, width: stemW, owner: owner))
+            tops.append(top)
         }
-
-        // Articulations (côté tête de note, point d'orgue toujours au-dessus).
-        for n in notes {
-            guard let arts = n.event.articulations, !arts.isEmpty else { continue }
-            let headW = SMuFL.noteheadWidth(n.event.duration.base) * sp
-            let cx = n.x + headW / 2
-            var stackIndex = 0
-            for a in arts.sorted(by: { $0.rawValue < $1.rawValue }) {
-                if a == .fermata {
-                    let y = min(staffTop - 1.0 * sp, yPos(staffTop, n.positions.last!, sp) - 2.4 * sp)
-                    items.append(.glyph(0xE4C0, LPoint(cx - 1.18 * sp, y), size: fs, scaleY: 1, owner: n.key))
-                    continue
-                }
-                let below = n.stemUp
-                let (glyph, width): (UInt32, Double) = {
-                    switch a {
-                    case .staccato: return (below ? 0xE4A3 : 0xE4A2, 0.38)
-                    case .accent: return (below ? 0xE4A1 : 0xE4A0, 1.36)
-                    case .tenuto: return (below ? 0xE4A5 : 0xE4A4, 1.34)
-                    case .marcato: return (below ? 0xE4AD : 0xE4AC, 0.96)
-                    case .staccatissimo: return (below ? 0xE4A7 : 0xE4A6, 0.42)
-                    case .fermata: return (0xE4C0, 2.36)
-                    }
-                }()
-                let step = Double(stackIndex) * 1.1 * sp
-                let y = below ? yPos(staffTop, n.positions.first!, sp) + 1.5 * sp + step
-                              : yPos(staffTop, n.positions.last!, sp) - 1.5 * sp - step
-                items.append(.glyph(glyph, LPoint(cx - width * sp / 2, y), size: fs, scaleY: 1, owner: n.key))
-                stackIndex += 1
-            }
-        }
-
-        // Chiffres de n-olets (« 3 » au-dessus du groupe).
-        var k = 0
-        let tupletEvents = timed.filter { $0.event.tuplet != nil }
-        while k < tupletEvents.count {
-            let t = tupletEvents[k].event.tuplet!
-            let group = Array(tupletEvents[k..<min(tupletEvents.count, k + t.actual)])
-            let xs = group.map { pm.x(at: $0.start.doubleValue) }
-            let mid = (xs.min()! + xs.max()!) / 2 + 0.6 * sp
-            let highest = group.flatMap { g in g.event.notes.map { yPos(staffTop, $0.pitch.diatonic - clef.bottomLineDiatonic, sp) } }.min() ?? staffTop
-            let y = min(staffTop - 1.2 * sp, highest - 4.2 * sp)
-            items.append(.text("\(t.actual)", LPoint(mid, y), size: sp * 1.6, bold: true, italic: true, align: .center))
-            k += max(1, group.count)
-        }
-
-        // Ligatures.
-        for list in beamGroups {
-            let members = list.compactMap { idx in notes.firstIndex { $0.key.eventID == timed[idx].event.id } }
-            guard members.count > 1 else { continue }
-            let up = notes[members[0]].stemUp
-            let firstN = notes[members.first!], lastN = notes[members.last!]
-            let x1 = firstN.stemX, x2 = lastN.stemX
-            var y1 = firstN.stemEndY, y2 = lastN.stemEndY
-            let maxSlope = 1.0 * sp
-            if abs(y2 - y1) > maxSlope { y2 = y1 + (y2 > y1 ? maxSlope : -maxSlope) }
-            let slope = (y2 - y1) / max(1, x2 - x1)
-            // Longueur minimale des hampes.
-            var shift = 0.0
-            for idx in members {
-                let n = notes[idx]
-                let by = y1 + slope * (n.stemX - x1)
-                let extra = Double(max(0, n.event.duration.base.flagCount - 1)) * 0.75 * sp
-                if up {
-                    let limit = yPos(staffTop, n.positions.last!, sp) - 2.6 * sp - extra
-                    shift = min(shift, limit - by)
-                } else {
-                    let limit = yPos(staffTop, n.positions.first!, sp) + 2.6 * sp + extra
-                    shift = max(shift, limit - by)
-                }
-            }
-            y1 += shift
-            func beamY(_ x: Double) -> Double { y1 + slope * (x - x1) }
-            let t = SMuFL.beam * sp
-            let stemW = SMuFL.stem * sp
-            for idx in members {
-                let n = notes[idx]
-                let from = up ? yPos(staffTop, n.positions.first!, sp) - 0.17 * sp : yPos(staffTop, n.positions.last!, sp) + 0.17 * sp
-                items.append(.line(LPoint(n.stemX, from), LPoint(n.stemX, beamY(n.stemX)), width: stemW, owner: n.key))
-            }
-            func beamSegment(_ xa: Double, _ xb: Double, level: Int) {
-                let off = Double(level) * 0.75 * sp * (up ? 1 : -1)
-                let ya = beamY(xa) + off, yb = beamY(xb) + off
-                let d = up ? t : -t
-                items.append(.polygon([LPoint(xa, ya), LPoint(xb, yb), LPoint(xb, yb + d), LPoint(xa, ya + d)], owner: nil))
-            }
-            beamSegment(x1 - stemW / 2, x2 + stemW / 2, level: 0)
-            let maxLevel = members.map { notes[$0].event.duration.base.flagCount }.max() ?? 1
-            if maxLevel > 1 {
-                for level in 1..<maxLevel {
-                    for (k, idx) in members.enumerated() {
-                        let n = notes[idx]
-                        guard n.event.duration.base.flagCount > level else { continue }
-                        let nextHas = k + 1 < members.count && notes[members[k + 1]].event.duration.base.flagCount > level
-                        let prevHas = k > 0 && notes[members[k - 1]].event.duration.base.flagCount > level
-                        if nextHas {
-                            beamSegment(n.stemX - stemW / 2, notes[members[k + 1]].stemX + stemW / 2, level: level)
-                        } else if !prevHas {
-                            let stub = 1.1 * sp
-                            if k + 1 < members.count { beamSegment(n.stemX, n.stemX + stub, level: level) }
-                            else { beamSegment(n.stemX - stub, n.stemX, level: level) }
-                        }
-                    }
-                }
-            }
+        if tops.count == 1, let t = tops.first {
+            items.append(.glyph(SMuFL.flag(.eighth, up: true), LPoint(t.x - stemW / 2, t.y), size: fs, scaleY: 1, owner: owner))
+            // Barre oblique de l'appoggiature brève.
+            items.append(.line(LPoint(t.x - 0.5 * sp, t.y + 1.5 * sp), LPoint(t.x + 0.9 * sp, t.y + 0.5 * sp), width: stemW, owner: owner))
+        } else if let a = tops.first, let b = tops.last {
+            let y = min(a.y, b.y)
+            for t in tops { items.append(.line(LPoint(t.x, t.y), LPoint(t.x, y), width: stemW, owner: owner)) }
+            let th = SMuFL.beam * sp * 0.6
+            items.append(.polygon([LPoint(a.x, y), LPoint(b.x, y), LPoint(b.x, y + th), LPoint(a.x, y + th)], owner: owner))
         }
     }
 
@@ -873,11 +937,13 @@ public struct LayoutEngine {
 
     func addTies(_ score: Score, layout: inout ScoreLayout, sp: Double) {
         for ref in score.staffRefs {
+          let nVoices = score[ref].measures.map(\.voices.count).max() ?? 1
+          for v in 0..<max(1, nVoices) {
             // Événements dans l'ordre, avec leur système.
             var seq: [(sys: Int, ev: Event, key: EventKey)] = []
             for m in 0..<score.measureCount {
                 guard let si = layout.systems.firstIndex(where: { s in s.measures.contains { $0.index == m } }) else { continue }
-                for e in score.events(ref, measure: m) { seq.append((si, e, EventKey(staff: ref, measure: m, voice: 0, eventID: e.id))) }
+                for e in score.events(ref, measure: m, voice: v) { seq.append((si, e, EventKey(staff: ref, measure: m, voice: v, eventID: e.id))) }
             }
             for (i, item) in seq.enumerated() where item.ev.notes.contains(where: \.tie) {
                 let sys = layout.systems[item.sys]
@@ -904,6 +970,7 @@ public struct LayoutEngine {
                     }
                 }
             }
+          }
         }
     }
 }

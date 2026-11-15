@@ -54,12 +54,24 @@ extension ScoreWindowController {
         let dsharp = paletteButton(symbol: nil, glyph: SMuFL.doubleSharp, tip: "Double dièse", tag: 2, action: #selector(accidentalChosen(_:)))
         let enharm = labelButton("♯♭", tip: "Enharmonie : écrire la note sélectionnée autrement (do♯ ↔ ré♭)", tag: 0, action: #selector(enharmonicChosen(_:)), momentary: true)
         accidentalButtons = [-2: dflat, -1: flat, 0: natural, 1: sharp, 2: dsharp]
+        voiceButtons = [
+            labelButton("V1", tip: "Voix 1 (voix principale)", tag: 0, action: #selector(voiceChosen(_:))),
+            labelButton("V2", tip: "Voix 2 : une deuxième mélodie sur la même portée, hampes en bas", tag: 1, action: #selector(voiceChosen(_:))),
+        ]
         let notes = paletteView([
             ("Durées", durations + [restButton, dotButton, tupletButton, tie]),
             ("Altérations", [dflat, flat, natural, sharp, dsharp, enharm]),
+            ("Voix et petites notes", voiceButtons + [
+                labelButton("♪↑", tip: "Petite note au-dessus de la note sélectionnée (appoggiature)", tag: 0, action: #selector(graceChosen(_:)), momentary: true),
+                labelButton("♪↓", tip: "Petite note au-dessous de la note sélectionnée", tag: 1, action: #selector(graceChosen(_:)), momentary: true),
+            ]),
             ("Mesures", [
                 paletteButton(symbol: "plus", glyph: nil, tip: "Ajouter une mesure à la fin (⌥⌘ M)", tag: 0, action: #selector(appendMeasure(_:)), momentary: true),
                 paletteButton(symbol: "minus", glyph: nil, tip: "Supprimer la mesure sélectionnée", tag: 0, action: #selector(deleteMeasure(_:)), momentary: true),
+                paletteButton(symbol: "doc.on.doc", glyph: nil, tip: "Copier les mesures choisies (⌥⌘ C)", tag: 0, action: #selector(copyMeasures(_:)), momentary: true),
+                paletteButton(symbol: "doc.on.clipboard", glyph: nil, tip: "Coller (⌘ V) : remplace à partir de la mesure choisie", tag: 0, action: #selector(pasteCopied(_:)), momentary: true),
+                paletteButton(symbol: "arrow.right.to.line", glyph: nil, tip: "Insérer les mesures copiées avant la mesure choisie (⌥⌘ V)", tag: 0, action: #selector(insertCopiedMeasures(_:)), momentary: true),
+                paletteButton(symbol: "arrow.up.arrow.down", glyph: nil, tip: "Transposer toute la partition", tag: 0, action: #selector(transposeDialog(_:)), momentary: true),
             ]),
         ])
 

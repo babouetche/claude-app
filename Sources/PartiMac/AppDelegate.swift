@@ -71,8 +71,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let (score, report) = try EncoreImporter.importScore(from: data, fileName: name)
             doc.score = score
             message = "Partition Encore importée : \(report.measures) mesures, \(report.notes) notes, \(report.texts) textes."
-            if report.hiddenVoiceNotes > 0 { message += " \(report.hiddenVoiceNotes) notes de voix secondaires ne sont pas encore affichées." }
-            if report.skippedGraceNotes > 0 { message += " \(report.skippedGraceNotes) notes d'ornement ignorées." }
+            if report.skippedGraceNotes > 0 { message += " \(report.skippedGraceNotes) petites notes non rattachées, ignorées." }
         } else {
             doc.score = try MIDIImporter.score(from: data, title: name)
             message = "Fichier MIDI importé."
@@ -149,6 +148,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         . : point  ·  + dièse  ·  - bémol  ·  = bécarre  ·  T : liaison
         Clic sur la portée : poser une note  ·  Maj + clic : ajouter à l'accord
 
+        COPIER, COLLER, TRANSPOSER
+        ⌘ C / ⌘ X / ⌘ V : copier, couper, coller les notes choisies (clic sur la 1re, Maj+clic sur la dernière)
+        ⌥⌘ C : copier les mesures  ·  ⌘ V : les coller à la place  ·  ⌥⌘ V : les insérer avant
+        ⌘ A : toute la portée  ·  menu Édition › Transposer la partition
+
         MODIFIER
         Échap : passer de la saisie (crayon) à la sélection (flèche)
         ← → : note précédente / suivante
@@ -223,6 +227,13 @@ enum MainMenu {
         edit.addItem(withTitle: "Copier", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
         edit.addItem(withTitle: "Coller", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
         edit.addItem(withTitle: "Tout sélectionner", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+        edit.addItem(.separator())
+        let cm = edit.addItem(withTitle: "Copier les mesures", action: #selector(ScoreWindowController.copyMeasures(_:)), keyEquivalent: "c")
+        cm.keyEquivalentModifierMask = [.command, .option]
+        let im = edit.addItem(withTitle: "Insérer les mesures copiées", action: #selector(ScoreWindowController.insertCopiedMeasures(_:)), keyEquivalent: "v")
+        im.keyEquivalentModifierMask = [.command, .option]
+        edit.addItem(.separator())
+        edit.addItem(withTitle: "Transposer la partition…", action: #selector(ScoreWindowController.transposeDialog(_:)), keyEquivalent: "")
 
         // Mesures
         let measures = submenu(main, "Mesures")

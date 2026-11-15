@@ -194,6 +194,8 @@ public struct Event: Hashable, Codable, Identifiable {
     public var color: UInt32?
     /// Paroles : une syllabe par couplet (index 0 = 1er couplet). Un « - » final relie à la syllabe suivante.
     public var lyrics: [String]?
+    /// Petites notes (appoggiatures brèves) jouées juste avant la note.
+    public var graceNotes: [Pitch]?
 
     public func lyric(_ verse: Int) -> String? {
         guard let l = lyrics, verse < l.count, !l[verse].isEmpty else { return nil }

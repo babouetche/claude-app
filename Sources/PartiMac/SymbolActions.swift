@@ -69,7 +69,7 @@ extension ScoreWindowController {
             for r in refs {
                 s.removeSpanners(touching: r)
                 if let loc = s.locate(r) {
-                    try? s.modifyEvent(r) { $0.articulations = nil }
+                    try? s.modifyEvent(r) { $0.articulations = nil; $0.graceNotes = nil }
                     s.annotations.removeAll { $0.staff == r.staff && $0.measure == r.measure && $0.offset == loc.start && $0.glyph != nil }
                 }
             }
