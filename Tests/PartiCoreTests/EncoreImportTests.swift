@@ -29,7 +29,15 @@ final class EncoreImportTests: XCTestCase {
         text[0...1] = ArraySlice(be16(0)); text[2] = 0x50; text[3] = 78; text[5] = 0x1E
         text[12...13] = ArraySlice(be16(10))   // au-dessus de la portée
         text[32...33] = ArraySlice(be16(0))    // texte n° 0
-        let elems = note + text + [0xFF, 0xFF]
+        // Paroles : « Là- » (1er couplet, voix 0) et « Do » (2e couplet, voix 1), juste après la note.
+        func lyric(_ bytes: [UInt8], verse: UInt8) -> [UInt8] {
+            var l = [UInt8](repeating: 0, count: 24)
+            l[0...1] = ArraySlice(be16(12)); l[2] = 0x60 | verse; l[3] = 24
+            l[12] = 0x01; l[13] = 0x77; l[15] = 0x10
+            for (i, c) in bytes.enumerated() { l[20 + i] = c }
+            return l
+        }
+        let elems = note + text + lyric([0x4C, 0xE0, 0x2D], verse: 0) + lyric(Array("Do".utf8), verse: 1) + [0xFF, 0xFF]
         let measBody = meas + elems
         // TEXT : un texte « Am ».
         let t = Array("Am".utf8) + [0]
@@ -56,6 +64,8 @@ final class EncoreImportTests: XCTestCase {
         XCTAssertEqual(score.annotations.first?.text, "Am")
         XCTAssertEqual(score.annotations.first?.above, true)
         XCTAssertEqual(report.notes, 1)
+        XCTAssertEqual(evs.first?.lyrics, ["Là-", "Do"])
+        XCTAssertEqual(report.lyrics, 2)
         XCTAssertEqual(score.parts[0].program, GM.accordion)
         // La partition importée se met en page et s'exporte en MIDI.
         XCTAssertFalse(LayoutEngine().layout(score).pages.isEmpty)

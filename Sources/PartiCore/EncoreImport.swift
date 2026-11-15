@@ -24,6 +24,7 @@ public struct EncoreImportReport {
     public var texts = 0
     public var skippedGraceNotes = 0
     public var hiddenVoiceNotes = 0
+    public var lyrics = 0
 }
 
 public enum EncoreImporter {
@@ -77,6 +78,8 @@ public enum EncoreImporter {
         var tieStart = false
         var keyCode = 0
         var chordText = ""
+        /// Syllabe de paroles (type 6) ; le couplet est dans `voice`.
+        var lyric = ""
     }
 
     struct Meas {
@@ -208,6 +211,12 @@ public enum EncoreImporter {
                 e.ornament = r.u8(q)
                 if e.ornament == 0x1E && size > 34 { e.textIndex = r.u16(p + 32) }
                 e.yPos = r.i16(p + 12)
+            case 6: // paroles : texte (Windows-1252) à p+20, couplet = voix
+                var bytes: [UInt8] = []
+                var i = p + 20
+                while i < min(p + size, r.b.count), r.b[i] != 0 { bytes.append(r.b[i]); i += 1 }
+                e.lyric = (String(bytes: bytes, encoding: .windowsCP1252) ?? String(bytes: bytes, encoding: .isoLatin1) ?? "")
+                    .trimmingCharacters(in: .whitespaces)
             case 3: // liaison de prolongation
                 e.tieStart = size > 5 && r.u8(q) == 0xFE
             case 2: // changement d'armure
@@ -394,6 +403,21 @@ public enum EncoreImporter {
                     slots[k].1.graceNotes = (slots[k].1.graceNotes ?? []) + [spell(g.pitch, accidental: g.accidental, key: measureKey)]
                 }
                 score.writeVoice(slots, staff: ref, measure: mi, voice: voice)
+            }
+
+            // Paroles : rattachées à la note qui commence juste avant (ou à la plus proche).
+            for e in m.elems where e.type == 6 && !e.lyric.isEmpty {
+                guard let ref = staffRef[e.staff] else { continue }
+                let t = Fraction(e.tick, ticksPerWhole)
+                let notes = score.timedEvents(ref, measure: mi).filter { !$0.event.isRest }
+                guard !notes.isEmpty else { continue }
+                let slack = Fraction(1, 32)
+                let target = notes.last(where: { $0.start <= t + slack }) ?? notes[0]
+                let er = EventRef(staff: ref, measure: mi, eventID: target.event.id)
+                let verse = min(7, e.voice)
+                let existing = score.locate(er)?.event.lyric(verse)
+                let text = existing.map { $0 + " " + e.lyric } ?? e.lyric
+                if (try? score.setLyric(er, verse: verse, text: text)) != nil { report.lyrics += 1 }
             }
 
             // Textes (accords, basses, doigtés, indications) et symboles :

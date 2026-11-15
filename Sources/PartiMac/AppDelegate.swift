@@ -70,7 +70,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if url.pathExtension.lowercased() == "enc" {
             let (score, report) = try EncoreImporter.importScore(from: data, fileName: name)
             doc.score = score
-            message = "Partition Encore importée : \(report.measures) mesures, \(report.notes) notes, \(report.texts) textes."
+            message = "Partition Encore importée : \(report.measures) mesures, \(report.notes) notes, \(report.texts) textes\(report.lyrics > 0 ? ", \(report.lyrics) syllabes de paroles" : "")."
             if report.skippedGraceNotes > 0 { message += " \(report.skippedGraceNotes) petites notes non rattachées, ignorées." }
         } else {
             doc.score = try MIDIImporter.score(from: data, title: name)
