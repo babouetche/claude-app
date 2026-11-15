@@ -73,7 +73,7 @@ final class Player {
         for (i, track) in seq.tracks.enumerated() where i < refs.count {
             track.destinationAudioUnit = samplers[refs[i].part]
         }
-        endBeat = score.measureStartBeats.last ?? 0
+        endBeat = score.performanceLengthInBeats
         seq.currentPositionInBeats = max(0, fromBeat)
         seq.prepareToPlay()
         try seq.start()

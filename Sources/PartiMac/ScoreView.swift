@@ -118,10 +118,9 @@ final class ScoreView: NSView {
         }
         // Curseur de lecture.
         if let beat = playbackBeat {
-            let starts = score.measureStartBeats
-            guard let m = starts.indices.dropLast().last(where: { starts[$0] <= beat }),
+            guard let (m, inner) = score.performedLocation(atBeat: beat),
                   let sys = l.system(containing: m), sys.page == page, let pm = sys.measure(m) else { return }
-            let x = pm.x(at: (beat - starts[m]) / 4)
+            let x = pm.x(at: inner / 4)
             ctx.setFillColor(NSColor.systemGreen.withAlphaComponent(0.8).cgColor)
             ctx.fill(CGRect(x: x - 1, y: sys.top - 2 * sp, width: 2.5, height: sys.bottom - sys.top + 4 * sp))
         }
@@ -130,11 +129,10 @@ final class ScoreView: NSView {
     /// Rectangle (coordonnées de la vue) du curseur de lecture, pour le défilement automatique.
     func playbackRect() -> NSRect? {
         guard let beat = playbackBeat, let l = layout, let doc = document else { return nil }
-        let starts = doc.score.measureStartBeats
-        guard let m = starts.indices.dropLast().last(where: { starts[$0] <= beat }),
+        guard let (m, inner) = doc.score.performedLocation(atBeat: beat),
               let sys = l.system(containing: m), let pm = sys.measure(m) else { return nil }
         let o = pageOrigin(sys.page)
-        let x = pm.x(at: (beat - starts[m]) / 4)
+        let x = pm.x(at: inner / 4)
         return NSRect(x: o.x + x - 60, y: o.y + sys.top - 40, width: 120, height: sys.bottom - sys.top + 80)
     }
 

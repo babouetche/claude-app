@@ -39,7 +39,8 @@ public enum MIDIExporter {
         for a in score.annotations where a.staff == ref {
             if let v = Dynamics.velocity(a.text) { dynamicsAt[a.measure, default: []].append((a.offset, v)) }
         }
-        for m in 0..<score.measureCount {
+        // Interprétation : reprises, cases de fin, D.C./Fine.
+        for m in score.performanceOrder() {
             let ml = score.measureLength(m)
             for (s, e) in score.timedEvents(ref, measure: m) {
                 if let d = dynamicsAt[m]?.filter({ $0.0 <= s }).max(by: { $0.0 < $1.0 }) { velocity = d.1 }
@@ -71,9 +72,13 @@ public enum MIDIExporter {
         var t = Fraction.zero
         var lastTime: TimeSignature?
         var lastKey: KeySignature?
-        for (i, info) in score.measures.enumerated() {
+        var lastTempo: Double?
+        for (k, i) in score.performanceOrder().enumerated() {
+            let info = score.measures[i]
             let tick = ticks(t)
-            if let bpm = info.tempo ?? (i == 0 ? 100.0 : nil) {
+            let bpm = score.tempo(at: i)
+            if k == 0 || bpm != lastTempo {
+                lastTempo = bpm
                 let us = Int(60_000_000 / bpm)
                 conductor.append((tick, meta(0x51, [UInt8((us >> 16) & 0xFF), UInt8((us >> 8) & 0xFF), UInt8(us & 0xFF)])))
             }

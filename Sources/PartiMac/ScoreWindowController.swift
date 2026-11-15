@@ -425,9 +425,9 @@ final class ScoreWindowController: NSWindowController, NSWindowDelegate {
         let s = scoreDocument.score
         var startBeat = 0.0
         if let sel = state.selection, let loc = s.locate(sel) {
-            startBeat = s.measureStartBeats[sel.measure] + loc.start.doubleValue * 4
+            startBeat = s.performanceBeat(measure: sel.measure, offsetBeats: loc.start.doubleValue * 4)
         } else if let c = state.cursor, c.measure < s.measureCount {
-            startBeat = s.measureStartBeats[c.measure]
+            startBeat = s.performanceBeat(measure: c.measure)
         }
         startPlayback(from: startBeat)
     }
