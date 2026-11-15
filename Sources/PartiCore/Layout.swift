@@ -274,10 +274,10 @@ public struct LayoutEngine {
     // MARK: Paroles
 
     /// Hauteur d'une ligne de paroles (en interlignes).
-    static let lyricLine = 2.4
-    static func lyricSize(_ sp: Double) -> Double { sp * 1.75 }
+    public static let lyricLine = 2.4
+    public static func lyricSize(_ sp: Double) -> Double { sp * 1.75 }
     /// Largeur approximative d'une syllabe (Times, corps lyricSize).
-    static func lyricWidth(_ text: String, _ sp: Double) -> Double {
+    public static func lyricWidth(_ text: String, _ sp: Double) -> Double {
         Double(text.filter { $0 != "-" && $0 != "_" }.count) * lyricSize(sp) * 0.5
     }
 
