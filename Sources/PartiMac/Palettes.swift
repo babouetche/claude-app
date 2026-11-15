@@ -61,7 +61,8 @@ extension ScoreWindowController {
         let notes = paletteView([
             ("Durées", durations + [restButton, dotButton, tupletButton, tie]),
             ("Altérations", [dflat, flat, natural, sharp, dsharp, enharm]),
-            ("Voix et petites notes", voiceButtons + [
+            ("Voix", voiceButtons),
+            ("Petites notes", [
                 labelButton("♪↑", tip: "Petite note au-dessus de la note sélectionnée (appoggiature)", tag: 0, action: #selector(graceChosen(_:)), momentary: true),
                 labelButton("♪↓", tip: "Petite note au-dessous de la note sélectionnée", tag: 1, action: #selector(graceChosen(_:)), momentary: true),
             ]),
