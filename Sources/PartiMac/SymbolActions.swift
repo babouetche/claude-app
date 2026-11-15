@@ -158,6 +158,21 @@ extension ScoreWindowController {
         }
     }
 
+    // MARK: Paroles
+
+    @objc func lyricsChosen(_ sender: Any?) {
+        let verse = (sender as? NSButton)?.tag ?? (sender as? NSMenuItem)?.tag ?? 0
+        scoreView.beginLyrics(verse: max(0, min(7, verse)))
+    }
+
+    @objc func eraseLyrics(_ sender: Any?) {
+        guard requireSelection() != nil else { return }
+        let refs = scoreView.selectedRange()
+        doc.apply("Effacer les paroles") { s in for r in refs { try? s.modifyEvent(r) { $0.lyrics = nil } } }
+        scoreView.relayout()
+        refocus()
+    }
+
     @objc func deleteAnnotation(_ sender: Any?) {
         guard let id = state.selectedAnnotation else {
             showStatus("Cliquez d'abord sur le texte ou le signe à supprimer, avec la flèche.", isError: true)

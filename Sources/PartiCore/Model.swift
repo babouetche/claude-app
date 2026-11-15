@@ -192,6 +192,13 @@ public struct Event: Hashable, Codable, Identifiable {
     public var articulations: [Articulation]?
     /// Couleur d'affichage (0xRRGGBB), nil = noir.
     public var color: UInt32?
+    /// Paroles : une syllabe par couplet (index 0 = 1er couplet). Un « - » final relie à la syllabe suivante.
+    public var lyrics: [String]?
+
+    public func lyric(_ verse: Int) -> String? {
+        guard let l = lyrics, verse < l.count, !l[verse].isEmpty else { return nil }
+        return l[verse]
+    }
 
     public init(id: UUID = UUID(), duration: Duration, notes: [Note] = [], isMeasureRest: Bool = false, tuplet: Tuplet? = nil) {
         self.id = id; self.duration = duration; self.notes = notes; self.isMeasureRest = isMeasureRest; self.tuplet = tuplet

@@ -157,8 +157,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Glisser une note (flèche) : changer sa hauteur
         ⌘ Z : annuler  ·  ⇧⌘ Z : rétablir
 
+        PAROLES
+        ⌘ L : paroles du 1er couplet (2e, 3e, 4e : palette Graphismes ou menu Partition)
+        Espace : syllabe suivante  ·  - : mot coupé (tiret)  ·  Effacer dans un champ vide : syllabe précédente
+        Entrée : terminer  ·  Échap : annuler la syllabe en cours
+
         LECTURE ET FICHIERS
-        Espace : écouter / arrêter (à partir de la note sélectionnée)
+        Espace : écouter / arrêter (à partir de la note sélectionnée, en suivant les reprises)
         ⌘ S : enregistrer  ·  ⌘ E : exporter en PDF  ·  ⌘ P : imprimer
         ⌘ + / ⌘ - : zoom
         """
@@ -229,6 +234,11 @@ enum MainMenu {
         // Partition
         let score = submenu(main, "Partition")
         score.addItem(withTitle: "Titre et compositeur…", action: #selector(ScoreWindowController.editScoreInfo(_:)), keyEquivalent: "")
+        score.addItem(.separator())
+        for v in 0..<4 {
+            let li = score.addItem(withTitle: "Paroles – \(v + 1)\(v == 0 ? "er" : "e") couplet", action: #selector(ScoreWindowController.lyricsChosen(_:)), keyEquivalent: v == 0 ? "l" : "")
+            li.tag = v
+        }
 
         // Lecture
         let play = submenu(main, "Lecture")

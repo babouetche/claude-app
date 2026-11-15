@@ -388,4 +388,34 @@ extension Score {
         best.alter = measures[measure].key.alter(forStep: step)
         return best
     }
+
+    // MARK: Paroles
+
+    /// Pose (ou efface si vide) la syllabe d'un couplet sous une note.
+    public mutating func setLyric(_ ref: EventRef, verse: Int, text: String) throws {
+        try modifyEvent(ref) { e in
+            var l = e.lyrics ?? []
+            while l.count <= verse { l.append("") }
+            l[verse] = text
+            while let last = l.last, last.isEmpty { l.removeLast() }
+            e.lyrics = l.isEmpty ? nil : l
+        }
+    }
+
+    /// Nombre de couplets écrits sur une portée.
+    public func lyricVerses(_ ref: StaffRef) -> Int {
+        self[ref].measures.reduce(0) { acc, sm in
+            sm.voices.reduce(acc) { a, v in v.events.reduce(a) { max($0, $1.lyrics?.count ?? 0) } }
+        }
+    }
+
+    /// Note suivante / précédente (les silences sont sautés), pour la saisie des paroles.
+    public func neighborNote(of ref: EventRef, forward: Bool) -> EventRef? {
+        var r = ref
+        while let n = neighbor(of: r, forward: forward) {
+            if let e = locate(n)?.event, !e.isRest { return n }
+            r = n
+        }
+        return nil
+    }
 }

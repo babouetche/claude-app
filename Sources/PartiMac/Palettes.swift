@@ -86,6 +86,13 @@ extension ScoreWindowController {
                 paletteButton(symbol: "info.circle", glyph: nil, tip: "Titre et compositeur", tag: 0, action: #selector(editScoreInfo(_:)), momentary: true),
                 paletteButton(symbol: "trash", glyph: nil, tip: "Supprimer le texte ou le signe sélectionné", tag: 0, action: #selector(deleteAnnotation(_:)), momentary: true),
             ]),
+            ("Paroles", [
+                labelButton("1er", tip: "Paroles du 1er couplet, à partir de la note sélectionnée (⌘L)", tag: 0, action: #selector(lyricsChosen(_:)), momentary: true),
+                labelButton("2e", tip: "Paroles du 2e couplet", tag: 1, action: #selector(lyricsChosen(_:)), momentary: true),
+                labelButton("3e", tip: "Paroles du 3e couplet", tag: 2, action: #selector(lyricsChosen(_:)), momentary: true),
+                labelButton("4e", tip: "Paroles du 4e couplet", tag: 3, action: #selector(lyricsChosen(_:)), momentary: true),
+                paletteButton(symbol: "eraser", glyph: nil, tip: "Effacer les paroles des notes sélectionnées (tous couplets)", tag: 0, action: #selector(eraseLyrics(_:)), momentary: true),
+            ]),
         ])
 
         // Nuances

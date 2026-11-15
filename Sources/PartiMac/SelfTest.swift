@@ -35,6 +35,15 @@ enum SelfTest {
             put(lh, 0, .zero, h, [Pitch(step: 0, octave: 3), Pitch(step: 2, octave: 3), Pitch(step: 4, octave: 3)])
             put(lh, 1, .zero, q, [Pitch(step: 4, octave: 2)]); put(lh, 1, Fraction(1, 4), q, [Pitch(step: 0, octave: 2)])
             score.appendMeasures(2)
+            if template == .piano {
+                // Paroles sur deux couplets.
+                let words = [["Au", "clair", "de", "la", "lu-", "ne"], ["Mon", "a-", "mi", "Pier-", "rot", ""]]
+                let notes = (0..<2).flatMap { m in score.events(rh, measure: m).filter { !$0.isRest }.map { EventRef(staff: rh, measure: m, eventID: $0.id) } }
+                for (v, line) in words.enumerated() {
+                    for (r, w) in zip(notes, line) where !w.isEmpty { try? score.setLyric(r, verse: v, text: w) }
+                }
+                check(score.lyricVerses(rh) == 2, "[piano] paroles : 2 couplets")
+            }
             if template == .accordion {
                 // Symboles du jalon 2 : articulations, liaison de phrasé, soufflet, nuance, triolets, case de fin.
                 let refs = score.events(rh, measure: 0).filter { !$0.isRest }.map { EventRef(staff: rh, measure: 0, eventID: $0.id) }

@@ -33,6 +33,8 @@ final class ScoreView: NSView {
 
     let pageGap: CGFloat = 28
     private var dragStartPosition: Int?
+    /// Saisie des paroles en cours.
+    var lyricsEditor: LyricsEditor?
     private var dragOriginal: Score?
     private var dragAccum = 0
 
@@ -167,6 +169,7 @@ final class ScoreView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
+        if let e = lyricsEditor { e.commit(); e.finish() }
         window?.makeFirstResponder(self)
         if state.tool == .select, let id = annotationHit(event) {
             state.selectedAnnotation = id

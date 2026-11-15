@@ -172,13 +172,15 @@ public struct LayoutEngine {
         let contentWidth = page.width - page.marginRight - contentLeft
 
         // Positions verticales des portées dans un système.
+        // (Les paroles ajoutent de la place sous leur portée.)
+        let verses = refs.map { score.lyricVerses($0) }
         var staffOffsets: [Double] = []
         var y = 0.0
         for (i, r) in refs.enumerated() {
-            if i > 0 { y += (r.part == refs[i - 1].part ? 11 : 13) * sp }
+            if i > 0 { y += (r.part == refs[i - 1].part ? 11 : 13) * sp + Double(verses[i - 1]) * LayoutEngine.lyricLine * sp }
             staffOffsets.append(y)
         }
-        let systemHeight = (staffOffsets.last ?? 0) + 4 * sp
+        let systemHeight = (staffOffsets.last ?? 0) + 4 * sp + Double(verses.last ?? 0) * LayoutEngine.lyricLine * sp
 
         // 1. Largeur naturelle de chaque mesure.
         let plans = (0..<score.measureCount).map { planMeasure(score, $0, refs: refs, sp: sp) }
@@ -262,6 +264,53 @@ public struct LayoutEngine {
         return result
     }
 
+    // MARK: Paroles
+
+    /// Hauteur d'une ligne de paroles (en interlignes).
+    static let lyricLine = 2.4
+    static func lyricSize(_ sp: Double) -> Double { sp * 1.75 }
+    /// Largeur approximative d'une syllabe (Times, corps lyricSize).
+    static func lyricWidth(_ text: String, _ sp: Double) -> Double {
+        Double(text.filter { $0 != "-" && $0 != "_" }.count) * lyricSize(sp) * 0.5
+    }
+
+    func drawLyrics(_ score: Score, placed: PlacedSystem, staffOffsets: [Double], top: Double, sp: Double, items: inout [DrawItem]) {
+        let size = LayoutEngine.lyricSize(sp)
+        for (i, ps) in placed.staves.enumerated() {
+            let ref = ps.ref
+            let evs = placed.events.values.filter { $0.key.staff == ref && $0.key.voice == 0 }
+                .sorted { ($0.key.measure, $0.start) < ($1.key.measure, $1.start) }
+            let nVerses = score.lyricVerses(ref)
+            guard nVerses > 0 else { continue }
+            let baseY = top + staffOffsets[i] + 4 * sp + 2.6 * sp
+            for v in 0..<nVerses {
+                let y = baseY + Double(v) * LayoutEngine.lyricLine * sp
+                // Syllabe précédente qui attend un tiret vers la suivante.
+                var pendingHyphen: Double?
+                for pe in evs {
+                    let ref = EventRef(staff: ref, measure: pe.key.measure, voice: 0, eventID: pe.key.eventID)
+                    guard let e = score.locate(ref)?.event, let raw = e.lyric(v) else { continue }
+                    let hyphen = raw.hasSuffix("-")
+                    let text = hyphen ? String(raw.dropLast()) : raw
+                    let cx = pe.x + pe.width / 2
+                    let w = LayoutEngine.lyricWidth(text, sp)
+                    if let px = pendingHyphen {
+                        let mid = (px + cx - w / 2) / 2
+                        items.append(.text("-", LPoint(mid, y), size: size, bold: false, italic: false, align: .center))
+                    }
+                    if !text.isEmpty && text != "_" {
+                        items.append(.text(text, LPoint(cx, y), size: size, bold: false, italic: false, align: .center))
+                    }
+                    pendingHyphen = hyphen ? cx + w / 2 : nil
+                }
+                // Mot coupé en fin de ligne : tiret juste après.
+                if let px = pendingHyphen {
+                    items.append(.text("-", LPoint(min(px + 1.2 * sp, placed.x1 - 0.3 * sp), y), size: size, bold: false, italic: false, align: .center))
+                }
+            }
+        }
+    }
+
     func timeSigWidth(_ t: TimeSignature, _ sp: Double) -> Double {
         Double(max(String(t.beats).count, String(t.beatType).count)) * 1.85 * sp
     }
@@ -280,6 +329,7 @@ public struct LayoutEngine {
         }
         var minDelta: [Fraction: Fraction] = [:]
         var accidentals: Set<Fraction> = []
+        var lyricWidth: [Fraction: Double] = [:]
         for r in refs {
             let evs = score.timedEvents(r, measure: m)
             for (i, te) in evs.enumerated() {
@@ -287,6 +337,10 @@ public struct LayoutEngine {
                 let d = next - te.start
                 minDelta[te.start] = min(minDelta[te.start] ?? d, d)
                 if te.event.notes.contains(where: { $0.pitch.alter != info.key.alter(forStep: $0.pitch.step) }) { accidentals.insert(te.start) }
+                if let l = te.event.lyrics {
+                    let w = l.map { LayoutEngine.lyricWidth($0, sp) }.max() ?? 0
+                    lyricWidth[te.start] = max(lyricWidth[te.start] ?? 0, w)
+                }
             }
         }
         plan.slots = minDelta.keys.sorted()
@@ -294,7 +348,7 @@ public struct LayoutEngine {
         for s in plan.slots {
             if accidentals.contains(s) { x += 1.2 * sp }
             plan.slotRel.append(x)
-            x += spacing(minDelta[s]!, sp)
+            x += max(spacing(minDelta[s]!, sp), (lyricWidth[s] ?? 0) + 0.8 * sp)
         }
         if plan.slots.count == 1 && minDelta[plan.slots[0]] == ml && score.staffRefs.allSatisfy({ score.events($0, measure: m).first?.isMeasureRest ?? true }) {
             x = max(x, plan.prefix + 9 * sp)
@@ -403,6 +457,7 @@ public struct LayoutEngine {
             placed.measures.append(pm)
             mx = mEnd
         }
+        drawLyrics(score, placed: placed, staffOffsets: staffOffsets, top: top, sp: sp, items: &items)
         // Cases de 1re/2e/3e fois au-dessus de la première portée.
         var k = 0
         let pms = placed.measures
