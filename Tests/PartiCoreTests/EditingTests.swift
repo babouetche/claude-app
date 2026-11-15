@@ -1,7 +1,7 @@
 import XCTest
 @testable import PartiCore
 
-final class EditingTests: XCTestCase {
+final class ClipboardEditingTests: XCTestCase {
     let rh = StaffRef(part: 0, staff: 0)
 
     func melody() throws -> Score {
