@@ -366,7 +366,7 @@ final class ScoreView: NSView {
     }
 
     /// ⌘A : toutes les notes de la portée (de la note choisie, sinon la 1re portée).
-    @objc func selectAll(_ sender: Any?) {
+    @objc override func selectAll(_ sender: Any?) {
         guard let doc = document, doc.score.measureCount > 0 else { return }
         let staff = state.selection?.staff ?? StaffRef(part: 0, staff: 0)
         let voice = state.selection?.voice ?? 0
