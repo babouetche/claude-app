@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: sonnerie-iphone
+    runtime: docker
+    rootDir: sonnerie
+    plan: free
