@@ -82,7 +82,8 @@ const server = http.createServer(async (req, res) => {
   const file = req.url === "/" ? "index.html" : req.url.replace(/\.\./g, "");
   const p = path.join(PUBLIC, file);
   if (fs.existsSync(p) && fs.statSync(p).isFile()) {
-    res.writeHead(200, { "Content-Type": file.endsWith(".html") ? "text/html; charset=utf-8" : "text/plain" });
+    const types = { ".html": "text/html; charset=utf-8", ".json": "application/manifest+json", ".png": "image/png" };
+    res.writeHead(200, { "Content-Type": types[path.extname(file)] || "text/plain" });
     fs.createReadStream(p).pipe(res);
   } else {
     res.writeHead(404).end("Not found");
