@@ -7,46 +7,55 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Shape Studio">
-<meta name="theme-color" content="#0b1320">
+<meta name="theme-color" content="#0a0f1c">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Bebas+Neue&family=Montserrat:wght@800&family=Pacifico&family=Permanent+Marker&display=swap">
 <title>Shape Studio</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <label class="btn">📂 Ouvrir<input id="fileInput" type="file" accept="image/*,video/*" hidden></label>
-  <h1>Shape Studio</h1>
-  <button id="exportBtn" class="btn primary" disabled>Exporter</button>
+<header id="top">
+  <button id="menuBtn" class="ghost" aria-label="Menu">☰</button>
+  <button id="ratioBtn" class="chip">9:16</button>
+  <div class="spacer"></div>
+  <button id="undoBtn" class="ghost" aria-label="Annuler">↶</button>
+  <button id="redoBtn" class="ghost" aria-label="Rétablir">↷</button>
+  <button id="exportBtn" class="btn primary">Exporter</button>
 </header>
 
 <main id="stage">
-  <div id="empty">
-    <div class="big">🎬</div>
-    <p>Ouvre une <b>photo</b> ou une <b>vidéo</b> pour commencer.</p>
-    <p class="muted">Détourage, sous-titres, musique, visages, dessin… tout se fait sur ton iPhone.</p>
-  </div>
   <canvas id="view" hidden></canvas>
+  <div id="empty">
+    <div class="logo">🎬</div>
+    <h2>Shape Studio</h2>
+    <p class="muted">Monte tes TikToks, Reels et visuels directement sur ton iPhone.</p>
+    <button id="startBtn" class="btn primary big">＋ Nouveau projet</button>
+  </div>
 </main>
 
-<div id="player" hidden>
-  <button id="playBtn" class="icon">▶︎</button>
-  <input id="seek" type="range" min="0" max="1" step="0.01" value="0">
-  <span id="time">0:00</span>
+<div id="transport" hidden>
+  <span id="tcur">0:00</span>
+  <button id="playBtn" class="play">▶</button>
+  <span id="ttot">0:00</span>
+  <div class="spacer"></div>
+  <button id="zoomOut" class="ghost sm">－</button>
+  <button id="zoomIn" class="ghost sm">＋</button>
 </div>
 
-<section id="panel"></section>
+<div id="tlWrap" hidden>
+  <div id="timeline"><div id="tlInner"></div></div>
+  <div id="playhead"></div>
+</div>
 
-<nav id="tabs">
-  <button data-tab="fond">✂️<span>Fond</span></button>
-  <button data-tab="texte">🔤<span>Texte</span></button>
-  <button data-tab="dessin">✏️<span>Dessin</span></button>
-  <button data-tab="visage">🙂<span>Visage</span></button>
-  <button data-tab="musique">🎵<span>Musique</span></button>
-  <button data-tab="reglages">🎚️<span>Réglages</span></button>
-  <button data-tab="couper" data-video>⏱️<span>Couper</span></button>
-</nav>
+<nav id="tools"></nav>
+
+<div id="sheet" hidden>
+  <div class="sheet-head"><span id="sheetTitle"></span><button id="sheetClose" class="ok">✓</button></div>
+  <div id="sheetBody"></div>
+</div>
 
 <div id="overlay" hidden>
   <div class="box">
@@ -56,6 +65,7 @@
   </div>
 </div>
 
+<div id="toast" hidden></div>
 <div id="mediaHost" aria-hidden="true"></div>
 <script type="module" src="app.js"></script>
 </body>
