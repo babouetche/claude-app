@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Shape Studio">
+<meta name="theme-color" content="#0b1320">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Shape Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <label class="btn">📂 Ouvrir<input id="fileInput" type="file" accept="image/*,video/*" hidden></label>
+  <h1>Shape Studio</h1>
+  <button id="exportBtn" class="btn primary" disabled>Exporter</button>
+</header>
+
+<main id="stage">
+  <div id="empty">
+    <div class="big">🎬</div>
+    <p>Ouvre une <b>photo</b> ou une <b>vidéo</b> pour commencer.</p>
+    <p class="muted">Détourage, sous-titres, musique, visages, dessin… tout se fait sur ton iPhone.</p>
+  </div>
+  <canvas id="view" hidden></canvas>
+</main>
+
+<div id="player" hidden>
+  <button id="playBtn" class="icon">▶︎</button>
+  <input id="seek" type="range" min="0" max="1" step="0.01" value="0">
+  <span id="time">0:00</span>
+</div>
+
+<section id="panel"></section>
+
+<nav id="tabs">
+  <button data-tab="fond">✂️<span>Fond</span></button>
+  <button data-tab="texte">🔤<span>Texte</span></button>
+  <button data-tab="dessin">✏️<span>Dessin</span></button>
+  <button data-tab="visage">🙂<span>Visage</span></button>
+  <button data-tab="musique">🎵<span>Musique</span></button>
+  <button data-tab="reglages">🎚️<span>Réglages</span></button>
+  <button data-tab="couper" data-video>⏱️<span>Couper</span></button>
+</nav>
+
+<div id="overlay" hidden>
+  <div class="box">
+    <div id="ovText"></div>
+    <progress id="ovProg" max="1"></progress>
+    <div id="ovBtns"></div>
+  </div>
+</div>
+
+<div id="mediaHost" aria-hidden="true"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
