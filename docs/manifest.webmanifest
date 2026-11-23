@@ -1,13 +1,13 @@
 {
-  "name": "Shape Studio",
-  "short_name": "Shape Studio",
+  "name": "Babou Art",
+  "short_name": "Babou Art",
   "description": "Montage photo & vidéo : détourage, sous-titres, musique, visages, dessin.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0b1320",
-  "theme_color": "#0b1320",
+  "background_color": "#1a0b2e",
+  "theme_color": "#1a0b2e",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }

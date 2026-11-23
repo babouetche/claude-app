@@ -1,4 +1,4 @@
-# Shape Studio — montage photo & vidéo sur iPhone
+# Babou Art — montage photo & vidéo sur iPhone
 
 Web-app installable (PWA). Tout est traité sur le téléphone, le projet est sauvegardé automatiquement.
 

@@ -1,4 +1,4 @@
-// Shape Studio — éditeur vidéo/photo multi-pistes, 100 % dans le navigateur (iPhone)
+// Babou Art — éditeur vidéo/photo multi-pistes, 100 % dans le navigateur (iPhone)
 const MP = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const IMGLY = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
 const HF = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
@@ -24,7 +24,7 @@ const FONTS = {
   Typewriter: ['"American Typewriter","Courier New",monospace', 700],
   Rond: ['"Arial Rounded MT Bold","Avenir Next",sans-serif', 800],
 };
-const COLORS = ['#ffffff', '#000000', '#ffd60a', '#ff4d8d', '#00d1e8', '#22c55e', '#ff7a00', '#8b5cf6', '#ef4444', '#0a2540'];
+const COLORS = ['#ffffff', '#000000', '#ffd60a', '#ff4d8d', '#ff4fae', '#22c55e', '#ff7a00', '#8b5cf6', '#ef4444', '#0a2540'];
 const TEXT_PRESETS = [
   { name: 'Classique', font: 'Classique', color: '#ffffff', style: 'outline', stroke: '#000000' },
   { name: 'TikTok', font: 'Classique', color: '#000000', style: 'pill', bg: '#ffffff' },
@@ -441,8 +441,9 @@ function layerBox(l, W, H) {
 function layerAnim(l, T) {
   const lt = T - l.start, ld = Math.max(.01, l.end - l.start), A = l.anim || {};
   let a = 1, k = 1, dx = 0, dy = 0, rot = 0, reveal = 1;
+  const live = UI.playing || UI.exporting; // en pause : on montre l'état final pour éditer facilement
   const ai = Math.min(.4, ld / 3);
-  if (lt < ai) {
+  if (live && lt < ai) {
     const t = lt / ai, e = easeOut(t);
     switch (A.in) {
       case 'fade': a = e; break;
@@ -453,9 +454,9 @@ function layerAnim(l, T) {
       case 'bounce': dy = -Math.abs(Math.cos(t * Math.PI * 1.5)) * (1 - t) * .12; a = Math.min(1, t * 3); break;
     }
   }
-  if (A.in === 'type') reveal = clamp(lt / Math.max(.3, Math.min(ld * .7, (l.text || '').length * .06)), 0, 1);
+  if (live && A.in === 'type') reveal = clamp(lt / Math.max(.3, Math.min(ld * .7, (l.text || '').length * .06)), 0, 1);
   const ao = Math.min(.35, ld / 3), rem = ld - lt;
-  if (rem < ao) { const t = 1 - rem / ao; if (A.out === 'fade') a *= 1 - t; else if (A.out === 'zoom') { k *= 1 - t * .9; a *= 1 - t; } else if (A.out === 'down') { dy += t * .1; a *= 1 - t; } }
+  if (live && rem < ao) { const t = 1 - rem / ao; if (A.out === 'fade') a *= 1 - t; else if (A.out === 'zoom') { k *= 1 - t * .9; a *= 1 - t; } else if (A.out === 'down') { dy += t * .1; a *= 1 - t; } }
   switch (A.loop) {
     case 'pulse': k *= 1 + .06 * Math.sin(lt * 6); break;
     case 'wiggle': rot = Math.sin(lt * 9) * 6; break;
@@ -699,13 +700,13 @@ function renderTools() {
   const s = findSel();
   let items;
   if (!s) items = [
-    tb('➕', 'Médias', async () => addMediaFiles(await pickFiles('image/*,video/*'))),
+    tb('🎞️', 'Médias', async () => addMediaFiles(await pickFiles('image/*,video/*'))),
     tb('🔤', 'Texte', () => addText()),
     tb('💬', 'Sous-titres', () => openTool('subs')),
-    tb('😀', 'Stickers', () => openTool('stickers')),
+    tb('🦄', 'Stickers', () => openTool('stickers')),
     tb('🎵', 'Audio', () => openTool('audio')),
     tb('✨', 'Modèles', () => openTool('templates')),
-    tb('✏️', 'Dessin', () => addDrawing()),
+    tb('🖍️', 'Dessin', () => addDrawing()),
     tb('🖼️', 'Incruster', () => addOverlayImage()),
     tb('📐', 'Format', () => openTool('format')),
   ];
@@ -717,32 +718,32 @@ function renderTools() {
       ...(img ? [] : [tb('🔊', 'Volume', () => openTool('volume'))]),
       tb('🎨', 'Filtres', () => openTool('filters')),
       tb('🎚️', 'Ajuster', () => openTool('adjust')),
-      tb('✨', 'Effets', () => openTool('effects')),
-      tb('🔀', 'Transition', () => openTool('transition')),
-      tb('👤', 'Détourer', () => openTool('cut')),
-      tb('🙂', 'Visage', () => openTool('face')),
-      tb('⤢', 'Cadrage', () => openTool('crop')),
-      tb('◀', 'Avant', () => moveClip(-1)), tb('▶', 'Après', () => moveClip(1)),
+      tb('🪄', 'Effets', () => openTool('effects')),
+      tb('🌀', 'Transition', () => openTool('transition')),
+      tb('🧍', 'Détourer', () => openTool('cut')),
+      tb('🎭', 'Visage', () => openTool('face')),
+      tb('🔲', 'Cadrage', () => openTool('crop')),
+      tb('⬅️', 'Avant', () => moveClip(-1)), tb('➡️', 'Après', () => moveClip(1)),
       tb('🔁', 'Remplacer', replaceClip),
-      tb('⧉', 'Dupliquer', duplicateSel), tb('🗑️', 'Supprimer', deleteSel, 'danger'),
+      tb('📑', 'Dupliquer', duplicateSel), tb('🗑️', 'Supprimer', deleteSel, 'danger'),
     ];
   } else if (UI.sel.kind === 'layer') {
     const t = s.type;
     items = [
-      ...(t === 'text' ? [tb('✏️', 'Modifier', () => openTool('editText')), tb('🅰️', 'Police', () => openTool('font')), tb('🎨', 'Style', () => openTool('style'))] : []),
-      ...(t === 'sticker' ? [tb('😀', 'Changer', () => openTool('stickers'))] : []),
-      ...(t === 'image' ? [tb('✂️', 'Détourer', () => { s.cut = !s.cut; changed(); toast(s.cut ? 'Détourage activé' : 'Détourage retiré'); })] : []),
-      ...(t === 'draw' ? [tb('✏️', 'Dessiner', () => openTool('draw'))] : []),
+      ...(t === 'text' ? [tb('📝', 'Modifier', () => openTool('editText')), tb('🅰️', 'Police', () => openTool('font')), tb('💅', 'Style', () => openTool('style'))] : []),
+      ...(t === 'sticker' ? [tb('🦄', 'Changer', () => openTool('stickers'))] : []),
+      ...(t === 'image' ? [tb('🧍', 'Détourer', () => { s.cut = !s.cut; changed(); toast(s.cut ? 'Détourage activé' : 'Détourage retiré'); })] : []),
+      ...(t === 'draw' ? [tb('🖍️', 'Dessiner', () => openTool('draw'))] : []),
       ...(t !== 'draw' ? [tb('💫', 'Animation', () => openTool('anim'))] : []),
-      tb('🔆', 'Opacité', () => openTool('opacity')),
+      tb('👻', 'Opacité', () => openTool('opacity')),
       tb('✂️', 'Diviser', splitSel),
-      tb('↔️', 'Toute la vidéo', () => { s.start = 0; s.end = Math.max(UI.clipsEnd, .5); changed(); }),
-      tb('⧉', 'Dupliquer', duplicateSel), tb('🗑️', 'Supprimer', deleteSel, 'danger'),
+      tb('📏', 'Toute la vidéo', () => { s.start = 0; s.end = Math.max(UI.clipsEnd, .5); changed(); }),
+      tb('📑', 'Dupliquer', duplicateSel), tb('🗑️', 'Supprimer', deleteSel, 'danger'),
     ];
   } else {
-    items = [tb('🔊', 'Volume', () => openTool('audioVol')), tb('🌗', 'Fondus', () => openTool('fades')), tb('✂️', 'Diviser', splitSel), tb('⧉', 'Dupliquer', duplicateSel), tb('🗑️', 'Supprimer', deleteSel, 'danger')];
+    items = [tb('🔊', 'Volume', () => openTool('audioVol')), tb('🌗', 'Fondus', () => openTool('fades')), tb('✂️', 'Diviser', splitSel), tb('📑', 'Dupliquer', duplicateSel), tb('🗑️', 'Supprimer', deleteSel, 'danger')];
   }
-  if (s) items.unshift(tb('‹', 'Retour', () => select(null), 'back'));
+  if (s) items.unshift(tb('🔙', 'Retour', () => select(null), 'back'));
   for (const it of items) { const b = document.createElement('button'); if (it.cls) b.className = it.cls; b.innerHTML = `${it.icon}<span>${it.label}</span>`; b.onclick = it.fn; box.appendChild(b); }
 }
 
@@ -1204,7 +1205,7 @@ async function exportImage() {
   closeSheet(); UI.exporting = true; setupCanvas(UI.q); syncVideos(); await waitVideos(); render();
   const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
   UI.exporting = false; setupCanvas(); req();
-  offerSave(blob, `shape-studio-${Date.now()}.png`);
+  offerSave(blob, `babou-art-${Date.now()}.png`);
 }
 function waitVideos() {
   return new Promise(res => { const t0 = performance.now(); const chk = () => { const busy = [...CEL.values()].some(v => v.seeking || v.readyState < 2 && !v.paused); if (!busy || performance.now() - t0 > 2500) res(); else setTimeout(chk, 50); }; setTimeout(chk, 60); });
@@ -1232,7 +1233,7 @@ async function exportVideo() {
   UI.exporting = false; setupCanvas(); req();
   if (UI.cancel) { hideOverlay(); return; }
   const type = (rec.mimeType || mime || 'video/mp4').split(';')[0];
-  offerSave(new Blob(chunks, { type }), `shape-studio-${Date.now()}.${type.includes('mp4') ? 'mp4' : 'webm'}`);
+  offerSave(new Blob(chunks, { type }), `babou-art-${Date.now()}.${type.includes('mp4') ? 'mp4' : 'webm'}`);
 }
 function offerSave(blob, name) {
   const file = new File([blob], name, { type: blob.type });
