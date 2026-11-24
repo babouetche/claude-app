@@ -88,7 +88,8 @@ def main():
     debut = sys.argv[3] if len(sys.argv) > 3 and sys.argv[3].strip() else "0"
     os.makedirs(DOSSIER, exist_ok=True)
     for f in glob.glob(os.path.join(DOSSIER, "dl.*")) + glob.glob(os.path.join(DOSSIER, "sonnerie.*")):
-        os.remove(f)
+        if not f.endswith(".py"):  # ne jamais effacer le script lui-même
+            os.remove(f)
 
     mettre_a_jour()
     ok = telecharger(mode, lien)
