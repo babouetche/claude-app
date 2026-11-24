@@ -8,14 +8,18 @@ Moteur : l'app **a-Shell** (gratuite, App Store) + **yt-dlp** (l'outil de réfé
 ## 1. Installation (une seule fois, 3 min)
 
 1. Installe **a-Shell** depuis l'App Store (éditeur : Nicolas Holzschuch).
-2. Ouvre a-Shell et tape ces 2 lignes (Entrée après chacune) :
-
+2. Ouvre a-Shell et tape (Entrée après chaque ligne) :
 ```
-pip install yt-dlp
+pip install -U --pre "yt-dlp[default]"
 mkdir -p ~/Documents/dl
 ```
+3. Sur ton iPhone, ouvre le fichier **`dl.py`** de ce dépôt (app GitHub) → copie tout son contenu.
+4. Dans a-Shell, tape :
+```
+pbpaste > ~/Documents/dl/dl.py
+```
 
-3. Pour mettre à jour plus tard (si un site ne marche plus) : `pip install -U yt-dlp`
+C'est ce script qui rend YouTube fiable (voir section 6).
 
 ---
 
@@ -40,9 +44,7 @@ Puis dans **chaque option du menu** :
 ### 🎬 Vidéo MP4
 1. **Execute Command** (a-Shell) — colle le texte ci-dessous, en remplaçant `LIEN` par la variable **lien** (appui long → Sélectionner la variable) :
 ```
-cd ~/Documents/dl
-rm -f dl.*
-yt-dlp -f "b[ext=mp4]/bv*[ext=mp4]+ba[ext=m4a]/bv*+ba/b" --merge-output-format mp4 -o "dl.%(ext)s" "LIEN"
+python3 ~/Documents/dl/dl.py mp4 "LIEN"
 ```
 2. **Get File** (a-Shell) — fichier : `dl/dl.mp4`
 3. **Enregistrer dans l'album photo** → Récents
@@ -50,9 +52,7 @@ yt-dlp -f "b[ext=mp4]/bv*[ext=mp4]+ba[ext=m4a]/bv*+ba/b" --merge-output-format m
 ### 🎵 Musique MP3
 1. **Execute Command** :
 ```
-cd ~/Documents/dl
-rm -f dl.*
-yt-dlp -x --audio-format mp3 --audio-quality 0 -o "dl.%(ext)s" "LIEN"
+python3 ~/Documents/dl/dl.py mp3 "LIEN"
 ```
 2. **Get File** — fichier : `dl/dl.mp3`
 3. **Enregistrer le fichier** (Fichiers → dossier de ton choix, ex. « Musiques cours »)
@@ -61,10 +61,7 @@ yt-dlp -x --audio-format mp3 --audio-quality 0 -o "dl.%(ext)s" "LIEN"
 1. **Demander une saisie** — Nombre, invite : « Début de la sonnerie (en secondes) ? », par défaut `0` → variable `debut`
 2. **Execute Command** (remplace `LIEN` et `DEBUT` par les variables) :
 ```
-cd ~/Documents/dl
-rm -f dl.* sonnerie.*
-yt-dlp -x --audio-format mp3 -o "dl.%(ext)s" "LIEN"
-ffmpeg -y -ss DEBUT -i dl.mp3 -t 29 -af "afade=t=in:d=0.5,afade=t=out:st=27.5:d=1.5" -c:a aac -b:a 192k sonnerie.m4a
+python3 ~/Documents/dl/dl.py sonnerie "LIEN" DEBUT
 ```
 3. **Get File** — fichier : `dl/sonnerie.m4a`
 4. **Enregistrer le fichier** → Fichiers (ex. dossier « Sonneries »)
@@ -91,9 +88,21 @@ ffmpeg -y -ss DEBUT -i dl.mp3 -t 29 -af "afade=t=in:d=0.5,afade=t=out:st=27.5:d=
 
 | Problème | Solution |
 |---|---|
-| Un site ne marche plus | Dans a-Shell : `pip install -U yt-dlp` |
-| Instagram refuse (compte privé / connexion requise) | Seuls les posts publics passent sans connexion |
-| YouTube capricieux | Mets à jour yt-dlp ; YouTube change souvent ses protections |
+| Instagram refuse | Seuls les posts publics passent sans connexion |
+| YouTube : « Sign in to confirm you're not a bot » | Ajoute un `cookies.txt` (section 6) |
 | Rien ne se passe | Ouvre a-Shell une fois, puis relance le raccourci |
+
+---
+
+## 6. Pourquoi YouTube marche (presque) toujours
+
+Le script `dl.py` fait tout seul, à chaque téléchargement :
+1. **Mise à jour auto** de yt-dlp 1 fois par jour (version la plus récente, celle qui contient les correctifs YouTube du jour).
+2. **6 tentatives** avec des « identités » YouTube différentes (TV, Safari, mobile, VR, intégré, iOS) : si YouTube en bloque une, il passe à la suivante.
+3. Si tout échoue : **mise à jour forcée** immédiate puis nouvelle série de tentatives.
+4. Nettoie les liens (Shorts, youtu.be, liens avec `?si=`, playlists → seulement la vidéo).
+5. Vidéo en **H.264 / 1080p max** : elle se lit directement dans Photos.
+
+**Le seul cas qui peut encore bloquer** : YouTube qui exige d'être connecté. Dans ce cas, exporte tes cookies YouTube en `cookies.txt` (extension « Get cookies.txt LOCALLY » sur un ordi), puis mets le fichier dans a-Shell → `~/Documents/dl/cookies.txt`. Le script l'utilise automatiquement.
 
 ⚠️ Usage perso uniquement : pour diffuser une musique en cours (cadre pro), il faut les droits (SACEM / Spré).
