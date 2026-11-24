@@ -12,8 +12,9 @@
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Bebas+Neue&family=Montserrat:wght@800&family=Pacifico&family=Permanent+Marker&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Bebas+Neue&family=Montserrat:wght@800&family=Pacifico&family=Permanent+Marker&family=Righteous&family=Lobster&family=Caveat:wght@700&display=swap">
 <title>Babou Art</title>
+<link rel="preload" href="fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -31,8 +32,12 @@
   <div id="empty">
     <img class="logo" src="icon-192.png" alt="">
     <h2>Babou Art</h2>
-    <p class="muted">Monte tes TikToks, Reels et visuels directement sur ton iPhone.</p>
-    <button id="startBtn" class="btn primary big">＋ Nouveau projet</button>
+    <p class="muted">Tes TikToks, Reels et visuels, montés en quelques gestes ✨</p>
+    <div class="starts">
+      <button id="startBtn" class="btn primary big">🎬 Nouveau projet</button>
+      <button id="blankBtn" class="btn big">🎨 Page vierge</button>
+    </div>
+    <div id="projList"></div>
   </div>
 </main>
 

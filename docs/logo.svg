@@ -25,5 +25,5 @@
   <!-- étincelles -->
   <path d="M388 360 l10 26 26 10 -26 10 -10 26 -10 -26 -26 -10 26 -10z" fill="#9dff6a"/>
   <path d="M120 120 l7 17 17 7 -17 7 -7 17 -7 -17 -17 -7 17 -7z" fill="#fff1a8"/>
-  <text x="256" y="476" text-anchor="middle" font-family="Arial Rounded MT Bold,Arial Black,Arial,sans-serif" font-weight="900" font-size="58" fill="#fff" stroke="#3a1670" stroke-width="3" paint-order="stroke">Babou Art</text>
+  <text x="256" y="476" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="58" fill="#fff" stroke="#3a1670" stroke-width="3" paint-order="stroke">Babou Art</text>
 </svg>
