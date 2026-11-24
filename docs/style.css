@@ -157,3 +157,4 @@ body.home #ratioBtn,body.home #undoBtn,body.home #redoBtn,body.home #exportBtn,b
 #sheet{animation:none}
 .it.clip{transition:transform .08s}
 body.home #menuBtn{visibility:hidden}
+.kfd{position:absolute;top:50%;width:9px;height:9px;margin:-5px 0 0 -5px;background:var(--sel);transform:rotate(45deg);border:1px solid #000;z-index:4;pointer-events:none}

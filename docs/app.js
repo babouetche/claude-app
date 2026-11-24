@@ -57,6 +57,22 @@ const COLLAGES = {
   '3 bandes': [[0, 0, 1, 1 / 3], [0, 1 / 3, 1, 1 / 3], [0, 2 / 3, 1, 1 / 3]], '1 + 2': [[0, 0, 1, .5], [0, .5, .5, .5], [.5, .5, .5, .5]],
   '4 grille': [[0, 0, .5, .5], [.5, 0, .5, .5], [0, .5, .5, .5], [.5, .5, .5, .5]], '6 grille': [[0, 0, .5, 1 / 3], [.5, 0, .5, 1 / 3], [0, 1 / 3, .5, 1 / 3], [.5, 1 / 3, .5, 1 / 3], [0, 2 / 3, .5, 1 / 3], [.5, 2 / 3, .5, 1 / 3]],
 };
+const CURVES = { 'Aucune': null, 'Montage': [2, 2, .35, 2, 2], 'Héros': [1.4, 1.4, .3, 1.4, 1.4], 'Bullet': [2.5, .3, .3, .3, 2.5], 'Flash entrée': [3, 2, 1, 1, 1], 'Flash sortie': [1, 1, 1, 2, 3], 'Accélération': [.5, 1, 1.5, 2, 3], 'Ralenti final': [2, 1.5, 1, .5, .3] };
+const curveMult = (pts, u) => { const x = clamp(u, 0, 1) * 4, i = Math.min(3, Math.floor(x)), f = x - i; return pts[i] * (1 - f) + pts[i + 1] * f; };
+const ctCache = new Map();
+function curveTable(c) {
+  const key = `${c.curve}|${c.in}|${c.out}|${c.speed}`; let t = ctCache.get(key); if (t) return t;
+  const pts = CURVES[c.curve], N = 100, seg = (c.out - c.in) / N, T = new Float64Array(N + 1);
+  for (let i = 0; i < N; i++) T[i + 1] = T[i] + seg / (c.speed * curveMult(pts, (i + .5) / N));
+  t = { T, N, seg }; if (ctCache.size > 200) ctCache.clear(); ctCache.set(key, t); return t;
+}
+const hasCurve = c => c.curve && c.curve !== 'Aucune' && CURVES[c.curve] && M[c.mediaId]?.kind === 'video';
+function srcAt(c, lt) {
+  if (!hasCurve(c)) return c.in + lt * c.speed;
+  const { T, N, seg } = curveTable(c); let i = 0; while (i < N - 1 && T[i + 1] < lt) i++;
+  const f = clamp((lt - T[i]) / (T[i + 1] - T[i] || 1), 0, 1); return c.in + (i + f) * seg;
+}
+const rateAt = (c, lt) => hasCurve(c) ? c.speed * curveMult(CURVES[c.curve], (srcAt(c, lt) - c.in) / (c.out - c.in || 1)) : c.speed;
 const SPEEDS = [.25, .5, .75, 1, 1.1, 1.25, 1.5, 2, 3, 4];
 const fmtSpeed = v => String(+v.toFixed(2)).replace('.', ',') + '×';
 const STYLES = [['plain', 'Simple'], ['outline', 'Contour'], ['shadow', 'Ombre'], ['box', 'Encadré'], ['pill', 'Pastille'], ['neon', 'Néon']];
@@ -106,6 +122,8 @@ const idb = (() => {
 const snap = () => JSON.stringify(P, (k, v) => k[0] === '_' ? undefined : v);
 let saveTimer = null; const drawDirty = new Set();
 let projects = [];
+let BRAND = { colors: [], logo: null, font: null };
+const saveBrand = () => idb.put('kv', BRAND, 'brand');
 function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 1200); }
 function thumbOf() {
   const t = document.createElement('canvas'), k = 240 / Math.max(cv.width, cv.height);
@@ -159,7 +177,7 @@ async function deleteProject(id) {
   projects = projects.filter(x => x.id !== id); await idb.put('kv', projects, 'projects');
   const json = await idb.get('kv', 'p:' + id); await idb.del('kv', 'p:' + id);
   if (json) {
-    const keep = new Set(); for (const pr of projects) { const j = await idb.get('kv', 'p:' + pr.id); if (j) mediaIdsIn(j).forEach(x => keep.add(x)); }
+    const keep = new Set(BRAND.logo ? [BRAND.logo] : []); for (const pr of projects) { const j = await idb.get('kv', 'p:' + pr.id); if (j) mediaIdsIn(j).forEach(x => keep.add(x)); }
     for (const mid of mediaIdsIn(json)) if (!keep.has(mid)) { await idb.del('media', mid); delete M[mid]; }
     for (const l of JSON.parse(json).layers) if (l.type === 'draw') await idb.del('kv', 'draw:' + l.id);
   }
@@ -207,6 +225,7 @@ function updUndo() { $('#undoBtn').style.opacity = hi > 0 ? 1 : .35; $('#redoBtn
 let changeRaf = 0;
 function changed(doCommit = true) {
   req();
+  const ss = typeof findSel === 'function' ? findSel() : null; if (ss?.kf?.length) captureKf(ss, UI.sel.kind, false);
   if (!changeRaf) changeRaf = requestAnimationFrame(() => { changeRaf = 0; renderTimeline(); });
   if (doCommit) commit();
   if (UI.playing) startAudio();
@@ -248,7 +267,7 @@ function startAudio() {
     src.start(at(t0), srcOff, Math.max(0.01, (len - off) * rate)); live.push(src);
   };
   layout();
-  for (const c of P.clips) { const m = M[c.mediaId]; if (m?.kind === 'video' && c.vol > 0) sched(m.buf, c._s, c.in, c._d, c.speed, c.vol); }
+  for (const c of P.clips) { const m = M[c.mediaId]; if (m?.kind === 'video' && c.vol > 0 && !hasCurve(c)) sched(m.buf, c._s, c.in, c._d, c.speed, c.vol); }
   for (const a of P.audios) { const m = M[a.mediaId]; if (m) sched(m.buf, a.start, a.in, (a.out - a.in) / (a.rate || 1), a.rate || 1, a.vol, a.fadeIn, a.fadeOut); }
   for (const l of P.layers) if (l.type === 'video') { const m = M[l.mediaId]; if (m && (l.vol ?? 1) > 0) sched(m.buf, l.start, l.in || 0, l.end - l.start, 1, l.vol ?? 1); }
 }
@@ -257,7 +276,7 @@ function startAudio() {
 /* ================= Musique générée (libre de droits) ================= */
 const MUSIC = {
   'Énergie': { bpm: 126, kind: 'house', prog: [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]] },
-  'Aquabike': { bpm: 130, kind: 'disco', prog: [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 54, 57]] },
+  'Disco': { bpm: 130, kind: 'disco', prog: [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 54, 57]] },
   'Cardio': { bpm: 140, kind: 'edm', prog: [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]] },
   'Motivation': { bpm: 110, kind: 'epic', prog: [[48, 52, 55], [55, 59, 62], [57, 60, 64], [53, 57, 60]] },
   'Hip-hop': { bpm: 90, kind: 'hiphop', prog: [[57, 60, 64], [55, 59, 62], [53, 57, 60], [52, 56, 59]] },
@@ -384,7 +403,7 @@ function alignClips(grid, n) {
     const md = M[c.mediaId], maxD = md.kind === 'video' ? (md.dur - c.in) / c.speed : 600;
     let end = grid.start + Math.round((t + n * tb - grid.start) / tb) * tb; if (end <= t + tb * .5) end += tb;
     if (end - t > maxD) { end = grid.start + Math.floor((t + maxD - grid.start) / tb) * tb; if (end <= t + .05) end = t + maxD; }
-    const dd = end - t; if (md.kind === 'video') c.out = c.in + dd * c.speed; else c.dur = dd; t = end;
+    c.curve = 'Aucune'; const dd = end - t; if (md.kind === 'video') c.out = c.in + dd * c.speed; else c.dur = dd; t = end;
   }
   return t;
 }
@@ -585,7 +604,7 @@ async function addMediaFiles(files, where = 'auto') {
 }
 
 /* ================= Temps / mise en page ================= */
-const clipDur = c => { const m = M[c.mediaId]; return !m ? 0 : m.kind === 'video' ? Math.max(.1, (c.out - c.in) / c.speed) : c.dur; };
+const clipDur = c => { const m = M[c.mediaId]; return !m ? 0 : m.kind === 'video' ? Math.max(.1, hasCurve(c) ? curveTable(c).T[100] : (c.out - c.in) / c.speed) : c.dur; };
 function layout() {
   let t = 0; for (const c of P.clips) { c._s = t; c._d = clipDur(c); t += c._d; }
   UI.clipsEnd = t;
@@ -891,6 +910,7 @@ function render() {
   const ctx = vctx, W = cv.width, H = cv.height, T = UI.T;
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
   const ci = clipIndexAt(T), c = P.clips[ci];
+  applyKf(T);
   drawProjectBg(ctx, W, H, c);
   if (c) {
     const lt = T - c._s, prev = P.clips[ci - 1];
@@ -898,6 +918,7 @@ function render() {
     else drawClip(ctx, c, lt);
   }
   for (const l of P.layers) if (T >= l.start && T < l.end) drawLayer(ctx, l, T, W, H);
+  if (UI.cover?.on) drawLayer(ctx, coverLayer(), T, W, H);
   if (UI.exporting) return;
   // aides visuelles
   const k = W / (cv.getBoundingClientRect().width || W);
@@ -913,12 +934,31 @@ function render() {
   }
 }
 
+/* ================= Images clés ================= */
+const KF_KEYS = ['x', 'y', 's', 'r', 'opacity'];
+function kfAt(list, t) {
+  if (t <= list[0].t) return list[0].v; const L = list[list.length - 1]; if (t >= L.t) return L.v;
+  let i = 0; while (list[i + 1].t < t) i++;
+  const a = list[i], b = list[i + 1], f = easeInOut((t - a.t) / (b.t - a.t || 1)), o = {};
+  for (const k in a.v) o[k] = a.v[k] + ((b.v[k] ?? a.v[k]) - a.v[k]) * f; return o;
+}
+function applyKf(T) {
+  for (const l of P.layers) if (l.kf?.length && l.type !== 'draw') Object.assign(l, kfAt(l.kf, clamp(T - l.start, 0, l.end - l.start)));
+  for (const c of P.clips) if (c.kf?.length) Object.assign(c.tf, kfAt(c.kf, clamp(T - (c._s || 0), 0, c._d || 0)));
+}
+function kfVals(o, kind) { return kind === 'clip' ? { x: o.tf.x, y: o.tf.y, s: o.tf.s, r: o.tf.r } : { x: o.x, y: o.y, s: o.s, r: o.r, opacity: o.opacity ?? 1 }; }
+function kfLocal(o, kind) { layout(); return kind === 'clip' ? UI.T - o._s : UI.T - o.start; }
+function captureKf(o, kind, create) {
+  const t = kfLocal(o, kind), list = o.kf ??= [], ex = list.find(k => Math.abs(k.t - t) < .06);
+  if (ex) ex.v = kfVals(o, kind); else if (create) { list.push({ t, v: kfVals(o, kind) }); list.sort((a, b) => a.t - b.t); }
+}
+
 /* ================= Lecture ================= */
 let dirty = true;
 const req = () => { dirty = true; };
 function syncEl(v, target, playing, rate) {
   if (playing) {
-    if (v.playbackRate !== rate) v.playbackRate = rate;
+    if (Math.abs(v.playbackRate - rate) > .04) v.playbackRate = clamp(rate, .1, 8);
     if (v.paused) { if (Math.abs(v.currentTime - target) > .08) v.currentTime = target; v.play().catch(() => {}); }
     else if (Math.abs(v.currentTime - target) > .3 && !v.seeking) v.currentTime = target;
   } else { if (!v.paused) v.pause(); if (Math.abs(v.currentTime - target) > .03 && !v.seeking) v.currentTime = target; }
@@ -928,11 +968,12 @@ function syncVideos() {
   P.clips.forEach((c, i) => {
     const m = M[c.mediaId]; if (m?.kind !== 'video') return;
     const v = clipEl(c); let target = null, playing = false;
-    if (i === ci) { target = c.in + (T - c._s) * c.speed; playing = UI.playing; }
+    let rate = c.speed;
+    if (i === ci) { target = srcAt(c, T - c._s); rate = rateAt(c, T - c._s); playing = UI.playing; }
     else if (i === ci - 1 && P.clips[ci]?.trans !== 'none' && T - P.clips[ci]._s < .7) target = c.out - .05;
     else if (i === ci + 1) target = c.in;
     if (target === null) { if (!v.paused) v.pause(); return; }
-    syncEl(v, clamp(target, 0, m.dur - .03), playing, c.speed);
+    syncEl(v, clamp(target, 0, m.dur - .03), playing, rate);
   });
   for (const l of P.layers) {
     if (l.type !== 'video') continue; const m = M[l.mediaId], v = layerEl(l); if (!m || !v) continue;
@@ -1020,7 +1061,7 @@ function addItem(kind, o, x, y, w) {
   if (kind === 'clip') {
     const m = M[o.mediaId];
     if (m?.strip) { d.style.backgroundImage = `url(${m.strip})`; d.style.backgroundPositionX = -(m.kind === 'video' ? o.in * UI.pps / o.speed : 0) + 'px'; }
-    const lb = []; if (o.speed !== 1) lb.push(fmtSpeed(o.speed));
+    const lb = []; if (hasCurve(o)) lb.push(o.curve); else if (o.speed !== 1) lb.push(fmtSpeed(o.speed)); if (o.kf?.length) lb.push('◆');
     d.innerHTML = `<span class="lbl">${fmt(o._d)}${lb.length ? ' · ' + lb.join(' ') : ''}</span>`;
   } else if (kind === 'layer') {
     d.style.background = LCOL[o.auto ? 'sub' : o.type];
@@ -1031,6 +1072,7 @@ function addItem(kind, o, x, y, w) {
     const m = M[o.mediaId]; if (m?.buf) d.prepend(waveCanvas(m, o.in, o.out, Math.max(6, w)));
   }
   d.onclick = e => { e.stopPropagation(); select(kind, o.id); };
+  if (sel && o.kf?.length) for (const k of o.kf) { const dm = el('i', { className: 'kfd' }); dm.style.left = (k.t * UI.pps) + 'px'; d.appendChild(dm); }
   if (sel) {
     for (const side of ['l', 'r']) { const h = document.createElement('div'); h.className = 'h ' + side; h.textContent = side === 'l' ? '‹' : '›'; dragTrim(h, kind, o, side, d); d.appendChild(h); }
     dragTrim(d, kind, o, 'move', d);
@@ -1110,6 +1152,8 @@ function renderTools() {
     tb('🖼️', 'Photo', () => addOverlayImage()),
     tb('🖍️', 'Dessin', () => addDrawing()),
     tb('⏩', 'Vitesse', () => openTool('speedAll')),
+    tb('', 'Kit', () => openTool('kit')),
+    tb('', 'Couverture', () => openTool('cover')),
     tb('📐', 'Format', () => openTool('format')),
   ];
   else if (UI.sel.kind === 'clip') {
@@ -1125,6 +1169,7 @@ function renderTools() {
       tb('🧍', 'Détourer', () => openTool('cut')),
       tb('🎭', 'Visage', () => openTool('face')),
       tb('🔲', 'Cadrage', () => openTool('crop')),
+      tb('', 'Images clés', () => openTool('kf')),
       ...(img ? [] : [tb('🧊', 'Figer', freezeFrame), tb('🎶', 'Extraire son', extractAudio)]),
       tb('⬅️', 'Avant', () => moveClip(-1)), tb('➡️', 'Après', () => moveClip(1)),
       tb('🔁', 'Remplacer', replaceClip),
@@ -1141,6 +1186,7 @@ function renderTools() {
       ...(t === 'draw' ? [tb('🖍️', 'Dessiner', () => openTool('draw'))] : []),
       ...(t !== 'draw' ? [tb('💫', 'Animation', () => openTool('anim')), tb('🌈', 'Fusion', () => openTool('blend'))] : []),
       tb('👻', 'Opacité', () => openTool('opacity')),
+      ...(t !== 'draw' ? [tb('', 'Images clés', () => openTool('kf'))] : []),
       tb('✂️', 'Diviser', splitSel),
       tb('📏', 'Toute la vidéo', () => { s.start = 0; s.end = Math.max(UI.clipsEnd, .5); changed(); }),
       tb('⬆️', 'Premier plan', () => { P.layers = P.layers.filter(x => x !== s); P.layers.push(s); changed(); toast('Au premier plan'); }),
@@ -1161,7 +1207,7 @@ function splitSel() {
     if (!splitClipAt(s, T)) return toast('Place la tête de lecture dans le clip');
   } else if (UI.sel.kind === 'layer') {
     if (T <= s.start + .05 || T >= s.end - .05) return toast('Place la tête de lecture dans l’élément');
-    const l2 = JSON.parse(JSON.stringify(s)); l2.id = 'l' + uid(); l2.start = T; s.end = T; if (s.type === 'video') l2.in = (s.in || 0) + (T - s.start);
+    const l2 = JSON.parse(JSON.stringify(s)); l2.id = 'l' + uid(); l2.start = T; s.end = T; if (s.kf) l2.kf = s.kf.map(k => ({ ...k, t: k.t - (T - s.start) })); if (s.type === 'video') l2.in = (s.in || 0) + (T - s.start);
     if (s.type === 'draw') { DRAW.set(l2.id, cloneCanvas(DRAW.get(s.id))); drawDirty.add(l2.id); }
     P.layers.push(l2);
   } else {
@@ -1173,7 +1219,8 @@ function splitSel() {
 function splitClipAt(s, T) {
   layout(); const lt = T - s._s; if (lt < .1 || lt > s._d - .1) return false;
   const c2 = JSON.parse(JSON.stringify(s)); c2.id = 'c' + uid(); c2.trans = 'none';
-  if (M[s.mediaId].kind === 'video') { s.out = s.in + lt * s.speed; c2.in = s.out; } else { c2.dur = s.dur - lt; s.dur = lt; }
+  if (M[s.mediaId].kind === 'video') { s.out = srcAt(s, lt); c2.in = s.out; } else { c2.dur = s.dur - lt; s.dur = lt; }
+  if (s.kf?.length) { c2.kf = s.kf.map(k => ({ ...k, t: k.t - lt })); }
   P.clips.splice(P.clips.indexOf(s) + 1, 0, c2); return true;
 }
 async function freezeFrame() {
@@ -1193,6 +1240,7 @@ function extractAudio() {
   const s = findSel(), m = M[s.mediaId];
   if (!m.buf) return toast('Pas de son dans cette vidéo');
   if (s.vol === 0) return toast('Le son de ce clip est coupé');
+  if (hasCurve(s)) return toast('Retire la courbe de vitesse pour extraire le son');
   layout(); P.audios.push({ id: 'a' + uid(), mediaId: m.id, start: s._s, in: s.in, out: s.out, rate: s.speed, vol: s.vol, fadeIn: 0, fadeOut: 0, kind: 'music', name: 'Son extrait' });
   s.vol = 0; changed(); renderTools(); toast('Son extrait sur une piste audio 🎶');
 }
@@ -1264,7 +1312,7 @@ function addLayer(l) {
 }
 function addText(text = '') {
   const L = addLayer({ type: 'text', text: text || 'Ton texte', size: .065, ...TEXT_PRESETS[0], name: undefined, karaoke: false });
-  delete L.name;
+  delete L.name; if (BRAND.font) L.font = BRAND.font;
   openTool('editText', true);
 }
 function addDrawing() {
@@ -1284,7 +1332,7 @@ function ensureCanvasReady() { if (!cv.width) setupCanvas(); return true; }
 const sheet = $('#sheet'), sb = $('#sheetBody');
 function openSheet(title, build) { UI.sheet = { title, build }; $('#sheetTitle').textContent = title; sb.innerHTML = ''; build(sb); sheet.hidden = false; }
 function refreshSheet() { if (UI.sheet && !sheet.hidden) { const st = sb.scrollTop; sb.innerHTML = ''; UI.sheet.build(sb); sb.scrollTop = st; } }
-function closeSheet() { sheet.hidden = true; UI.sheet = null; if (UI.drawing) { UI.drawing = false; } }
+function closeSheet() { sheet.hidden = true; UI.sheet = null; if (UI.cover?.on) { UI.cover.on = false; req(); } if (UI.drawing) { UI.drawing = false; } }
 $('#sheetClose').onclick = () => { closeSheet(); commit(); };
 const el = (tag, props = {}, kids = []) => { const e = Object.assign(document.createElement(tag), props); for (const k of kids) e.append(k); return e; };
 const lab = (p, t) => p.appendChild(el('div', { className: 'lab', textContent: t }));
@@ -1301,7 +1349,7 @@ function slider(p, label, min, max, step, val, onInput, f = v => v) {
 }
 function swatches(p, cur, pick) {
   const d = el('div', { className: 'chips' });
-  for (const c of COLORS) { const b = el('button', { className: 'sw' + (c === cur ? ' on' : '') }); b.style.background = c; b.onclick = () => { pick(c); changed(); refreshSheet(); }; d.appendChild(b); }
+  for (const c of [...new Set([...BRAND.colors, ...COLORS])]) { const b = el('button', { className: 'sw' + (c === cur ? ' on' : '') }); b.style.background = c; b.onclick = () => { pick(c); changed(); refreshSheet(); }; d.appendChild(b); }
   const ci = el('input', { type: 'color', value: /^#[0-9a-f]{6}$/i.test(cur) ? cur : '#ffffff' }); ci.oninput = () => { pick(ci.value); changed(false); }; ci.onchange = () => commit();
   d.appendChild(ci); p.appendChild(d);
 }
@@ -1312,6 +1360,8 @@ const subsAll = (s, fn) => { if (s.auto && UI.subsLinked !== false) P.layers.fil
 const TOOLS = {
   /* ---- clip ---- */
   speed: ['Vitesse', (p, s) => {
+    lab(p, 'Courbe'); chips(p, Object.keys(CURVES).map(k => [k, k]), s.curve || 'Aucune', v => { s.curve = v; changed(); if (v !== 'Aucune') { UI.T = s._s; play(); } }, 'wrap');
+    if (hasCurve(s)) note(p, 'Le son du clip est coupé pendant une courbe. Ajoute une musique par-dessus.');
     lab(p, 'Accélérer'); chips(p, SPEEDS.filter(v => v > 1).map(v => [v, fmtSpeed(v)]), s.speed, v => { s.speed = v; changed(); }, 'big');
     lab(p, 'Ralentir'); chips(p, SPEEDS.filter(v => v <= 1).map(v => [v, fmtSpeed(v)]), s.speed, v => { s.speed = v; changed(); }, 'big');
     slider(p, 'Précis', .25, 4, .05, s.speed, v => { s.speed = v; }, fmtSpeed);
@@ -1458,6 +1508,47 @@ const TOOLS = {
     for (const n of Object.keys(COLLAGES)) { const b = el('button'); b.appendChild(collagePreview(COLLAGES[n])); b.append(n); b.onclick = () => { closeSheet(); makeCollage(n); }; g.appendChild(b); }
     note(p, 'Choisis la disposition puis tes photos. Astuce : format 1:1 ou 4:5 pour un post Insta.');
   }],
+  kf: ['Images clés', (p, s) => {
+    const kind = UI.sel.kind, t = kfLocal(s, kind), list = s.kf || [], here = list.find(k => Math.abs(k.t - t) < .06);
+    note(p, 'Ajoute une image clé, avance la tête de lecture, puis déplace, agrandis ou tourne l’élément : l’animation se crée toute seule.');
+    const r = el('div', { className: 'two' }); r.style.marginTop = '10px'; p.appendChild(r);
+    btn(r, here ? 'Mettre à jour ici' : 'Ajouter ici', () => { captureKf(s, kind, true); changed(); refreshSheet(); }, 'primary');
+    if (here) btn(r, 'Supprimer celle-ci', () => { s.kf = list.filter(k => k !== here); if (!s.kf.length) delete s.kf; changed(); refreshSheet(); });
+    if (list.length) {
+      lab(p, `${list.length} image(s) clé(s)`);
+      chips(p, list.map((k, i) => [i, fmt(k.t)]), null, i => { UI.T = (kind === 'clip' ? s._s : s.start) + list[i].t; req(); }, 'wrap');
+      btn(p, 'Tout effacer', () => { delete s.kf; changed(); refreshSheet(); }, 'sm danger').style.marginTop = '8px';
+    }
+  }],
+  kit: ['Mon kit de marque', p => {
+    lab(p, 'Mes couleurs');
+    const row = el('div', { className: 'chips' }); p.appendChild(row);
+    for (const c of BRAND.colors) { const b = el('button', { className: 'sw' }); b.style.background = c; b.title = 'Retirer'; b.onclick = () => { BRAND.colors = BRAND.colors.filter(x => x !== c); saveBrand(); refreshSheet(); }; row.appendChild(b); }
+    const ci = el('input', { type: 'color', value: '#ff4fae' }); ci.onchange = () => { if (!BRAND.colors.includes(ci.value)) BRAND.colors.push(ci.value); saveBrand(); refreshSheet(); }; row.appendChild(ci);
+    note(p, 'Touche le sélecteur pour ajouter une couleur, touche une couleur pour la retirer. Elles apparaissent en premier partout.');
+    lab(p, 'Ma police'); chips(p, [[null, 'Par défaut'], ...Object.keys(FONTS).map(k => [k, k, `font-family:${FONTS[k][0]};font-weight:${FONTS[k][1]}`])], BRAND.font, v => { BRAND.font = v; saveBrand(); }, 'wrap');
+    if (BRAND.font) btn(p, 'Appliquer à tous les textes du projet', () => { P.layers.forEach(l => { if (l.type === 'text') l.font = BRAND.font; }); changed(); toast('Police appliquée'); }, 'sm full').style.marginTop = '8px';
+    lab(p, 'Mon logo');
+    const r2 = el('div', { className: 'two' }); p.appendChild(r2);
+    btn(r2, BRAND.logo ? 'Changer le logo' : 'Choisir mon logo', async () => { const [f] = await pickFiles('image/*', false); if (!f) return; try { const m = await importFile(f); BRAND.logo = m.id; saveBrand(); refreshSheet(); } catch (e) { toast(e.message); } });
+    if (BRAND.logo) btn(r2, 'Ajouter à la vidéo', async () => {
+      if (!M[BRAND.logo]) { const r = await idb.get('media', BRAND.logo); if (r) await loadMedia(r); }
+      if (!M[BRAND.logo]) return toast('Logo introuvable');
+      closeSheet(); const L = addLayer({ type: 'image', mediaId: BRAND.logo, size: .22, x: .84, y: .08, anim: { in: 'fade', out: 'none', loop: 'none' } }); L.start = 0; L.end = Math.max(UI.clipsEnd, .5); changed();
+    }, 'primary');
+  }],
+  cover: ['Couverture', p => {
+    UI.cover ??= { text: '', preset: 'Impact', y: .5, size: .1 }; UI.cover.on = true; req();
+    const c = UI.cover;
+    slider(p, 'Image', 0, Math.max(.1, layout() - .05), .05, UI.T, v => { UI.T = v; req(); }, fmt);
+    const ta = el('textarea', { value: c.text, placeholder: 'Titre de la couverture (facultatif)' });
+    ta.oninput = () => { c.text = ta.value; req(); }; p.appendChild(ta);
+    lab(p, 'Style'); chips(p, TEXT_PRESETS.map(t => [t.name, t.name]), c.preset, v => { c.preset = v; req(); });
+    lab(p, 'Position'); chips(p, [[.2, 'Haut'], [.5, 'Milieu'], [.8, 'Bas']], c.y, v => { c.y = v; req(); });
+    slider(p, 'Taille', .04, .2, .005, c.size, v => { c.size = v; req(); }, v => Math.round(v * 1000) / 10);
+    btn(p, 'Exporter la couverture', exportCover, 'primary full').style.marginTop = '10px';
+    note(p, 'Choisis l’image avec le curseur, ajoute un titre, puis exporte-la comme couverture TikTok, Reel ou YouTube.');
+  }],
   stickers: ['Stickers', p => {
     UI.stkCat ??= Object.keys(STICKERS)[0];
     chips(p, Object.keys(STICKERS).map(k => [k, k]), UI.stkCat, v => UI.stkCat = v);
@@ -1479,7 +1570,7 @@ const TOOLS = {
         r.oninput = () => { UI.musBpm[name] = +r.value; lb.textContent = r.value + ' BPM'; };
         row.append(el('div', { className: 'tn', textContent: name }), lb, lis, add); list.appendChild(row); list.appendChild(r);
       }
-      note(p, 'Musiques créées par l’app : libres de droits, utilisables partout. Règle le tempo (BPM) sur ton cours.');
+      note(p, 'Musiques créées par l’app : libres de droits, utilisables partout. Règle le tempo (BPM) selon l’ambiance voulue.');
     } else if (UI.musTab === 'sfx') {
       const g = el('div', { className: 'cards' }); p.appendChild(g);
       for (const n of SFX) { const b = el('button', { textContent: n }); b.onclick = async () => { previewBuffer(await renderSfx(n), 2); addSfx(n); }; g.appendChild(b); }
@@ -1580,17 +1671,21 @@ function openTool(name, extra) {
 /* ---- Modèles ---- */
 const TPL_T = (text, preset, o = {}) => { const t = TEXT_PRESETS.find(x => x.name === preset); return { type: 'text', text, font: t.font, color: t.color, style: t.style, bg: t.bg, stroke: t.stroke || '#000', size: .065, ...o }; };
 const TEMPLATES = [
-  { name: '📣 Annonce de cours', L: [TPL_T('AQUABIKE 🔥', 'Impact', { y: .2, size: .1 }), TPL_T('Mardi 19h · Chartrons', 'TikTok', { y: .3, size: .045, anim: { in: 'slide', out: 'fade', loop: 'none' } }), { type: 'sticker', emoji: '💦', size: .1, x: .82, y: .12, anim: { in: 'zoom', out: 'fade', loop: 'float' } }] },
-  { name: '😱 Hook TikTok', L: [TPL_T('ATTENDS LA FIN 😱', 'Jaune', { y: .16, size: .07, anim: { in: 'pop', out: 'fade', loop: 'wiggle' } })], len: 2.5 },
-  { name: '🏋️ Tuto exercice', L: [TPL_T('ÉTAPE 1', 'Encadré', { y: .12, size: .05 }), TPL_T('Garde le dos bien droit', 'Classique', { y: .8, size: .055, anim: { in: 'type', out: 'fade', loop: 'none' } })] },
-  { name: '🎉 Promo', L: [TPL_T('-20%', 'Fun', { y: .38, size: .2, anim: { in: 'pop', out: 'fade', loop: 'pulse' } }), TPL_T('sur la carte 10 séances', 'TikTok', { y: .53, size: .045 })] },
-  { name: '💬 Citation', L: [TPL_T('« Le corps atteint ce que l’esprit croit »', 'Élégant', { y: .5, size: .06, anim: { in: 'fade', out: 'fade', loop: 'none' } })], len: 4 },
-  { name: '📍 Infos pratiques', L: [TPL_T('📍 Piscine · Chartrons\n🕖 19h – 20h\n📲 Réserve en DM', 'Machine', { y: .5, size: .045, anim: { in: 'slide', out: 'fade', loop: 'none' } })], len: 4 },
-  { name: '⏱️ Compte à rebours', seq: ['3', '2', '1', 'GO ! 💪'] },
-  { name: '🎀 Bandeau titre', L: [{ type: 'shape', shape: 'round', w: .82, h: .13, color: '#ff4fae', grad: ['#ff5fb8', '#b03bd8'], x: .5, y: .82, anim: { in: 'left', out: 'fade', loop: 'none' } }, TPL_T('Baptiste · Coach aquatique', 'Babou', { y: .82, size: .038, style: 'plain', anim: { in: 'fade', out: 'fade', loop: 'none' } })], len: 4 },
-  { name: '👉 Flèche + texte', L: [{ type: 'shape', shape: 'arrow', w: .35, h: .1, color: '#ffd60a', x: .3, y: .6, r: -20, anim: { in: 'pop', out: 'fade', loop: 'float' } }, TPL_T('Regarde ça !', 'Jaune', { x: .35, y: .5, size: .055 })] },
-  { name: '💬 Bulle', L: [{ type: 'shape', shape: 'bubble', w: .7, h: .3, color: '#ffffff', x: .5, y: .3, anim: { in: 'pop', out: 'fade', loop: 'none' } }, TPL_T('Qui vient demain ? 🙋', 'Babou', { y: .27, size: .05, color: '#2a1247', style: 'plain' })] },
-  { name: '🔁 Avant / Après', L: [TPL_T('AVANT', 'TikTok', { y: .08, size: .05 })], len: 2, after: TPL_T('APRÈS ✨', 'TikTok', { y: .08, size: .05 }) },
+  { name: 'Grande annonce', L: [TPL_T('GRANDE NOUVELLE 🔥', 'Impact', { y: .2, size: .09 }), TPL_T('Samedi 18h · En ligne', 'TikTok', { y: .3, size: .045, anim: { in: 'slide', out: 'fade', loop: 'none' } }), { type: 'sticker', emoji: '🎉', size: .1, x: .82, y: .1, anim: { in: 'zoom', out: 'fade', loop: 'float' } }] },
+  { name: 'Accroche', L: [TPL_T('ATTENDS LA FIN 😱', 'Jaune', { y: .16, size: .07, anim: { in: 'pop', out: 'fade', loop: 'wiggle' } })], len: 2.5 },
+  { name: 'Top 3', L: [TPL_T('TOP 3', 'Impact', { y: .15, size: .1 }), TPL_T('1. Premier', 'TikTok', { y: .35, size: .05, dt: .6 }), TPL_T('2. Deuxième', 'TikTok', { y: .45, size: .05, dt: 1.2 }), TPL_T('3. Troisième', 'TikTok', { y: .55, size: .05, dt: 1.8 })], len: 5 },
+  { name: 'Tuto', L: [TPL_T('ÉTAPE 1', 'Encadré', { y: .12, size: .05 }), TPL_T('Astuce du jour', 'Classique', { y: .8, size: .055, anim: { in: 'type', out: 'fade', loop: 'none' } })] },
+  { name: 'Question / Réponse', L: [TPL_T('QUESTION', 'Encadré', { y: .15, size: .05 }), TPL_T('Ta question ici ?', 'Classique', { y: .3, size: .06 })], len: 2.5, after: TPL_T('RÉPONSE : ta réponse ici', 'TikTok', { y: .3, size: .05 }) },
+  { name: 'Promo', L: [TPL_T('-20%', 'Fun', { y: .38, size: .2, anim: { in: 'pop', out: 'fade', loop: 'pulse' } }), TPL_T('sur toute la boutique', 'TikTok', { y: .53, size: .045 })] },
+  { name: 'Abonne-toi', L: [{ type: 'shape', shape: 'round', w: .62, h: .12, color: '#ef4444', x: .5, y: .85, anim: { in: 'pop', out: 'fade', loop: 'pulse' } }, TPL_T('ABONNE-TOI', 'Babou', { y: .85, size: .045, style: 'plain', anim: { in: 'pop', out: 'fade', loop: 'pulse' } })] },
+  { name: 'Nouveau post', L: [TPL_T('NOUVEAU POST', 'Néon', { y: .45, size: .09 }), { type: 'sticker', emoji: '🔔', size: .12, x: .5, y: .32, anim: { in: 'drop', out: 'fade', loop: 'wiggle' } }] },
+  { name: 'Citation', L: [TPL_T('« Le succès, c’est d’oser commencer »', 'Élégant', { y: .5, size: .06, anim: { in: 'fade', out: 'fade', loop: 'none' } })], len: 4 },
+  { name: 'Infos pratiques', L: [TPL_T('📍 Adresse\n🕖 Horaires\n📲 Infos en DM', 'Machine', { y: .5, size: .045, anim: { in: 'slide', out: 'fade', loop: 'none' } })], len: 4 },
+  { name: 'Sondage', L: [{ type: 'shape', shape: 'bubble', w: .7, h: .3, color: '#ffffff', x: .5, y: .3, anim: { in: 'pop', out: 'fade', loop: 'none' } }, TPL_T('Team A ou Team B ? 🤔', 'Babou', { y: .27, size: .05, color: '#2a1247', style: 'plain' })] },
+  { name: 'Compte à rebours', seq: ['3', '2', '1', 'GO !'] },
+  { name: 'Bandeau titre', L: [{ type: 'shape', shape: 'round', w: .82, h: .13, color: '#ff4fae', grad: ['#ff5fb8', '#b03bd8'], x: .5, y: .82, anim: { in: 'left', out: 'fade', loop: 'none' } }, TPL_T('Ton nom · Ton titre', 'Babou', { y: .82, size: .038, style: 'plain', anim: { in: 'fade', out: 'fade', loop: 'none' } })], len: 4 },
+  { name: 'Flèche + texte', L: [{ type: 'shape', shape: 'arrow', w: .35, h: .1, color: '#ffd60a', x: .3, y: .6, r: -20, anim: { in: 'pop', out: 'fade', loop: 'float' } }, TPL_T('Regarde ça !', 'Jaune', { x: .35, y: .5, size: .055 })] },
+  { name: 'Avant / Après', L: [TPL_T('AVANT', 'TikTok', { y: .08, size: .05 })], len: 2, after: TPL_T('APRÈS', 'TikTok', { y: .08, size: .05 }) },
 ];
 function applyTemplate(t) {
   showEditor(); const T = UI.T;
@@ -1598,7 +1693,7 @@ function applyTemplate(t) {
   if (t.seq) { t.seq.forEach((s, i) => addLayer(TPL_T(s, 'Impact', { start: T + i * .8, end: T + i * .8 + .8, size: i === 3 ? .12 : .25, anim: { in: 'zoom', out: 'fade', loop: 'none' } }))); }
   else {
     const len = t.len || 3;
-    for (const l of t.L) addLayer(fix({ ...JSON.parse(JSON.stringify(l)), start: T, end: T + len }));
+    for (const l of t.L) { const c = JSON.parse(JSON.stringify(l)), dt = c.dt || 0; delete c.dt; addLayer(fix({ ...c, start: T + dt, end: T + len })); }
     if (t.after) addLayer({ ...JSON.parse(JSON.stringify(t.after)), start: T + len, end: T + len * 2 });
   }
   select(null); toast('Modèle ajouté ✨ Touche un texte pour le modifier');
@@ -1718,6 +1813,7 @@ cv.addEventListener('pointerdown', e => {
 cv.addEventListener('pointermove', e => {
   if (!ptrs.has(e.pointerId)) return;
   const p = toCanvas(e); ptrs.set(e.pointerId, p); if (!G) return;
+  queueMicrotask(() => { const s = findSel(); if (s?.kf?.length && G && G.type !== 'draw' && G.type !== 'tap' && (G.type !== 'move' || G.moved)) captureKf(s, UI.sel.kind, true); });
   const W = cv.width, H = cv.height;
   if (G.type === 'draw') { stroke(G.l, G.last, p); G.last = p; return; }
   if (G.type === 'pinch' && ptrs.size >= 2) {
@@ -1766,6 +1862,16 @@ $('#exportBtn').onclick = () => {
     note(p, 'La vidéo se calcule en temps réel : garde l’écran allumé et l’app ouverte pendant l’export.');
   });
 };
+function coverLayer() {
+  const c = UI.cover, t = TEXT_PRESETS.find(x => x.name === c.preset) || TEXT_PRESETS[0];
+  return { type: 'text', text: c.text || ' ', font: BRAND.font || t.font, color: t.color, style: t.style, bg: t.bg, stroke: t.stroke || '#000', grad: t.grad || null, size: c.size, x: .5, y: c.y, s: 1, r: 0, opacity: c.text ? 1 : 0, start: -1e6, end: 1e6, anim: {} };
+}
+async function exportCover() {
+  UI.exporting = true; setupCanvas(1080); syncVideos(); await waitVideos(); render();
+  const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', .95));
+  UI.exporting = false; setupCanvas(); req();
+  offerSave(blob, `couverture-${Date.now()}.jpg`);
+}
 async function exportImage() {
   closeSheet(); UI.exporting = true; setupCanvas(UI.q); syncVideos(); await waitVideos(); render();
   const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
@@ -1846,7 +1952,7 @@ window.addEventListener('resize', () => { renderTimeline(); req(); });
 
 /* ================= Démarrage ================= */
 async function boot() {
-  try { await loadProjectsList(); } catch (e) { console.warn('chargement', e); }
+  try { await loadProjectsList(); BRAND = { ...BRAND, ...((await idb.get('kv', 'brand')) || {}) }; } catch (e) { console.warn('chargement', e); }
   showEmpty(); hist = [snap()]; hi = 0; updUndo();
   navigator.storage?.persist?.();
   window.addEventListener('pagehide', saveNow);

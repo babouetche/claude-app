@@ -10,5 +10,7 @@ Web-app installable (PWA). Tout est traité sur le téléphone, chaque projet es
 - **Musique** : bibliothèque de musiques générées (libres de droits, tempo réglable), bruitages, forme d'onde, import, voix off
 - **Montage auto** : choisis tes vidéos et une musique, les coupes tombent sur le rythme ; **Caler sur le rythme** pour tout projet
 - **Clips** déplaçables en les glissant dans la timeline
+- **Images clés** (déplacer, agrandir, tourner, opacité dans le temps), **courbes de vitesse** (Montage, Héros, Bullet…)
+- **Kit de marque** (couleurs, police, logo), **couverture** exportable avec titre, 15 modèles
 - **Sous-titres auto** (IA Whisper), **collages**, **formes**, **modèles**, **stickers** par catégories
 - **Export** MP4 720p/1080p en 30 ou 60 i/s, ou image PNG

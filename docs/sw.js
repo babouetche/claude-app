@@ -1,5 +1,5 @@
 // Cache de l'application pour un lancement rapide (les modèles IA sont mis en cache par le navigateur)
-const CACHE = 'babou-art-v5';
+const CACHE = 'babou-art-v6';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'logo.svg', 'fonts/fredoka.woff2', 'fonts/fredoka-ext.woff2'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))); self.clients.claim(); });
