@@ -1,0 +1,116 @@
+/* Separate nodes preserve both the move labels and existing damage text. */
+.null-ai-probability {
+    display: inline-block;
+    margin-left: 8px;
+    font: bold 11px/1.4 sans-serif;
+    white-space: nowrap;
+    color: #086c90;
+    cursor: help;
+}
+.null-ai-probability:focus-visible { outline: 1px solid currentColor; }
+.null-ai-unavailable { color: #875c00; }
+.null-ai-context { font: 11px/1.4 sans-serif; margin: 5px 0 8px; max-width: 95%; }
+.null-ai-context summary { cursor: pointer; }
+.null-ai-context p { margin: 5px 0; }
+.null-ai-context label { background: transparent; }
+.null-ai-context input[type=number] { width: 3.5em; }
+.null-ai-context input[type=text] { width: 10em; max-width: 100%; }
+.null-ai-context select { max-width: 100%; }
+.null-ai-context > summary { font-weight: bold; }
+.null-ai-control-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; margin: 7px 0; }
+.null-ai-control-row > label { flex: 1 1 140px; }
+.null-ai-control-row > select { flex: 1 1 180px; width: 180px; }
+.null-ai-subsection { margin-top: 9px; padding: 7px 8px; border: 1px solid #8297a6; border-radius: 4px; }
+.null-ai-subsection > summary { font-weight: bold; }
+.null-ai-facts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; margin: 8px 0; }
+.null-ai-facts-grid .null-ai-condition { display: flex; align-items: start; gap: 3px; margin: 0; }
+.null-ai-note { opacity: 0.85; }
+.null-ai-action-summary { clear: both; font: bold 11px/1.5 sans-serif; margin: 5px 0; padding: 6px; border-left: 3px solid #086c90; overflow-wrap: anywhere; }
+.null-ai-switch-destination { clear: both; font: 12px/1.5 sans-serif; margin: 5px 0 9px; padding: 6px 8px; border: 1px solid #8297a6; border-radius: 4px; overflow-wrap: anywhere; }
+.null-ai-switch-destination p { margin: 0 0 4px; font-weight: bold; }
+.null-ai-switch-destination ul { margin: 0; padding-left: 18px; }
+.null-ai-switch-destination li { margin: 2px 0; }
+.null-ai-party-title { font-weight: bold; }
+.null-ai-party-row { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; margin: 8px 0; }
+.null-ai-party-row > label:first-child { flex: 1 1 130px; }
+.null-ai-party-score { flex: 1 1 100%; margin-left: 20px; }
+.null-ai-party-row[data-active=true] { opacity: 0.6; }
+.null-ai-context li { margin-bottom: 5px; }
+.null-ai-estimated { color: #8a5100; }
+.null-ai-usable-label { margin-left: 8px; }
+.null-ai-condition { display: inline-block; margin-right: 8px; }
+.null-post-ko { clear: left; width: 30em; margin-top: 8px; padding: 8px .75em; box-sizing: content-box; font: inherit; line-height: 1.5; overflow-wrap: anywhere; }
+.null-post-ko legend { font-weight: bold; }
+.null-post-ko p { margin: 7px 0; }
+.null-post-ko label { background: transparent; }
+.null-post-ko-toggle { display: block; }
+.null-post-ko-legend { font-size: 11px; }
+.null-post-ko-row { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 8px; padding: 7px 6px; margin: 6px 0; border: 1px solid #8297a6; border-left-width: 4px; border-radius: 3px; }
+.null-post-ko-name { flex: 1 1 140px; font-weight: bold; }
+.null-post-ko-score { flex: 1 1 100%; order: 3; }
+.null-post-ko-row.null-post-ko-likely { border-left-color: #168043; background: rgba(22, 128, 67, .12); }
+.null-post-ko-row.null-post-ko-possible { border-left-color: #1678b2; background: rgba(22, 120, 178, .08); }
+.null-post-ko-row.null-post-ko-uncertain { border-left-color: #bc790b; }
+.null-post-ko-row.null-post-ko-fainted { border-left-color: #c0392b; background: rgba(192, 57, 43, .1); }
+.null-post-ko-fainted .null-post-ko-name { text-decoration: line-through; }
+.null-post-ko-details { margin-top: 8px; }
+.null-post-ko-details > summary { cursor: pointer; font-weight: bold; }
+.null-post-ko-details ul { padding-left: 18px; }
+.null-post-ko-icon-wrap { display: block; position: relative; width: var(--box-icon-w, var(--box-icon-size, 64px)); height: var(--box-icon-h, var(--box-icon-size, 64px)); max-width: 100%; flex-shrink: 0; line-height: 0; vertical-align: middle; }
+.null-post-ko-icon-wrap > .trainer-pok { width: 100%; height: 100%; max-width: 100%; margin: 0; }
+html.icon-size-small .null-post-ko-icon-wrap { width: 40px; height: 30px; margin: 0 10px 0 0; }
+html.icon-size-small .null-post-ko-icon-wrap > .trainer-pok { width: 40px; height: 30px; margin: 0; }
+.null-post-ko-icon-wrap:has(> .opponent-marked, > .null-post-ko-fainted)::after { content: "×"; color: #c62828; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: bold 30px/1 sans-serif; text-shadow: 1px 1px white, -1px -1px white; pointer-events: none; }
+.trainer-pok.null-post-ko-fainted { background: rgba(231, 76, 60, .5); outline: 2px solid #c0392b; outline-offset: -2px; }
+.trainer-pok.null-post-ko-likely { outline: 3px solid #168043; outline-offset: -3px; }
+.trainer-pok.null-post-ko-possible { outline: 3px solid #1678b2; outline-offset: -3px; }
+.trainer-pok.null-post-ko-uncertain { outline: 3px solid #bc790b; outline-offset: -3px; }
+html:not([data-theme=light]) .null-ai-probability { color: #8be9fd; }
+html:not([data-theme=light]) .null-ai-unavailable { color: #f0cf63; }
+html:not([data-theme=light]) .null-ai-estimated { color: #f0cf63; }
+html:not([data-theme=light]) .null-ai-action-summary { border-color: #8be9fd; }
+.move-result-group.null-ai-enabled { display: flow-root; margin-bottom: 1em; }
+.null-double-card { border: 1px solid #8297a6; border-radius: 3px; padding: 6px; margin: 8px 0; }
+.null-double-card > summary, .null-double-card details > summary { cursor: pointer; font-weight: bold; margin-bottom: 6px; }
+.null-double-card .select2-container { max-width: 100%; }
+.null-double-stats-preview { display: block; margin: 4px 0 7px; }
+.null-double-set-filter { display: block; margin: 5px 0; }
+.null-double-stats, .null-double-targets { width: 100%; border-collapse: collapse; margin: 6px 0; }
+.null-double-stats input { width: 42px; }
+.null-double-stats th, .null-double-targets th { text-align: left; }
+.null-double-targets td, .null-double-targets th { padding: 4px; border-bottom: 1px solid #8297a6; overflow-wrap: anywhere; }
+.null-double-targets td:nth-child(3) { white-space: nowrap; }
+.null-double-pp { display: flex; gap: 8px; margin: 3px 0 8px; }
+.null-double-pp input[type=number] { width: 42px; }
+.null-double-card details { margin-top: 8px; }
+.null-doubles-mode .null-double-context { clear: both; max-width: none; padding: 12px; border: 2px solid #8297a6; border-radius: 8px; font-size: 12px; }
+.null-double-board, .null-double-partners, #null-double-target-results { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.null-double-board { margin: 10px 0; }
+.null-double-side { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.null-double-side h3 { grid-column: 1 / -1; margin: 0; font-size: 14px; }
+.null-double-battler { border: 1px solid #8297a6; border-radius: 6px; padding: 10px; background: rgba(22,120,178,.09); }
+.null-double-side-opponent .null-double-battler { background: rgba(192,57,43,.09); }
+.null-double-battler strong, .null-double-battler small { display: block; }
+.null-double-battler strong { font-size: 16px; margin: 3px 0; }
+.null-double-battler progress { width: 100%; height: 12px; accent-color: #168043; }
+.null-double-fainted { opacity: .55; }
+.null-double-fainted strong { text-decoration: line-through; }
+.null-double-board-moves { font-size: 11px; overflow-wrap: anywhere; }
+#null-double-target-results > p { grid-column: 1 / -1; }
+.null-double-slot-results { padding: 8px; border: 1px solid #8297a6; border-radius: 6px; }
+.null-double-slot-results { min-width: 0; }
+@media(max-width:850px) {
+    .null-double-board, .null-double-partners, #null-double-target-results { grid-template-columns: 1fr; }
+}
+@media (max-width: 650px) {
+    .null-doubles-mode .null-double-context { width: calc(100vw - 3em); box-sizing: border-box; }
+    /* The original page has a wide minimum width. Keep just the move results
+       within the viewport so both sides and the AI controls remain readable. */
+    .move-result-group.null-ai-enabled { width: calc(100vw - 3em); min-width: 0; }
+    .null-ai-enabled .move-result-subgroup { width: 100%; float: none; margin-bottom: 10px; }
+    .null-ai-enabled .null-ai-probability { display: block; width: fit-content; margin: 0 0 3px 3px; }
+    .null-ai-context { max-width: 100%; }
+    .null-ai-facts-grid { grid-template-columns: 1fr; }
+    .null-ai-action-summary { max-width: 100%; box-sizing: border-box; }
+    .null-ai-switch-destination { max-width: 100%; box-sizing: border-box; }
+}

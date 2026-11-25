@@ -1,0 +1,261 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "checkedAt": "2026-11-02T21:06:04.667Z",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "fixtureSHA256": "d52ad5227ad6b2b179768bf6d015f9cdea22ef1627f83420c7769c5be219c6dc",
+  "native": {
+    "rechecked": true,
+    "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+    "records": 30,
+    "groups": 29
+  },
+  "groups": [
+    {
+      "trainer": "Hiker Marcster",
+      "reserveForm": "Minior",
+      "aliases": [
+        "Minior (Hiker Marcster)",
+        "Minior-Meteor (Hiker Marcster)"
+      ]
+    },
+    {
+      "trainer": "Camper Charlie",
+      "reserveForm": "Minior",
+      "aliases": [
+        "Minior (Camper Charlie)",
+        "Minior-Meteor (Camper Charlie)"
+      ]
+    },
+    {
+      "trainer": "Leader Winona 2",
+      "reserveForm": "Minior",
+      "aliases": [
+        "Minior (Leader Winona 2)",
+        "Minior-Meteor (Leader Winona 2)"
+      ]
+    },
+    {
+      "trainer": "Triathlete Benjamin & Triathlete Alyssa",
+      "reserveForm": "Eiscue",
+      "aliases": [
+        "Eiscue (Triathlete Benjamin & Triathlete Alyssa)",
+        "Eiscue-Noice (Triathlete Benjamin & Triathlete Alyssa)"
+      ]
+    },
+    {
+      "trainer": "Picnicker Frieren",
+      "reserveForm": "Eiscue",
+      "aliases": [
+        "Eiscue (Picnicker Frieren)",
+        "Eiscue-Noice (Picnicker Frieren)"
+      ]
+    },
+    {
+      "trainer": "Woods Team Aqua Grunt",
+      "reserveForm": "Wishiwashi",
+      "aliases": [
+        "Wishiwashi (Woods Team Aqua Grunt)",
+        "Wishiwashi-School (Woods Team Aqua Grunt)"
+      ]
+    },
+    {
+      "trainer": "Ninja Boy Hideo",
+      "reserveForm": "Wishiwashi",
+      "aliases": [
+        "Wishiwashi (Ninja Boy Hideo)",
+        "Wishiwashi-School (Ninja Boy Hideo)"
+      ]
+    },
+    {
+      "trainer": "Leader Roxanne",
+      "reserveForm": "Zygarde",
+      "aliases": [
+        "Zygarde (Leader Roxanne)",
+        "Zygarde-Complete (Leader Roxanne)"
+      ]
+    },
+    {
+      "trainer": "Adventurer Brandon 1",
+      "reserveForm": "Zygarde",
+      "aliases": [
+        "Zygarde (Adventurer Brandon 1)",
+        "Zygarde-Complete (Adventurer Brandon 1)",
+        "Zygarde-Mega (Adventurer Brandon 1)"
+      ]
+    },
+    {
+      "trainer": "Adventurer Brandon 2",
+      "reserveForm": "Zygarde",
+      "aliases": [
+        "Zygarde (Adventurer Brandon 2)",
+        "Zygarde-Complete (Adventurer Brandon 2)",
+        "Zygarde-Mega (Adventurer Brandon 2)"
+      ]
+    },
+    {
+      "trainer": "Battle Girl Jocelyn",
+      "reserveForm": "Morpeko",
+      "aliases": [
+        "Morpeko (Battle Girl Jocelyn)",
+        "Morpeko-Hangry (Battle Girl Jocelyn)"
+      ]
+    },
+    {
+      "trainer": "Space Center Team Magma Grunt #2",
+      "reserveForm": "Morpeko",
+      "aliases": [
+        "Morpeko (Space Center Team Magma Grunt #2)",
+        "Morpeko-Hangry (Space Center Team Magma Grunt #2)"
+      ]
+    },
+    {
+      "trainer": "Mt.Chimney Team Magma Grunt",
+      "reserveForm": "Darmanitan",
+      "aliases": [
+        "Darmanitan (Mt.Chimney Team Magma Grunt)",
+        "Darmanitan-Zen (Mt.Chimney Team Magma Grunt)"
+      ]
+    },
+    {
+      "trainer": "Hideout Team Magma Grunt Zeldest",
+      "reserveForm": "Darmanitan",
+      "aliases": [
+        "Darmanitan (Hideout Team Magma Grunt Zeldest)"
+      ]
+    },
+    {
+      "trainer": "Leader Liza",
+      "reserveForm": "Darmanitan",
+      "aliases": [
+        "Darmanitan (Leader Liza)",
+        "Darmanitan-Zen (Leader Liza)"
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "reserveForm": "Darmanitan",
+      "aliases": [
+        "Darmanitan (Pokémaniac Darm)"
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "reserveForm": "Darmanitan-Zen-Mode",
+      "aliases": [
+        "Darmanitan-Zen-Mode (Pokémaniac Darm)"
+      ]
+    },
+    {
+      "trainer": "Cooltrainer Axle",
+      "reserveForm": "Darmanitan-Galar",
+      "aliases": [
+        "Darmanitan-Galar (Cooltrainer Axle)",
+        "Darmanitan-Galar-Zen (Cooltrainer Axle)"
+      ]
+    },
+    {
+      "trainer": "Hideout Team Magma Grunt #3",
+      "reserveForm": "Darmanitan-Galar",
+      "aliases": [
+        "Darmanitan-Galar (Hideout Team Magma Grunt #3)",
+        "Darmanitan-Galar-Zen (Hideout Team Magma Grunt #3)"
+      ]
+    },
+    {
+      "trainer": "Pokéfan Annika",
+      "reserveForm": "Darmanitan-Galar",
+      "aliases": [
+        "Darmanitan-Galar (Pokéfan Annika)"
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "reserveForm": "Darmanitan-Galar",
+      "aliases": [
+        "Darmanitan-Galar (Pokémaniac Darm)"
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "reserveForm": "Darmanitan-Zen-Mode-Galar",
+      "aliases": [
+        "Darmanitan-Zen-Mode-Galar (Pokémaniac Darm)"
+      ]
+    },
+    {
+      "trainer": "Leader Liza",
+      "reserveForm": "Necrozma-Dusk-Mane",
+      "aliases": [
+        "Necrozma-Dusk-Mane (Leader Liza)",
+        "Necrozma-Ultra (Leader Liza)"
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Shinji (Inverse Room)",
+      "reserveForm": "Terapagos",
+      "aliases": [
+        "Terapagos (Pokémaniac Shinji (Inverse Room))",
+        "Terapagos-Terastal (Pokémaniac Shinji (Inverse Room))"
+      ]
+    },
+    {
+      "trainer": "Cooltrainer Reyna",
+      "reserveForm": "Terapagos",
+      "aliases": [
+        "Terapagos (Cooltrainer Reyna)",
+        "Terapagos-Stellar (Cooltrainer Reyna)"
+      ]
+    },
+    {
+      "trainer": "Team Magma Leader Maxie 2",
+      "reserveForm": "Groudon",
+      "aliases": [
+        "Groudon (Team Magma Leader Maxie 2)"
+      ]
+    },
+    {
+      "trainer": "Trainer Maxie",
+      "reserveForm": "Groudon",
+      "aliases": [
+        "Groudon (Trainer Maxie)",
+        "Groudon-Primal (Trainer Maxie)"
+      ]
+    },
+    {
+      "trainer": "Team Aqua Leader Archie 2",
+      "reserveForm": "Kyogre",
+      "aliases": [
+        "Kyogre (Team Aqua Leader Archie 2)"
+      ]
+    },
+    {
+      "trainer": "Trainer Archie",
+      "reserveForm": "Kyogre",
+      "aliases": [
+        "Kyogre (Trainer Archie)",
+        "Kyogre-Primal (Trainer Archie)"
+      ]
+    }
+  ],
+  "observed": {
+    "scores": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "probabilities": [
+      0.9,
+      0,
+      0.1,
+      0
+    ]
+  },
+  "checks": [
+    "29 trainer/set groups in eleven non-Mega form families retain the reserve form supported by native party records; duplicate display forms share one logical slot and distinct Darm Zen sets remain separate.",
+    "The observed Marcster battle reproduces Minior 90%, Corsola-Galar 10%, Lunatone 0%; strict/estimate agree and the displayed damage/HP remain unchanged.",
+    "Selecting the active Meteor form still uses its real 66 Speed; the reserve correction does not force active Pokémon into core form.",
+    "Legacy Meteor HP/PP inputs apply to the logical reserve; KO/Restore crosses both icons, excludes Minior and restores the same ranking."
+  ],
+  "errors": []
+}

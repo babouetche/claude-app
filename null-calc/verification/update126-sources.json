@@ -1,0 +1,46 @@
+{
+  "consultedAt": "2026-10-24",
+  "priority": [
+    "ROM supplied by user",
+    "official documentation",
+    "historical C and dex"
+  ],
+  "documents": [
+    {
+      "name": "ai-current.md",
+      "url": "https://docs.google.com/document/d/1KwkghD6eOZ026HR81C7yToDD_7fPwL2Iccc_XNL-G48/edit",
+      "sha256": "802772567819e2a22567f91a797984b7e1ab1074e9244ed3f4c198b9850fa6f1",
+      "bytes": 40977
+    },
+    {
+      "name": "trainer-battles-current.xlsx",
+      "url": "https://docs.google.com/spreadsheets/d/1mwHPt0AMzOJ_hfmDrVZpKP-Hf4eTT0ROhY8Wa7bY7r8/edit",
+      "sha256": "92c36122a397906f9158ecc5b8bc5f6aaecaab30560e1af758ab33a4b6608a77",
+      "bytes": 375995
+    },
+    {
+      "name": "mechanic-changes-current.txt",
+      "url": "https://drive.google.com/file/d/1eT_iu57FVhxJHkjPC0zy5qAkmVxdmD85/view",
+      "sha256": "8d7958fa84ffbf25427baf23f5076c7fb4756fa90c885d00f99e142f11b11c2f",
+      "bytes": 4793
+    },
+    {
+      "name": "move-changes-current.csv",
+      "url": "https://docs.google.com/spreadsheets/d/17Vyr-bXeu9MGMZt_7dttb1OF8cuIcc5LihYmL0DEUu8/edit",
+      "sha256": "ccd4f7a51cfda3db87569ae50f5392de59c59db8bcecf99838db6fa0c82eb5a3",
+      "bytes": 6988
+    },
+    {
+      "name": "item-locations-current.xlsx",
+      "url": "https://docs.google.com/spreadsheets/d/1ForxCI9BczgfLYHEOTd-3Cg4tEa3Nn_VNk5nx-OLedo/edit",
+      "sha256": "95b95d2a4998c69a9a33f2b038278b534d411fe90acbd0025cc2c0588f2295fb",
+      "bytes": 31426
+    },
+    {
+      "name": "pokemon-locations-current.xlsx",
+      "url": "https://docs.google.com/spreadsheets/d/1EdJf2JRe5dLPEX1vWmbeRFeCIh-7hgos-t52JQd1Xb8/edit",
+      "sha256": "27b049c972397d188fdcc2b86bc180c1cab62ba16af2afcd6e2cc011c9b0a2be",
+      "bytes": 106685
+    }
+  ]
+}

@@ -1,0 +1,757 @@
+{
+  "schemaVersion": 1,
+  "version": "1.2.6",
+  "authority": "Native gTrainers party pointers and sizes, checked against current workbook columns. Only the two explicitly requested, unambiguous groups are classified.",
+  "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+  "sourceWorkbookURL": "https://docs.google.com/spreadsheets/d/1mwHPt0AMzOJ_hfmDrVZpKP-Hf4eTT0ROhY8Wa7bY7r8/edit",
+  "sourceWorkbookSHA256": "92c36122a397906f9158ecc5b8bc5f6aaecaab30560e1af758ab33a4b6608a77",
+  "nativeLayout": {
+    "gTrainers": "0x083c2cf8",
+    "trainerStride": 40,
+    "aiFlagsOffset": 0,
+    "partyPointerOffset": 4,
+    "itemsOffset": 8,
+    "trainerClassOffset": 16,
+    "nameOffset": 19,
+    "nameLength": 12,
+    "doubleBattleFlagsOffset": 34,
+    "partySizeOffset": 35,
+    "trainerMonStride": 40,
+    "trainerMonIVOffset": 8
+  },
+  "indexMeaning": "partyFirstIndex is inclusive; partyLastIndex is exclusive and uses the calculator compressed roster order. Native two-owner parties occupy [0,3) and [3,6), padded with empty slots when a trainer has fewer than 3 members.",
+  "selectionRequirements": [
+    "Identify owner from the current acting/fainted native slot; never derive it from display species or trainer name alone.",
+    "Restrict replacement candidates to that owner. Never choose a reserve from the other trainer.",
+    "Exclude both active battlers from reserve candidates, including the surviving partner after a KO.",
+    "Do not apply these partitions to any other double battle without separate native owner evidence."
+  ],
+  "groups": [
+    {
+      "trainer": "Fisherman Elliot & Fisherman Ned",
+      "kind": "two-separate-trainers",
+      "rosterSize": 4,
+      "owners": [
+        {
+          "id": "native-trainer-339",
+          "name": "Fisherman Elliot",
+          "nativeTrainerID": 339,
+          "nativeHeaderOffset": "0x3c61f0",
+          "nativeHeaderSHA256": "7b593bb31b30ef013b5c7ec98ef50e7c54ba9a1e08df06fa65e723b289b9fb79",
+          "nativeHeaderBytes": "27000200a4843a080000000000000000270b37bfe0e0dde3e8ff0000000000000000020200000000",
+          "nativePartyPointerFieldOffset": "0x3c61f4",
+          "nativePartyStart": "0x3a84a4",
+          "nativePartySize": 2,
+          "nativePartySizeFieldOffset": "0x3c6213",
+          "nativePhysicalFirstIndex": 0,
+          "nativePhysicalLastIndex": 3,
+          "partyFirstIndex": 0,
+          "partyLastIndex": 2,
+          "slots": [
+            {
+              "id": "Fisherman Elliot & Fisherman Ned::0x3a84ac",
+              "aliases": [
+                "Seaking (Fisherman Elliot & Fisherman Ned)"
+              ],
+              "nativeIVAnchor": "0x3a84ac"
+            },
+            {
+              "id": "Fisherman Elliot & Fisherman Ned::0x3a84d4",
+              "aliases": [
+                "Lanturn (Fisherman Elliot & Fisherman Ned)"
+              ],
+              "nativeIVAnchor": "0x3a84d4"
+            }
+          ]
+        },
+        {
+          "id": "native-trainer-340",
+          "name": "Fisherman Ned",
+          "nativeTrainerID": 340,
+          "nativeHeaderOffset": "0x3c6218",
+          "nativeHeaderSHA256": "03c9e503b6995a664e4a164252c2681a79030117fe5e40fe9681a571d9375ea5",
+          "nativeHeaderBytes": "27000200f4843a080000000000000000270b37c8d9d8ff0000000000000000000000020200000000",
+          "nativePartyPointerFieldOffset": "0x3c621c",
+          "nativePartyStart": "0x3a84f4",
+          "nativePartySize": 2,
+          "nativePartySizeFieldOffset": "0x3c623b",
+          "nativePhysicalFirstIndex": 3,
+          "nativePhysicalLastIndex": 6,
+          "partyFirstIndex": 2,
+          "partyLastIndex": 4,
+          "slots": [
+            {
+              "id": "Fisherman Elliot & Fisherman Ned::0x3a84fc",
+              "aliases": [
+                "Lapras (Fisherman Elliot & Fisherman Ned)"
+              ],
+              "nativeIVAnchor": "0x3a84fc"
+            },
+            {
+              "id": "Fisherman Elliot & Fisherman Ned::0x3a8524",
+              "aliases": [
+                "Lanturn (Fisherman Elliot & Fisherman Ned [Slot 2])"
+              ],
+              "nativeIVAnchor": "0x3a8524"
+            }
+          ]
+        }
+      ],
+      "documentation": {
+        "sheet": "Brawly Split",
+        "nameCell": "B105",
+        "ownerColumns": [
+          [
+            "B",
+            "C"
+          ],
+          [
+            "E",
+            "F"
+          ]
+        ],
+        "speciesRow": 107,
+        "lastMovesRow": 115
+      }
+    },
+    {
+      "trainer": "Triathlete Benjamin & Triathlete Alyssa",
+      "kind": "two-separate-trainers",
+      "rosterSize": 5,
+      "owners": [
+        {
+          "id": "native-trainer-353",
+          "name": "Triathlete Benjamin",
+          "nativeTrainerID": 353,
+          "nativeHeaderOffset": "0x3c6420",
+          "nativeHeaderSHA256": "03109831481111ad593e8491bec88ea22bde95cd089ac37b7c38b18f73ac6477",
+          "nativeHeaderBytes": "270002006ca13a080000000000000000280038bcd9e2ded5e1dde2ff000000000000020300000000",
+          "nativePartyPointerFieldOffset": "0x3c6424",
+          "nativePartyStart": "0x3aa16c",
+          "nativePartySize": 3,
+          "nativePartySizeFieldOffset": "0x3c6443",
+          "nativePhysicalFirstIndex": 0,
+          "nativePhysicalLastIndex": 3,
+          "partyFirstIndex": 0,
+          "partyLastIndex": 3,
+          "slots": [
+            {
+              "id": "Triathlete Benjamin & Triathlete Alyssa::0x3aa174",
+              "aliases": [
+                "Eiscue (Triathlete Benjamin & Triathlete Alyssa)",
+                "Eiscue-Noice (Triathlete Benjamin & Triathlete Alyssa)"
+              ],
+              "nativeIVAnchor": "0x3aa174"
+            },
+            {
+              "id": "Triathlete Benjamin & Triathlete Alyssa::0x3aa19c",
+              "aliases": [
+                "Delibird (Triathlete Benjamin & Triathlete Alyssa)"
+              ],
+              "nativeIVAnchor": "0x3aa19c"
+            },
+            {
+              "id": "Triathlete Benjamin & Triathlete Alyssa::0x3aa1c4",
+              "aliases": [
+                "Raichu (Triathlete Benjamin & Triathlete Alyssa)",
+                "Raichu-Mega-X (Triathlete Benjamin & Triathlete Alyssa)"
+              ],
+              "nativeIVAnchor": "0x3aa1c4"
+            }
+          ]
+        },
+        {
+          "id": "native-trainer-701",
+          "name": "Triathlete Alyssa",
+          "nativeTrainerID": 701,
+          "nativeHeaderOffset": "0x3c9a80",
+          "nativeHeaderSHA256": "0c879cf1b55a78be93e8a0ec8a907e8c2e2ea5e918a35e9fe6ba9bb1fc0a4f5e",
+          "nativeHeaderBytes": "27000200e4a13a080000000000000000288139bbe0ede7e7d5ff0000000000000000020200000000",
+          "nativePartyPointerFieldOffset": "0x3c9a84",
+          "nativePartyStart": "0x3aa1e4",
+          "nativePartySize": 2,
+          "nativePartySizeFieldOffset": "0x3c9aa3",
+          "nativePhysicalFirstIndex": 3,
+          "nativePhysicalLastIndex": 6,
+          "partyFirstIndex": 3,
+          "partyLastIndex": 5,
+          "slots": [
+            {
+              "id": "Triathlete Benjamin & Triathlete Alyssa::0x3aa1ec",
+              "aliases": [
+                "Ninetales-Alola (Triathlete Benjamin & Triathlete Alyssa)"
+              ],
+              "nativeIVAnchor": "0x3aa1ec"
+            },
+            {
+              "id": "Triathlete Benjamin & Triathlete Alyssa::0x3aa214",
+              "aliases": [
+                "Raichu-Mega-Y (Triathlete Benjamin & Triathlete Alyssa)"
+              ],
+              "nativeIVAnchor": "0x3aa214"
+            }
+          ]
+        }
+      ],
+      "documentation": {
+        "sheet": "Norman Split",
+        "nameCell": "B92",
+        "ownerColumns": [
+          [
+            "B",
+            "C",
+            "D"
+          ],
+          [
+            "E",
+            "F"
+          ]
+        ],
+        "speciesRow": 94,
+        "lastMovesRow": 102
+      }
+    }
+  ],
+  "nativeProof": [
+    {
+      "label": "trainerFlagsAndStride",
+      "offset": "0x15df18",
+      "length": 24,
+      "sha256": "d3eb0c6cc80c2054ff3d9ffe9a29b8acba890e27b6f398b2851dde1f7806cd5b",
+      "bytes": "1c48006803691c4a1c48018888004018c000801800681861",
+      "claim": "Load gTrainers + trainerID*40, read AI flags from +0; literal base at0x15df90.",
+      "thumb": [
+        {
+          "address": "0x815df18",
+          "mnemonic": "ldr",
+          "operands": "r0, [pc, #0x70]"
+        },
+        {
+          "address": "0x815df1a",
+          "mnemonic": "ldr",
+          "operands": "r0, [r0]"
+        },
+        {
+          "address": "0x815df1c",
+          "mnemonic": "ldr",
+          "operands": "r3, [r0, #0x10]"
+        },
+        {
+          "address": "0x815df1e",
+          "mnemonic": "ldr",
+          "operands": "r2, [pc, #0x70]"
+        },
+        {
+          "address": "0x815df20",
+          "mnemonic": "ldr",
+          "operands": "r0, [pc, #0x70]"
+        },
+        {
+          "address": "0x815df22",
+          "mnemonic": "ldrh",
+          "operands": "r1, [r0]"
+        },
+        {
+          "address": "0x815df24",
+          "mnemonic": "lsls",
+          "operands": "r0, r1, #2"
+        },
+        {
+          "address": "0x815df26",
+          "mnemonic": "adds",
+          "operands": "r0, r0, r1"
+        },
+        {
+          "address": "0x815df28",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #3"
+        },
+        {
+          "address": "0x815df2a",
+          "mnemonic": "adds",
+          "operands": "r0, r0, r2"
+        },
+        {
+          "address": "0x815df2c",
+          "mnemonic": "ldr",
+          "operands": "r0, [r0]"
+        },
+        {
+          "address": "0x815df2e",
+          "mnemonic": "str",
+          "operands": "r0, [r3, #0x10]"
+        }
+      ]
+    },
+    {
+      "label": "trainerDoubleBattleBit",
+      "offset": "0x15df60",
+      "length": 24,
+      "sha256": "903cac7bf6fa7f06085657632076754eda6b5df0ea02ea7e54894966b2d7a51d",
+      "bytes": "0b4a0c48018888004018c000801822300078c007002806d0",
+      "claim": "Same trainer stride/base, inspect bit0 at offset0x22 (34).",
+      "thumb": [
+        {
+          "address": "0x815df60",
+          "mnemonic": "ldr",
+          "operands": "r2, [pc, #0x2c]"
+        },
+        {
+          "address": "0x815df62",
+          "mnemonic": "ldr",
+          "operands": "r0, [pc, #0x30]"
+        },
+        {
+          "address": "0x815df64",
+          "mnemonic": "ldrh",
+          "operands": "r1, [r0]"
+        },
+        {
+          "address": "0x815df66",
+          "mnemonic": "lsls",
+          "operands": "r0, r1, #2"
+        },
+        {
+          "address": "0x815df68",
+          "mnemonic": "adds",
+          "operands": "r0, r0, r1"
+        },
+        {
+          "address": "0x815df6a",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #3"
+        },
+        {
+          "address": "0x815df6c",
+          "mnemonic": "adds",
+          "operands": "r0, r0, r2"
+        },
+        {
+          "address": "0x815df6e",
+          "mnemonic": "adds",
+          "operands": "r0, #0x22"
+        },
+        {
+          "address": "0x815df70",
+          "mnemonic": "ldrb",
+          "operands": "r0, [r0]"
+        },
+        {
+          "address": "0x815df72",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #0x1f"
+        },
+        {
+          "address": "0x815df74",
+          "mnemonic": "cmp",
+          "operands": "r0, #0"
+        },
+        {
+          "address": "0x815df76",
+          "mnemonic": "beq",
+          "operands": "#0x815df86"
+        }
+      ]
+    },
+    {
+      "label": "trainerPartyCountAndPointer",
+      "offset": "0xd62f8",
+      "length": 96,
+      "sha256": "c82b1739cdb421f5aa0eadf506b96c06bc90af7d94560ef3625ca323feee3edc",
+      "bytes": "30b50004000c09060b0e144d81000918cc006019021c233212789a4200d2131c0021223000784008012812d1281d20180468002299420cd290008018c0000019807e08180006010e501c0006020e9a42f2d3081c30bc02bc08470000f82c3c08",
+      "claim": "Read party size at offset0x23 (35); load party pointer at +4; index40-byte TrainerMon and read its level at+0x1a.",
+      "thumb": [
+        {
+          "address": "0x80d62f8",
+          "mnemonic": "push",
+          "operands": "{r4, r5, lr}"
+        },
+        {
+          "address": "0x80d62fa",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #0x10"
+        },
+        {
+          "address": "0x80d62fc",
+          "mnemonic": "lsrs",
+          "operands": "r0, r0, #0x10"
+        },
+        {
+          "address": "0x80d62fe",
+          "mnemonic": "lsls",
+          "operands": "r1, r1, #0x18"
+        },
+        {
+          "address": "0x80d6300",
+          "mnemonic": "lsrs",
+          "operands": "r3, r1, #0x18"
+        },
+        {
+          "address": "0x80d6302",
+          "mnemonic": "ldr",
+          "operands": "r5, [pc, #0x50]"
+        },
+        {
+          "address": "0x80d6304",
+          "mnemonic": "lsls",
+          "operands": "r1, r0, #2"
+        },
+        {
+          "address": "0x80d6306",
+          "mnemonic": "adds",
+          "operands": "r1, r1, r0"
+        },
+        {
+          "address": "0x80d6308",
+          "mnemonic": "lsls",
+          "operands": "r4, r1, #3"
+        },
+        {
+          "address": "0x80d630a",
+          "mnemonic": "adds",
+          "operands": "r0, r4, r5"
+        },
+        {
+          "address": "0x80d630c",
+          "mnemonic": "adds",
+          "operands": "r2, r0, #0"
+        },
+        {
+          "address": "0x80d630e",
+          "mnemonic": "adds",
+          "operands": "r2, #0x23"
+        },
+        {
+          "address": "0x80d6310",
+          "mnemonic": "ldrb",
+          "operands": "r2, [r2]"
+        },
+        {
+          "address": "0x80d6312",
+          "mnemonic": "cmp",
+          "operands": "r2, r3"
+        },
+        {
+          "address": "0x80d6314",
+          "mnemonic": "bhs",
+          "operands": "#0x80d6318"
+        },
+        {
+          "address": "0x80d6316",
+          "mnemonic": "adds",
+          "operands": "r3, r2, #0"
+        },
+        {
+          "address": "0x80d6318",
+          "mnemonic": "movs",
+          "operands": "r1, #0"
+        },
+        {
+          "address": "0x80d631a",
+          "mnemonic": "adds",
+          "operands": "r0, #0x22"
+        },
+        {
+          "address": "0x80d631c",
+          "mnemonic": "ldrb",
+          "operands": "r0, [r0]"
+        },
+        {
+          "address": "0x80d631e",
+          "mnemonic": "lsrs",
+          "operands": "r0, r0, #1"
+        },
+        {
+          "address": "0x80d6320",
+          "mnemonic": "cmp",
+          "operands": "r0, #1"
+        },
+        {
+          "address": "0x80d6322",
+          "mnemonic": "bne",
+          "operands": "#0x80d634a"
+        },
+        {
+          "address": "0x80d6324",
+          "mnemonic": "adds",
+          "operands": "r0, r5, #4"
+        },
+        {
+          "address": "0x80d6326",
+          "mnemonic": "adds",
+          "operands": "r0, r4, r0"
+        },
+        {
+          "address": "0x80d6328",
+          "mnemonic": "ldr",
+          "operands": "r4, [r0]"
+        },
+        {
+          "address": "0x80d632a",
+          "mnemonic": "movs",
+          "operands": "r2, #0"
+        },
+        {
+          "address": "0x80d632c",
+          "mnemonic": "cmp",
+          "operands": "r1, r3"
+        },
+        {
+          "address": "0x80d632e",
+          "mnemonic": "bhs",
+          "operands": "#0x80d634a"
+        },
+        {
+          "address": "0x80d6330",
+          "mnemonic": "lsls",
+          "operands": "r0, r2, #2"
+        },
+        {
+          "address": "0x80d6332",
+          "mnemonic": "adds",
+          "operands": "r0, r0, r2"
+        },
+        {
+          "address": "0x80d6334",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #3"
+        },
+        {
+          "address": "0x80d6336",
+          "mnemonic": "adds",
+          "operands": "r0, r0, r4"
+        },
+        {
+          "address": "0x80d6338",
+          "mnemonic": "ldrb",
+          "operands": "r0, [r0, #0x1a]"
+        },
+        {
+          "address": "0x80d633a",
+          "mnemonic": "adds",
+          "operands": "r0, r1, r0"
+        },
+        {
+          "address": "0x80d633c",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #0x18"
+        },
+        {
+          "address": "0x80d633e",
+          "mnemonic": "lsrs",
+          "operands": "r1, r0, #0x18"
+        },
+        {
+          "address": "0x80d6340",
+          "mnemonic": "adds",
+          "operands": "r0, r2, #1"
+        },
+        {
+          "address": "0x80d6342",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #0x18"
+        },
+        {
+          "address": "0x80d6344",
+          "mnemonic": "lsrs",
+          "operands": "r2, r0, #0x18"
+        },
+        {
+          "address": "0x80d6346",
+          "mnemonic": "cmp",
+          "operands": "r2, r3"
+        },
+        {
+          "address": "0x80d6348",
+          "mnemonic": "blo",
+          "operands": "#0x80d6330"
+        },
+        {
+          "address": "0x80d634a",
+          "mnemonic": "adds",
+          "operands": "r0, r1, #0"
+        },
+        {
+          "address": "0x80d634c",
+          "mnemonic": "pop",
+          "operands": "{r4, r5}"
+        },
+        {
+          "address": "0x80d634e",
+          "mnemonic": "pop",
+          "operands": "{r1}"
+        },
+        {
+          "address": "0x80d6350",
+          "mnemonic": "bx",
+          "operands": "r1"
+        },
+        {
+          "address": "0x80d6352",
+          "mnemonic": "movs",
+          "operands": "r0, r0"
+        },
+        {
+          "address": "0x80d6354",
+          "mnemonic": "cmp",
+          "operands": "r4, #0xf8"
+        },
+        {
+          "address": "0x80d6356",
+          "mnemonic": "lsrs",
+          "operands": "r4, r7, #0x20"
+        }
+      ]
+    },
+    {
+      "label": "GetAIPartyIndexes",
+      "offset": "0x81e60",
+      "length": 108,
+      "sha256": "5054bda6ed2291fe0357670378a926126fea9ebdd6a0bfb155757b2407ef1a93",
+      "bytes": "30b5051c0b1c141c094801688022d2031140021c002911d006480188064881420cd101202840002808d00020186017e0b44c000230960102ffff000011680548014000290bd002202840002804d11860032006e00080c0000320186000e019600620206030bc01bc00470000",
+      "claim": "For native two-owner/multi flags, left flank receives [0,3), right flank[3,6); ordinary/shared party receives[0,6). Includes two-vs-one exception.",
+      "thumb": [
+        {
+          "address": "0x8081e60",
+          "mnemonic": "push",
+          "operands": "{r4, r5, lr}"
+        },
+        {
+          "address": "0x8081e62",
+          "mnemonic": "adds",
+          "operands": "r5, r0, #0"
+        },
+        {
+          "address": "0x8081e64",
+          "mnemonic": "adds",
+          "operands": "r3, r1, #0"
+        },
+        {
+          "address": "0x8081e66",
+          "mnemonic": "adds",
+          "operands": "r4, r2, #0"
+        },
+        {
+          "address": "0x8081e68",
+          "mnemonic": "ldr",
+          "operands": "r0, [pc, #0x24]"
+        },
+        {
+          "address": "0x8081e6a",
+          "mnemonic": "ldr",
+          "operands": "r1, [r0]"
+        },
+        {
+          "address": "0x8081e6c",
+          "mnemonic": "movs",
+          "operands": "r2, #0x80"
+        },
+        {
+          "address": "0x8081e6e",
+          "mnemonic": "lsls",
+          "operands": "r2, r2, #0xf"
+        },
+        {
+          "address": "0x8081e70",
+          "mnemonic": "ands",
+          "operands": "r1, r2"
+        },
+        {
+          "address": "0x8081e72",
+          "mnemonic": "adds",
+          "operands": "r2, r0, #0"
+        },
+        {
+          "address": "0x8081e74",
+          "mnemonic": "cmp",
+          "operands": "r1, #0"
+        },
+        {
+          "address": "0x8081e76",
+          "mnemonic": "beq",
+          "operands": "#0x8081e9c"
+        },
+        {
+          "address": "0x8081e78",
+          "mnemonic": "ldr",
+          "operands": "r0, [pc, #0x18]"
+        },
+        {
+          "address": "0x8081e7a",
+          "mnemonic": "ldrh",
+          "operands": "r1, [r0]"
+        },
+        {
+          "address": "0x8081e7c",
+          "mnemonic": "ldr",
+          "operands": "r0, [pc, #0x18]"
+        },
+        {
+          "address": "0x8081e7e",
+          "mnemonic": "cmp",
+          "operands": "r1, r0"
+        },
+        {
+          "address": "0x8081e80",
+          "mnemonic": "bne",
+          "operands": "#0x8081e9c"
+        },
+        {
+          "address": "0x8081e82",
+          "mnemonic": "movs",
+          "operands": "r0, #1"
+        },
+        {
+          "address": "0x8081e84",
+          "mnemonic": "ands",
+          "operands": "r0, r5"
+        },
+        {
+          "address": "0x8081e86",
+          "mnemonic": "cmp",
+          "operands": "r0, #0"
+        },
+        {
+          "address": "0x8081e88",
+          "mnemonic": "beq",
+          "operands": "#0x8081e9c"
+        },
+        {
+          "address": "0x8081e8a",
+          "mnemonic": "movs",
+          "operands": "r0, #0"
+        },
+        {
+          "address": "0x8081e8c",
+          "mnemonic": "str",
+          "operands": "r0, [r3]"
+        },
+        {
+          "address": "0x8081e8e",
+          "mnemonic": "b",
+          "operands": "#0x8081ec0"
+        },
+        {
+          "address": "0x8081e90",
+          "mnemonic": "ldr",
+          "operands": "r4, [pc, #0x2d0]"
+        },
+        {
+          "address": "0x8081e92",
+          "mnemonic": "lsls",
+          "operands": "r0, r0, #8"
+        },
+        {
+          "address": "0x8081e94",
+          "mnemonic": "str",
+          "operands": "r6, [sp, #0xc0]"
+        },
+        {
+          "address": "0x8081e96",
+          "mnemonic": "lsls",
+          "operands": "r1, r0, #8"
+        }
+      ]
+    }
+  ]
+}

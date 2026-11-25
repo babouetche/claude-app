@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "gameVersion": "1.2.6",
+  "baselineVersion": "pre-1.2.5",
+  "baselineFile": "rules-family-reference.json",
+  "baselineSHA256": "7c8dba90ec850cc1ea826dd95146435d1e6df0c0b8af7ca8ad51225912b63242",
+  "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+  "provenance": "Targeted native dispatch/Thumb evidence in verification/update126-ai-native.json and explicit assertions in tests/update126-ai.test.cjs. Historical1263-case fixture is retained unchanged. These45 changed snapshots reflect reviewed1.2.5/1.2.6 rule/trace changes;1218 other snapshots must remain identical.",
+  "byMove": {
+    "Feint": 2,
+    "Upper Hand": 8,
+    "Stone Axe": 5,
+    "Ceaseless Edge": 6,
+    "Electro Shot": 8,
+    "Sky Attack": 2,
+    "Freeze Shock": 2,
+    "Ice Burn": 2,
+    "King's Shield": 8,
+    "Shell Smash": 2
+  },
+  "cases": [
+    {
+      "id": "target/Feint/1",
+      "move": "Feint",
+      "baselineDigest": "f1023e17a3ffb0deebf39a36b0968c1adef07aa2fcd290c685f9ef1ee1c080fd",
+      "digest": "d140fe397c3d9da72bf8c7b2bef96cb99a9f5f7d16ff6cfee2f9bae50a392085"
+    },
+    {
+      "id": "target/Feint/2",
+      "move": "Feint",
+      "baselineDigest": "f1023e17a3ffb0deebf39a36b0968c1adef07aa2fcd290c685f9ef1ee1c080fd",
+      "digest": "d140fe397c3d9da72bf8c7b2bef96cb99a9f5f7d16ff6cfee2f9bae50a392085"
+    },
+    {
+      "id": "singles/Upper Hand/0",
+      "move": "Upper Hand",
+      "baselineDigest": "4fdb5f5779da25a1c132a4720b4dc45d31a7c2db6acbf017c0bdfdfbfaebe602",
+      "digest": "0d309854fc98705fccf3a18b56546f68775ad656dca496786b90b58248e2f1eb"
+    },
+    {
+      "id": "target/Upper Hand/0",
+      "move": "Upper Hand",
+      "baselineDigest": "b75c6a4a8ae4f7b20908777185558f37f86daf120c91958abfe5a01a84c24c80",
+      "digest": "546a256c0d6b2f30a257cf569b1bb3b6875135f2cc9e9a498df287fcd3b67f16"
+    },
+    {
+      "id": "singles/Upper Hand/1",
+      "move": "Upper Hand",
+      "baselineDigest": "201d142ba0f4cfde7762ed8a8b5a1ccf981b534a2cb51ac2b888dd3cd5504aa1",
+      "digest": "26e6b222b06f645f9b22eecadc52104add3c9e3c12f2f48a1b614b47b7e3fbbe"
+    },
+    {
+      "id": "target/Upper Hand/1",
+      "move": "Upper Hand",
+      "baselineDigest": "5288693036405e235b32f9bf9d3ad58ab42660cadfa8a1c54de125865cdf7feb",
+      "digest": "0e046f97f3d7783a29bbb38abcc19783e22e2d3fbbbef404ca05a788054403ea"
+    },
+    {
+      "id": "singles/Upper Hand/2",
+      "move": "Upper Hand",
+      "baselineDigest": "0d144930e746fb7fd284ddcea6eb2f9d7c28f68d1dd1d2f371719e52acd4702b",
+      "digest": "8f5739a1d21eda208d6607930033127a352b21bfc4cb8092ade7f2c5bdf81325"
+    },
+    {
+      "id": "target/Upper Hand/2",
+      "move": "Upper Hand",
+      "baselineDigest": "11ae01b504a59a3003fda8981e25f479fbb6c09f47bc003bcd7664614e6ed3c6",
+      "digest": "9a5bfc86b47533fa92fcc7e4e4bd713a81d86d4ea0d184a44f3a6f819a19c58e"
+    },
+    {
+      "id": "singles/Upper Hand/3",
+      "move": "Upper Hand",
+      "baselineDigest": "f65903532af7fd124dcacbcb5b7c3b6854dd999e6d438bf329ba4ff2e9b51534",
+      "digest": "838753fbd64e4010fd9f7760b7e68f63f721a826b8c55e02adb039f3c3046896"
+    },
+    {
+      "id": "target/Upper Hand/3",
+      "move": "Upper Hand",
+      "baselineDigest": "b75c6a4a8ae4f7b20908777185558f37f86daf120c91958abfe5a01a84c24c80",
+      "digest": "546a256c0d6b2f30a257cf569b1bb3b6875135f2cc9e9a498df287fcd3b67f16"
+    },
+    {
+      "id": "singles/Stone Axe/0",
+      "move": "Stone Axe",
+      "baselineDigest": "60fc47d38056756ad021c89bea1c24a9e2bc946c6e2679c99cdd5634bb9de445",
+      "digest": "3102701fe698f5fddfd6d9992707f9d816819ee557665ac1cfa186c3923e95fb"
+    },
+    {
+      "id": "target/Stone Axe/0",
+      "move": "Stone Axe",
+      "baselineDigest": "0b96d1ce65b6972d38e846090012ec52d99e7e2071fc8b43bb0a4503a45802aa",
+      "digest": "07f6b0db21affcc526693d63639ab87e79c9ebddbfbff172d084f477dc055d9d"
+    },
+    {
+      "id": "singles/Stone Axe/1",
+      "move": "Stone Axe",
+      "baselineDigest": "8d96f827cca39fd06174fd7c9e72435c67771b7f42bf14abc33af2ad2db6dad1",
+      "digest": "e86201761ddf2e191c3a713e346794d7390f37a266add2b3bb6d72811fa8ea89"
+    },
+    {
+      "id": "target/Stone Axe/1",
+      "move": "Stone Axe",
+      "baselineDigest": "8aa952ff220621d59d130073678b64586e798bfb675da76847095f5b76d266d5",
+      "digest": "fb6c1882a53f1191ff0fcc671118e4cf03746f8647c45dd01456ecff5ea38ed6"
+    },
+    {
+      "id": "target/Stone Axe/3",
+      "move": "Stone Axe",
+      "baselineDigest": "5eeedb68580e98d581c9dee0494c9a770f9bfdb23b270064ed33394a7169720b",
+      "digest": "4a92015b993ed232e9d1db4ba68813a1cb791f673bc8c0223997a02b28afc06d"
+    },
+    {
+      "id": "singles/Ceaseless Edge/0",
+      "move": "Ceaseless Edge",
+      "baselineDigest": "64b107d22c060a8a0b465cd2d3bd68df5b35026f1e572738a5117d4f888da399",
+      "digest": "aacabd510b0e38b552bc676cc1bf55c77e1ac94e5858d448ad266967fa82c1a0"
+    },
+    {
+      "id": "target/Ceaseless Edge/0",
+      "move": "Ceaseless Edge",
+      "baselineDigest": "0b96d1ce65b6972d38e846090012ec52d99e7e2071fc8b43bb0a4503a45802aa",
+      "digest": "ff4afdf132aa8dd00a53320573f15f460f6d2be7def0eb78b9a171aa5b64e25a"
+    },
+    {
+      "id": "singles/Ceaseless Edge/1",
+      "move": "Ceaseless Edge",
+      "baselineDigest": "71a4fa23c1bd35843f94fb407b59786786ba6bb253a5cdadaccac6fd05eeca4d",
+      "digest": "a9b5ea818532093f28520081c2e852275a0d547211925d75df46fcd36aa0adff"
+    },
+    {
+      "id": "target/Ceaseless Edge/1",
+      "move": "Ceaseless Edge",
+      "baselineDigest": "ed8e8e35b56f3ecb91a1347f645d55dd70410aadb7f9f1f7bc8c8d35d9b61184",
+      "digest": "156218e486ad8a850800035cf128ca6d2c8a1e8a40301814ffadd74ed3963734"
+    },
+    {
+      "id": "singles/Ceaseless Edge/3",
+      "move": "Ceaseless Edge",
+      "baselineDigest": "9d9ae1eaf142927610e5f5962ec534f727d322e730391c8c76ae08f8a75e50fe",
+      "digest": "402e663f3aaefffa92ae440ae46b7c58305ce0a763d50e4f3778b0190351ef85"
+    },
+    {
+      "id": "target/Ceaseless Edge/3",
+      "move": "Ceaseless Edge",
+      "baselineDigest": "77802d1a113f3aeff0a803bf822c22afbe75acf9c15be10db8dc2ed9ea65e6b2",
+      "digest": "5dd4073207165382b0f6c9ec2f924841d6c8296c181f94c3fb3aff37cbafb607"
+    },
+    {
+      "id": "singles/Electro Shot/0",
+      "move": "Electro Shot",
+      "baselineDigest": "e8691dd5b0732330deeefd3250ba53bb50b50711ff81ae6b4bdd436208ef6b98",
+      "digest": "f040819cafedddbba8e7b891636b036a8746f63109725152ab2a981b4d5d3c43"
+    },
+    {
+      "id": "target/Electro Shot/0",
+      "move": "Electro Shot",
+      "baselineDigest": "2c5e2056d0db486ae12efccb5ee2c651af5c5fa95702c4f2a9e8dddda115c30c",
+      "digest": "d63fca0d2dbd45ee6b2b5665519a4f1677d17dea3885e83a8887931c850e8070"
+    },
+    {
+      "id": "singles/Electro Shot/1",
+      "move": "Electro Shot",
+      "baselineDigest": "ed0c7cb95c7ab5741cb23cfb09d90e8916ebef2edd5f7ffea119eb7d18b4e503",
+      "digest": "a2663f978c90b2e6ac51a937d7e5e061e97a01900ef7951d47067114423ebec3"
+    },
+    {
+      "id": "target/Electro Shot/1",
+      "move": "Electro Shot",
+      "baselineDigest": "6d7d9be1bea786e579975d907bc4ba53fdd5a02d07f86cf726a13b8cabf4ce2d",
+      "digest": "a0e4a7de94955128dec20a4dca4fda6be21d9f92f61148cc3d2688da12249b1a"
+    },
+    {
+      "id": "singles/Electro Shot/2",
+      "move": "Electro Shot",
+      "baselineDigest": "ed0c7cb95c7ab5741cb23cfb09d90e8916ebef2edd5f7ffea119eb7d18b4e503",
+      "digest": "a2663f978c90b2e6ac51a937d7e5e061e97a01900ef7951d47067114423ebec3"
+    },
+    {
+      "id": "target/Electro Shot/2",
+      "move": "Electro Shot",
+      "baselineDigest": "6d7d9be1bea786e579975d907bc4ba53fdd5a02d07f86cf726a13b8cabf4ce2d",
+      "digest": "a0e4a7de94955128dec20a4dca4fda6be21d9f92f61148cc3d2688da12249b1a"
+    },
+    {
+      "id": "singles/Electro Shot/3",
+      "move": "Electro Shot",
+      "baselineDigest": "ab21531d7a203a7c3286a4ceedc6f8d8436c54ba25f07d9e6d42345ed0e7abb6",
+      "digest": "4dd3ff15497363d1d6dddc7d2332e2043747757b6e26fec47f7d1a7c250380b5"
+    },
+    {
+      "id": "target/Electro Shot/3",
+      "move": "Electro Shot",
+      "baselineDigest": "2c5e2056d0db486ae12efccb5ee2c651af5c5fa95702c4f2a9e8dddda115c30c",
+      "digest": "d63fca0d2dbd45ee6b2b5665519a4f1677d17dea3885e83a8887931c850e8070"
+    },
+    {
+      "id": "singles/Sky Attack/2",
+      "move": "Sky Attack",
+      "baselineDigest": "1aa701919f228a3977393d67c9ba66cc60571822d96837b97f497f34e3c9a81b",
+      "digest": "74da96a1e729352b75ed93b13b5c0341737d0bb385da60efe8bbd05fe7929200"
+    },
+    {
+      "id": "target/Sky Attack/2",
+      "move": "Sky Attack",
+      "baselineDigest": "0072def150a1708493785f036059d41e3e5806579f7c082d41dd456ce7701685",
+      "digest": "fdf707a94a283744c64ecaea8fde5ec03d9fb2be4c7fd1f3897084d0c1b92580"
+    },
+    {
+      "id": "singles/Freeze Shock/2",
+      "move": "Freeze Shock",
+      "baselineDigest": "1bb288b1e5f97f45924b5afd4ae4ed512b91ec3b906e96a18fc28429289ed1c9",
+      "digest": "2165a35f3e5147cd78744ae6eec4909ef82be2fae92752927ec32906b7bcb5dd"
+    },
+    {
+      "id": "target/Freeze Shock/2",
+      "move": "Freeze Shock",
+      "baselineDigest": "0072def150a1708493785f036059d41e3e5806579f7c082d41dd456ce7701685",
+      "digest": "fdf707a94a283744c64ecaea8fde5ec03d9fb2be4c7fd1f3897084d0c1b92580"
+    },
+    {
+      "id": "singles/Ice Burn/2",
+      "move": "Ice Burn",
+      "baselineDigest": "aed244893978cf885dec74788135b06abb5f9a47c22637136f452cd1bcbcf877",
+      "digest": "18355aaefabc2cca108c2967d96cca637460eba290b8deea90fb004fee32cdff"
+    },
+    {
+      "id": "target/Ice Burn/2",
+      "move": "Ice Burn",
+      "baselineDigest": "0072def150a1708493785f036059d41e3e5806579f7c082d41dd456ce7701685",
+      "digest": "fdf707a94a283744c64ecaea8fde5ec03d9fb2be4c7fd1f3897084d0c1b92580"
+    },
+    {
+      "id": "singles/King's Shield/0",
+      "move": "King's Shield",
+      "baselineDigest": "0716723dae814d288d0a87198106ff5277b3b9984d289652827b01b984733937",
+      "digest": "4605ffed85856c8c696b5042ecd7ba0bb288afff3d643f23445ab21ce99562de"
+    },
+    {
+      "id": "target/King's Shield/0",
+      "move": "King's Shield",
+      "baselineDigest": "13f8ea3444bdd84d519c0c03dfe4f1ca7baf1d16c7c09d07fe984030619ccb85",
+      "digest": "1fca3ed865253312c04f39a4c7bbb945b5a257a587ceb0619bba4886c44ad1c7"
+    },
+    {
+      "id": "singles/King's Shield/1",
+      "move": "King's Shield",
+      "baselineDigest": "0ef4a87d9bbf407f3b7727008c94835bb7bb0f93b6fb12618428c12e46ae9d33",
+      "digest": "18b330d117a7720ef8f5f6990146fe5c16e32dadce8269e44b6a55d1d0f92074"
+    },
+    {
+      "id": "target/King's Shield/1",
+      "move": "King's Shield",
+      "baselineDigest": "3096a3531fa00462997cf7183dd6d3e061b2c0cc5544e7a84903c1f86ca6b8f2",
+      "digest": "b0d0b4d16e3159028b9788d9624f412c60d1e863640269290b5c670035afc0f4"
+    },
+    {
+      "id": "singles/King's Shield/2",
+      "move": "King's Shield",
+      "baselineDigest": "5189ffb637e467babac148ef2cc7cc6470b0c87f5cc978ad911b2d893f089680",
+      "digest": "4876f2147774dac7236b472387653ae88f3a906def3f941caa14f2454723ea0c"
+    },
+    {
+      "id": "target/King's Shield/2",
+      "move": "King's Shield",
+      "baselineDigest": "2a00421f324c0ded67eb153243118dd3249a4e08ca35248920f54381d56f315e",
+      "digest": "a6faff830147e8fa1a7a2d6a75a2438b84621cc01497b12e1320ea328f2a0b6e"
+    },
+    {
+      "id": "singles/King's Shield/3",
+      "move": "King's Shield",
+      "baselineDigest": "9def671ec5b8d7904cfa7c9111d435ec59e59cde360e3f66b2cb164fa1c5a481",
+      "digest": "045e5861a7d5b51f53231174427a9e952eba95950ad2dee1cca43e3c29c24b2e"
+    },
+    {
+      "id": "target/King's Shield/3",
+      "move": "King's Shield",
+      "baselineDigest": "1ca771c3f06f721da79aad041cec9361e2bea4f98f6e0ccc82257adcbda8a64e",
+      "digest": "4bb28fc5429bfeab969d4641de0d23e6cc5dcaf40b783945bfafaa6782f9ef71"
+    },
+    {
+      "id": "singles/Shell Smash/1",
+      "move": "Shell Smash",
+      "baselineDigest": "127dffeffdfea737bd8e63fe850112819161f2985d68545748ab48639d3f7363",
+      "digest": "bf3f1e12129e9f6fa9444268c79e384f28bfe3f2df1633b996a3af5448be06bd"
+    },
+    {
+      "id": "target/Shell Smash/1",
+      "move": "Shell Smash",
+      "baselineDigest": "cdea406d793aba75a5b8ed1ce9eb496ab90820bcdf472fea50f17b1c1d5f138c",
+      "digest": "30790ea95a8244bc3a0c4a4d463844b642088a07cb814375db3e6c4afdcf2295"
+    }
+  ]
+}

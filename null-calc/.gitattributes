@@ -1,0 +1,3 @@
+# Preserve exact source/fixture bytes: protected data hashes must also pass
+# after cloning or downloading GitHub's source archive on any platform.
+* -text

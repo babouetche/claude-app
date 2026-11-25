@@ -1,0 +1,160 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "checkedAt": "2026-11-02T21:05:51.109Z",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "trainerDataSHA256": "5750c9d5eb796deea5ded6d40b8932a3f9dddf4a37c03af0125d08650f865826",
+  "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+  "originalObservationROM": "a6f4f3f9d9b68515c70b134d6f0e79b3fd22e00c2f1468dbafa5b7529d98dbf4",
+  "battles": [
+    {
+      "id": "joey-chesnaught",
+      "observedEntrant": "Heliolisk",
+      "playerHP": 126,
+      "scores": [
+        {
+          "name": "Heliolisk",
+          "score": 1,
+          "probability": 1,
+          "scoreDamage": {
+            "outgoing": 37,
+            "incoming": 146,
+            "outgoingMove": "Swift",
+            "incomingMove": "Brick Break",
+            "hitsToKO": 4,
+            "hitsToBeKOed": 1
+          }
+        },
+        {
+          "name": "Clodsire",
+          "score": 0,
+          "probability": 0,
+          "scoreDamage": {
+            "outgoing": 30,
+            "incoming": 58,
+            "outgoingMove": "Poison Tail",
+            "incomingMove": "Grassy Glide",
+            "hitsToKO": 5,
+            "hitsToBeKOed": 3
+          }
+        },
+        {
+          "name": "Comfey",
+          "score": 1,
+          "probability": 0,
+          "scoreDamage": {
+            "outgoing": 56,
+            "incoming": 45,
+            "outgoingMove": "Draining Kiss",
+            "incomingMove": "Grassy Glide",
+            "hitsToKO": 3,
+            "hitsToBeKOed": 2
+          }
+        }
+      ],
+      "damageUnchanged": true,
+      "strictModeConsistent": true
+    },
+    {
+      "id": "ivan-boltund-rain",
+      "observedEntrant": "Castform",
+      "playerHP": 109,
+      "scores": [
+        {
+          "name": "Castform",
+          "score": 2,
+          "probability": 1,
+          "scoreDamage": {
+            "outgoing": 67,
+            "incoming": 51,
+            "outgoingMove": "Weather Ball",
+            "incomingMove": "Zing Zap",
+            "hitsToKO": 2,
+            "hitsToBeKOed": 3
+          }
+        },
+        {
+          "name": "Qwilfish",
+          "score": 1,
+          "probability": 0,
+          "scoreDamage": {
+            "outgoing": 69,
+            "incoming": 104,
+            "outgoingMove": "Flip Turn",
+            "incomingMove": "Parabolic Charge",
+            "hitsToKO": 2,
+            "hitsToBeKOed": 1
+          }
+        },
+        {
+          "name": "Seadra",
+          "score": -1,
+          "probability": 0,
+          "scoreDamage": {
+            "outgoing": 96,
+            "incoming": 120,
+            "outgoingMove": "Octazooka",
+            "incomingMove": "Parabolic Charge",
+            "hitsToKO": 2,
+            "hitsToBeKOed": 1
+          }
+        }
+      ],
+      "damageUnchanged": true,
+      "strictModeConsistent": true
+    },
+    {
+      "id": "james-typhlosion",
+      "observedEntrant": "Farfetch’d",
+      "playerHP": 112,
+      "scores": [
+        {
+          "name": "Beedrill",
+          "score": -1,
+          "probability": 0,
+          "scoreDamage": {
+            "outgoing": 60,
+            "incoming": 110,
+            "outgoingMove": "Drill Run",
+            "incomingMove": "Lava Plume",
+            "hitsToKO": 2,
+            "hitsToBeKOed": 1
+          }
+        },
+        {
+          "name": "Farfetch’d",
+          "score": 0,
+          "probability": 1,
+          "scoreDamage": {
+            "outgoing": 40,
+            "incoming": 70,
+            "outgoingMove": "Slash",
+            "incomingMove": "Thunder Punch",
+            "hitsToKO": 3,
+            "hitsToBeKOed": 2
+          }
+        },
+        {
+          "name": "Chansey",
+          "score": 0,
+          "probability": 0,
+          "scoreDamage": {
+            "outgoing": 22,
+            "incoming": 98,
+            "outgoingMove": "Earthquake",
+            "incomingMove": "Thunder Punch",
+            "hitsToKO": 6,
+            "hitsToBeKOed": 3
+          }
+        }
+      ],
+      "damageUnchanged": true,
+      "strictModeConsistent": true
+    }
+  ],
+  "checks": [
+    "Three reported encounters use unchanged trainer data and reproduce Heliolisk, Castform and Farfetch’d with no-variance reserve scoring. Strict mode agrees and visible damage/HP are unchanged.",
+    "The real browser adapter changes Joey’s replacement from Comfey at112HP to Heliolisk at113HP, and restores the observed full126HP case.",
+    "Direct post-KO scenario and lower-right replacement preview share the exact same scores, hit counts and destination."
+  ],
+  "errors": []
+}

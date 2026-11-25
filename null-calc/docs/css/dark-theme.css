@@ -1,0 +1,290 @@
+/* Dark mode styles */
+
+:root {
+    /* Should make it easier to change colors in the future */
+    --text: #e4e4e4;
+    --background: #222222;
+
+    --button-hover: black;
+    --button-selected: #232e51;
+    --fieldset-color: #333333;
+
+    --column-1: #333333;
+}
+
+html, body {
+    color: var(--text);
+    background-color: var(--background);
+    color-scheme: dark;
+}
+
+.btn {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.btn:hover {
+    z-index: 10;
+    background: var(--button-hover);
+    border-color: var(--fieldset-color);
+    outline: none;
+}
+
+.visually-hidden:focus-visible + .btn,
+.btn:hover {
+    z-index: 10;
+    background: var(--button-hover);
+    border-color: var(--fieldset-color);
+    outline: none;
+}
+
+.visually-hidden:checked + .btn {
+    font-weight: bold;
+    color: var(--text);
+    background: var(--button-selected);
+}
+
+.visually-hidden:disabled + .btn {
+    color: var(--button-hover);
+}
+
+fieldset {
+    background-color: var(--fieldset-color);
+}
+
+select {
+    background-color: var(--background);
+    color: var(--text);
+    border: 1px solid black !important;
+    border-radius: 6px;
+}
+
+/* Level and stats inputs: same border as select (Tera Type) so they are visible */
+.poke-info input.level,
+.poke-info input.base,
+.poke-info input.ivs,
+.poke-info input.evs {
+    border: 1px solid black !important;
+    border-radius: 6px;
+}
+
+/* Set Level: same border & text as level field; override .btn:hover border */
+.poke-info .level-row-with-set-btn .set-level-from-box-btn,
+.poke-info .level-row-with-set-btn .set-level-from-box-btn:hover,
+.poke-info .level-row-with-set-btn .set-level-from-box-btn:focus-visible {
+    border: 1px solid black !important;
+    border-radius: 6px;
+    font: inherit;
+    color: var(--text);
+}
+
+/* Base power, Crit / Z / Commander buttons: same border as Tera Type */
+.poke-info input.move-bp,
+.poke-info .crit-btn,
+.poke-info .z-btn,
+.poke-info .commander-dondozo-btn {
+    border: 1px solid black !important;
+    border-radius: 6px;
+}
+
+a.links-lighten {
+    color: #7A9CFF;
+}
+
+a.links-lighten:hover {
+    color: #C2D0FF;
+}
+
+a.links-lighten:visited {
+    color: #BC8BEA;
+}
+
+a.links-lighten:visited:hover {
+    color: #DACAF7;
+}
+
+input {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+textarea {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.wrapper {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+a.collapsible-link {
+    color: var(--text);
+}
+
+.bs-btn {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.bs-btn:hover {
+    z-index: 10;
+    background: var(--button-hover);
+    color: var(--text);
+}
+
+.dataTables_info {
+    color: var(--text) !important; /* I know, don't use !important, but w/e */
+}
+
+.search-label {
+    color: var(--text);
+}
+
+tr.odd, tr.even {
+    background-color: var(--background) !important;
+}
+
+
+td.sorting_1 {
+    background-color: var(--column-1) !important;
+}
+
+
+label:not(.btn) {
+    color: var(--text);
+}
+
+.credits .theme-picker-label {
+    color: var(--text);
+}
+.credits .theme-option {
+    background-color: var(--background);
+    color: var(--text);
+    border: 1px solid black !important;
+}
+.credits .theme-option:hover {
+    background: var(--button-hover);
+    border-color: var(--fieldset-color);
+}
+.credits .theme-option[aria-pressed="true"] {
+    font-weight: bold;
+    color: var(--text);
+    background: var(--button-selected);
+    box-shadow: none;
+}
+
+/* Select2 Dropdown stylings */
+
+.select2-container .select2-choice {
+    background: var(--background);
+    background-image: linear-gradient(#333, 70%, #222222);
+    /* Not fully satisfied w/ this gradient, but it's w/e */
+    color: var(--text);
+    border-color: black !important;
+}
+
+.select2-container .select2-choice .select2-arrow {
+    background: none;
+    border-left: none;
+}
+
+.select2-container-active .select2-choice,
+.select2-container-active .select2-choices {
+    border-color: black !important;
+}
+
+.select2-dropdown-open .select2-choice {
+    -webkit-box-shadow: 0 1px 0 var(--background) inset;
+    box-shadow: 0 1px 0 var(--background) inset;
+    background-image: none;
+    border-color: black !important;
+}
+
+.select2-dropdown-open.select2-drop-above .select2-choice,
+.select2-dropdown-open.select2-drop-above .select2-choices {
+    border-color: black !important;
+}
+
+.select2-drop {
+    background-color: var(--background);
+    color: var(--text);
+    border-color: black !important;
+}
+
+.select2-drop.select2-drop-active,
+.select2-drop.select2-drop-above.select2-drop-active {
+    border-color: black !important;
+}
+
+.select2-dropdown-open.select2-drop-above .select2-choice,
+.select2-dropdown-open.select2-drop-above .select2-choices {
+    background-image: none;
+}
+
+input.select2-input {
+    color: var(--text);
+    border-color: black !important;
+    /* 
+    * I have to use this URL because this CSS file is in the dist/css folder,
+    * whereas the Select2 CSS file is right next to the select2.png file
+    */
+    background: url('../js/vendor/select2/select2.png') no-repeat 100% -22px, var(--background);
+}
+
+/* Re-assert selector spacing after this file (loads last when dark theme on) */
+div.info-group.info-selectors.i-f-stats > .info-selector-row + .info-selector-row,
+div.info-group.info-selectors.i-f-o-stats > .info-selector-row + .info-selector-row {
+    margin-top: 2px !important;
+}
+div.info-group.info-selectors.i-f-stats .info-selector-row label:not(.btn),
+div.info-group.info-selectors.i-f-o-stats .info-selector-row label:not(.btn),
+div.info-group.info-selectors.i-f-stats .info-selector-row select,
+div.info-group.info-selectors.i-f-o-stats .info-selector-row select {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.app-menu-cog {
+    border-color: #555555;
+    background-color: var(--fieldset-color);
+}
+.app-menu-panel {
+    border-color: #e5e7eb;
+    background-color: #1a1a1a;
+    color: #f3f4f6;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+.app-menu-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+.app-menu-toggle-row:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+.app-menu-toggle-track {
+    background: #4a4a55;
+}
+.app-menu-toggle-input:checked + .app-menu-toggle-track {
+    background: #2563eb;
+}
+.app-menu-toggle-input:focus-visible + .app-menu-toggle-track {
+    box-shadow: 0 0 0 2px #93c5fd;
+}
+.battle-notes-box .battle-notes-textarea,
+.import-export-box .import-name-text,
+.import-export-box .import-team-text {
+    background: var(--background);
+    color: var(--text);
+    border-color: black !important;
+}
+.import-export-box #import.bs-btn.bs-btn-default {
+    background: var(--background);
+    color: var(--text);
+    border-color: black !important;
+}
+.import-export-box #import.bs-btn.bs-btn-default:hover,
+.import-export-box #import.bs-btn.bs-btn-default:focus {
+    background: var(--button-hover);
+    border-color: black !important;
+    color: var(--text);
+}

@@ -1,0 +1,449 @@
+/* Document does not scroll; panels.js scrolls .pfx-panel. One vertical bar on the iframe right — same track for empty vs filled thumb (no jump vs html vs panel). */
+html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100%;
+}
+body {
+    overflow-y: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.pfx-panel {
+    overflow-y: scroll !important;
+    scrollbar-gutter: stable;
+}
+
+html[data-host-theme="dark"] body {
+    background: #222222 !important;
+    color: #e4e4e4 !important;
+}
+
+html[data-host-theme="light"] .pfx-panel,
+html[data-host-theme="light"] .pfx-body {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+html[data-host-theme="light"] .pfx-panel {
+    border-left: 0 !important;
+}
+html[data-host-theme="light"] .pfx-body {
+    border: 0 !important;
+}
+
+html[data-host-theme="dark"] .pfx-panel,
+html[data-host-theme="dark"] .pfx-body {
+    background: #222222 !important;
+    color: #e4e4e4 !important;
+    border-color: #333333 !important;
+}
+html[data-host-theme="dark"] .pfx-panel {
+    border-left: 0 !important;
+    box-shadow: none !important;
+}
+html[data-host-theme="dark"] .pfx-body {
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+html[data-host-theme="dark"] .tabbar .button,
+html[data-host-theme="dark"] .button,
+html[data-host-theme="dark"] input.searchbox {
+    background: #222222 !important;
+    color: #e4e4e4 !important;
+    border-color: #333333 !important;
+    text-shadow: none !important;
+}
+
+html[data-host-theme="dark"] .button.cur,
+html[data-host-theme="dark"] .button.cur:hover {
+    background: #232e51 !important;
+    color: #e4e4e4 !important;
+    border-color: #333333 !important;
+}
+
+html[data-host-theme="dark"] .button:hover {
+    background: #000000 !important;
+    color: #e4e4e4 !important;
+    border-color: #333333 !important;
+}
+
+html[data-host-theme="dark"] a {
+    color: #7a9cff !important;
+}
+
+html[data-host-theme="dark"] .tabbar:after {
+    background: #222222 !important;
+    border-color: #333333 !important;
+}
+html[data-host-theme="dark"] .tabbar .button.cur,
+html[data-host-theme="dark"] .tabbar .button.cur:hover {
+    background: #222222 !important;
+    color: #e4e4e4 !important;
+    border-color: #333333 !important;
+}
+html[data-host-theme="dark"] .type.physical {
+    background: linear-gradient(#9f5851, #7f413b) !important;
+    border-color: #69332f !important;
+    color: #ffd1c8 !important;
+}
+html[data-host-theme="dark"] .type.special {
+    background: linear-gradient(#6e7483, #555b68) !important;
+    border-color: #464b56 !important;
+    color: #e6ebf8 !important;
+}
+html[data-host-theme="dark"] .type.status {
+    background: linear-gradient(#7a787a, #616061) !important;
+    border-color: #4f4e4f !important;
+    color: #f3f2f3 !important;
+}
+
+html[data-host-theme="dark"] .utilichart,
+html[data-host-theme="dark"] .utilichart .content,
+html[data-host-theme="dark"] .resultheader,
+html[data-host-theme="dark"] .utilichart .result {
+    color: #e4e4e4 !important;
+}
+html[data-host-theme="dark"] .utilichart li > a,
+html[data-host-theme="dark"] .utilichart a {
+    background: #222222 !important;
+    color: #e4e4e4 !important;
+    border-color: transparent !important;
+}
+html[data-host-theme="dark"] .utilichart a.active,
+html[data-host-theme="dark"] .utilichart a.active:hover,
+html[data-host-theme="dark"] .utilichart.nokbd a:hover {
+    background: #2a2f3d !important;
+    border-color: #3a4152 !important;
+    color: #f1f1f1 !important;
+}
+html[data-host-theme="dark"] .utilichart a.sel,
+html[data-host-theme="dark"] .utilichart a.sel:hover,
+html[data-host-theme="dark"] .utilichart a.cur,
+html[data-host-theme="dark"] .utilichart a.cur:hover,
+html[data-host-theme="dark"] .utilichart li > a.cur {
+    background: #232e51 !important;
+    border-color: #3e4f82 !important;
+    color: #f5f7ff !important;
+}
+html[data-host-theme="dark"] .utilichart small,
+html[data-host-theme="dark"] .utilichart em {
+    color: #c9ccd7 !important;
+}
+html[data-host-theme="dark"] .utilichart .sortrow {
+    background: #2a2a2a !important;
+    border-bottom: 1px solid #3b3b3b !important;
+}
+html[data-host-theme="dark"] .utilichart .sortcol,
+html[data-host-theme="dark"] .utilichart .sortcol:hover,
+html[data-host-theme="dark"] .utilichart .sortcol.cur,
+html[data-host-theme="dark"] .utilichart .sortcol.numsortcol.cur,
+html[data-host-theme="dark"] .utilichart .sortcol.numsortcol.cur:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+html[data-host-theme="dark"] .utilichart h3,
+html[data-host-theme="dark"] .dexentry h3,
+html[data-host-theme="dark"] .resultheader h3 {
+    background: #2a2a2a !important;
+    border-color: #3a3a3a !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Pokémon page: grey labels → white (Types, Size, Abilities, stats headers, etc.) */
+html[data-host-theme="dark"] .dexentry dt,
+html[data-host-theme="dark"] .dexentry h1 code,
+html[data-host-theme="dark"] .dexentry .tier,
+html[data-host-theme="dark"] .dexentry .minor,
+html[data-host-theme="dark"] .dexentry dl.ppentry dd,
+html[data-host-theme="dark"] .movetag,
+html[data-host-theme="dark"] .dexentry .movetag,
+html[data-host-theme="dark"] table.stats th,
+html[data-host-theme="dark"] table.stats td,
+html[data-host-theme="dark"] table.stats td.stat,
+html[data-host-theme="dark"] table.stats small,
+html[data-host-theme="dark"] table.stats .ministat,
+html[data-host-theme="dark"] table.stats th.ministat,
+html[data-host-theme="dark"] table.stats .bst,
+html[data-host-theme="dark"] table.evos td,
+html[data-host-theme="dark"] table.evos th {
+    color: #ffffff !important;
+}
+html[data-host-theme="dark"] .dexentry dd,
+html[data-host-theme="dark"] .dexentry small {
+    color: #ffffff !important;
+}
+
+/* Original uses its own dark palette in this project too; match it */
+html[data-host-theme="original"] body {
+    background: #1b1b1b !important;
+    color: #e4e4e4 !important;
+}
+
+html[data-host-theme="original"] .pfx-panel,
+html[data-host-theme="original"] .pfx-body {
+    background: #1b1b1b !important;
+    color: #e4e4e4 !important;
+    border-color: #2a2a2a !important;
+}
+html[data-host-theme="original"] .pfx-panel {
+    border-left: 0 !important;
+    box-shadow: none !important;
+}
+html[data-host-theme="original"] .pfx-body {
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+html[data-host-theme="original"] .tabbar .button,
+html[data-host-theme="original"] .button,
+html[data-host-theme="original"] input.searchbox {
+    background: #1b1b1b !important;
+    color: #e4e4e4 !important;
+    border-color: #2a2a2a !important;
+    text-shadow: none !important;
+}
+
+html[data-host-theme="original"] .button.cur,
+html[data-host-theme="original"] .button.cur:hover {
+    background: #232e51 !important;
+    color: #e4e4e4 !important;
+    border-color: #2a2a2a !important;
+}
+
+html[data-host-theme="original"] .button:hover {
+    background: #000000 !important;
+    color: #e4e4e4 !important;
+    border-color: #2a2a2a !important;
+}
+
+html[data-host-theme="original"] a {
+    color: #7a9cff !important;
+}
+
+html[data-host-theme="original"] .tabbar:after {
+    background: #1b1b1b !important;
+    border-color: #2a2a2a !important;
+}
+html[data-host-theme="original"] .tabbar .button.cur,
+html[data-host-theme="original"] .tabbar .button.cur:hover {
+    background: #1b1b1b !important;
+    color: #e4e4e4 !important;
+    border-color: #2a2a2a !important;
+}
+html[data-host-theme="original"] .type.physical {
+    background: linear-gradient(#9f5851, #7f413b) !important;
+    border-color: #69332f !important;
+    color: #ffd1c8 !important;
+}
+html[data-host-theme="original"] .type.special {
+    background: linear-gradient(#6e7483, #555b68) !important;
+    border-color: #464b56 !important;
+    color: #e6ebf8 !important;
+}
+html[data-host-theme="original"] .type.status {
+    background: linear-gradient(#7a787a, #616061) !important;
+    border-color: #4f4e4f !important;
+    color: #f3f2f3 !important;
+}
+
+html[data-host-theme="original"] .utilichart,
+html[data-host-theme="original"] .utilichart .content,
+html[data-host-theme="original"] .resultheader,
+html[data-host-theme="original"] .utilichart .result {
+    color: #e4e4e4 !important;
+}
+html[data-host-theme="original"] .utilichart li > a,
+html[data-host-theme="original"] .utilichart a {
+    background: #1b1b1b !important;
+    color: #e4e4e4 !important;
+    border-color: transparent !important;
+}
+html[data-host-theme="original"] .utilichart a.active,
+html[data-host-theme="original"] .utilichart a.active:hover,
+html[data-host-theme="original"] .utilichart.nokbd a:hover {
+    background: #252833 !important;
+    border-color: #353a49 !important;
+    color: #f1f1f1 !important;
+}
+html[data-host-theme="original"] .utilichart a.sel,
+html[data-host-theme="original"] .utilichart a.sel:hover,
+html[data-host-theme="original"] .utilichart a.cur,
+html[data-host-theme="original"] .utilichart a.cur:hover,
+html[data-host-theme="original"] .utilichart li > a.cur {
+    background: #232e51 !important;
+    border-color: #3e4f82 !important;
+    color: #f5f7ff !important;
+}
+html[data-host-theme="original"] .utilichart small,
+html[data-host-theme="original"] .utilichart em {
+    color: #c9ccd7 !important;
+}
+html[data-host-theme="original"] .utilichart .sortrow {
+    background: #252525 !important;
+    border-bottom: 1px solid #363636 !important;
+}
+html[data-host-theme="original"] .utilichart .sortcol,
+html[data-host-theme="original"] .utilichart .sortcol:hover,
+html[data-host-theme="original"] .utilichart .sortcol.cur,
+html[data-host-theme="original"] .utilichart .sortcol.numsortcol.cur,
+html[data-host-theme="original"] .utilichart .sortcol.numsortcol.cur:hover {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+html[data-host-theme="original"] .utilichart h3,
+html[data-host-theme="original"] .dexentry h3,
+html[data-host-theme="original"] .resultheader h3 {
+    background: #252525 !important;
+    border-color: #343434 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+html[data-host-theme="original"] .dexentry dt,
+html[data-host-theme="original"] .dexentry h1 code,
+html[data-host-theme="original"] .dexentry .tier,
+html[data-host-theme="original"] .dexentry .minor,
+html[data-host-theme="original"] .dexentry dl.ppentry dd,
+html[data-host-theme="original"] .movetag,
+html[data-host-theme="original"] .dexentry .movetag,
+html[data-host-theme="original"] table.stats th,
+html[data-host-theme="original"] table.stats td,
+html[data-host-theme="original"] table.stats td.stat,
+html[data-host-theme="original"] table.stats small,
+html[data-host-theme="original"] table.stats .ministat,
+html[data-host-theme="original"] table.stats th.ministat,
+html[data-host-theme="original"] table.stats .bst,
+html[data-host-theme="original"] table.evos td,
+html[data-host-theme="original"] table.evos th {
+    color: #ffffff !important;
+}
+html[data-host-theme="original"] .dexentry dd,
+html[data-host-theme="original"] .dexentry small {
+    color: #ffffff !important;
+}
+
+/* Force readable white text for all Dex table/list content in dark palettes */
+html[data-host-theme="dark"] .utilichart,
+html[data-host-theme="dark"] .utilichart *,
+html[data-host-theme="dark"] .resultheader,
+html[data-host-theme="dark"] .result,
+html[data-host-theme="original"] .utilichart,
+html[data-host-theme="original"] .utilichart *,
+html[data-host-theme="original"] .resultheader,
+html[data-host-theme="original"] .result {
+    color: #ffffff !important;
+}
+
+/* Keep selected rows highlighted but with white text */
+html[data-host-theme="dark"] .utilichart a.sel,
+html[data-host-theme="dark"] .utilichart a.sel:hover,
+html[data-host-theme="dark"] .utilichart a.cur,
+html[data-host-theme="dark"] .utilichart a.cur:hover,
+html[data-host-theme="original"] .utilichart a.sel,
+html[data-host-theme="original"] .utilichart a.sel:hover,
+html[data-host-theme="original"] .utilichart a.cur,
+html[data-host-theme="original"] .utilichart a.cur:hover {
+    color: #ffffff !important;
+}
+
+/* Themed scrollbars for embedded Dex */
+html[data-host-theme="light"] {
+    scrollbar-color: #8f8f8f #f2f2f2;
+}
+html[data-host-theme="light"] ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+html[data-host-theme="light"] ::-webkit-scrollbar-track {
+    background: #f2f2f2;
+}
+html[data-host-theme="light"] ::-webkit-scrollbar-thumb {
+    background: #8f8f8f;
+    border: 2px solid #f2f2f2;
+    border-radius: 8px;
+}
+html[data-host-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: #767676;
+}
+
+html[data-host-theme="dark"] {
+    scrollbar-color: #6d6d6d #222222;
+}
+html[data-host-theme="dark"] ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+html[data-host-theme="dark"] ::-webkit-scrollbar-track {
+    background: #222222;
+}
+html[data-host-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: #6d6d6d;
+    border: 2px solid #222222;
+    border-radius: 8px;
+}
+html[data-host-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: #848484;
+}
+
+html[data-host-theme="original"] {
+    scrollbar-color: #6b6b6b #1b1b1b;
+}
+html[data-host-theme="original"] ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+html[data-host-theme="original"] ::-webkit-scrollbar-track {
+    background: #1b1b1b;
+}
+html[data-host-theme="original"] ::-webkit-scrollbar-thumb {
+    background: #6b6b6b;
+    border: 2px solid #1b1b1b;
+    border-radius: 8px;
+}
+html[data-host-theme="original"] ::-webkit-scrollbar-thumb:hover {
+    background: #838383;
+}
+
+/* Firefox: scrollbar lives on .pfx-panel, not html */
+html[data-host-theme="light"] .pfx-panel {
+    scrollbar-color: #8f8f8f #f2f2f2;
+}
+html[data-host-theme="dark"] .pfx-panel {
+    scrollbar-color: #6d6d6d #222222;
+}
+html[data-host-theme="original"] .pfx-panel {
+    scrollbar-color: #6b6b6b #1b1b1b;
+}
+
+/* Keep unobtainable warning text black in all themes */
+.warning,
+.warning *,
+.warning strong {
+    color: #000000 !important;
+}
+
+/* Keep type badge text color consistent across all themes */
+.type,
+a.type,
+html[data-host-theme="dark"] .type,
+html[data-host-theme="original"] .type,
+html[data-host-theme="light"] .type {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 1px #333333 !important;
+}
+
+/* Encounter level (left of Pokémon name on location encounter page only) */
+.metricchart .enclevelcol {
+    min-width: 5.25em;
+    text-align: left;
+    padding-left: 0.35em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}

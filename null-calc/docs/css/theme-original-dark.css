@@ -1,0 +1,86 @@
+/* Original calculator dark palette + borders (see workspace original/nullcalc-main).
+   Applied when <html> has class theme-original-dark and dark-theme.css is enabled. */
+html.theme-original-dark {
+    --text: #e4e4e4;
+    --background: #1b1b1b;
+    --button-hover: black;
+    --button-selected: #232e51;
+    --fieldset-color: #2a2a2a;
+    --column-1: #2a2a2a;
+    /* Original main.css used soft greys for chrome, not #000 / #222 / black */
+    --border-ui: #aaaaaa;
+    --border-ui-muted: #888888;
+    --border-ui-hover: #777777;
+}
+
+html.theme-original-dark .select2-container .select2-choice {
+    background-image: linear-gradient(#333, 70%, #1b1b1b);
+}
+
+/* Fieldsets & outer panels: #AAAAAA like original main.css */
+html.theme-original-dark fieldset {
+    border-color: var(--border-ui) !important;
+}
+
+/* dark-theme.css forces black on controls — restore original-style greys */
+html.theme-original-dark select,
+html.theme-original-dark .poke-info input.level,
+html.theme-original-dark .poke-info input.base,
+html.theme-original-dark .poke-info input.ivs,
+html.theme-original-dark .poke-info input.evs,
+html.theme-original-dark .poke-info .level-row-with-set-btn .set-level-from-box-btn,
+html.theme-original-dark .poke-info .level-row-with-set-btn .set-level-from-box-btn:hover,
+html.theme-original-dark .poke-info .level-row-with-set-btn .set-level-from-box-btn:focus-visible,
+html.theme-original-dark .poke-info input.move-bp,
+html.theme-original-dark .poke-info .crit-btn,
+html.theme-original-dark .poke-info .z-btn,
+html.theme-original-dark .poke-info .commander-dondozo-btn {
+    border: 1px solid var(--border-ui) !important;
+}
+
+html.theme-original-dark input,
+html.theme-original-dark textarea,
+html.theme-original-dark select {
+    border-color: var(--border-ui) !important;
+}
+
+html.theme-original-dark .btn {
+    border-color: var(--border-ui) !important;
+}
+
+html.theme-original-dark .btn:hover,
+html.theme-original-dark .visually-hidden:focus-visible + .btn {
+    border-color: var(--border-ui-hover) !important;
+}
+
+html.theme-original-dark .credits .theme-option,
+html.theme-original-dark .app-menu-panel .theme-option {
+    border-color: var(--border-ui) !important;
+}
+
+html.theme-original-dark .credits .theme-option:hover,
+html.theme-original-dark .app-menu-panel .theme-option:hover {
+    border-color: var(--border-ui-hover) !important;
+}
+
+html.theme-original-dark .import-export-box #import.bs-btn {
+    border-color: var(--border-ui) !important;
+}
+html.theme-original-dark .import-export-box #import.bs-btn:hover,
+html.theme-original-dark .import-export-box #import.bs-btn:focus {
+    border-color: var(--border-ui-hover) !important;
+}
+
+/* Select2: softer border than pure black */
+html.theme-original-dark .select2-container .select2-choice,
+html.theme-original-dark .select2-container-active .select2-choice,
+html.theme-original-dark .select2-container-active .select2-choices,
+html.theme-original-dark .select2-dropdown-open .select2-choice,
+html.theme-original-dark .select2-dropdown-open.select2-drop-above .select2-choice,
+html.theme-original-dark .select2-dropdown-open.select2-drop-above .select2-choices,
+html.theme-original-dark .select2-drop,
+html.theme-original-dark .select2-drop.select2-drop-active,
+html.theme-original-dark .select2-drop.select2-drop-above.select2-drop-active,
+html.theme-original-dark input.select2-input {
+    border-color: var(--border-ui-muted) !important;
+}

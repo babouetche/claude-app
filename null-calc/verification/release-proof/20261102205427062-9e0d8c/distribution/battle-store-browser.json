@@ -1,0 +1,91 @@
+{
+  "revision": "battle-store",
+  "checkedAt": "2026-11-02T21:05:38.983Z",
+  "entry": "C:\\Users\\pseud\\.codex\\.chatgpt-projects\\g-p-6a9ed0f7ceb88191bba3523b4b34109b\\livraison\\release-20261102205427062-9e0d8c\\Null-Calculateur\\CALCULATEUR.html",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "trainerDataSHA256": "5750c9d5eb796deea5ded6d40b8932a3f9dddf4a37c03af0125d08650f865826",
+  "measurements": {
+    "coldMs": 19.5,
+    "warmMs": 120.29999999981374,
+    "uncachedMs": 164,
+    "coldStats": {
+      "size": 1,
+      "limit": 32,
+      "epoch": 1,
+      "references": 1,
+      "calls": 1,
+      "hits": 0,
+      "misses": 1,
+      "evictions": 0,
+      "computeMs": 4.5,
+      "engineCalls": 44,
+      "keyMs": 0.20000000018626451,
+      "cloneMs": 0.40000000037252903,
+      "referenceResets": 0,
+      "scheduled": 0,
+      "coalesced": 0
+    },
+    "warmStats": {
+      "size": 1,
+      "limit": 32,
+      "epoch": 1,
+      "references": 1,
+      "calls": 10,
+      "hits": 10,
+      "misses": 0,
+      "evictions": 0,
+      "computeMs": 0,
+      "engineCalls": 0,
+      "keyMs": 1.7000000001862645,
+      "cloneMs": 4.399999998509884,
+      "referenceResets": 0,
+      "scheduled": 0,
+      "coalesced": 0
+    },
+    "equal": true,
+    "party": [
+      "Vivillon",
+      "Dipplin",
+      "Dunsparce",
+      "Watchog"
+    ]
+  },
+  "invalidations": [
+    "current HP",
+    "opponent HP",
+    "stat stage",
+    "held item",
+    "ability",
+    "move power",
+    "weather",
+    "Trick Room",
+    "PP",
+    "faint history",
+    "reserve HP"
+  ],
+  "coalescing": {
+    "size": 21,
+    "limit": 32,
+    "epoch": 1,
+    "references": 1,
+    "calls": 1,
+    "hits": 1,
+    "misses": 0,
+    "evictions": 0,
+    "computeMs": 0,
+    "engineCalls": 0,
+    "keyMs": 0.20000000018626451,
+    "cloneMs": 0.5,
+    "referenceResets": 0,
+    "scheduled": 2,
+    "coalesced": 1
+  },
+  "checks": [
+    "Kenobi: cold, 10 warm and 10 uncached real-engine adapter states are exactly equal. The bounded whole-state cache avoids repeated party reconstruction and damage calls; elapsed timings are recorded, not treated as a universal speed guarantee.",
+    "Every sampled HP/stat/item/ability/power/field/PP/faint/reserve input agrees with a fresh uncached engine read.",
+    "A same-event-loop input/change burst requests two refreshes and executes one; explicit synchronous refresh calls remain synchronous.",
+    "Singles and four-battler frozen references survive player changes, preserve ally matchups and use the common clone/lifecycle. Opponent slot changes and a partner at zero HP remain live.",
+    "Frozen Singles and Doubles references rebuild Water Spout/Eruption/Flail/Reversal and Focus Sash across reserve HP 100% → 50% → 100%, against the original player and field after the displayed Pokémon, weather and Magic Room change. Original trainer data is restored."
+  ],
+  "errors": []
+}

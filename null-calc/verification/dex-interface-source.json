@@ -1,0 +1,102 @@
+{
+  "base": "https://nulldex.pokemon0null.workers.dev/",
+  "files": [
+    {
+      "path": "",
+      "bytes": 4907,
+      "sha256": "6e3369ea226f0ac9f881044e25c94298494ea7fff51cfbd25048b8b268ff8445"
+    },
+    {
+      "path": "js/panels.js",
+      "bytes": 47316,
+      "sha256": "b831db2275271f2ba257e4674ad01b4af011996b6b3aa9958e502561b23d8902"
+    },
+    {
+      "path": "js/pokedex.js?b359",
+      "bytes": 33242,
+      "sha256": "2048a9ff6f89569877529053544b9ae1bd1249c05116913c7b683e9134956107"
+    },
+    {
+      "path": "js/pokedex-pokemon.js?b361",
+      "bytes": 37788,
+      "sha256": "f2c5df890a832446e79ebb40052b80481013556b13e16a72231212cc45457df9"
+    },
+    {
+      "path": "js/pokedex-moves.js?b359",
+      "bytes": 29243,
+      "sha256": "8a5c982a8007cd27afbec43e9541a48bae249eb10b0e414919efda7ecd48e661"
+    },
+    {
+      "path": "js/pokedex-encounters.js?b359",
+      "bytes": 7307,
+      "sha256": "c51466402724a9a09f596557b65aab34f80d95eda5b460adc26b0fcc5bb32295"
+    },
+    {
+      "path": "js/pokedex-search.js?b359",
+      "bytes": 11834,
+      "sha256": "c3c55fe9b4507f9075de5a68c709439b2b75176a15e1799a5f33d3a011445c68"
+    },
+    {
+      "path": "js/nulldex-encounters.js?b1",
+      "bytes": 21470,
+      "sha256": "d571f54eb9d144818bd0395dd75316a36fa53191c12fe7976b07930a0bbfe481"
+    },
+    {
+      "path": "js/router.js?b359",
+      "bytes": 853,
+      "sha256": "2f4e1cfe44ae99982083712a7d3b205b777298603ec26612d9ebfb3359280e8b"
+    },
+    {
+      "path": "js/theme-toggle.js?b1",
+      "bytes": 776,
+      "sha256": "41b17f3f5761d73488c9c52bc69c6a1b52169f7bdccbdae754ac93fdab0690e9"
+    },
+    {
+      "path": "js/battledata.js?v0.9xy32",
+      "bytes": 579427,
+      "sha256": "dbba69e9c547022f691e2a5b4da461bf38cbf17632c2832b133d76f94dba5c5a"
+    },
+    {
+      "path": "js/battle-dex-search.js?v0.9xy31",
+      "bytes": 87406,
+      "sha256": "bf90afdbde146b58d995d5cb0cb89069302c2ce9ecb36c60d0b57a7df99982ac"
+    },
+    {
+      "path": "js/search.js?v0.9xy31",
+      "bytes": 42264,
+      "sha256": "4e441d8ace2be95321365107e691a889c8eb603102f6dbf4aeaa43960543c290"
+    },
+    {
+      "path": "config/config.js?v0.9xy31",
+      "bytes": 2824,
+      "sha256": "88dc33f0e33c7649e131768be580adea73e2e73d8b6fe938108a6cae03a1e64a"
+    },
+    {
+      "path": "data/encounters.js?v0.9xy31",
+      "bytes": 268285,
+      "sha256": "9791e8ca0217e42dea43e7a9e82c511b1644ed0fd3e2ae718158706ead93b0f3"
+    },
+    {
+      "path": "theme/main.css",
+      "bytes": 1690,
+      "sha256": "d2a30d1c2bae139b5a43df19cf75adb9f858d0070f60ed52cd54ae4106b38758"
+    },
+    {
+      "path": "theme/panels.css",
+      "bytes": 8875,
+      "sha256": "ba8e31a2332ff67ae2f8ed707fb1b5d44ca96230597e3d7bfcf35d48dbe9fa9c"
+    },
+    {
+      "path": "theme/pokedex.css",
+      "bytes": 10460,
+      "sha256": "3d65f79687031a44e1415db0595b0ed993eff3137bc6a1ab76a854b58d4d8c7c"
+    },
+    {
+      "path": "theme/theme-toggle.css",
+      "bytes": 5803,
+      "sha256": "32a4c96d4e65548bcfb48a0c9ce719c263fae97ed0a324fcedb6c3e312e26aa1"
+    }
+  ],
+  "consultedAt": "2026-10-24",
+  "usage": "Official visual/navigation sources; data/encounters.js is a reference cross-checked against supplied ROM before additive corrections."
+}

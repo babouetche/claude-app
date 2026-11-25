@@ -1,0 +1,19 @@
+# Local dependencies, Python caches and private game files
+node_modules/
+__pycache__/
+*.py[cod]
+*.gba
+*.sav
+*.sa[0-9]
+*.ss[0-9]
+*.state
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+
+# Rebuilt archives and obsolete local verification runs
+*.zip
+verification/history/

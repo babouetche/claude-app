@@ -1,0 +1,348 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "checkedAt": "2026-11-02T21:01:06.840Z",
+  "entry": "C:\\Users\\pseud\\.codex\\.chatgpt-projects\\g-p-6a9ed0f7ceb88191bba3523b4b34109b\\livraison\\release-20261102205427062-9e0d8c\\Null-Calculateur\\CALCULATEUR.html",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "fixtureSHA256": {
+    "trainers": "a2c20ccd7ed828ce1500fbe2d01fcfb6afe1a19b1f2b3da7883dced2d1413222",
+    "numeric": "e608e4db231aaec0e8b219478d8df89a594cf4e397193b04eb330dd354bb5641",
+    "ai": "e849acecdac973f0130b6018695ece5c48f205744ed91f171862ee45bc66ce8f",
+    "levelup": "25f05febe835291734a9b615d9b0cde297e3823476e51778397267bcf75b9af1",
+    "teaching": "b3006b4f244584527401a7242c19a430a48c0d58f544d3d1d7aed53a78d47376",
+    "items": "263f166af2cadef05e033c0aa56a8353c4ac05957cf60190d166188b9cde77e8"
+  },
+  "native": {
+    "rechecked": true,
+    "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+    "trainerRecords": 2120,
+    "ownerHeaders": 4,
+    "aiBlocks": 11,
+    "numericRecords": 2178,
+    "levelupEntries": 1427,
+    "teachingProofs": 1435,
+    "itemRecords": 836
+  },
+  "checks": [
+    "Pinned native trainer, AI, numeric, learnset, teaching and item evidence",
+    "Version 1.2.6 appears in the title and game-data settings",
+    "Every trainer patch and new native member reaches the browser dataset",
+    "The two Lanturn remain separate partner choices and independent KO controls",
+    "Mega Raichu X and Y remain separate partner choices and independent KO controls",
+    "Both separate-trainer doubles restrict post-KO reserves to the native owner and translate the owner indicator",
+    "Regenor selects Doubles automatically and has six distinct logical members",
+    "Trainer navigation enters and leaves the new Regenor team",
+    "All 348 historical trainer groups retain their navigation order around the Regenor insertion",
+    "Fennekin/Froakie rival teams and both Drake teams preserve the historical logical party order",
+    "Reserve evaluation uses native base species and preserves four native Mega reserves",
+    "The embedded Pokédex uses ROM 1.2.6 species, moves, learnsets and encounters",
+    "Visible Pokédex panels render current abilities, native details, special tutors and level-up moves",
+    "Browsing, form evaluation and KO toggles leave trainer data intact"
+  ],
+  "details": {
+    "Pinned native trainer, AI, numeric, learnset, teaching and item evidence": {
+      "rechecked": true,
+      "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+      "trainerRecords": 2120,
+      "ownerHeaders": 4,
+      "aiBlocks": 11,
+      "numericRecords": 2178,
+      "levelupEntries": 1427,
+      "teachingProofs": 1435,
+      "itemRecords": 836
+    },
+    "Version 1.2.6 appears in the title and game-data settings": {
+      "trainer": "1.2.6",
+      "game": "1.2.6",
+      "fixture": "a2c20ccd7ed828ce1500fbe2d01fcfb6afe1a19b1f2b3da7883dced2d1413222"
+    },
+    "Every trainer patch and new native member reaches the browser dataset": {
+      "patches": 28,
+      "additions": 8
+    },
+    "The two Lanturn remain separate partner choices and independent KO controls": {
+      "firstSlot": "Lanturn (Fisherman Elliot & Fisherman Ned)",
+      "secondSlot": "Lanturn (Fisherman Elliot & Fisherman Ned [Slot 2])"
+    },
+    "Mega Raichu X and Y remain separate partner choices and independent KO controls": {
+      "firstSlot": "Raichu (Triathlete Benjamin & Triathlete Alyssa)",
+      "secondSlot": "Raichu-Mega-Y (Triathlete Benjamin & Triathlete Alyssa)"
+    },
+    "Both separate-trainer doubles restrict post-KO reserves to the native owner and translate the owner indicator": [
+      {
+        "trainer": "Fisherman Elliot & Fisherman Ned",
+        "owner": "Fisherman Elliot",
+        "bounds": [
+          0,
+          2
+        ],
+        "eligibleSlots": [
+          "Fisherman Elliot & Fisherman Ned::0x3a84d4"
+        ]
+      },
+      {
+        "trainer": "Fisherman Elliot & Fisherman Ned",
+        "owner": "Fisherman Ned",
+        "bounds": [
+          2,
+          4
+        ],
+        "eligibleSlots": [
+          "Fisherman Elliot & Fisherman Ned::0x3a8524"
+        ]
+      },
+      {
+        "trainer": "Triathlete Benjamin & Triathlete Alyssa",
+        "owner": "Triathlete Benjamin",
+        "bounds": [
+          0,
+          3
+        ],
+        "eligibleSlots": [
+          "Triathlete Benjamin & Triathlete Alyssa::0x3aa19c",
+          "Triathlete Benjamin & Triathlete Alyssa::0x3aa1c4"
+        ]
+      },
+      {
+        "trainer": "Triathlete Benjamin & Triathlete Alyssa",
+        "owner": "Triathlete Alyssa",
+        "bounds": [
+          3,
+          5
+        ],
+        "eligibleSlots": [
+          "Triathlete Benjamin & Triathlete Alyssa::0x3aa214"
+        ]
+      }
+    ],
+    "Regenor selects Doubles automatically and has six distinct logical members": {
+      "trainer": "Dragon Tamer Regenor",
+      "members": [
+        "Raichu-Mega-X",
+        "Iron Bundle",
+        "Zekrom",
+        "Toxapex",
+        "Naganadel",
+        "Hydrapple"
+      ]
+    },
+    "navigationAttempt": {
+      "previous": "Darmanitan-Zen-Mode (Pokémaniac Darm)",
+      "beforeNext": {
+        "id": "Darmanitan-Zen-Mode (Pokémaniac Darm)",
+        "navigationChoice": "Darmanitan-Zen-Mode (Pokémaniac Darm)"
+      },
+      "afterPrevious": {
+        "id": "Raichu-Mega-X (Dragon Tamer Regenor)",
+        "trainer": "Dragon Tamer Regenor"
+      }
+    },
+    "Trainer navigation enters and leaves the new Regenor team": {
+      "next": "Elite Four Sidney Singles",
+      "previous": "Darmanitan-Zen-Mode (Pokémaniac Darm)"
+    },
+    "All 348 historical trainer groups retain their navigation order around the Regenor insertion": {
+      "historicalGroups": 348,
+      "currentGroups": 349,
+      "insertionBefore": "Elite Four Sidney Singles",
+      "orderSHA256": "7c71d39831d61a30d93e16578f730ba19a654de3fe847c28cb457fcf6ca319f3"
+    },
+    "Fennekin/Froakie rival teams and both Drake teams preserve the historical logical party order": [
+      {
+        "trainer": "Rustboro Rival Fennekin",
+        "slots": [
+          "Rustboro Rival Fennekin::0x3a82cc",
+          "Rustboro Rival Fennekin::0x3a82f4",
+          "Rustboro Rival Fennekin::0x3a831c",
+          "Rustboro Rival Fennekin::0x3a8344",
+          "Rustboro Rival Fennekin::0x3a836c",
+          "Rustboro Rival Fennekin::0x3a8394"
+        ]
+      },
+      {
+        "trainer": "Rustboro Rival Froakie",
+        "slots": [
+          "Rustboro Rival Froakie::0x3a83bc",
+          "Rustboro Rival Froakie::0x3a83e4",
+          "Rustboro Rival Froakie::0x3a840c",
+          "Rustboro Rival Froakie::0x3a8434",
+          "Rustboro Rival Froakie::0x3a845c",
+          "Rustboro Rival Froakie::0x3a8484"
+        ]
+      },
+      {
+        "trainer": "Cycling Road Rival Fennekin",
+        "slots": [
+          "Cycling Road Rival Fennekin::0x3aa3f4",
+          "Cycling Road Rival Fennekin::0x3aa41c",
+          "Cycling Road Rival Fennekin::0x3aa444",
+          "Cycling Road Rival Fennekin::0x3aa46c",
+          "Cycling Road Rival Fennekin::0x3aa494",
+          "Cycling Road Rival Fennekin::0x3aa4bc"
+        ]
+      },
+      {
+        "trainer": "Cycling Road Rival Froakie",
+        "slots": [
+          "Cycling Road Rival Froakie::0x3aa4e4",
+          "Cycling Road Rival Froakie::0x3aa50c",
+          "Cycling Road Rival Froakie::0x3aa534",
+          "Cycling Road Rival Froakie::0x3aa55c",
+          "Cycling Road Rival Froakie::0x3aa584",
+          "Cycling Road Rival Froakie::0x3aa5ac"
+        ]
+      },
+      {
+        "trainer": "Bridge Rival Fennekin",
+        "slots": [
+          "Bridge Rival Fennekin::0x3af054",
+          "Bridge Rival Fennekin::0x3af07c",
+          "Bridge Rival Fennekin::0x3af0a4",
+          "Bridge Rival Fennekin::0x3af0cc",
+          "Bridge Rival Fennekin::0x3af0f4",
+          "Bridge Rival Fennekin::0x3af11c"
+        ]
+      },
+      {
+        "trainer": "Bridge Rival Froakie",
+        "slots": [
+          "Bridge Rival Froakie::0x3af144",
+          "Bridge Rival Froakie::0x3af16c",
+          "Bridge Rival Froakie::0x3af194",
+          "Bridge Rival Froakie::0x3af1bc",
+          "Bridge Rival Froakie::0x3af1e4",
+          "Bridge Rival Froakie::0x3af20c"
+        ]
+      },
+      {
+        "trainer": "Lilycove Rival Fennekin",
+        "slots": [
+          "Lilycove Rival Fennekin::0x3b05f4",
+          "Lilycove Rival Fennekin::0x3b061c",
+          "Lilycove Rival Fennekin::0x3b0644",
+          "Lilycove Rival Fennekin::0x3b066c",
+          "Lilycove Rival Fennekin::0x3b0694",
+          "Lilycove Rival Fennekin::0x3b06bc"
+        ]
+      },
+      {
+        "trainer": "Lilycove Rival Froakie",
+        "slots": [
+          "Lilycove Rival Froakie::0x3b06e4",
+          "Lilycove Rival Froakie::0x3b070c",
+          "Lilycove Rival Froakie::0x3b0734",
+          "Lilycove Rival Froakie::0x3b075c",
+          "Lilycove Rival Froakie::0x3b0784",
+          "Lilycove Rival Froakie::0x3b07ac"
+        ]
+      },
+      {
+        "trainer": "Elite Four Drake Singles",
+        "slots": [
+          "Elite Four Drake Singles::0x3b75bc",
+          "Elite Four Drake Singles::0x3b75e4",
+          "Elite Four Drake Singles::0x3b760c",
+          "Elite Four Drake Singles::0x3b7634",
+          "Elite Four Drake Singles::0x3b765c",
+          "Elite Four Drake Singles::0x3b7684"
+        ]
+      },
+      {
+        "trainer": "Elite Four Drake Doubles",
+        "slots": [
+          "Elite Four Drake Doubles::0x3b76ac",
+          "Elite Four Drake Doubles::0x3b76d4",
+          "Elite Four Drake Doubles::0x3b76fc",
+          "Elite Four Drake Doubles::0x3b7724",
+          "Elite Four Drake Doubles::0x3b774c",
+          "Elite Four Drake Doubles::0x3b7774"
+        ]
+      }
+    ],
+    "Reserve evaluation uses native base species and preserves four native Mega reserves": [
+      {
+        "target": "Raichu-Mega-X (Dragon Tamer Regenor)",
+        "evaluationForm": "Raichu"
+      },
+      {
+        "target": "Zygarde-Mega (Adventurer Brandon 1)",
+        "evaluationForm": "Zygarde"
+      },
+      {
+        "target": "Tyranitar-Mega (Team Aqua Grunt Steve 3)",
+        "evaluationForm": "Tyranitar-Mega"
+      },
+      {
+        "target": "Steelix-Mega (Team Aqua Grunt Steve 3)",
+        "evaluationForm": "Steelix-Mega"
+      },
+      {
+        "target": "Garchomp-Mega (Team Aqua Grunt Steve 3)",
+        "evaluationForm": "Garchomp-Mega"
+      },
+      {
+        "target": "Salamence-Mega (Lorekeeper Zinnia)",
+        "evaluationForm": "Salamence-Mega"
+      }
+    ],
+    "The embedded Pokédex uses ROM 1.2.6 species, moves, learnsets and encounters": {
+      "version": "1.2.6",
+      "slowking": {
+        "0": "Regenerator",
+        "1": "Regenerator",
+        "H": "Shell Armor"
+      },
+      "hurricaneWind": 1,
+      "delphox": {
+        "powergem": [
+          "L68"
+        ],
+        "psystrike": [
+          "T"
+        ]
+      },
+      "route119Land": [
+        {
+          "species": "castform",
+          "minLvl": 70,
+          "maxLvl": 70
+        },
+        {
+          "species": "tapukoko",
+          "minLvl": 70,
+          "maxLvl": 70
+        },
+        {
+          "species": "tapubulu",
+          "minLvl": 70,
+          "maxLvl": 70
+        },
+        {
+          "species": "tapubulu",
+          "minLvl": 70,
+          "maxLvl": 70
+        }
+      ],
+      "magmaLast": {
+        "species": "heatran",
+        "minLvl": 55,
+        "maxLvl": 55
+      }
+    },
+    "Visible Pokédex panels render current abilities, native details, special tutors and level-up moves": {
+      "slowking": "Catch rate:\n200\nWild held items:\nNone",
+      "tutorNote": "Psystrike — Starter Tutor\nMystical Fire — Starter Tutor",
+      "psystrikeRows": [
+        " Psystrike  Power95 Accuracy100% PP8 Damages target based on Defense, not Sp. Def. "
+      ],
+      "kingdraIcyWind": {
+        "row": "L47 Icy Wind  Power55 Accuracy100% PP24 100% chance to lower the foe(s) Speed by 1. ",
+        "section": "Level-up"
+      },
+      "aegislash": {
+        "bladeAttack": 140,
+        "shieldDefense": 140
+      }
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,207 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "aiRevision": "null-1.2.6-public-release",
+  "releaseVerified": true,
+  "runId": "20261102205427062-9e0d8c",
+  "buildId": "239de790-ebbe-414b-91b5-ddc7806844df",
+  "startedAt": "2026-11-02T20:54:27.062Z",
+  "checkedAt": "2026-11-02T21:06:52.464Z",
+  "sourceTests": {
+    "tests": 325,
+    "pass": 325,
+    "fail": 0,
+    "skipped": 0
+  },
+  "distributionTests": {
+    "tests": 325,
+    "pass": 325,
+    "fail": 0,
+    "skipped": 0
+  },
+  "browsers": {
+    "source/check-dex-interface-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:54:57.828Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/dex-interface-browser.json",
+      "sha256": "6d85f84a063b2cac3e3cb6f9a1379c1fd61617ae7cf7303e5338b8b5eb45d5f9",
+      "errors": []
+    },
+    "source/check-update126-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:55:22.658Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/update126-browser.json",
+      "sha256": "b0a9ac0b29474108f62c9e494f5f707953d7f461d7daf2aa59161fc28f64bc1e",
+      "errors": []
+    },
+    "source/check-doubles-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:57:43.066Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/doubles-browser.json",
+      "sha256": "fa5745f938bcdeae4948cacb21d32b67e28abf70fd65945304f63f2d617349fd",
+      "errors": []
+    },
+    "source/check-trick-room-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:58:05.840Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/trick-room-browser.json",
+      "sha256": "c5d7d427903090697f79bd808b510948812f0e43f1475b3112941d3f2697b601",
+      "errors": []
+    },
+    "source/check-faint-context-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:58:31.670Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/faint-context-browser.json",
+      "sha256": "adc20393beb8211aa991365431d2a8e078cdbd37212afb055d0adb9dc574b36a",
+      "errors": []
+    },
+    "source/check-last-resort-normalize-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:59:06.137Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/last-resort-normalize-browser.json",
+      "sha256": "393ed5ace87922735652aa1c9f00f73e8a286d7ff1bdf3f8d205ae737db3e8d7",
+      "errors": []
+    },
+    "source/check-custom-set-reset-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:59:23.345Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/custom-set-reset-browser.json",
+      "sha256": "f9e0e70c9e6673ef59a0f1aa07bc05e42bcd8c76e39c9befc2be4c6774cbf141",
+      "errors": []
+    },
+    "source/check-battle-store-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T20:59:52.625Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/battle-store-browser.json",
+      "sha256": "5702cde47d104c918caebe42a52b009a90aef9577a2285ae48f73b04abc1d7b7",
+      "errors": []
+    },
+    "source/check-native-threshold-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T21:00:05.068Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/native-threshold-browser.json",
+      "sha256": "18499f1eff5b14c4031ca83e574bcaf4aadd9ddc19080b0097669b94947f163f",
+      "errors": []
+    },
+    "source/check-reserve-forms-browser.cjs": {
+      "entrySHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+      "checkedAt": "2026-11-02T21:00:19.160Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/source/reserve-forms-browser.json",
+      "sha256": "330ed230531f0db3e927684354788f1f77eadcf6e1f53e00032fcc6915015642",
+      "errors": []
+    },
+    "distribution/check-dex-interface-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:00:42.027Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/dex-interface-browser.json",
+      "sha256": "f23ec3a0fabfefe5388256e51fb221d318230fe3c746d10734f45a821a05c376",
+      "errors": []
+    },
+    "distribution/check-update126-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:01:06.840Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/update126-browser.json",
+      "sha256": "fa39a6d4ffe4d3dafc2edd5529dbc667986a9c2f2a98b7a1334d2e65ec24290f",
+      "errors": []
+    },
+    "distribution/check-doubles-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:03:26.495Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/doubles-browser.json",
+      "sha256": "3892b51771d8c6229aec3f0e3da39a3bc13e4348a599d8e722045c9b16476872",
+      "errors": []
+    },
+    "distribution/check-trick-room-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:03:51.104Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/trick-room-browser.json",
+      "sha256": "ed0f23f3204e5405d2e4e268f253d854427f56ffcc93d56043cb90a3d3f4db56",
+      "errors": []
+    },
+    "distribution/check-faint-context-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:04:16.680Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/faint-context-browser.json",
+      "sha256": "08eb5bfbe51ec653b76e97183b8cf1b08b6f2cc8aec5896a85d8c9b04770d49b",
+      "errors": []
+    },
+    "distribution/check-last-resort-normalize-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:04:52.082Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/last-resort-normalize-browser.json",
+      "sha256": "03c39084992715ff88161c8d36f59dde43b553ed681ff0f6014ea016f52039f6",
+      "errors": []
+    },
+    "distribution/check-custom-set-reset-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:05:13.290Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/custom-set-reset-browser.json",
+      "sha256": "1ac133d9037669e07c699616db1d0045e75023384bfb3d997360cd7cc6091eb3",
+      "errors": []
+    },
+    "distribution/check-battle-store-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:05:38.983Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/battle-store-browser.json",
+      "sha256": "ae8dbbc0699f8da2b70aad47bc4c06669c0a28e5fee47858bc78f6ce9b793f81",
+      "errors": []
+    },
+    "distribution/check-native-threshold-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:05:51.109Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/native-threshold-browser.json",
+      "sha256": "1c0168e53255d50bd54c4ba3c79bd700e165c88ed84fcdbf0b4b14866aeddeb6",
+      "errors": []
+    },
+    "distribution/check-reserve-forms-browser.cjs": {
+      "entrySHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+      "checkedAt": "2026-11-02T21:06:04.667Z",
+      "report": "verification/release-proof/20261102205427062-9e0d8c/distribution/reserve-forms-browser.json",
+      "sha256": "16a1c1348dc74e3263cdaff8f8b7e72b8ee35e0f995e24ae77e3a6b2c4192fa8",
+      "errors": []
+    }
+  },
+  "browserEquivalence": {
+    "equivalent": true,
+    "comparedSnapshots": 16
+  },
+  "gameVersion": "1.2.6",
+  "trainerSetsPreserved": 2280,
+  "trainerSetsCurrent": 2288,
+  "protectedOriginalFilesVerified": 147,
+  "singleArchive": true,
+  "nativeParityCertified": false,
+  "nativeROMRechecked": true,
+  "sourceAndDistributionModulesEqual": true,
+  "nativeAudit": {
+    "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+    "auditScriptSHA256": "1844baeab66e1851acf3f66e7a3dbb4e3ebba295af46d37bef00674336f677e9",
+    "reportSHA256": "2f78954423f62bd27358c8c69f7b6a5fd6a2e374448d272d9a2a956b502a8963"
+  },
+  "sourceContentSHA256": "69cbff2df6d6625a418e1ecfe4fe48fb3d84afa3790a9f997a1a02720a675975",
+  "distributionContentSHA256": "05715f701a01e20173b9ca6cd08e7c7c5d3789677dfd3b74de823b65bfc8bc7c",
+  "proofFiles": {
+    "verification/release-proof/20261102205427062-9e0d8c/distribution-tests.txt": "0a0bf26b7557b17baa3cc37adffd05d299fb1c4e2ab5dc2ff3097852594214e6",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/battle-store-browser.json": "ae8dbbc0699f8da2b70aad47bc4c06669c0a28e5fee47858bc78f6ce9b793f81",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/custom-set-reset-browser.json": "1ac133d9037669e07c699616db1d0045e75023384bfb3d997360cd7cc6091eb3",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/dex-interface-browser.json": "f23ec3a0fabfefe5388256e51fb221d318230fe3c746d10734f45a821a05c376",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/doubles-browser.json": "3892b51771d8c6229aec3f0e3da39a3bc13e4348a599d8e722045c9b16476872",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/faint-context-browser.json": "08eb5bfbe51ec653b76e97183b8cf1b08b6f2cc8aec5896a85d8c9b04770d49b",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/last-resort-normalize-browser.json": "03c39084992715ff88161c8d36f59dde43b553ed681ff0f6014ea016f52039f6",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/native-threshold-browser.json": "1c0168e53255d50bd54c4ba3c79bd700e165c88ed84fcdbf0b4b14866aeddeb6",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/reserve-forms-browser.json": "16a1c1348dc74e3263cdaff8f8b7e72b8ee35e0f995e24ae77e3a6b2c4192fa8",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/trick-room-browser.json": "ed0f23f3204e5405d2e4e268f253d854427f56ffcc93d56043cb90a3d3f4db56",
+    "verification/release-proof/20261102205427062-9e0d8c/distribution/update126-browser.json": "fa39a6d4ffe4d3dafc2edd5529dbc667986a9c2f2a98b7a1334d2e65ec24290f",
+    "verification/release-proof/20261102205427062-9e0d8c/organized-browser.json": "f13265105beb15063f26d2b99e7b667ef8648151b72f0eadfac245af0be269e0",
+    "verification/release-proof/20261102205427062-9e0d8c/source-tests.txt": "0752ad8ebac27b65e225479ac5d4fcc45fb7b0ed305443894db864ccde3b0075",
+    "verification/release-proof/20261102205427062-9e0d8c/source/battle-store-browser.json": "5702cde47d104c918caebe42a52b009a90aef9577a2285ae48f73b04abc1d7b7",
+    "verification/release-proof/20261102205427062-9e0d8c/source/custom-set-reset-browser.json": "f9e0e70c9e6673ef59a0f1aa07bc05e42bcd8c76e39c9befc2be4c6774cbf141",
+    "verification/release-proof/20261102205427062-9e0d8c/source/dex-interface-browser.json": "6d85f84a063b2cac3e3cb6f9a1379c1fd61617ae7cf7303e5338b8b5eb45d5f9",
+    "verification/release-proof/20261102205427062-9e0d8c/source/doubles-browser.json": "fa5745f938bcdeae4948cacb21d32b67e28abf70fd65945304f63f2d617349fd",
+    "verification/release-proof/20261102205427062-9e0d8c/source/faint-context-browser.json": "adc20393beb8211aa991365431d2a8e078cdbd37212afb055d0adb9dc574b36a",
+    "verification/release-proof/20261102205427062-9e0d8c/source/last-resort-normalize-browser.json": "393ed5ace87922735652aa1c9f00f73e8a286d7ff1bdf3f8d205ae737db3e8d7",
+    "verification/release-proof/20261102205427062-9e0d8c/source/native-threshold-browser.json": "18499f1eff5b14c4031ca83e574bcaf4aadd9ddc19080b0097669b94947f163f",
+    "verification/release-proof/20261102205427062-9e0d8c/source/reserve-forms-browser.json": "330ed230531f0db3e927684354788f1f77eadcf6e1f53e00032fcc6915015642",
+    "verification/release-proof/20261102205427062-9e0d8c/source/trick-room-browser.json": "c5d7d427903090697f79bd808b510948812f0e43f1475b3112941d3f2697b601",
+    "verification/release-proof/20261102205427062-9e0d8c/source/update126-browser.json": "b0a9ac0b29474108f62c9e494f5f707953d7f461d7daf2aa59161fc28f64bc1e"
+  }
+}

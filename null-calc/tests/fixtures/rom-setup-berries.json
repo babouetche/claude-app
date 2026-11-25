@@ -1,0 +1,59 @@
+{
+  "romSHA256": "a6f4f3f9d9b68515c70b134d6f0e79b3fd22e00c2f1468dbafa5b7529d98dbf4",
+  "itemTableBase": "0x8858a4",
+  "recordSize": 44,
+  "holdEffectOffset": 24,
+  "holdEffectParamOffset": 25,
+  "method": "Seven unique encoded name anchors, native item IDs matched to supplied Lua enum, and consistent 44-byte stride. Healing amounts are native table parameters; trigger thresholds and the missing AI helper remain documented estimates.",
+  "berries": {
+    "Oran Berry": {
+      "id": 520,
+      "offset": "0x88b204",
+      "recordBytes": "c9e6d5e200bcd9e6e6edff00000000000000000008021400010a0000852f880800000501c951120801000a00",
+      "holdEffect": 1,
+      "holdEffectParam": 10
+    },
+    "Sitrus Berry": {
+      "id": 523,
+      "offset": "0x88b288",
+      "recordBytes": "cddde8e6e9e700bcd9e6e6edff000000000000000b021400641900001130880800000501c951120801000a00",
+      "holdEffect": 100,
+      "holdEffectParam": 25
+    },
+    "Figy Berry": {
+      "id": 524,
+      "offset": "0x88b2b4",
+      "recordBytes": "c0dddbed00bcd9e6e6edff0000000000000000000c0214000a02000043308808000005040d60120800000a00",
+      "holdEffect": 10,
+      "holdEffectParam": 2
+    },
+    "Wiki Berry": {
+      "id": 525,
+      "offset": "0x88b2e0",
+      "recordBytes": "d1dddfdd00bcd9e6e6edff0000000000000000000d0214000b02000071308808000005040d60120800000a00",
+      "holdEffect": 11,
+      "holdEffectParam": 2
+    },
+    "Mago Berry": {
+      "id": 526,
+      "offset": "0x88b30c",
+      "recordBytes": "c7d5dbe300bcd9e6e6edff0000000000000000000e0214000c0200009f308808000005040d60120800000a00",
+      "holdEffect": 12,
+      "holdEffectParam": 2
+    },
+    "Aguav Berry": {
+      "id": 527,
+      "offset": "0x88b338",
+      "recordBytes": "bbdbe9d5ea00bcd9e6e6edff00000000000000000f0214000d020000cd308808000005040d60120800000a00",
+      "holdEffect": 13,
+      "holdEffectParam": 2
+    },
+    "Iapapa Berry": {
+      "id": 528,
+      "offset": "0x88b364",
+      "recordBytes": "c3d5e4d5e4d500bcd9e6e6edff00000000000000100214000e020000fb308808000005040d60120800000a00",
+      "holdEffect": 14,
+      "holdEffectParam": 2
+    }
+  }
+}

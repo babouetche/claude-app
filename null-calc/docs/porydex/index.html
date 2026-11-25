@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>window.__DEX_ROOT = new URL("./", location.href).pathname;</script>
+
+    <title>Pok&eacute;dex - Pok&eacute;mon Showdown</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=IE8" />
+	<script>
+		(function () {
+			var theme = 'light';
+			try {
+				var savedTheme = localStorage.getItem('nulldex-theme');
+				if (savedTheme === 'dark' || savedTheme === 'light') theme = savedTheme;
+			} catch (e) {}
+			document.documentElement.setAttribute('data-theme', theme);
+		})();
+	</script>
+    <link
+      rel="stylesheet"
+      href="vendor/play-ps/font-awesome.css"
+    />
+    <link rel="stylesheet" href="theme/panels.css?b2" />
+    <link rel="stylesheet" href="theme/main.css?b1" />
+    <link rel="stylesheet" href="theme/theme-toggle.css?b4" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="vendor/play-ps/utilichart.css"
+    />
+    <link rel="stylesheet" href="theme/pokedex.css?b359" />
+
+    <!-- Workarounds for IE bugs to display trees correctly. -->
+    <!--[if lte IE 6
+      ]><style>
+        li.tree {
+          height: 1px;
+        }
+      </style><!
+    [endif]-->
+    <!--[if IE 7
+      ]><style>
+        li.tree {
+          zoom: 1;
+        }
+      </style><!
+    [endif]-->
+  </head>
+  <body>
+    <div class="pfx-topbar">
+      <div class="header">
+        <ul class="nav">
+          <li>
+            <a
+              class="button nav-first"
+              href="https://docs.google.com/spreadsheets/d/1mwHPt0AMzOJ_hfmDrVZpKP-Hf4eTT0ROhY8Wa7bY7r8/edit?gid=1449301522#gid=1449301522"
+              ><img
+                src="images/pokemonshowdownbeta.png"
+                alt="Pok&eacute;mon Showdown! (beta)"
+              />Trainer Sheet</a
+            >
+          </li>
+          <li><a class="button" href="index.html">Pok&eacute;dex</a></li>
+          <li>
+            <a
+              class="button"
+              href="../../CALCULATEUR.html"
+              target="_blank"
+              >Calculator</a
+            >
+          </li>
+          <li>
+            <a
+              class="button"
+              href="https://pokemonnull.com/patch-applier.html"
+              target="_blank"
+              >Download</a
+            >
+          </li>
+        </ul>
+        <div style="clear: both"></div>
+        <ul class="nav nav-theme">
+          <li>
+            <label class="theme-label" for="theme-select">Theme</label>
+            <select id="theme-select" class="textbox theme-select" aria-label="Theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </li>
+        </ul>
+        <div style="clear: both"></div>
+      </div>
+    </div>
+    <div class="pfx-panel">
+      <div class="pfx-body">
+        <noscript
+          ><p>
+            <strong>Requires JavaScript!</strong>
+          </p></noscript
+        >
+        <p>Loading...</p>
+      </div>
+    </div>
+    <script src="js/lib/jquery-1.12.4.min.js"></script>
+    <script src="js/lib/lodash.min.js"></script>
+    <script src="js/lib/backbone-min.js"></script>
+    <script src="js/local-navigation.js"></script>
+    <script src="js/panels.js"></script>
+    <script src="config/config.js?v0.9xy31"></script>
+    <script src="js/battledata.js?v0.9xy31"></script>
+    <script src="js/dex-vendor-assets.js?v0.9xy31"></script>
+    <script src="js/battle-sprite.js?v0.9xy31"></script>
+    <script src="js/calc-icon.js?v0.9xy31"></script>
+    <script src="data/search-index.js?v0.9xy31"></script>
+    <script src="vendor/play-ps/teambuilder-tables.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/typechart.js?v0.9xy31"></script>
+    <script src="vendor/play-ps/aliases.js?v0.9xy31"></script>
+    <script src="js/battle-dex-search.js?v0.9xy31"></script>
+    <script src="js/search.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/species.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/learnsets.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/encounters.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/moves.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/abilities.js?v0.9xy31"></script>
+    <script src="../js/data/nulldex/items.js?v0.9xy31"></script>
+    <script src="data/null-1.2.6.js"></script>
+    <script src="js/version126-data.js"></script>
+    <script src="js/pokedex.js?b359"></script>
+    <script src="js/pokedex-pokemon.js?b359"></script>
+    <script src="js/pokedex-moves.js?b359"></script>
+    <script src="js/pokedex-encounters.js?b359"></script>
+    <script src="js/pokedex-search.js?b359"></script>
+    <script src="js/nulldex-encounters.js"></script>
+    <script src="js/version126-panels.js"></script>
+    <script src="js/router.js?b359"></script>
+    <script src="js/theme-toggle.js"></script>
+  </body>
+</html>

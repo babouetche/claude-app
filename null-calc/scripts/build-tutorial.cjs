@@ -1,0 +1,11 @@
+'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
+const root=path.resolve(__dirname,'..');
+const current=path.join(root,'documentation/TUTORIEL_SOURCE.txt');
+const text=fs.readFileSync(fs.existsSync(current)?current:path.join(root,'TUTORIEL.txt'),'utf8');
+const escape=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const chunks=text.split(/\r?\n\r?\n/);
+const body=chunks.map((chunk,i)=> i===0?'<h1>'+escape(chunk.split('\n')[0])+'</h1><p>'+escape(chunk.split('\n').slice(1).join('\n'))+'</p>': '<p>'+escape(chunk).replace(/\n/g,'<br>')+'</p>').join('\n');
+fs.writeFileSync(path.join(root,'TUTORIEL.html'),`<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Guide du calculateur Null</title><style>body{font:16px/1.65 system-ui,sans-serif;background:#edf3f5;color:#16343d;margin:0}main{max-width:900px;margin:32px auto;padding:36px;background:white;border-radius:16px}h1{line-height:1.2;font-size:30px}a{color:#06748c}p{white-space:normal}p::first-line{font-weight:650}.start{display:inline-block;background:#06748c;color:white;text-decoration:none;padding:12px 22px;border-radius:8px;margin:12px 0}@media(max-width:600px){main{margin:0;padding:24px;border-radius:0}}</style><main><a class="start" href="CALCULATEUR.html">Ouvrir le calculateur</a>${body}</main></html>`);
+console.log('TUTORIEL.html ready.');

@@ -1,0 +1,21 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "gameVersion": "1.2.6",
+  "romFixture": "rom-1.2.6-data.json",
+  "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+  "luaSHA256": "984709a7418cafec66e7715b45d6c7771b17c3b7a523c171c394fd8cc36b62ee",
+  "reserveFormFixture": "reserve-form-rom-1.2.6.json",
+  "minimumComparedSnapshots": 16,
+  "browserCases": [
+    ["check-dex-interface-browser.cjs", "dex-interface-browser.json"],
+    ["check-update126-browser.cjs", "update126-browser.json"],
+    ["check-doubles-browser.cjs", "doubles-browser.json"],
+    ["check-trick-room-browser.cjs", "trick-room-browser.json"],
+    ["check-faint-context-browser.cjs", "faint-context-browser.json"],
+    ["check-last-resort-normalize-browser.cjs", "last-resort-normalize-browser.json"],
+    ["check-custom-set-reset-browser.cjs", "custom-set-reset-browser.json"],
+    ["check-battle-store-browser.cjs", "battle-store-browser.json"],
+    ["check-native-threshold-browser.cjs", "native-threshold-browser.json"],
+    ["check-reserve-forms-browser.cjs", "reserve-forms-browser.json"]
+  ]
+}

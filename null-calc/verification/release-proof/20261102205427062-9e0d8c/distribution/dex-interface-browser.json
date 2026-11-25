@@ -1,0 +1,61 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "checkedAt": "2026-11-02T21:00:42.027Z",
+  "entry": "C:\\Users\\pseud\\.codex\\.chatgpt-projects\\g-p-6a9ed0f7ceb88191bba3523b4b34109b\\livraison\\release-20261102205427062-9e0d8c\\Null-Calculateur\\CALCULATEUR.html",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "checks": [
+    "All 245 encounter profiles retain independently checked native bytes and map pointers",
+    "Official header, theme, location list and independent split panels",
+    "Location to Pokémon to ability keeps the contextual Rustboro Grove back button",
+    "Pokémon fishing encounters show numeric rates, levels and working native new-tab links",
+    "Dark theme persists and the official panels remain usable on narrow screens",
+    "Official species encounter filters and keyboard navigation work from local routes",
+    "Embedded official Calculator button returns without resetting the battle"
+  ],
+  "details": {
+    "All 245 encounter profiles retain independently checked native bytes and map pointers": {
+      "rechecked": true,
+      "profiles": 245,
+      "areas": 145,
+      "slots": 2226
+    },
+    "Official header, theme, location list and independent split panels": [
+      {
+        "fragment": "encounters/",
+        "left": -1,
+        "width": 1050.671875,
+        "overflow": "auto"
+      },
+      {
+        "fragment": "encounters/rustborogrove",
+        "left": 1048.671875,
+        "width": 784,
+        "overflow": "auto"
+      }
+    ],
+    "Location to Pokémon to ability keeps the contextual Rustboro Grove back button": {
+      "backButton": "Rustboro Grove",
+      "ability": "Intimidate"
+    },
+    "Pokémon fishing encounters show numeric rates, levels and working native new-tab links": {
+      "rustboroRate": "20% Lv 15\nRustboro Grove",
+      "newTabActions": 2
+    },
+    "Dark theme persists and the official panels remain usable on narrow screens": {
+      "persistedTheme": "dark",
+      "viewportWidth": 700
+    },
+    "Official species encounter filters and keyboard navigation work from local routes": {
+      "filteredAreas": 5,
+      "keyboardRoute": "pokemon/slowking",
+      "flavorRestored": true
+    },
+    "Embedded official Calculator button returns without resetting the battle": {
+      "preservedHP": [
+        "37",
+        "168"
+      ]
+    }
+  },
+  "errors": []
+}

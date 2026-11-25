@@ -1,0 +1,30 @@
+{
+  "revision": "post-ko-faint-context",
+  "checkedAt": "2026-11-02T21:04:16.680Z",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "trainerDataSHA256": "5750c9d5eb796deea5ded6d40b8932a3f9dddf4a37c03af0125d08650f865826",
+  "scores": [
+    {
+      "name": "Dipplin",
+      "score": 2,
+      "probability": 0
+    },
+    {
+      "name": "Dunsparce",
+      "score": 0,
+      "probability": 0
+    },
+    {
+      "name": "Watchog",
+      "score": 4,
+      "probability": 1
+    }
+  ],
+  "checks": [
+    "Kenobi screenshot reproduced exactly: ordinary Retaliate 55–66, post-KO Retaliate 109–130; Watchog score 4 beats Dipplin 2. Normal switches, strict mode, Trick Room/Analytic and repeated recalculation use the correct separate profiles without changing battle HP/damage.",
+    "EN/FR explanations agree. The active Retaliate power remains an explicit manual input (70 or 140); source trainer sets stay unchanged.",
+    "Last Respects and Supreme Overlord include prior faints plus the simulated KO once; KO/Restore reverses profiles, an already marked active is not counted twice, explicit cumulative revival totals persist within the trainer, and changed faint history invalidates a frozen Switch into reference.",
+    "Complete doubles counts only the selected simulated KO and includes a partner at 0 HP; the living active partner remains excluded from reserves. Singles/trainer changes restore Kenobi and clear the previous trainer faint-total input."
+  ],
+  "errors": []
+}

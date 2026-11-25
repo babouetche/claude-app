@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-11-02T20:57:43.066Z",
+  "entry": "C:\\Users\\pseud\\.codex\\.chatgpt-projects\\g-p-6a9ed0f7ceb88191bba3523b4b34109b\\Null-1.2-Damage-Calc\\CALCULATEUR.html",
+  "checks": [
+    "Incomplete doubles withholds move/target and switch destination probabilities.",
+    "Screenshot Poipole vs Chesnaught: numerical estimates, Sleep Talk 0, two active slots excluded from reserves; displayed damage unchanged.",
+    "Partner HP changes targets; fainted targets excluded; strict mode hides estimates.",
+    "Language toggle and four-battler Switch into snapshot retain partner state and predictions.",
+    "Slot correspondence changes the post-KO player reference; Trick Room applies; marking/restoring the active partner updates its availability.",
+    "Doubles disable and return to Singles preserve the original single-battle probability and damage results."
+  ],
+  "baseline": [
+    0,
+    0.00640869140625,
+    0,
+    0.99359130859375
+  ],
+  "errors": []
+}

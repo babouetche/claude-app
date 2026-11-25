@@ -1,0 +1,4722 @@
+{
+  "schemaVersion": 1,
+  "version": "1.2.6",
+  "methods": [
+    {
+      "area": "route119",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "tornadus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "tornadus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "thundurus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "thundurus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "landorus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "landorus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "enamorus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "enamorus",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "castform",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "tapukoko",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "tapubulu",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "tapubulu",
+            "minLvl": 70,
+            "maxLvl": 70
+          }
+        ]
+      }
+    },
+    {
+      "area": "route119",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "quaquaval",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "samurotthisui",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "samurott",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "tentacruel",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "goomy",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "dragonair",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout1f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "chandelure",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "runerigus",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "typhlosionhisui",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "typhlosion",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "skeledirge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "marowakalola",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "aggron",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "rhyperior",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ceruledge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ceruledge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "marowak",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "heatran",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "route102",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "zubat",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "noibat",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "natu",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "starly",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "ducklett",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "fletchling",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "rookidee",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "minior",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "wattrel",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "fletchling",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "swablu",
+            "minLvl": 7,
+            "maxLvl": 7
+          },
+          {
+            "species": "murkrow",
+            "minLvl": 7,
+            "maxLvl": 7
+          }
+        ]
+      }
+    },
+    {
+      "area": "route105",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "pawmot",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "pawmot",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "dipplin",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "serperior",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "poliwrath",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "magneton",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "gallade",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "alakazam",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "hawlucha",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "blaziken",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "exeggutoralola",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "exeggutor",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "route112",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "hitmontop",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "marill",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "chimecho",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "camerupt",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "arcanine",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "arcaninehisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "rockruff",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "scovillain",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "fraxure",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "vibrava",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "vibrava",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "vibrava",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "route118",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "pinsir",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "delcatty",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spinda",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "victreebel",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "manectric",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "ferroseed",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "magmar",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "breloom",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "amoonguss",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "butterfree",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "treecko",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "wimpod",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "granitecaveb1f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "phanpy",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "trapinch",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "cubone",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "mudbray",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "hippopotas",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "rhyhorn",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "onix",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "toedscool",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "sandile",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "gligar",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "numel",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "numel",
+            "minLvl": 15,
+            "maxLvl": 15
+          }
+        ]
+      }
+    },
+    {
+      "area": "underwaterroute126",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "lanturn",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "gorebyss",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "huntail",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "dondozo",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "relicanth",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "carracosta",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "granitecaveb2f",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "mrmime",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "ninetalesalola",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "darumakagalar",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "munchlax",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "arctibax",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "absol",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "granitecaveb2f",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "glalie",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "sealeo",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "swalot",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "duosion",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "snubbull",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bronzor",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "fierypath",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "torkoal",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "torkoal",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "turtonator",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "centiskorch",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "camerupt",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "magcargo",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "coalossal",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "heatmor",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "scorbunny",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "chimchar",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "torchic",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "fuecoco",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "fierypath",
+      "method": "rock",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "magmortar",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "electivire",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "lycanroc",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "pyroar",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "ampharos",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "meteorfallsb1f2r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "greattusk",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "irontreads",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "fluttermane",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "ironvaliant",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "screamtail",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "ironbundle",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "roaringmoon",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "ironthorns",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "stakataka",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "kartana",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "pheromosa",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "buzzwole",
+            "minLvl": 95,
+            "maxLvl": 95
+          }
+        ]
+      }
+    },
+    {
+      "area": "meteorfallsb1f2r",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "ironbundle",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "walkingwake",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "ironjugulis",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "naganadel",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "celesteela",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "celesteela",
+            "minLvl": 95,
+            "maxLvl": 95
+          }
+        ]
+      }
+    },
+    {
+      "area": "meteorfallsb1f2r",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "tatsugiri",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "tatsugiri",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "tatsugiri",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "dondozo",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "dondozo",
+            "minLvl": 95,
+            "maxLvl": 95
+          },
+          {
+            "species": "dondozo",
+            "minLvl": 95,
+            "maxLvl": 95
+          }
+        ]
+      }
+    },
+    {
+      "area": "route106",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "lapras",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "gyarados",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "tatsugiri",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "dondozo",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "wailmer",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "goomy",
+            "minLvl": 20,
+            "maxLvl": 20
+          }
+        ]
+      }
+    },
+    {
+      "area": "route108",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "carvanha",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "lombre",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "oshawott",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "tentacool",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "arrokuda",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "buizel",
+            "minLvl": 20,
+            "maxLvl": 20
+          }
+        ]
+      }
+    },
+    {
+      "area": "route108",
+      "method": "fish",
+      "value": {
+        "baseRate": 30,
+        "encs": [
+          {
+            "species": "corphish",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "grimeralola",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "squirtle",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "mareanie",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "chewtle",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "binacle",
+            "minLvl": 20,
+            "maxLvl": 20
+          }
+        ]
+      }
+    },
+    {
+      "area": "route109",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "seadra",
+            "minLvl": 32,
+            "maxLvl": 32
+          },
+          {
+            "species": "drampa",
+            "minLvl": 32,
+            "maxLvl": 32
+          },
+          {
+            "species": "swablu",
+            "minLvl": 32,
+            "maxLvl": 32
+          },
+          {
+            "species": "clawitzer",
+            "minLvl": 32,
+            "maxLvl": 32
+          },
+          {
+            "species": "wailmer",
+            "minLvl": 32,
+            "maxLvl": 32
+          },
+          {
+            "species": "dratini",
+            "minLvl": 32,
+            "maxLvl": 32
+          }
+        ]
+      }
+    },
+    {
+      "area": "newmauvilleinside",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "charjabug",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "magneton",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "magneton",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "togedemaru",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "togedemaru",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "rotom",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "raichu",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "probopass",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "ampharos",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "metang",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "electabuzz",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "boltund",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "route123",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "veluza",
+            "minLvl": 61,
+            "maxLvl": 61
+          },
+          {
+            "species": "corsola",
+            "minLvl": 61,
+            "maxLvl": 61
+          },
+          {
+            "species": "gyarados",
+            "minLvl": 61,
+            "maxLvl": 61
+          },
+          {
+            "species": "milotic",
+            "minLvl": 61,
+            "maxLvl": 61
+          },
+          {
+            "species": "toxapex",
+            "minLvl": 61,
+            "maxLvl": 61
+          },
+          {
+            "species": "corsolagalar",
+            "minLvl": 61,
+            "maxLvl": 61
+          }
+        ]
+      }
+    },
+    {
+      "area": "mtpyre3f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "honedge",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "doublade",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "annihilape",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "mimikyu",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "polteageist",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "dusknoir",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "lampent",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "ceruledge",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "zoroarkhisui",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "zoroarkhisui",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "froslass",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "froslass",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "mtpyre5f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "meowscarada",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "incineroar",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "mabosstiff",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "mandibuzz",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "weavile",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "absol",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bisharp",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "tyranitar",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "grimmsnarl",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "grimmsnarl",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "grimmsnarl",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "mtpyre6f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "typhlosion",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "typhlosionhisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "skeledirge",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "decidueye",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "decidueyehisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "dhelmise",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "brambleghast",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "rotom",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "annihilape",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "mimikyu",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "gholdengo",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "gholdengo",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "mtpyreexterior",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "pumpkaboosuper",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "pumpkaboosuper",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "poltchageist",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "poltchageist",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "decidueye",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "decidueye",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bramblin",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "dhelmise",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "phantump",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "phantump",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "houndstone",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "houndstone",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "route131",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "golisopod",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "lumineon",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "bibarel",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "octillery",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "clawitzer",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "luvdisc",
+            "minLvl": 65,
+            "maxLvl": 65
+          }
+        ]
+      }
+    },
+    {
+      "area": "seafloorcavernroom7",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "barbaracle",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "starmie",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "feraligatr",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "malamar",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "eelektross",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "eelektross",
+            "minLvl": 65,
+            "maxLvl": 65
+          }
+        ]
+      }
+    },
+    {
+      "area": "caveoforiginentrance",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "golem",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "golem",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "chansey",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "ursaring",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "hariyama",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "probopass",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "flygon",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "claydol",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "azelf",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "carbink",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "carbink",
+            "minLvl": 65,
+            "maxLvl": 65
+          }
+        ]
+      }
+    },
+    {
+      "area": "caveoforigin1f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "sableye",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "sableye",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "farigiraf",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "carbink",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "mawile",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "grimmsnarl",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "hatterene",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "audino",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "rapidashgalar",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "diancie",
+            "minLvl": 65,
+            "maxLvl": 65
+          },
+          {
+            "species": "diancie",
+            "minLvl": 65,
+            "maxLvl": 65
+          }
+        ]
+      }
+    },
+    {
+      "area": "newmauvilleentrance",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "heliolisk",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "pawmo",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "pawmo",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "morpeko",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "morpeko",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "rotom",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "raichualola",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "golemalola",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "magneton",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "tyranitar",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "toxtricity",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "toxtricitylowkey",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "victoryroadb1f",
+      "method": "rock",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "tyranitar",
+            "minLvl": 85,
+            "maxLvl": 85
+          },
+          {
+            "species": "metagross",
+            "minLvl": 85,
+            "maxLvl": 85
+          },
+          {
+            "species": "mawile",
+            "minLvl": 85,
+            "maxLvl": 85
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 85,
+            "maxLvl": 85
+          },
+          {
+            "species": "diancie",
+            "minLvl": 85,
+            "maxLvl": 85
+          }
+        ]
+      }
+    },
+    {
+      "area": "meteorfalls1f1r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "arbok",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "krookodile",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "gigalith",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "stoutland",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "incineroar",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "scrafty",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "mawile",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "arcaninehisui",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "tyranitar",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "bagon",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "shelgon",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "shoalcavelowtidestairsroom",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "grimmsnarl",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "grimmsnarl",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "medicham",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "kangaskhan",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "toxicroak",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "mienshao",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "goodrahisui",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "baxcalibur",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "stonjourner",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "tinkaton",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "tinkaton",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "tinkaton",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "shoalcavelowtidelowerroom",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "sneasler",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "lopunny",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "aggron",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "rhyperior",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "haxorus",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "skuntank",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "kingambit",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "altaria",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "golurk",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "floatzel",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "crabominable",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "crabominable",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "shoalcavelowtideentranceroom",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "garganacl",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "garganacl",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "sneasler",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "weavile",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "samurott",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "samurotthisui",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "escavalier",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "crustle",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "quaquaval",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "perrserker",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "froslass",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "clefable",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "lilycovecity",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "altaria",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dragonite",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "empoleon",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "kingdra",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "seismitoad",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "tatsugiri",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "evergrandecity",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "swampert",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "barraskewda",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "seismitoad",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "whiscash",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "cloyster",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "cloyster",
+            "minLvl": 70,
+            "maxLvl": 70
+          }
+        ]
+      }
+    },
+    {
+      "area": "petalburgcity",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "bombirdier",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "purrloin",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "meowthalola",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "maschiff",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "morpeko",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "nymble",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "houndour",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "inkay",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "inkay",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "murkrow",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "seedot",
+            "minLvl": 8,
+            "maxLvl": 8
+          },
+          {
+            "species": "seedot",
+            "minLvl": 8,
+            "maxLvl": 8
+          }
+        ]
+      }
+    },
+    {
+      "area": "underwaterroute124",
+      "method": "surf",
+      "value": {
+        "baseRate": 0,
+        "encs": []
+      }
+    },
+    {
+      "area": "shoalcavelowtideiceroom",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "beartic",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "aurorus",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "ninetalesalola",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "darmanitangalar",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "weavile",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "mrmimegalar",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "froslass",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "baxcalibur",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "mamoswine",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "abomasnow",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "glalie",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "frosmoth",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "skypillar1f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "lucario",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "scizor",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "skarmory",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "claydol",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "ursaluna",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "ursalunabloodmoon",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "mimikyu",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "rhyperior",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "krookodile",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "weavile",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "meowscarada",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "meowscarada",
+            "minLvl": 70,
+            "maxLvl": 70
+          }
+        ]
+      }
+    },
+    {
+      "area": "safarizonenortheast",
+      "method": "rock",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "diancie",
+            "minLvl": 80,
+            "maxLvl": 80
+          },
+          {
+            "species": "heatran",
+            "minLvl": 80,
+            "maxLvl": 80
+          },
+          {
+            "species": "regigigas",
+            "minLvl": 80,
+            "maxLvl": 80
+          },
+          {
+            "species": "zygarde10",
+            "minLvl": 80,
+            "maxLvl": 80
+          },
+          {
+            "species": "zygarde10",
+            "minLvl": 80,
+            "maxLvl": 80
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout2f1r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "taurospaldeablaze",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "garchomp",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "charizard",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "torkoal",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dachsbun",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "snorlax",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "darmanitan",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "darmanitangalar",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "armarouge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "armarouge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ceruledge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "virizion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout2f2r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "taurospaldeablaze",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "garchomp",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "charizard",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "torkoal",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dachsbun",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "snorlax",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "darmanitan",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "darmanitangalar",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "armarouge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "armarouge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ceruledge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "virizion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout3f1r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "mimikyu",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "salazzle",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "cinderace",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "infernape",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "garganacl",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "salamence",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dragonite",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ursaring",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "exeggutoralola",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "exeggutor",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "cobalion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout3f2r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "mimikyu",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "salazzle",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "cinderace",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "infernape",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "garganacl",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "salamence",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dragonite",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ursaring",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "exeggutoralola",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "exeggutor",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "cobalion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout4f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "ursaluna",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ursalunabloodmoon",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "heatmor",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "lopunny",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "sneasler",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "blaziken",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "hydreigon",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "baxcalibur",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "aerodactyl",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "magcargo",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "magcargo",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "terrakion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout3f3r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "mimikyu",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "salazzle",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "cinderace",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "infernape",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "garganacl",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "glimmora",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "salamence",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dragonite",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ursaring",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "exeggutoralola",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "exeggutor",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "cobalion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "magmahideout2f3r",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "taurospaldeablaze",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "garchomp",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "charizard",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "torkoal",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "dachsbun",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "snorlax",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "darmanitan",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "darmanitangalar",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "armarouge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "armarouge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "ceruledge",
+            "minLvl": 55,
+            "maxLvl": 55
+          },
+          {
+            "species": "virizion",
+            "minLvl": 55,
+            "maxLvl": 55
+          }
+        ]
+      }
+    },
+    {
+      "area": "miragetower3f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "misdreavus",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "misdreavus",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "shuppet",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "shuppet",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "yamask",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "yamaskgalar",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "duskull",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "duskull",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "sinistea",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "poltchageist",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "zoruahisui",
+            "minLvl": 43,
+            "maxLvl": 43
+          },
+          {
+            "species": "greavard",
+            "minLvl": 43,
+            "maxLvl": 43
+          }
+        ]
+      }
+    },
+    {
+      "area": "artisancaveb1f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "buneary",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "bewear",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "teddiursa",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "audino",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "kangaskhan",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "aipom",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "porygon",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "zigzagoongalar",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "cyclizar",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "eevee",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "happiny",
+            "minLvl": 20,
+            "maxLvl": 20
+          },
+          {
+            "species": "happiny",
+            "minLvl": 20,
+            "maxLvl": 20
+          }
+        ]
+      }
+    },
+    {
+      "area": "artisancave1f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "grafaiai",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "grafaiai",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bewear",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "diggersby",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "arboliva",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "pyroar",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "wyrdeer",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "obstagoon",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "cyclizar",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "audino",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "chansey",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "chansey",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "verdanturfgrotto",
+      "method": "rock",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "drednaw",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "cranidos",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "shuckle",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "glimmet",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "diancie",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "fallarbortown",
+      "method": "rock",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "tyrantrum",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "aurorus",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "decidueyehisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "breloom",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "lilliganthisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "rustborogrove",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "meowth",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "meowthalola",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "meowthalola",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "meowthgalar",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "meowthgalar",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "glameow",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "skitty",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "espurr",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "litten",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "purrloin",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "luxio",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "pichu",
+            "minLvl": 15,
+            "maxLvl": 15
+          }
+        ]
+      }
+    },
+    {
+      "area": "rustborogrove",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "kangaskhan",
+            "minLvl": 45,
+            "maxLvl": 45
+          },
+          {
+            "species": "hariyama",
+            "minLvl": 45,
+            "maxLvl": 45
+          },
+          {
+            "species": "avalugghisui",
+            "minLvl": 45,
+            "maxLvl": 45
+          },
+          {
+            "species": "eiscue",
+            "minLvl": 45,
+            "maxLvl": 45
+          },
+          {
+            "species": "raichu",
+            "minLvl": 45,
+            "maxLvl": 45
+          },
+          {
+            "species": "raichualola",
+            "minLvl": 45,
+            "maxLvl": 45
+          }
+        ]
+      }
+    },
+    {
+      "area": "rustborogrove",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "totodile",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "inkay",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "clauncher",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "buizel",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "lotad",
+            "minLvl": 15,
+            "maxLvl": 15
+          },
+          {
+            "species": "seel",
+            "minLvl": 15,
+            "maxLvl": 15
+          }
+        ]
+      }
+    },
+    {
+      "area": "mauvillecity",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "kilowattrel",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "joltik",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "manectric",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "pikachu",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "togedemaru",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "morpeko",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "pawmi",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "toxel",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "dracozolt",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "graveleralola",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "graveleralola",
+            "minLvl": 34,
+            "maxLvl": 34
+          },
+          {
+            "species": "graveleralola",
+            "minLvl": 34,
+            "maxLvl": 34
+          }
+        ]
+      }
+    },
+    {
+      "area": "battlefrontieroutsidewest",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "bibarel",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "dubwool",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "diggersby",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "dudunsparce",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "dudunsparcethreesegment",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "tauros",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "snorlax",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "ambipom",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "delcatty",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "purugly",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "persian",
+            "minLvl": 56,
+            "maxLvl": 56
+          },
+          {
+            "species": "spinda",
+            "minLvl": 56,
+            "maxLvl": 56
+          }
+        ]
+      }
+    },
+    {
+      "area": "skypillar2f",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "tyranitar",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "metagross",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "forretress",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "dusknoir",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "banette",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "sableye",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "gliscor",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "kleavor",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "mamoswine",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "sneasler",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "skeledirge",
+            "minLvl": 70,
+            "maxLvl": 70
+          },
+          {
+            "species": "skeledirge",
+            "minLvl": 70,
+            "maxLvl": 70
+          }
+        ]
+      }
+    },
+    {
+      "area": "mtchimney",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "typhlosion",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "typhlosionhisui",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "weezinggalar",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "camerupt",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "hakamoo",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "pignite",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "scolipede",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "lycanrocdusk",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "gliscor",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "minior",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "minior",
+            "minLvl": 50,
+            "maxLvl": 50
+          },
+          {
+            "species": "minior",
+            "minLvl": 50,
+            "maxLvl": 50
+          }
+        ]
+      }
+    },
+    {
+      "area": "navelrockfork",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "wyrdeer",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "exeggutoralola",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "carbink",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "cofagrigus",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "klefki",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "reuniclus",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "audino",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "orbeetle",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "hatterene",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "aquahideout1f",
+      "method": "surf",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "mukalola",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "dragalge",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "basculegionf",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "raichu",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "raichualola",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "raichualola",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "aquahideout1f",
+      "method": "fish",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "overqwil",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "tentacruel",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "basculegion",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "corsolagalar",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "sharpedo",
+            "minLvl": 60,
+            "maxLvl": 60
+          },
+          {
+            "species": "crawdaunt",
+            "minLvl": 60,
+            "maxLvl": 60
+          }
+        ]
+      }
+    },
+    {
+      "area": "southernislandexterior",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "sneaselhisui",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "riolu",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "chimchar",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "torchic",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "mankey",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "buneary",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "meditite",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "pawmo",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "hawlucha",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "timburr",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "terrakion",
+            "minLvl": 25,
+            "maxLvl": 25
+          },
+          {
+            "species": "terrakion",
+            "minLvl": 25,
+            "maxLvl": 25
+          }
+        ]
+      }
+    },
+    {
+      "area": "navelrockup2",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "golem",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "golemalola",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "magnezone",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "steelix",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "forretress",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "donphan",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bastiodon",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "duraludon",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "crustle",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "avalugg",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "avalugghisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "avalugghisui",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "navelrockup3",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "lycanrocmidnight",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bibarel",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "bombirdier",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "carbink",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "shuckle",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "minior",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "druddigon",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "armaldo",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "copperajah",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "meowstic",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "meowsticf",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "meowsticf",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "navelrockdown01",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "audino",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "yanmega",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "klawf",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "espathra",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "klefki",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "dachsbun",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "stonjourner",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "obstagoon",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "sableye",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "ninjask",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "hitmontop",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "hitmontop",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "navelrockdown02",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "clefable",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "mrmime",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "shiinotic",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "amoonguss",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "lucario",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "blastoise",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "sinistcha",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "larvesta",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "toedscruel",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "raichu",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "raichualola",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "raichualola",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    },
+    {
+      "area": "navelrockdown03",
+      "method": "land",
+      "value": {
+        "baseRate": 50,
+        "encs": [
+          {
+            "species": "shiftry",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "lokix",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "grimmsnarl",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "toxicroak",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "honchkrow",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "obstagoon",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "cinderace",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "lycanrocdusk",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "mawile",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          },
+          {
+            "species": "spiritomb",
+            "minLvl": 40,
+            "maxLvl": 40
+          }
+        ]
+      }
+    }
+  ],
+  "staticPools": [
+    {
+      "area": "route111",
+      "label": "Random static encounter",
+      "encs": [
+        {
+          "species": "golett",
+          "minLvl": 40,
+          "maxLvl": 40
+        },
+        {
+          "species": "sandygast",
+          "minLvl": 40,
+          "maxLvl": 40
+        },
+        {
+          "species": "sandshrew",
+          "minLvl": 40,
+          "maxLvl": 40
+        },
+        {
+          "species": "phanpy",
+          "minLvl": 40,
+          "maxLvl": 40
+        },
+        {
+          "species": "orthworm",
+          "minLvl": 40,
+          "maxLvl": 40
+        }
+      ],
+      "note": "Level 40 static event pool: Golett / Sandygast / Sandshrew / Phanpy / Orthworm. Orthworm was added in 1.2.5. Separate from grass, fishing, surfing and Rock Smash.",
+      "probabilities": null
+    }
+  ],
+  "locations": [
+    {
+      "area": "route101",
+      "name": "Route 101"
+    },
+    {
+      "area": "route102",
+      "name": "Route 102"
+    },
+    {
+      "area": "route103",
+      "name": "Route 103"
+    },
+    {
+      "area": "route104",
+      "name": "Route 104"
+    },
+    {
+      "area": "route105",
+      "name": "Route 105"
+    },
+    {
+      "area": "route110",
+      "name": "Route 110"
+    },
+    {
+      "area": "route111",
+      "name": "Route 111"
+    },
+    {
+      "area": "route112",
+      "name": "Route 112"
+    },
+    {
+      "area": "route113",
+      "name": "Route 113"
+    },
+    {
+      "area": "route114",
+      "name": "Route 114"
+    },
+    {
+      "area": "route116",
+      "name": "Route 116"
+    },
+    {
+      "area": "route117",
+      "name": "Route 117"
+    },
+    {
+      "area": "route118",
+      "name": "Route 118"
+    },
+    {
+      "area": "petalburgwoods",
+      "name": "Petalburg Woods"
+    },
+    {
+      "area": "rusturftunnel",
+      "name": "Rusturf Tunnel"
+    },
+    {
+      "area": "granitecave1f",
+      "name": "Granite Cave 1F"
+    },
+    {
+      "area": "granitecaveb1f",
+      "name": "Granite Cave B1F"
+    },
+    {
+      "area": "mtpyre1f",
+      "name": "Mt Pyre 1F"
+    },
+    {
+      "area": "victoryroad1f",
+      "name": "Victory Road 1F"
+    },
+    {
+      "area": "safarizonesouth",
+      "name": "Safari Zone South"
+    },
+    {
+      "area": "underwaterroute126",
+      "name": "Underwater Route 126"
+    },
+    {
+      "area": "abandonedshiproomsb1f",
+      "name": "Abandoned Ship Rooms B1F"
+    },
+    {
+      "area": "granitecaveb2f",
+      "name": "Granite Cave B2F"
+    },
+    {
+      "area": "fierypath",
+      "name": "Fiery Path"
+    },
+    {
+      "area": "meteorfallsb1f2r",
+      "name": "Meteor Falls B1F 2R"
+    },
+    {
+      "area": "jaggedpass",
+      "name": "Jagged Pass"
+    },
+    {
+      "area": "route106",
+      "name": "Route 106"
+    },
+    {
+      "area": "route107",
+      "name": "Route 107"
+    },
+    {
+      "area": "route108",
+      "name": "Route 108"
+    },
+    {
+      "area": "route109",
+      "name": "Route 109"
+    },
+    {
+      "area": "route115",
+      "name": "Route 115"
+    },
+    {
+      "area": "newmauvilleinside",
+      "name": "New Mauville Inside"
+    },
+    {
+      "area": "route119",
+      "name": "Route 119"
+    },
+    {
+      "area": "route120",
+      "name": "Route 120"
+    },
+    {
+      "area": "route121",
+      "name": "Route 121"
+    },
+    {
+      "area": "route122",
+      "name": "Route 122"
+    },
+    {
+      "area": "route123",
+      "name": "Route 123"
+    },
+    {
+      "area": "mtpyre2f",
+      "name": "Mt Pyre 2F"
+    },
+    {
+      "area": "mtpyre3f",
+      "name": "Mt Pyre 3F"
+    },
+    {
+      "area": "mtpyre4f",
+      "name": "Mt Pyre 4F"
+    },
+    {
+      "area": "mtpyre5f",
+      "name": "Mt Pyre 5F"
+    },
+    {
+      "area": "mtpyre6f",
+      "name": "Mt Pyre 6F"
+    },
+    {
+      "area": "mtpyreexterior",
+      "name": "Mt Pyre Exterior"
+    },
+    {
+      "area": "mtpyresummit",
+      "name": "Mt Pyre Summit"
+    },
+    {
+      "area": "granitecavestevensroom",
+      "name": "Granite Cave Stevens Room"
+    },
+    {
+      "area": "route125",
+      "name": "Route 125"
+    },
+    {
+      "area": "route126",
+      "name": "Route 126"
+    },
+    {
+      "area": "route127",
+      "name": "Route 127"
+    },
+    {
+      "area": "route128",
+      "name": "Route 128"
+    },
+    {
+      "area": "route131",
+      "name": "Route 131"
+    },
+    {
+      "area": "route134",
+      "name": "Route 134"
+    },
+    {
+      "area": "abandonedshiphiddenfloorcorridors",
+      "name": "Abandoned Ship Hidden Floor Corridors"
+    },
+    {
+      "area": "seafloorcavernroom1",
+      "name": "Seafloor Cavern Room1"
+    },
+    {
+      "area": "seafloorcavernroom2",
+      "name": "Seafloor Cavern Room2"
+    },
+    {
+      "area": "seafloorcavernroom3",
+      "name": "Seafloor Cavern Room3"
+    },
+    {
+      "area": "seafloorcavernroom4",
+      "name": "Seafloor Cavern Room4"
+    },
+    {
+      "area": "seafloorcavernroom5",
+      "name": "Seafloor Cavern Room5"
+    },
+    {
+      "area": "seafloorcavernroom6",
+      "name": "Seafloor Cavern Room6"
+    },
+    {
+      "area": "seafloorcavernroom7",
+      "name": "Seafloor Cavern Room7"
+    },
+    {
+      "area": "seafloorcavernroom8",
+      "name": "Seafloor Cavern Room8"
+    },
+    {
+      "area": "caveoforiginentrance",
+      "name": "Cave Of Origin Entrance"
+    },
+    {
+      "area": "caveoforigin1f",
+      "name": "Cave Of Origin 1F"
+    },
+    {
+      "area": "newmauvilleentrance",
+      "name": "New Mauville Entrance"
+    },
+    {
+      "area": "safarizonesouthwest",
+      "name": "Safari Zone Southwest"
+    },
+    {
+      "area": "safarizonenorth",
+      "name": "Safari Zone North"
+    },
+    {
+      "area": "safarizonenorthwest",
+      "name": "Safari Zone Northwest"
+    },
+    {
+      "area": "victoryroadb1f",
+      "name": "Victory Road B1F"
+    },
+    {
+      "area": "meteorfalls1f1r",
+      "name": "Meteor Falls 1F 1R"
+    },
+    {
+      "area": "meteorfalls1f2r",
+      "name": "Meteor Falls 1F 2R"
+    },
+    {
+      "area": "meteorfallsb1f1r",
+      "name": "Meteor Falls B1F 1R"
+    },
+    {
+      "area": "shoalcavelowtidestairsroom",
+      "name": "Shoal Cave Low Tide Stairs Room"
+    },
+    {
+      "area": "shoalcavelowtidelowerroom",
+      "name": "Shoal Cave Low Tide Lower Room"
+    },
+    {
+      "area": "shoalcavelowtideinnerroom",
+      "name": "Shoal Cave Low Tide Inner Room"
+    },
+    {
+      "area": "shoalcavelowtideentranceroom",
+      "name": "Shoal Cave Low Tide Entrance Room"
+    },
+    {
+      "area": "lilycovecity",
+      "name": "Lilycove City"
+    },
+    {
+      "area": "dewfordtown",
+      "name": "Dewford Town"
+    },
+    {
+      "area": "slateportcity",
+      "name": "Slateport City"
+    },
+    {
+      "area": "mossdeepcity",
+      "name": "Mossdeep City"
+    },
+    {
+      "area": "pacifidlogtown",
+      "name": "Pacifidlog Town"
+    },
+    {
+      "area": "evergrandecity",
+      "name": "Ever Grande City"
+    },
+    {
+      "area": "petalburgcity",
+      "name": "Petalburg City"
+    },
+    {
+      "area": "underwaterroute124",
+      "name": "Underwater Route 124"
+    },
+    {
+      "area": "shoalcavelowtideiceroom",
+      "name": "Shoal Cave Low Tide Ice Room"
+    },
+    {
+      "area": "skypillar1f",
+      "name": "Sky Pillar 1F"
+    },
+    {
+      "area": "sootopoliscity",
+      "name": "Sootopolis City"
+    },
+    {
+      "area": "skypillar3f",
+      "name": "Sky Pillar 3F"
+    },
+    {
+      "area": "skypillar5f",
+      "name": "Sky Pillar 5F"
+    },
+    {
+      "area": "safarizonesoutheast",
+      "name": "Safari Zone Southeast"
+    },
+    {
+      "area": "safarizonenortheast",
+      "name": "Safari Zone Northeast"
+    },
+    {
+      "area": "magmahideout1f",
+      "name": "Magma Hideout 1F"
+    },
+    {
+      "area": "magmahideout2f1r",
+      "name": "Magma Hideout 2F 1R"
+    },
+    {
+      "area": "magmahideout2f2r",
+      "name": "Magma Hideout 2F 2R"
+    },
+    {
+      "area": "magmahideout3f1r",
+      "name": "Magma Hideout 3F 1R"
+    },
+    {
+      "area": "magmahideout3f2r",
+      "name": "Magma Hideout 3F 2R"
+    },
+    {
+      "area": "magmahideout4f",
+      "name": "Magma Hideout 4F"
+    },
+    {
+      "area": "magmahideout3f3r",
+      "name": "Magma Hideout 3F 3R"
+    },
+    {
+      "area": "magmahideout2f3r",
+      "name": "Magma Hideout 2F 3R"
+    },
+    {
+      "area": "miragetower1f",
+      "name": "Mirage Tower 1F"
+    },
+    {
+      "area": "miragetower2f",
+      "name": "Mirage Tower 2F"
+    },
+    {
+      "area": "miragetower3f",
+      "name": "Mirage Tower 3F"
+    },
+    {
+      "area": "miragetower4f",
+      "name": "Mirage Tower 4F"
+    },
+    {
+      "area": "desertunderpass",
+      "name": "Desert Underpass"
+    },
+    {
+      "area": "artisancaveb1f",
+      "name": "Artisan Cave B1F"
+    },
+    {
+      "area": "artisancave1f",
+      "name": "Artisan Cave 1F"
+    },
+    {
+      "area": "alteringcave",
+      "name": "Altering Cave"
+    },
+    {
+      "area": "meteorfallsstevenscave",
+      "name": "Meteor Falls Stevens Cave"
+    },
+    {
+      "area": "littleroottown",
+      "name": "Littleroot Town"
+    },
+    {
+      "area": "oldalegrove",
+      "name": "Oldale Grove"
+    },
+    {
+      "area": "littlerootgrove",
+      "name": "Littleroot Grove"
+    },
+    {
+      "area": "oldaletown",
+      "name": "Oldale Town"
+    },
+    {
+      "area": "petalburggrove",
+      "name": "Petalburg Grove"
+    },
+    {
+      "area": "verdanturftunnel1f",
+      "name": "Verdanturf Tunnel 1F"
+    },
+    {
+      "area": "verdanturftunnel1bf",
+      "name": "Verdanturf Tunnel 1Bf"
+    },
+    {
+      "area": "verdanturfgrotto",
+      "name": "Verdanturf Grotto"
+    },
+    {
+      "area": "rustborocity",
+      "name": "Rustboro City"
+    },
+    {
+      "area": "route102grove",
+      "name": "Route 102Grove"
+    },
+    {
+      "area": "fallarbortown",
+      "name": "Fallarbor Town"
+    },
+    {
+      "area": "iciclecave",
+      "name": "Icicle Cave"
+    },
+    {
+      "area": "verdanturftown",
+      "name": "Verdanturf Town"
+    },
+    {
+      "area": "fortreecity",
+      "name": "Fortree City"
+    },
+    {
+      "area": "rustborogrove",
+      "name": "Rustboro Grove"
+    },
+    {
+      "area": "landcaveend",
+      "name": "Land Cave End"
+    },
+    {
+      "area": "landcaveentrance",
+      "name": "Land Cave Entrance"
+    },
+    {
+      "area": "mauvillecity",
+      "name": "Mauville City"
+    },
+    {
+      "area": "alteringgrove",
+      "name": "Altering Grove"
+    },
+    {
+      "area": "battlefrontieroutsidewest",
+      "name": "Battle Frontier Outside West"
+    },
+    {
+      "area": "skypillar4f",
+      "name": "Sky Pillar 4F"
+    },
+    {
+      "area": "skypillar2f",
+      "name": "Sky Pillar 2F"
+    },
+    {
+      "area": "mtchimney",
+      "name": "Mt Chimney"
+    },
+    {
+      "area": "southernislandinterior",
+      "name": "Southern Island Interior"
+    },
+    {
+      "area": "navelrockentrance",
+      "name": "Navel Rock Entrance"
+    },
+    {
+      "area": "navelrockb1f",
+      "name": "Navel Rock B1F"
+    },
+    {
+      "area": "navelrockfork",
+      "name": "Navel Rock Fork"
+    },
+    {
+      "area": "navelrockup1",
+      "name": "Navel Rock Up1"
+    },
+    {
+      "area": "verdanturftunnel1bftinyroom",
+      "name": "Verdanturf Tunnel 1Bf Tiny Room"
+    },
+    {
+      "area": "aquahideout1f",
+      "name": "Aqua Hideout 1F"
+    },
+    {
+      "area": "victoryfinale",
+      "name": "Victory Finale"
+    },
+    {
+      "area": "southernislandexterior",
+      "name": "Southern Island Exterior"
+    },
+    {
+      "area": "navelrockup2",
+      "name": "Navel Rock Up2"
+    },
+    {
+      "area": "navelrockup3",
+      "name": "Navel Rock Up3"
+    },
+    {
+      "area": "navelrockup4",
+      "name": "Navel Rock Up4"
+    },
+    {
+      "area": "navelrockdown01",
+      "name": "Navel Rock Down01"
+    },
+    {
+      "area": "navelrockdown02",
+      "name": "Navel Rock Down02"
+    },
+    {
+      "area": "navelrockdown03",
+      "name": "Navel Rock Down03"
+    },
+    {
+      "area": "navelrockdown04",
+      "name": "Navel Rock Down04"
+    },
+    {
+      "area": "navelrockdown05",
+      "name": "Navel Rock Down05"
+    }
+  ],
+  "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+  "interfaceSource": "https://nulldex.pokemon0null.workers.dev/"
+}

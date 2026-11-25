@@ -1,0 +1,79 @@
+Quilladin
+Ability: Battle Armor
+Level: 25
+Impish Nature
+IVs: 31 HP / 15 Atk / 31 Def / 4 SpA / 14 SpD / 31 Spe
+- Rock Tomb
+- Needle Arm
+- Bite
+- Trailblaze
+
+Morpeko
+Ability: Hunger Switch
+Level: 25
+Bashful Nature
+IVs: 24 HP / 28 Atk / 31 Def / 1 SpA / 10 SpD / 16 Spe
+- Foul Play
+- Spark
+- Lash Out
+- Fake Out
+
+Arctovish
+Ability: Slush Rush
+Level: 25
+Quirky Nature
+IVs: 21 HP / 22 Atk / 9 Def / 30 SpA / 8 SpD / 4 Spe
+- Flip Turn
+- Glaciate
+- Ancient Power
+- Aurora Veil
+
+Stantler
+Ability: Intimidate
+Level: 25
+Lonely Nature
+IVs: 14 HP / 23 Atk / 29 Def / 4 SpA / 21 SpD / 31 Spe
+- Me First
+- Stomp
+- Confuse Ray
+- Take Down
+
+Capsakid
+Ability: Chlorophyll
+Level: 25
+Gentle Nature
+IVs: 12 HP / 3 Atk / 16 Def / 7 SpA / 12 SpD / 29 Spe
+- Bullet Seed
+- Headbutt
+- Bite
+- Trailblaze
+
+Rockruff
+Ability: Keen Eye
+Level: 25
+Quiet Nature
+IVs: 26 HP / 9 Atk / 4 Def / 31 SpA / 10 SpD / 5 Spe
+- Rock Tomb
+- Sand Attack
+- Bite
+- Smack Down
+
+Stantler
+Ability: Intimidate
+Level: 13
+Relaxed Nature
+IVs: 15 HP / 18 Atk / 28 Def / 2 SpA / 26 SpD / 24 Spe
+- Me First
+- Stomp
+- Leer
+- Astonish
+
+Tangela
+Ability: Regenerator
+Level: 13
+Mild Nature
+IVs: 4 HP / 6 Atk / 4 Def / 23 SpA / 24 SpD / 21 Spe
+- Constrict
+- Sleep Powder
+- Vine Whip
+- Absorb

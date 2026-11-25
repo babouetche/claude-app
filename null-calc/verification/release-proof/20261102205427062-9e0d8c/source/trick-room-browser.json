@@ -1,0 +1,56 @@
+{
+  "revision": "trick-room-field",
+  "checkedAt": "2026-11-02T20:58:05.840Z",
+  "htmlSHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+  "checks": [
+    "Screenshot Slowbro 36 vs Alolan Golem 44: six aligned cells; main click reverses arrows and live box speed border, with ordinary damage, HP, raw speeds and trainer data unchanged.",
+    "Legacy AI checkbox stays synchronized in both directions and languages; changing the room exits a frozen Switch into snapshot and explains the updated active reference.",
+    "Browser mechanics reverse Payback, Fishious Rend and Analytic; Gyro Ball/Electro Ball and displayed real speeds stay unchanged; disabling the room restores original damage.",
+    "Equal-speed arrows stay tied. Complete doubles shares the room across all four battlers, move-target and reserve states; returning to singles preserves the setting and HP."
+  ],
+  "geometry": [
+    {
+      "id": "harsh-sunshine",
+      "x": 516.5,
+      "y": -109.515625,
+      "w": 123.21875,
+      "h": 23
+    },
+    {
+      "id": "heavy-rain",
+      "x": 638.71875,
+      "y": -109.515625,
+      "w": 123.21875,
+      "h": 23
+    },
+    {
+      "id": "strong-winds",
+      "x": 760.9375,
+      "y": -109.515625,
+      "w": 123.21875,
+      "h": 23
+    },
+    {
+      "id": "trickroom",
+      "x": 516.5,
+      "y": -81.515625,
+      "w": 123.21875,
+      "h": 23
+    },
+    {
+      "id": "magicroom",
+      "x": 638.71875,
+      "y": -81.515625,
+      "w": 123.21875,
+      "h": 23
+    },
+    {
+      "id": "wonderroom",
+      "x": 760.9375,
+      "y": -81.515625,
+      "w": 123.21875,
+      "h": 23
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,61 @@
+{
+  "revision": "null-1.2.6-public-release",
+  "checkedAt": "2026-11-02T20:54:57.828Z",
+  "entry": "C:\\Users\\pseud\\.codex\\.chatgpt-projects\\g-p-6a9ed0f7ceb88191bba3523b4b34109b\\Null-1.2-Damage-Calc\\CALCULATEUR.html",
+  "htmlSHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+  "checks": [
+    "All 245 encounter profiles retain independently checked native bytes and map pointers",
+    "Official header, theme, location list and independent split panels",
+    "Location to Pokémon to ability keeps the contextual Rustboro Grove back button",
+    "Pokémon fishing encounters show numeric rates, levels and working native new-tab links",
+    "Dark theme persists and the official panels remain usable on narrow screens",
+    "Official species encounter filters and keyboard navigation work from local routes",
+    "Embedded official Calculator button returns without resetting the battle"
+  ],
+  "details": {
+    "All 245 encounter profiles retain independently checked native bytes and map pointers": {
+      "rechecked": true,
+      "profiles": 245,
+      "areas": 145,
+      "slots": 2226
+    },
+    "Official header, theme, location list and independent split panels": [
+      {
+        "fragment": "encounters/",
+        "left": -1,
+        "width": 867.984375,
+        "overflow": "auto"
+      },
+      {
+        "fragment": "encounters/rustborogrove",
+        "left": 865.984375,
+        "width": 784,
+        "overflow": "auto"
+      }
+    ],
+    "Location to Pokémon to ability keeps the contextual Rustboro Grove back button": {
+      "backButton": "Rustboro Grove",
+      "ability": "Intimidate"
+    },
+    "Pokémon fishing encounters show numeric rates, levels and working native new-tab links": {
+      "rustboroRate": "20% Lv 15\nRustboro Grove",
+      "newTabActions": 2
+    },
+    "Dark theme persists and the official panels remain usable on narrow screens": {
+      "persistedTheme": "dark",
+      "viewportWidth": 700
+    },
+    "Official species encounter filters and keyboard navigation work from local routes": {
+      "filteredAreas": 5,
+      "keyboardRoute": "pokemon/slowking",
+      "flavorRestored": true
+    },
+    "Embedded official Calculator button returns without resetting the battle": {
+      "preservedHP": [
+        "37",
+        "168"
+      ]
+    }
+  },
+  "errors": []
+}

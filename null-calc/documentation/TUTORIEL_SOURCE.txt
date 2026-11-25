@@ -1,0 +1,141 @@
+POKÉMON NULL 1.2.6 — CALCULATEUR LOCAL
+Révision : null-1.2.6-public-release, 2 novembre 2026.
+Un seul dossier pour jouer, conserver les sources et faciliter les prochains agents.
+
+OUVRIR LE CALCULATEUR
+1. Extraire entièrement le ZIP (clic droit > Extraire tout sous Windows).
+2. Ouvrir le dossier extrait puis double-cliquer CALCULATEUR.html.
+3. Utiliser Chrome ou Edge ; conserver le dossier docs à côté du HTML.
+Aucune installation, ROM ou connexion n'est nécessaire pour calculer.
+Ne pas ouvrir le HTML directement dans l'aperçu du ZIP.
+
+OUVRIR LE POKÉDEX
+Clic gauche sur Pokédex : affichage intégré au calculateur.
+Clic molette ou Ctrl+clic : ouverture du Pokédex dans un nouvel onglet.
+Le combat en cours reste ouvert dans son onglet.
+Le Pokédex reprend les menus, les panneaux et les thèmes du site officiel.
+Encounters affiche les zones, les niveaux et les taux par méthode. Cliquer une
+espèce, puis son talent : le bouton en haut à gauche permet de revenir à la zone.
+Dans le Pokédex intégré, Calculator ramène au combat en conservant les réglages.
+Le menu Theme choisit Light ou Dark et mémorise ce choix pour le Pokédex.
+Les données, icônes et sprites principaux fonctionnent sans connexion.
+Les animations et les cris de Flavor, ainsi que Trainer Sheet et Download,
+utilisent les services officiels et demandent une connexion.
+
+RÉGLER LE COMBAT
+Choisir votre Pokémon à gauche et le set du trainer à droite. Vérifier niveau,
+IV/EV, talent, objet, PV, statut, boosts et terrain. Les données des trainers
+sont actualisées pour la ROM 1.2.6 ; les circonstances du combat restent à renseigner.
+Le volet « AI: probabilities, switching and battle state » détaille les options.
+La roue des paramètres propose « AI panel language » : English ou Français.
+
+IMPORTER PLUSIEURS POKÉMON
+Coller les sets au format texte dans Import / Export puis cliquer Import.
+Les doublons d'espèce sont conservés : Custom Set, Custom Set 2, Custom Set 3…
+Un nouvel import ajoute des individus. La corbeille peut retirer un set précis.
+« Remove Pokémon from all boxes », après confirmation, efface tous les customs,
+les listes normales et doubles, Team/Box/Box 2/Trash. Le prochain import repart
+de Custom Set. Si le set actif disparaît, le panneau affiche son Blank Set ;
+un partenaire doubles supprimé doit être choisi à nouveau. Les trainers et
+préférences sont conservés. Annuler la confirmation ne change rien.
+
+LIRE LES PROBABILITÉS ET LES COULEURS
+Le volet IA contient les hypothèses et règles appliquées. « Indeterminate »
+signifie qu'une donnée ou règle manque : ce n'est pas une probabilité nulle.
+Les résultats estimés portent ≈ et une teinte dorée/orange ; les résultats
+établis dans le contexte utilisent la teinte bleue. Lire la légende du panneau
+concerné : les probabilités sont celles du modèle avec vos renseignements.
+
+SWITCH ET REMPLACEMENT APRÈS KO
+Le volet IA règle un switch ordinaire ou un scénario « Switch into ». Ce dernier
+peut utiliser une référence de combat mémorisée : vérifier ce qui est indiqué.
+En bas à droite, « Next Pokémon after KO » simule le KO de l'adversaire affiché
+et classe les réserves du même trainer face à votre Pokémon actuel. Cette
+simulation ne change pas les PV affichés. Marquer les adversaires déjà battus
+avec KO ou par clic droit sur leur icône ; Restore les rend disponibles.
+Vert : meilleur entrant du modèle (égalité possible). Bleu : autre entrant
+possible. Doré/orange : estimation ou indétermination. Croix rouge : déjà KO.
+0 % signifie non retenu dans ce scénario, pas impossibilité dans tous les combats.
+
+FORMES DES POKÉMON EN RÉSERVE
+Le classement utilise la forme que l'IA voit dans son équipe, avant l'entrée.
+Minior est ainsi évalué en forme Noyau, même s'il arrive ensuite en Météore.
+Pour un Pokémon déjà actif, sélectionner sa forme réellement présente sur le
+terrain. PV, PP et croix KO sont partagés entre les deux affichages d'un même
+emplacement ; deux Pokémon ayant des sets distincts restent séparés.
+Les Méga en réserve sont évaluées sous la forme enregistrée dans l'équipe
+avant leur entrée, généralement la forme de base. « AI reserve form » précise
+la forme utilisée quand elle diffère du nom affiché. Les quatre Méga déjà
+enregistrées comme telles dans la ROM gardent leur forme Méga.
+
+HISTORIQUES IMPORTANTS
+Après KO, Retaliate est évaluée renforcée pour les réserves. Sur le Pokémon
+actif, saisir sa puissance selon le tour : 140 lorsqu'elle est renforcée,
+puis 70 lorsque l'effet finit. Last Respects et Supreme Overlord comptent les
+KO précédents et le KO simulé une seule fois. Après des résurrections, préciser
+« Total allied faints » ; laisser vide pour utiliser les PV/marques KO connus.
+Last Resort exige d'avoir tenté les autres attaques depuis l'entrée : cocher
+« Attempted since entry ». Un Sucker Punch échoué compte aussi. Utiliser
+« Reset attempts: new entry » après un switch ; chaque partenaire a son historique.
+Rage Fist et les puissances liées aux usages ou échecs précédents nécessitent
+leur historique propre ; ne pas déduire ces événements des seules croix KO.
+
+TRICK ROOM
+La case du panneau Field est synchronisée avec celle du volet IA. Elle inverse
+l'ordre à priorité égale ; les chiffres de Vitesse et les priorités ne changent
+pas. Flèches, bordures, calculs concernés et prévisions utilisent ce réglage.
+Payback, Analytic, Fishious Rend et Bolt Beak suivent le nouvel ordre ; Gyro Ball
+et Electro Ball conservent leurs calculs sur les vitesses réelles. Décocher à
+la fin de l'effet (normalement cinq tours ; pas de compteur automatique).
+Changer Trick Room pendant « Switch into » revient à la référence active
+affichée ; le panneau le signale. Choisir ensuite de nouveau le scénario voulu.
+
+COMBATS DOUBLES
+Cliquer Doubles dans Field puis choisir les deux partenaires du panneau supérieur.
+À gauche, « Only show imported sets » filtre les customs. À droite, les Pokémon
+du trainer affiché sont proposés. Vérifier les quatre actifs, leurs PV, leurs
+créneaux et les cibles. Les Pokémon déjà actifs sont exclus des réserves ;
+les marques KO restent partagées avec le panneau de remplacement.
+Pour Elliot/Ned et Benjamin/Alyssa, les remplaçants appartiennent au dresseur
+qui contrôle le Pokémon mis KO. Le panneau précise « Reserves belong to » :
+les réserves de l'autre dresseur sont exclues. Deux Lanturn ou Raichu d'un
+même combat sont conservés comme individus distincts.
+
+POKÉDEX ET VERSION 1.2.6
+Le Pokédex intégré utilise les tables de la nouvelle ROM pour les statistiques,
+talents, puissances, apprentissages et rencontres vérifiés. Une attaque de
+niveau 1 d'une évolution peut nécessiter un rappel d'attaque. Les CT et tuteurs
+sont affichés séparément ; Psystrike de Delphox vient du tuteur des starters.
+La liste complète des changements, des sources et des limites est dans
+documentation/MISE_A_JOUR_1.2.6.md. La ROM prime sur une note contradictoire.
+
+CLASSEMENT DES REMPLAÇANTS : SEUILS DE KO
+La fonction retrouvée dans la ROM évalue les réserves sans le jet de dégâts
+aléatoire. Le classement utilise donc le maximum de la plage, et non sa moyenne,
+avec le nombre de coups arrondi au supérieur et la protection Focus Sash/Sturdy
+à PV pleins telle que l'évalue l'IA. Les dégâts affichés gardent leur plage réelle.
+Les scénarios signalés avec Heliolisk, Castform et Farfetch'd sont maintenant
+reproduits. Un seul PV peut changer ce classement ; saisir les PV du moment.
+Le détail et les limites de cette vérification sont dans documentation/SEUILS_KO_ROM.md.
+
+LIMITES À CONNAÎTRE
+Le calculateur ne lit pas la mémoire du jeu. PV, PP, effets temporaires et
+historiques renseignés doivent correspondre au combat. Une prévision à 100 %
+dans le modèle n'est pas une garantie si une fonction native ou un état caché
+reste inconnu. Les seuils de KO et leurs limites sont documentés dans la
+référence courante, sans prétendre reproduire toute l'IA native.
+
+POUR LES PROCHAINS AGENTS
+Lire documentation/GUIDE_AGENTS.md puis DOCUMENTATION_COMPLETE.md. Les anciens
+audits complets sont regroupés dans HISTORIQUE.md. Sources, tests et preuves
+sont inclus dans le même ZIP. La commande de vérification et livraison unique
+est « node scripts/release.cjs » (Node, Python et environnement navigateur requis
+uniquement pour développer). Le nombre de tests réellement réussis figure dans
+verification/unified-validation.json ; aucun ancien total n'est une preuve actuelle.
+
+CONTENU DU DOSSIER
+CALCULATEUR.html lance l'application ; TUTORIEL.html contient ce guide.
+Le dossier docs contient l'application et ses ressources. documentation regroupe
+les explications courantes et l'historique. scripts et tests servent aux prochains
+agents. verification ne conserve que les audits utiles et les preuves de la
+dernière livraison. Les anciens rapports et captures redondants sont exclus.

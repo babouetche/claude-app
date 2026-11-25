@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "excludeFiles": [
+    "scripts/build-report.cjs",
+    "scripts/diagnose-doubles.cjs",
+    "scripts/check-null-ai-browser.cjs",
+    "scripts/package-organized.py",
+    "scripts/package-release.py",
+    "scripts/record-doubles-version.cjs",
+    "scripts/record-native-version.cjs",
+    "scripts/record-post-ko-version.cjs",
+    "scripts/record-setup-version.cjs",
+    "scripts/record-sprites-version.cjs",
+    "scripts/record-verified-version.cjs",
+    "scripts/update-native-docs.cjs"
+  ],
+  "verificationInputs": [
+    "dex-interface-encounters-native.json",
+    "dex-interface-source.json",
+    "documentary-sources.json",
+    "native-threshold-rom.json",
+    "rom-data-comparison.json",
+    "update126-ai-native.json",
+    "update126-encounter-native.json",
+    "update126-levelup-differences.json",
+    "update126-numeric-differences.json",
+    "update126-owner-native.json",
+    "update126-reserve-proof-recheck.json",
+    "update126-sources.json",
+    "update126-switch-chances.json"
+  ]
+}

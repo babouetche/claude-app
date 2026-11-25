@@ -1,0 +1,1960 @@
+TAP version 13
+# Subtest: battle clone preserves Infinity, undefined, graph aliases, methods and doubles .ally properties
+ok 1 - battle clone preserves Infinity, undefined, graph aliases, methods and doubles .ally properties
+  ---
+  duration_ms: 2.8973
+  type: 'test'
+  ...
+# Subtest: bounded engine memo isolates both first and repeated callers while retaining result methods
+ok 2 - bounded engine memo isolates both first and repeated callers while retaining result methods
+  ---
+  duration_ms: 23.3243
+  type: 'test'
+  ...
+# Subtest: complete deterministic keys distinguish every mechanic input and preserve special numeric values
+ok 3 - complete deterministic keys distinguish every mechanic input and preserve special numeric values
+  ---
+  duration_ms: 6.8826
+  type: 'test'
+  ...
+# Subtest: single and double reference channels share lifecycle without sharing or losing their snapshot graphs
+ok 4 - single and double reference channels share lifecycle without sharing or losing their snapshot graphs
+  ---
+  duration_ms: 0.6077
+  type: 'test'
+  ...
+# Subtest: input/change scheduling coalesces a same-turn burst and explicit synchronous refresh can cancel it
+ok 5 - input/change scheduling coalesces a same-turn burst and explicit synchronous refresh can cancel it
+  ---
+  duration_ms: 0.6395
+  type: 'test'
+  ...
+# Subtest: real-engine adapter repeat reuses all unchanged confrontations and matches uncached output exactly
+ok 6 - real-engine adapter repeat reuses all unchanged confrontations and matches uncached output exactly
+  ---
+  duration_ms: 161.3391
+  type: 'test'
+  ...
+# Subtest: HP, stats, moves, item, ability and field changes invalidate the appropriate real-engine cache entries
+ok 7 - HP, stats, moves, item, ability and field changes invalidate the appropriate real-engine cache entries
+  ---
+  duration_ms: 197.9891
+  type: 'test'
+  ...
+# Subtest: KO marks, reserve HP, faint totals and move PP remain fresh while unchanged damage is safely reused
+ok 8 - KO marks, reserve HP, faint totals and move PP remain fresh while unchanged damage is safely reused
+  ---
+  duration_ms: 57.7081
+  type: 'test'
+  ...
+# Subtest: installed damage hooks and ROM revision changes invalidate identical input profiles
+ok 9 - installed damage hooks and ROM revision changes invalidate identical input profiles
+  ---
+  duration_ms: 69.2935
+  type: 'test'
+  ...
+# Subtest: cached whole states isolate caller mutations and detect edited trainer rows without data mutation tokens
+ok 10 - cached whole states isolate caller mutations and detect edited trainer rows without data mutation tokens
+  ---
+  duration_ms: 35.1377
+  type: 'test'
+  ...
+# Subtest: complete doubles cache preserves ally arrays and invalidates HP, move, faint and slot inputs
+ok 11 - complete doubles cache preserves ally arrays and invalidates HP, move, faint and slot inputs
+  ---
+  duration_ms: 257.6972
+  type: 'test'
+  ...
+# Subtest: native reserve damage profiles use raw party HP before hazards and expose the native Sash/Sturdy flag
+ok 12 - native reserve damage profiles use raw party HP before hazards and expose the native Sash/Sturdy flag
+  ---
+  duration_ms: 106.6927
+  type: 'test'
+  ...
+# Subtest: frozen singles rebuild HP-dependent reserve damage against captured Pokémon and field with isolated cached outputs
+ok 13 - frozen singles rebuild HP-dependent reserve damage against captured Pokémon and field with isolated cached outputs
+  ---
+  duration_ms: 85.7472
+  type: 'test'
+  ...
+# Subtest: frozen doubles rebuild conditional reserve power using captured spread targets, slot correspondence and field
+ok 14 - frozen doubles rebuild conditional reserve power using captured spread targets, slot correspondence and field
+  ---
+  duration_ms: 278.0696
+  type: 'test'
+  ...
+# Subtest: legacy importer reproduces the reported overwrite; new importer keeps all eight individuals
+ok 15 - legacy importer reproduces the reported overwrite; new importer keeps all eight individuals
+  ---
+  duration_ms: 74.2995
+  type: 'test'
+  ...
+# Subtest: three identical same-species individuals and later imports each retain their own ID
+ok 16 - three identical same-species individuals and later imports each retain their own ID
+  ---
+  duration_ms: 12.1233
+  type: 'test'
+  ...
+# Subtest: existing saved data and trainer names are preserved while suffixes skip occupied names
+ok 17 - existing saved data and trainer names are preserved while suffixes skip occupied names
+  ---
+  duration_ms: 21.4457
+  type: 'test'
+  ...
+# Subtest: explicit nicknames retain their names and duplicate nicknames receive a suffix
+ok 18 - explicit nicknames retain their names and duplicate nicknames receive a suffix
+  ---
+  duration_ms: 15.6314
+  type: 'test'
+  ...
+# Subtest: a following individual does not inherit omitted stats, ability or moves from its predecessor
+ok 19 - a following individual does not inherit omitted stats, ability or moves from its predecessor
+  ---
+  duration_ms: 13.0456
+  type: 'test'
+  ...
+# Subtest: Aegislash aliases reserve one shared set name and cannot overwrite an existing Shield record
+ok 20 - Aegislash aliases reserve one shared set name and cannot overwrite an existing Shield record
+  ---
+  duration_ms: 11.431
+  type: 'test'
+  ...
+# Subtest: full reset removes duplicate and stale custom sets from every generation, restores shipped collisions and restarts naming
+ok 21 - full reset removes duplicate and stale custom sets from every generation, restores shipped collisions and restarts naming
+  ---
+  duration_ms: 19.6647
+  type: 'test'
+  ...
+# Subtest: full reset handles corrupt or already absent storage and preserves unrelated saved settings
+ok 22 - full reset handles corrupt or already absent storage and preserves unrelated saved settings
+  ---
+  duration_ms: 14.655
+  type: 'test'
+  ...
+# Subtest: four-battler API refuses incomplete doubles without lifting the Singles API guard
+ok 23 - four-battler API refuses incomplete doubles without lifting the Singles API guard
+  ---
+  duration_ms: 5.7806
+  type: 'test'
+  ...
+# Subtest: double battle chooses the faster guaranteed KO move AND its specific target
+ok 24 - double battle chooses the faster guaranteed KO move AND its specific target
+  ---
+  duration_ms: 17.0801
+  type: 'test'
+  ...
+# Subtest: equal foe targets split their move probability without multiplying its total
+ok 25 - equal foe targets split their move probability without multiplying its total
+  ---
+  duration_ms: 3.3528
+  type: 'test'
+  ...
+# Subtest: fainted targets and actor slots are excluded
+ok 26 - fainted targets and actor slots are excluded
+  ---
+  duration_ms: 2.7166
+  type: 'test'
+  ...
+# Subtest: spread selections per foe merge into one displayed action affecting all battlers
+ok 27 - spread selections per foe merge into one displayed action affecting all battlers
+  ---
+  duration_ms: 2.7285
+  type: 'test'
+  ...
+# Subtest: Acupressure can target self or partner, never a player
+ok 28 - Acupressure can target self or partner, never a player
+  ---
+  duration_ms: 3.2415
+  type: 'test'
+  ...
+# Subtest: PP, availability, forced slots, awake Sleep Talk and invalid input are respected
+ok 29 - PP, availability, forced slots, awake Sleep Talk and invalid input are respected
+  ---
+  duration_ms: 2.6419
+  type: 'test'
+  ...
+# Subtest: Ice Shard can prefer Weakness Policy activation; generic priority cannot
+ok 30 - Ice Shard can prefer Weakness Policy activation; generic priority cannot
+  ---
+  duration_ms: 11.0818
+  type: 'test'
+  ...
+# Subtest: current documented Weakness Policy +7 branch yields 81.25 percent against HDM +6/+8
+ok 31 - current documented Weakness Policy +7 branch yields 81.25 percent against HDM +6/+8
+  ---
+  duration_ms: 4.3749
+  type: 'test'
+  ...
+# Subtest: Heal Pulse only targets the injured partner and excludes fainted partners
+ok 32 - Heal Pulse only targets the injured partner and excludes fainted partners
+  ---
+  duration_ms: 4.7633
+  type: 'test'
+  ...
+# Subtest: Round in slot 2 conditions on slot 1 and receives the slower +13 bonus
+ok 33 - Round in slot 2 conditions on slot 1 and receives the slower +13 bonus
+  ---
+  duration_ms: 3.0239
+  type: 'test'
+  ...
+# Subtest: strict mode does not certify an assumed spread aggregation or joint RNG law
+ok 34 - strict mode does not certify an assumed spread aggregation or joint RNG law
+  ---
+  duration_ms: 1.3496
+  type: 'test'
+  ...
+# Subtest: prediction does not mutate four Pokémon, move arrays or ally matchups
+ok 35 - prediction does not mutate four Pokémon, move arrays or ally matchups
+  ---
+  duration_ms: 2.2015
+  type: 'test'
+  ...
+# Subtest: incomplete doubles cannot display the old single-target Shiinotic destination
+ok 36 - incomplete doubles cannot display the old single-target Shiinotic destination
+  ---
+  duration_ms: 2.0909
+  type: 'test'
+  ...
+# Subtest: post-KO doubles ranks reserves and excludes the partner already on the field
+ok 37 - post-KO doubles ranks reserves and excludes the partner already on the field
+  ---
+  duration_ms: 3.593
+  type: 'test'
+  ...
+# Subtest: KO counts add the displayed faint exactly once and never mutate marks or HP
+ok 38 - KO counts add the displayed faint exactly once and never mutate marks or HP
+  ---
+  duration_ms: 4.615
+  type: 'test'
+  ...
+# Subtest: doubles counts exclude the living active partner from the simulated KO
+ok 39 - doubles counts exclude the living active partner from the simulated KO
+  ---
+  duration_ms: 0.488
+  type: 'test'
+  ...
+# Subtest: revival totals are explicit cumulative counts, at least the number of known faints
+ok 40 - revival totals are explicit cumulative counts, at least the number of known faints
+  ---
+  duration_ms: 0.8041
+  type: 'test'
+  ...
+# Subtest: Retaliate, Last Respects and unrelated history counters are distinct conditions
+ok 41 - Retaliate, Last Respects and unrelated history counters are distinct conditions
+  ---
+  duration_ms: 0.3337
+  type: 'test'
+  ...
+# Subtest: post-KO selects recalculated move profiles idempotently without scaling final rolls
+ok 42 - post-KO selects recalculated move profiles idempotently without scaling final rolls
+  ---
+  duration_ms: 1.4414
+  type: 'test'
+  ...
+# Subtest: ordinary switching keeps Retaliate unboosted while both post-KO entry points use the boosted profile
+ok 43 - ordinary switching keeps Retaliate unboosted while both post-KO entry points use the boosted profile
+  ---
+  duration_ms: 3.9859
+  type: 'test'
+  ...
+# Subtest: post-KO profiles still respect PP, known KO exclusions and incomplete doubles guards
+ok 44 - post-KO profiles still respect PP, known KO exclusions and incomplete doubles guards
+  ---
+  duration_ms: 0.8323
+  type: 'test'
+  ...
+# Subtest: every protected data and damage file is byte-for-byte identical to the user ZIP
+ok 45 - every protected data and damage file is byte-for-byte identical to the user ZIP
+  ---
+  duration_ms: 971.3475
+  type: 'test'
+  ...
+# Subtest: confirmed first-turn screenshot chooses Sucker Punch, excluding locked Last Resort before HDM scoring
+ok 46 - confirmed first-turn screenshot chooses Sucker Punch, excluding locked Last Resort before HDM scoring
+  ---
+  duration_ms: 5.3203
+  type: 'test'
+  ...
+# Subtest: a failed Sucker Punch attempt unlocks Last Resort; success is not required
+ok 47 - a failed Sucker Punch attempt unlocks Last Resort; success is not required
+  ---
+  duration_ms: 9.3104
+  type: 'test'
+  ...
+# Subtest: every other known slot must be attempted, including zero-PP or currently unavailable moves
+ok 48 - every other known slot must be attempted, including zero-PP or currently unavailable moves
+  ---
+  duration_ms: 0.3103
+  type: 'test'
+  ...
+# Subtest: Last Resort as the only known move cannot unlock, while No Move slots are ignored
+ok 49 - Last Resort as the only known move cannot unlock, while No Move slots are ignored
+  ---
+  duration_ms: 0.2913
+  type: 'test'
+  ...
+# Subtest: missing mid-battle history stays unknown instead of certifying Last Resort at 100 percent
+ok 50 - missing mid-battle history stays unknown instead of certifying Last Resort at 100 percent
+  ---
+  duration_ms: 0.3408
+  type: 'test'
+  ...
+# Subtest: strict mode accepts known first-entry history and PP still overrides an unlocked move
+ok 51 - strict mode accepts known first-entry history and PP still overrides an unlocked move
+  ---
+  duration_ms: 0.3519
+  type: 'test'
+  ...
+# Subtest: returning reserves cannot use Last Resort to obtain a false fast OHKO score
+ok 52 - returning reserves cannot use Last Resort to obtain a false fast OHKO score
+  ---
+  duration_ms: 6.6335
+  type: 'test'
+  ...
+# Subtest: unlocked player Last Resort remains part of incoming damage against a reserve
+ok 53 - unlocked player Last Resort remains part of incoming damage against a reserve
+  ---
+  duration_ms: 4.8699
+  type: 'test'
+  ...
+# Subtest: invalid attempt flags cannot silently unlock Last Resort
+ok 54 - invalid attempt flags cannot silently unlock Last Resort
+  ---
+  duration_ms: 1.4405
+  type: 'test'
+  ...
+# Subtest: the doubles scorer uses each active slot history and removes locked Last Resort targets
+ok 55 - the doubles scorer uses each active slot history and removes locked Last Resort targets
+  ---
+  duration_ms: 8.0756
+  type: 'test'
+  ...
+# Subtest: unknown Last Resort history cannot use the doubles single-move shortcut to show 100 percent
+ok 56 - unknown Last Resort history cannot use the doubles single-move shortcut to show 100 percent
+  ---
+  duration_ms: 0.9765
+  type: 'test'
+  ...
+# Subtest: R1: slow incoming KO precedes its own outgoing KO (switch C 239-246)
+ok 57 - R1: slow incoming KO precedes its own outgoing KO (switch C 239-246)
+  ---
+  duration_ms: 2.9585
+  type: 'test'
+  ...
+# Subtest: R2: voluntary hard switch assigns -2/-1, wiping Support (C 258-265)
+ok 58 - R2: voluntary hard switch assigns -2/-1, wiping Support (C 258-265)
+  ---
+  duration_ms: 1.7838
+  type: 'test'
+  ...
+# Subtest: R3: all four sacrificial moves and zero-power attacks are excluded in both directions
+ok 59 - R3: all four sacrificial moves and zero-power attacks are excluded in both directions
+  ---
+  duration_ms: 0.8202
+  type: 'test'
+  ...
+# Subtest: R3: incoming reserve comparison does not filter PP, unlike outgoing (C 207-225)
+ok 60 - R3: incoming reserve comparison does not filter PP, unlike outgoing (C 207-225)
+  ---
+  duration_ms: 0.3608
+  type: 'test'
+  ...
+# Subtest: R4: Sash, Sturdy and Disguise protect the slow base-score branch
+ok 61 - R4: Sash, Sturdy and Disguise protect the slow base-score branch
+  ---
+  duration_ms: 0.5766
+  type: 'test'
+  ...
+# Subtest: R4: species Ditto receives +3; non-Ditto Imposter receives no species bonus
+ok 62 - R4: species Ditto receives +3; non-Ditto Imposter receives no species bonus
+  ---
+  duration_ms: 0.3012
+  type: 'test'
+  ...
+# Subtest: R5: all post-KO scores <= -1 expose native sentinel, not a fabricated 100% destination
+ok 63 - R5: all post-KO scores <= -1 expose native sentinel, not a fabricated 100% destination
+  ---
+  duration_ms: 1.8889
+  type: 'test'
+  ...
+# Subtest: R6: Support then Regenerator is nominal 52%; C integer HP threshold is strict
+ok 64 - R6: Support then Regenerator is nominal 52%; C integer HP threshold is strict
+  ---
+  duration_ms: 0.8615
+  type: 'test'
+  ...
+# Subtest: R6: failed destination aborts GameState; Extreme runs only after a failed trigger
+ok 65 - R6: failed destination aborts GameState; Extreme runs only after a failed trigger
+  ---
+  duration_ms: 0.5292
+  type: 'test'
+  ...
+# Subtest: R7: Anti-Setup compares final scores <= -5, not zero damage
+ok 66 - R7: Anti-Setup compares final scores <= -5, not zero damage
+  ---
+  duration_ms: 0.697
+  type: 'test'
+  ...
+# Subtest: R8: three tied reserves with variance use 25/25/50; ordinary order uses 100/0/0
+ok 67 - R8: three tied reserves with variance use 25/25/50; ordinary order uses 100/0/0
+  ---
+  duration_ms: 0.2972
+  type: 'test'
+  ...
+# Subtest: R9: Wonder Guard retries each effective move and each reserve in order
+ok 68 - R9: Wonder Guard retries each effective move and each reserve in order
+  ---
+  duration_ms: 0.8084
+  type: 'test'
+  ...
+# Subtest: R9: absorption chooses the first passing absorber, not the highest generic score
+ok 69 - R9: absorption chooses the first passing absorber, not the highest generic score
+  ---
+  duration_ms: 0.6648
+  type: 'test'
+  ...
+# Subtest: R10: every escape restriction blocks a voluntary Perish switch, not replacement
+ok 70 - R10: every escape restriction blocks a voluntary Perish switch, not replacement
+  ---
+  duration_ms: 0.9547
+  type: 'test'
+  ...
+# Subtest: R11: Walled checks seeded AI, Poison Black Sludge, and excludes OHKO from Avoid
+ok 71 - R11: Walled checks seeded AI, Poison Black Sludge, and excludes OHKO from Avoid
+  ---
+  duration_ms: 0.7901
+  type: 'test'
+  ...
+# Subtest: R12: best target then best move gives 50%, 1/6, 1/6, 1/6
+ok 72 - R12: best target then best move gives 50%, 1/6, 1/6, 1/6
+  ---
+  duration_ms: 0.8381
+  type: 'test'
+  ...
+# Subtest: R12/R14: allied maximum below normalized 0 is excluded even when foes score worse
+ok 73 - R12/R14: allied maximum below normalized 0 is excluded even when foes score worse
+  ---
+  duration_ms: 0.3348
+  type: 'test'
+  ...
+# Subtest: R15: confirmed copied move scores its routine; unknown prediction is disclosed
+ok 74 - R15: confirmed copied move scores its routine; unknown prediction is disclosed
+  ---
+  duration_ms: 9.2665
+  type: 'test'
+  ...
+# Subtest: R16: slow Moxie KO gets no talent bonus; fast As One does
+ok 75 - R16: slow Moxie KO gets no talent bonus; fast As One does
+  ---
+  duration_ms: 2.1941
+  type: 'test'
+  ...
+# Subtest: R17: existing Spikes malus/bonus are exclusive, nominal 98%, 1.5%, 0.5%
+ok 76 - R17: existing Spikes malus/bonus are exclusive, nominal 98%, 1.5%, 0.5%
+  ---
+  duration_ms: 3.7652
+  type: 'test'
+  ...
+# Subtest: R17 updated1.2.6: Ceaseless Edge uses one native hazard routine, with last-player early exit
+ok 77 - R17 updated1.2.6: Ceaseless Edge uses one native hazard routine, with last-player early exit
+  ---
+  duration_ms: 1.1032
+  type: 'test'
+  ...
+# Subtest: R19: known item is composed after switch; unknown inventory changes the scope
+ok 78 - R19: known item is composed after switch; unknown inventory changes the scope
+  ---
+  duration_ms: 0.5645
+  type: 'test'
+  ...
+# Subtest: R20: future reserved slot is excluded without mutating KO marks or trainer data
+ok 79 - R20: future reserved slot is excluded without mutating KO marks or trainer data
+  ---
+  duration_ms: 0.5227
+  type: 'test'
+  ...
+# Subtest: R18: a supplied unsupported trainer flag combination is never silently ignored
+ok 80 - R18: a supplied unsupported trainer flag combination is never silently ignored
+  ---
+  duration_ms: 0.6497
+  type: 'test'
+  ...
+# Subtest: ROM hit-count helper rounds up exact and adjacent KO thresholds; zero damage is UINT32_MAX
+ok 81 - ROM hit-count helper rounds up exact and adjacent KO thresholds; zero damage is UINT32_MAX
+  ---
+  duration_ms: 11.1211
+  type: 'test'
+  ...
+# Subtest: ROM full-HP protection changes a one-hit count to two, leaving other counts intact
+ok 82 - ROM full-HP protection changes a one-hit count to two, leaving other counts intact
+  ---
+  duration_ms: 0.4352
+  type: 'test'
+  ...
+# Subtest: snapshot HP synchronization recomputes Sash/Sturdy using its memorized field rather than its stale flag
+ok 83 - snapshot HP synchronization recomputes Sash/Sturdy using its memorized field rather than its stale flag
+  ---
+  duration_ms: 0.2774
+  type: 'test'
+  ...
+# Subtest: reserve move comparison maximizes damage without variance, not the average roll
+ok 84 - reserve move comparison maximizes damage without variance, not the average roll
+  ---
+  duration_ms: 0.5996
+  type: 'test'
+  ...
+# Subtest: reserve counts use pre-hazard HP while the early slow-OHKO rejection uses post-hazard HP
+ok 85 - reserve counts use pre-hazard HP while the early slow-OHKO rejection uses post-hazard HP
+  ---
+  duration_ms: 1.0413
+  type: 'test'
+  ...
+# Subtest: native Sash/Sturdy count is used for immediate-entry penalties, including the ROM multihit quirk
+ok 86 - native Sash/Sturdy count is used for immediate-entry penalties, including the ROM multihit quirk
+  ---
+  duration_ms: 1.5346
+  type: 'test'
+  ...
+# Subtest: observed battle: joey-chesnaught chooses Heliolisk
+ok 87 - observed battle: joey-chesnaught chooses Heliolisk
+  ---
+  duration_ms: 3.3315
+  type: 'test'
+  ...
+# Subtest: observed battle: ivan-boltund-rain chooses Castform
+ok 88 - observed battle: ivan-boltund-rain chooses Castform
+  ---
+  duration_ms: 1.0055
+  type: 'test'
+  ...
+# Subtest: observed battle: james-typhlosion chooses Farfetch’d
+ok 89 - observed battle: james-typhlosion chooses Farfetch’d
+  ---
+  duration_ms: 1.1005
+  type: 'test'
+  ...
+# Subtest: Joey changes ranking exactly across the 112/113 HP two-hit threshold
+ok 90 - Joey changes ranking exactly across the 112/113 HP two-hit threshold
+  ---
+  duration_ms: 2.1015
+  type: 'test'
+  ...
+# Subtest: strict post-KO mode accepts the verified deterministic threshold but still hides estimated damage
+ok 91 - strict post-KO mode accepts the verified deterministic threshold but still hides estimated damage
+  ---
+  duration_ms: 1.7564
+  type: 'test'
+  ...
+# Subtest: an estimated competing move keeps direct post-KO and preview equally uncertain in strict mode
+ok 92 - an estimated competing move keeps direct post-KO and preview equally uncertain in strict mode
+  ---
+  duration_ms: 0.7265
+  type: 'test'
+  ...
+# Subtest: Normalize Thunder Wave becomes Normal and can paralyze Ground Golem
+ok 93 - Normalize Thunder Wave becomes Normal and can paralyze Ground Golem
+  ---
+  duration_ms: 5.9961
+  type: 'test'
+  ...
+# Subtest: ordinary Electric Thunder Wave remains blocked by Ground and Electric absorption abilities
+ok 94 - ordinary Electric Thunder Wave remains blocked by Ground and Electric absorption abilities
+  ---
+  duration_ms: 3.4495
+  type: 'test'
+  ...
+# Subtest: normalized Thunder Wave respects Ghost type immunity while Electric-specific abilities do not absorb Normal
+ok 95 - normalized Thunder Wave respects Ghost type immunity while Electric-specific abilities do not absorb Normal
+  ---
+  duration_ms: 1.539
+  type: 'test'
+  ...
+# Subtest: Electric paralysis immunity, Limber and Misty Terrain still protect against normalized Thunder Wave
+ok 96 - Electric paralysis immunity, Limber and Misty Terrain still protect against normalized Thunder Wave
+  ---
+  duration_ms: 0.714
+  type: 'test'
+  ...
+# Subtest: Foresight can remove Normal type immunity without changing the independent paralysis protections
+ok 97 - Foresight can remove Normal type immunity without changing the independent paralysis protections
+  ---
+  duration_ms: 0.3091
+  type: 'test'
+  ...
+# Subtest: unambiguously strongest move is selected for every damage and score outcome
+ok 98 - unambiguously strongest move is selected for every damage and score outcome
+  ---
+  duration_ms: 13.3356
+  type: 'test'
+  ...
+# Subtest: two equal killing moves split equally even with unspecified boost correlation
+ok 99 - two equal killing moves split equally even with unspecified boost correlation
+  ---
+  duration_ms: 0.8475
+  type: 'test'
+  ...
+# Subtest: three equal killing moves need the missing joint random law
+ok 100 - three equal killing moves need the missing joint random law
+  ---
+  duration_ms: 1.9684
+  type: 'test'
+  ...
+# Subtest: damage immunity loses to a usable positive damaging move
+ok 101 - damage immunity loses to a usable positive damaging move
+  ---
+  duration_ms: 0.6873
+  type: 'test'
+  ...
+# Subtest: an immune move is never falsely preferred over a penalized status move
+ok 102 - an immune move is never falsely preferred over a penalized status move
+  ---
+  duration_ms: 0.513
+  type: 'test'
+  ...
+# Subtest: zero PP and explicitly unusable moves have zero probability
+ok 103 - zero PP and explicitly unusable moves have zero probability
+  ---
+  duration_ms: 0.3829
+  type: 'test'
+  ...
+# Subtest: one legal move does not need scores from an unsupported routine
+ok 104 - one legal move does not need scores from an unsupported routine
+  ---
+  duration_ms: 0.2068
+  type: 'test'
+  ...
+# Subtest: HDM bonus competes with paralysis +1: 25% damage, 75% paralysis
+ok 105 - HDM bonus competes with paralysis +1: 25% damage, 75% paralysis
+  ---
+  duration_ms: 0.3383
+  type: 'test'
+  ...
+# Subtest: player speed change reverses the paralysis ordering: 12.5% / 87.5%
+ok 106 - player speed change reverses the paralysis ordering: 12.5% / 87.5%
+  ---
+  duration_ms: 0.4863
+  type: 'test'
+  ...
+# Subtest: confusion and infatuation affect paralysis scoring; missing state is withheld
+ok 107 - confusion and infatuation affect paralysis scoring; missing state is withheld
+  ---
+  duration_ms: 0.937
+  type: 'test'
+  ...
+# Subtest: player HP changes a KO into a no-KO and changes the distribution
+ok 108 - player HP changes a KO into a no-KO and changes the distribution
+  ---
+  duration_ms: 0.3723
+  type: 'test'
+  ...
+# Subtest: ambiguous damage ranges are withheld, not uniformly guessed
+ok 109 - ambiguous damage ranges are withheld, not uniformly guessed
+  ---
+  duration_ms: 0.3984
+  type: 'test'
+  ...
+# Subtest: slow priority KO beats a slow ordinary KO using the documented bonuses
+ok 110 - slow priority KO beats a slow ordinary KO using the documented bonuses
+  ---
+  duration_ms: 0.6193
+  type: 'test'
+  ...
+# Subtest: guaranteed secondary does not stack status base with HDM
+ok 111 - guaranteed secondary does not stack status base with HDM
+  ---
+  duration_ms: 0.7682
+  type: 'test'
+  ...
+# Subtest: Choice status penalty uses documented exceptions
+ok 112 - Choice status penalty uses documented exceptions
+  ---
+  duration_ms: 0.3765
+  type: 'test'
+  ...
+# Subtest: healthy recovery is discouraged by exactly one point
+ok 113 - healthy recovery is discouraged by exactly one point
+  ---
+  duration_ms: 0.4348
+  type: 'test'
+  ...
+# Subtest: contradictory slow recovery thresholds are explicitly unavailable
+ok 114 - contradictory slow recovery thresholds are explicitly unavailable
+  ---
+  duration_ms: 0.3072
+  type: 'test'
+  ...
+# Subtest: strict hazard routine requires the relevant battle context
+ok 115 - strict hazard routine requires the relevant battle context
+  ---
+  duration_ms: 0.5416
+  type: 'test'
+  ...
+# Subtest: HDM Salt Cure follows summary while strict blocked status moves remain unavailable
+ok 116 - HDM Salt Cure follows summary while strict blocked status moves remain unavailable
+  ---
+  duration_ms: 0.6874
+  type: 'test'
+  ...
+# Subtest: blocked stat drops and repeated field effects cannot yield invented probabilities
+ok 117 - blocked stat drops and repeated field effects cannot yield invented probabilities
+  ---
+  duration_ms: 0.9329
+  type: 'test'
+  ...
+# Subtest: doubles and fainted battlers have no invented distribution
+ok 118 - doubles and fainted battlers have no invented distribution
+  ---
+  duration_ms: 0.2847
+  type: 'test'
+  ...
+# Subtest: no legal moves reports Struggle separately instead of normalizing zeros
+ok 119 - no legal moves reports Struggle separately instead of normalizing zeros
+  ---
+  duration_ms: 0.3233
+  type: 'test'
+  ...
+# Subtest: invalid PP cannot produce a plausible percentage
+ok 120 - invalid PP cannot produce a plausible percentage
+  ---
+  duration_ms: 0.2246
+  type: 'test'
+  ...
+# Subtest: missing Pokemon and partial move data fail without throwing
+ok 121 - missing Pokemon and partial move data fail without throwing
+  ---
+  duration_ms: 0.3
+  type: 'test'
+  ...
+# Subtest: joint branches reaching the same move are added, ties split uniformly
+ok 122 - joint branches reaching the same move are added, ties split uniformly
+  ---
+  duration_ms: 0.4792
+  type: 'test'
+  ...
+# Subtest: joint branch mass is checked before any normalization
+ok 123 - joint branch mass is checked before any normalization
+  ---
+  duration_ms: 0.8623
+  type: 'test'
+  ...
+# Subtest: rounding and evaluation do not mutate source battle state
+ok 124 - rounding and evaluation do not mutate source battle state
+  ---
+  duration_ms: 0.3927
+  type: 'test'
+  ...
+# Subtest: forced Choice or Encore slot eliminates every other move
+ok 125 - forced Choice or Encore slot eliminates every other move
+  ---
+  duration_ms: 0.2789
+  type: 'test'
+  ...
+# Subtest: invalid forced slot is unavailable
+ok 126 - invalid forced slot is unavailable
+  ---
+  duration_ms: 0.1702
+  type: 'test'
+  ...
+# Subtest: draining attack gets documented low-HP bonus, except against Liquid Ooze
+ok 127 - draining attack gets documented low-HP bonus, except against Liquid Ooze
+  ---
+  duration_ms: 0.4391
+  type: 'test'
+  ...
+# Subtest: uncertain drain four-hit threshold never uses invented roll odds
+ok 128 - uncertain drain four-hit threshold never uses invented roll odds
+  ---
+  duration_ms: 0.2659
+  type: 'test'
+  ...
+# Subtest: evasion setup uses the documented HP-dependent random check
+ok 129 - evasion setup uses the documented HP-dependent random check
+  ---
+  duration_ms: 0.3748
+  type: 'test'
+  ...
+# Subtest: Powder reads the player's actual Fire moves
+ok 130 - Powder reads the player's actual Fire moves
+  ---
+  duration_ms: 0.3204
+  type: 'test'
+  ...
+# Subtest: Topsy Turvy compares sums of positive and negative boosts
+ok 131 - Topsy Turvy compares sums of positive and negative boosts
+  ---
+  duration_ms: 0.413
+  type: 'test'
+  ...
+# Subtest: empty player move slots are not status moves for Taunt
+ok 132 - empty player move slots are not status moves for Taunt
+  ---
+  duration_ms: 0.3274
+  type: 'test'
+  ...
+# Subtest: documented thawing bonus can make a lower-damage attack win
+ok 133 - documented thawing bonus can make a lower-damage attack win
+  ---
+  duration_ms: 0.4494
+  type: 'test'
+  ...
+# Subtest: invalid stat stages and negative speeds do not produce percentages
+ok 134 - invalid stat stages and negative speeds do not produce percentages
+  ---
+  duration_ms: 0.2378
+  type: 'test'
+  ...
+# Subtest: every constructible trainer set has correct numeric reserve and doubles-partner statistics
+ok 135 - every constructible trainer set has correct numeric reserve and doubles-partner statistics
+  ---
+  duration_ms: 1903.9935
+  type: 'test'
+  ...
+# Subtest: forced replacement uses the faster OHKO reserve, excluding the displayed opponent
+ok 136 - forced replacement uses the faster OHKO reserve, excluding the displayed opponent
+  ---
+  duration_ms: 7.433
+  type: 'test'
+  ...
+# Subtest: Trick Room reverses the entrant selected by the speed/OHKO rule
+ok 137 - Trick Room reverses the entrant selected by the speed/OHKO rule
+  ---
+  duration_ms: 2.1325
+  type: 'test'
+  ...
+# Subtest: party order resolves equal post-KO scores and fainted reserves are excluded
+ok 138 - party order resolves equal post-KO scores and fainted reserves are excluded
+  ---
+  duration_ms: 0.7884
+  type: 'test'
+  ...
+# Subtest: no reserves, entry-hazard KOs and unsupported doubles have separate explanations
+ok 139 - no reserves, entry-hazard KOs and unsupported doubles have separate explanations
+  ---
+  duration_ms: 0.7626
+  type: 'test'
+  ...
+# Subtest: strict mode uses the verified no-variance reserve damage and immediate damage is opt-in
+ok 140 - strict mode uses the verified no-variance reserve damage and immediate damage is opt-in
+  ---
+  duration_ms: 2.5353
+  type: 'test'
+  ...
+# Subtest: an approximated OHKO never becomes a certified destination in strict mode
+ok 141 - an approximated OHKO never becomes a certified destination in strict mode
+  ---
+  duration_ms: 1.3294
+  type: 'test'
+  ...
+# Subtest: documented doubles post-KO still forces entry when every reserve score is negative
+ok 142 - documented doubles post-KO still forces entry when every reserve score is negative
+  ---
+  duration_ms: 1.2192
+  type: 'test'
+  ...
+# Subtest: doubles Support gets its documented 10 percent bonus and party order breaks the other tie
+ok 143 - doubles Support gets its documented 10 percent bonus and party order breaks the other tie
+  ---
+  duration_ms: 4.3231
+  type: 'test'
+  ...
+# Subtest: Support at base score -1 never gains a bonus after an immediate-entry penalty
+ok 144 - Support at base score -1 never gains a bonus after an immediate-entry penalty
+  ---
+  duration_ms: 1.1432
+  type: 'test'
+  ...
+# Subtest: all 50 protected Null data, import, order and damage files match the original
+ok 145 - all 50 protected Null data, import, order and damage files match the original
+  ---
+  duration_ms: 185.0422
+  type: 'test'
+  ...
+# Subtest: all 2280 Null sets and their indices, trainer names and order are intact
+ok 146 - all 2280 Null sets and their indices, trainer names and order are intact
+  ---
+  duration_ms: 56.9219
+  type: 'test'
+  ...
+# Subtest: foreign Smogon presets are absent while every import container remains usable
+ok 147 - foreign Smogon presets are absent while every import container remains usable
+  ---
+  duration_ms: 14.573
+  type: 'test'
+  ...
+# Subtest: AI numeric metadata uses the pinned ROM before the historical Pokédex
+ok 148 - AI numeric metadata uses the pinned ROM before the historical Pokédex
+  ---
+  duration_ms: 67.5124
+  type: 'test'
+  ...
+# Subtest: the page and its template load all added scripts and styles from local files
+ok 149 - the page and its template load all added scripts and styles from local files
+  ---
+  duration_ms: 109.7912
+  type: 'test'
+  ...
+# Subtest: release fails closed for absent/duplicate TAP summaries, failed or skipped tests
+ok 150 - release fails closed for absent/duplicate TAP summaries, failed or skipped tests
+  ---
+  duration_ms: 7.6002
+  type: 'test'
+  ...
+# Subtest: release freshness fingerprint detects code/fixture changes while fresh evidence may be written
+ok 151 - release freshness fingerprint detects code/fixture changes while fresh evidence may be written
+  ---
+  duration_ms: 47.694
+  type: 'test'
+  ...
+# Subtest: freshly touched but old browser report is rejected, as is a fresh report with errors
+ok 152 - freshly touched but old browser report is rejected, as is a fresh report with errors
+  ---
+  duration_ms: 24.0628
+  type: 'test'
+  ...
+# Subtest: packaging keeps editable sources and native inputs but never imports earlier proof runs
+ok 153 - packaging keeps editable sources and native inputs but never imports earlier proof runs
+  ---
+  duration_ms: 1332.0717
+  type: 'test'
+  ...
+# Subtest: final archive guard rejects stale evidence and tools even if they were copied after the build
+ok 154 - final archive guard rejects stale evidence and tools even if they were copied after the build
+  ---
+  duration_ms: 500.8348
+  type: 'test'
+  ...
+# Subtest: all30 current reserve-form proof bytes agree with their decoded species, moves, U8 level and hashes without requiring a private ROM
+ok 155 - all30 current reserve-form proof bytes agree with their decoded species, moves, U8 level and hashes without requiring a private ROM
+  ---
+  duration_ms: 9.1188
+  type: 'test'
+  ...
+# Subtest: selected form anchors agree with final trainer metadata, while the duplicate Liza profile has its actual separate native owner
+ok 156 - selected form anchors agree with final trainer metadata, while the duplicate Liza profile has its actual separate native owner
+  ---
+  duration_ms: 12.9416
+  type: 'test'
+  ...
+# Subtest: default estimates give three equal KOs one third each and identify the RNG assumption
+ok 157 - default estimates give three equal KOs one third each and identify the RNG assumption
+  ---
+  duration_ms: 14.8595
+  type: 'test'
+  ...
+# Subtest: overlapping damage estimates retain the multiplicity of equal rolls
+ok 158 - overlapping damage estimates retain the multiplicity of equal rolls
+  ---
+  duration_ms: 6.391
+  type: 'test'
+  ...
+# Subtest: the screenshot's Stealth Rock matchup now has finite probabilities
+ok 159 - the screenshot's Stealth Rock matchup now has finite probabilities
+  ---
+  duration_ms: 1.795
+  type: 'test'
+  ...
+# Subtest: hazard formula uses living party fraction: 3 of 5 gives a 45% gate
+ok 160 - hazard formula uses living party fraction: 3 of 5 gives a 45% gate
+  ---
+  duration_ms: 0.5999
+  type: 'test'
+  ...
+# Subtest: a last-player-Pokemon hazard loses to a normal damage move
+ok 161 - a last-player-Pokemon hazard loses to a normal damage move
+  ---
+  duration_ms: 0.7686
+  type: 'test'
+  ...
+# Subtest: mixed and defensive setup routines produce scores based on player attacking category
+ok 162 - mixed and defensive setup routines produce scores based on player attacking category
+  ---
+  duration_ms: 2.6097
+  type: 'test'
+  ...
+# Subtest: confusion is supported and an already confused target receives a disclosed useless penalty
+ok 163 - confusion is supported and an already confused target receives a disclosed useless penalty
+  ---
+  duration_ms: 0.9205
+  type: 'test'
+  ...
+# Subtest: Protect uses residual conditions, first-turn behavior and protection history
+ok 164 - Protect uses residual conditions, first-turn behavior and protection history
+  ---
+  duration_ms: 0.7851
+  type: 'test'
+  ...
+# Subtest: slow recovery below 50% is useful and explicitly labels the ambiguous source ordering
+ok 165 - slow recovery below 50% is useful and explicitly labels the ambiguous source ordering
+  ---
+  duration_ms: 0.5893
+  type: 'test'
+  ...
+# Subtest: Salt Cure respects the summary: secondary utility does not stack with HDM
+ok 166 - Salt Cure respects the summary: secondary utility does not stack with HDM
+  ---
+  duration_ms: 0.9142
+  type: 'test'
+  ...
+# Subtest: Palafin pivot is an exclusive score, not an additive HDM bonus
+ok 167 - Palafin pivot is an exclusive score, not an additive HDM bonus
+  ---
+  duration_ms: 6.0732
+  type: 'test'
+  ...
+# Subtest: Fake Out stacks its documented +9 with HDM, then becomes unusable after first turn
+ok 168 - Fake Out stacks its documented +9 with HDM, then becomes unusable after first turn
+  ---
+  duration_ms: 0.8273
+  type: 'test'
+  ...
+# Subtest: single-hit Focus Sash prevents the estimate from treating the protected target as a KO
+ok 169 - single-hit Focus Sash prevents the estimate from treating the protected target as a KO
+  ---
+  duration_ms: 0.6845
+  type: 'test'
+  ...
+# Subtest: Trick Room reverses speed-based KO bonuses while a tie still counts as AI faster
+ok 170 - Trick Room reverses speed-based KO bonuses while a tie still counts as AI faster
+  ---
+  duration_ms: 0.837
+  type: 'test'
+  ...
+# Subtest: copied routines disclose predictions and strict mode hides them; incomplete doubles stays unavailable
+ok 171 - copied routines disclose predictions and strict mode hides them; incomplete doubles stays unavailable
+  ---
+  duration_ms: 3.298
+  type: 'test'
+  ...
+# Subtest: adapter estimates are disclosed, strict mode refuses them, and input state is immutable
+ok 172 - adapter estimates are disclosed, strict mode refuses them, and input state is immutable
+  ---
+  duration_ms: 1.4969
+  type: 'test'
+  ...
+# Subtest: independent exact score integration agrees with exhaustive branch aggregation including ties
+ok 173 - independent exact score integration agrees with exhaustive branch aggregation including ties
+  ---
+  duration_ms: 1.1463
+  type: 'test'
+  ...
+# Subtest: 1.2.6 migration preserves the historical fixture and limits reviewed overrides to45 native-rule cases
+ok 174 - 1.2.6 migration preserves the historical fixture and limits reviewed overrides to45 native-rule cases
+  ---
+  duration_ms: 234.4296
+  type: 'test'
+  ...
+# Subtest: scoring families preserve getNullAIMoveProbabilities outputs with explicit reviewed1.2.6 overrides
+ok 175 - scoring families preserve getNullAIMoveProbabilities outputs with explicit reviewed1.2.6 overrides
+  ---
+  duration_ms: 156.4551
+  type: 'test'
+  ...
+# Subtest: scoring families preserve getTargetScoreDistributions outputs with explicit reviewed1.2.6 overrides
+ok 176 - scoring families preserve getTargetScoreDistributions outputs with explicit reviewed1.2.6 overrides
+  ---
+  duration_ms: 97.4743
+  type: 'test'
+  ...
+# Subtest: scoring families preserve full two-slot doubles decisions and target distributions
+ok 177 - scoring families preserve full two-slot doubles decisions and target distributions
+  ---
+  duration_ms: 83.8063
+  type: 'test'
+  ...
+# Subtest: browser UMD family loader produces the same outputs as Node without generated code
+ok 178 - browser UMD family loader produces the same outputs as Node without generated code
+  ---
+  duration_ms: 128.9434
+  type: 'test'
+  ...
+# Subtest: family dispatch has unique stable order and each family contains actual scoring routines
+ok 179 - family dispatch has unique stable order and each family contains actual scoring routines
+  ---
+  duration_ms: 7.1807
+  type: 'test'
+  ...
+# Subtest: missing browser family fails clearly at load instead of publishing partial probabilities
+ok 180 - missing browser family fails clearly at load instead of publishing partial probabilities
+  ---
+  duration_ms: 4.1542
+  type: 'test'
+  ...
+# Subtest: Linoone screenshot: eligible Iapapa changes Belly Drum from 0 to 87.5%, not 100%
+ok 181 - Linoone screenshot: eligible Iapapa changes Belly Drum from 0 to 87.5%, not 100%
+  ---
+  duration_ms: 15.1875
+  type: 'test'
+  ...
+# Subtest: seven native berry parameters and item IDs are independently pinned
+ok 182 - seven native berry parameters and item IDs are independently pinned
+  ---
+  duration_ms: 0.4627
+  type: 'test'
+  ...
+# Subtest: all five native pinch berries heal half HP with Gluttony
+ok 183 - all five native pinch berries heal half HP with Gluttony
+  ---
+  duration_ms: 2.8099
+  type: 'test'
+  ...
+# Subtest: without Gluttony a full-HP Belly Drum does not activate a quarter-HP berry
+ok 184 - without Gluttony a full-HP Belly Drum does not activate a quarter-HP berry
+  ---
+  duration_ms: 0.6538
+  type: 'test'
+  ...
+# Subtest: removing the berry or holding an unrelated item gives no phantom healing
+ok 185 - removing the berry or holding an unrelated item gives no phantom healing
+  ---
+  duration_ms: 1.2813
+  type: 'test'
+  ...
+# Subtest: Sitrus restores one quarter, Oran restores ten, following native parameters
+ok 186 - Sitrus restores one quarter, Oran restores ten, following native parameters
+  ---
+  duration_ms: 6.1571
+  type: 'test'
+  ...
+# Subtest: Magic Room, Klutz, Embargo, Heal Block and living opposing Unnerve suppress healing
+ok 187 - Magic Room, Klutz, Embargo, Heal Block and living opposing Unnerve suppress healing
+  ---
+  duration_ms: 7.829
+  type: 'test'
+  ...
+# Subtest: integer HP cost and trigger: odd maxHP does not prematurely activate Gluttony
+ok 188 - integer HP cost and trigger: odd maxHP does not prematurely activate Gluttony
+  ---
+  duration_ms: 1.0737
+  type: 'test'
+  ...
+# Subtest: Belly Drum and Filet Away are discouraged at <=50% HP, positive Attack, or Contrary
+ok 189 - Belly Drum and Filet Away are discouraged at <=50% HP, positive Attack, or Contrary
+  ---
+  duration_ms: 11.4154
+  type: 'test'
+  ...
+# Subtest: Filet Away uses the same half-HP cost and berry survival correction
+ok 190 - Filet Away uses the same half-HP cost and berry survival correction
+  ---
+  duration_ms: 4.2041
+  type: 'test'
+  ...
+# Subtest: canonical ROM/dataset name Fillet Away reaches the routine, unlike the documentary typo
+ok 191 - canonical ROM/dataset name Fillet Away reaches the routine, unlike the documentary typo
+  ---
+  duration_ms: 0.6399
+  type: 'test'
+  ...
+# Subtest: Clangorous Soul can activate a Sitrus Berry after its third-HP cost
+ok 192 - Clangorous Soul can activate a Sitrus Berry after its third-HP cost
+  ---
+  duration_ms: 0.8846
+  type: 'test'
+  ...
+# Subtest: Clangorous Soul at its HP-cost threshold is discouraged, berries cannot revive it
+ok 193 - Clangorous Soul at its HP-cost threshold is discouraged, berries cannot revive it
+  ---
+  duration_ms: 0.522
+  type: 'test'
+  ...
+# Subtest: Shell Smash has no HP cost and White Herb avoids the approximate defense-drop penalty
+ok 194 - Shell Smash has no HP cost and White Herb avoids the approximate defense-drop penalty
+  ---
+  duration_ms: 4.8545
+  type: 'test'
+  ...
+# Subtest: incapacitated branch falls through to survival on the remaining 10%
+ok 195 - incapacitated branch falls through to survival on the remaining 10%
+  ---
+  duration_ms: 2.2876
+  type: 'test'
+  ...
+# Subtest: strict mode withholds missing-helper estimates; explicit KO fact remains usable
+ok 196 - strict mode withholds missing-helper estimates; explicit KO fact remains usable
+  ---
+  duration_ms: 2.0377
+  type: 'test'
+  ...
+# Subtest: reset moves and Unaware still discourage the four setup moves
+ok 197 - reset moves and Unaware still discourage the four setup moves
+  ---
+  duration_ms: 1.5392
+  type: 'test'
+  ...
+# Subtest: doubles shares the berry correction and respects Unnerve in the other player slot
+ok 198 - doubles shares the berry correction and respects Unnerve in the other player slot
+  ---
+  duration_ms: 26.3633
+  type: 'test'
+  ...
+# Subtest: Rusturf screenshot: Phione ties Masquerain at 90 and wins 3 against Slowbro-Galar 2
+ok 199 - Rusturf screenshot: Phione ties Masquerain at 90 and wins 3 against Slowbro-Galar 2
+  ---
+  duration_ms: 7.5286
+  type: 'test'
+  ...
+# Subtest: Rusturf prediction changes at the correct speed boundary, rather than rolling 50/50
+ok 200 - Rusturf prediction changes at the correct speed boundary, rather than rolling 50/50
+  ---
+  duration_ms: 8.4166
+  type: 'test'
+  ...
+# Subtest: equal speed uses every faster score branch, including a lost damage exchange
+ok 201 - equal speed uses every faster score branch, including a lost damage exchange
+  ---
+  duration_ms: 1.3312
+  type: 'test'
+  ...
+# Subtest: strictly slower and faster checks still reverse under Trick Room
+ok 202 - strictly slower and faster checks still reverse under Trick Room
+  ---
+  duration_ms: 0.7658
+  type: 'test'
+  ...
+# Subtest: strict mode accepts a deterministic tied-speed replacement without an uncertainty flag
+ok 203 - strict mode accepts a deterministic tied-speed replacement without an uncertainty flag
+  ---
+  duration_ms: 0.8805
+  type: 'test'
+  ...
+# Subtest: hard-switch entry penalties remain separate from the favorable tie convention
+ok 204 - hard-switch entry penalties remain separate from the favorable tie convention
+  ---
+  duration_ms: 0.3589
+  type: 'test'
+  ...
+# Subtest: equal post-KO scores keep party order; speed ties do not add random selection
+ok 205 - equal post-KO scores keep party order; speed ties do not add random selection
+  ---
+  duration_ms: 0.5924
+  type: 'test'
+  ...
+# Subtest: doubles tied-speed replacement excludes the active partner and KO reserves
+ok 206 - doubles tied-speed replacement excludes the active partner and KO reserves
+  ---
+  duration_ms: 1.0081
+  type: 'test'
+  ...
+# Subtest: Retaliate reserves carry separate real-engine profiles for ordinary entry and the turn after a KO
+ok 207 - Retaliate reserves carry separate real-engine profiles for ordinary entry and the turn after a KO
+  ---
+  duration_ms: 109.0472
+  type: 'test'
+  ...
+# Subtest: Last Respects counts existing KO marks plus the simulated KO without double counting a marked active
+ok 208 - Last Respects counts existing KO marks plus the simulated KO without double counting a marked active
+  ---
+  duration_ms: 133.4031
+  type: 'test'
+  ...
+# Subtest: Supreme Overlord reserves receive known faints and the simulated one at the engine modifier stage
+ok 209 - Supreme Overlord reserves receive known faints and the simulated one at the engine modifier stage
+  ---
+  duration_ms: 28.0481
+  type: 'test'
+  ...
+# Subtest: explicit revival counts apply to Last Respects and Supreme Overlord, whose bonus caps at five
+ok 210 - explicit revival counts apply to Last Respects and Supreme Overlord, whose bonus caps at five
+  ---
+  duration_ms: 24.5253
+  type: 'test'
+  ...
+# Subtest: doubles reserve faint profiles count a partner at zero HP but simulate only the selected slot KO
+ok 211 - doubles reserve faint profiles count a partner at zero HP but simulate only the selected slot KO
+  ---
+  duration_ms: 123.4529
+  type: 'test'
+  ...
+# Subtest: post-KO recalculation preserves explicit reserve PP and move-availability overrides
+ok 212 - post-KO recalculation preserves explicit reserve PP and move-availability overrides
+  ---
+  duration_ms: 17.9122
+  type: 'test'
+  ...
+# Subtest: four-battler adapter keeps self/ally/spread targets and source trainer data intact
+ok 213 - four-battler adapter keeps self/ally/spread targets and source trainer data intact
+  ---
+  duration_ms: 30.4126
+  type: 'test'
+  ...
+# Subtest: partner KO mark affects the active snapshot and a foreign partner invalidates only party predictions
+ok 214 - partner KO mark affects the active snapshot and a foreign partner invalidates only party predictions
+  ---
+  duration_ms: 79.7552
+  type: 'test'
+  ...
+# Subtest: opposing slot 2 uses player slot 2 for replacements and preserves partner-specific facts
+ok 215 - opposing slot 2 uses player slot 2 for replacements and preserves partner-specific facts
+  ---
+  duration_ms: 55.6817
+  type: 'test'
+  ...
+# Subtest: spread damage is reduced for multiple living targets and restored when only one remains
+ok 216 - spread damage is reduced for multiple living targets and restored when only one remains
+  ---
+  duration_ms: 83.3889
+  type: 'test'
+  ...
+# Subtest: post-KO doubles scores follow each documented slot, including partner HP and moves
+ok 217 - post-KO doubles scores follow each documented slot, including partner HP and moves
+  ---
+  duration_ms: 111.171
+  type: 'test'
+  ...
+# Subtest: trainer reserves use the opponent hazard side and preserve team order
+ok 218 - trainer reserves use the opponent hazard side and preserve team order
+  ---
+  duration_ms: 19.1
+  type: 'test'
+  ...
+# Subtest: numeric-string trainer IVs and EVs yield the same reserve stats and damage as numbers
+ok 219 - numeric-string trainer IVs and EVs yield the same reserve stats and damage as numbers
+  ---
+  duration_ms: 44.1254
+  type: 'test'
+  ...
+# Subtest: Ivan Seadra with string IVs cannot become a fabricated faster OHKO reserve
+ok 220 - Ivan Seadra with string IVs cannot become a fabricated faster OHKO reserve
+  ---
+  duration_ms: 62.3946
+  type: 'test'
+  ...
+# Subtest: numeric-string levels are normalized before HP computation
+ok 221 - numeric-string levels are normalized before HP computation
+  ---
+  duration_ms: 37.0875
+  type: 'test'
+  ...
+# Subtest: malformed IVs, EVs and levels invalidate a partial team instead of producing statistics or a certain destination
+ok 222 - malformed IVs, EVs and levels invalidate a partial team instead of producing statistics or a certain destination
+  ---
+  duration_ms: 235.9695
+  type: 'test'
+  ...
+# Subtest: reserve Castform stays untransformed, except the documented Weather Ball STAB
+ok 223 - reserve Castform stays untransformed, except the documented Weather Ball STAB
+  ---
+  duration_ms: 29.0399
+  type: 'test'
+  ...
+# Subtest: marked KO and explicit reserve HP affect counts without changing source sets
+ok 224 - marked KO and explicit reserve HP affect counts without changing source sets
+  ---
+  duration_ms: 16.6091
+  type: 'test'
+  ...
+# Subtest: reserve Unburden is inactive before its item has been consumed
+ok 225 - reserve Unburden is inactive before its item has been consumed
+  ---
+  duration_ms: 16.123
+  type: 'test'
+  ...
+# Subtest: a similarly named different trainer is not added to the selected party
+ok 226 - a similarly named different trainer is not added to the selected party
+  ---
+  duration_ms: 7.4185
+  type: 'test'
+  ...
+# Subtest: only the selected trainer slot is active when a different form shares its base species
+ok 227 - only the selected trainer slot is active when a different form shares its base species
+  ---
+  duration_ms: 11.3009
+  type: 'test'
+  ...
+# Subtest: opponent Tailwind affects its reserves but does not affect player speed
+ok 228 - opponent Tailwind affects its reserves but does not affect player speed
+  ---
+  duration_ms: 11.4037
+  type: 'test'
+  ...
+# Subtest: switch-in evaluation does not anticipate consuming a terrain seed
+ok 229 - switch-in evaluation does not anticipate consuming a terrain seed
+  ---
+  duration_ms: 19.3962
+  type: 'test'
+  ...
+# Subtest: Corrosion keeps Toxic usable against Poison and Steel targets
+ok 230 - Corrosion keeps Toxic usable against Poison and Steel targets
+  ---
+  duration_ms: 17.8153
+  type: 'test'
+  ...
+# Subtest: Minior meteor and core display forms count as one trainer party slot
+ok 231 - Minior meteor and core display forms count as one trainer party slot
+  ---
+  duration_ms: 9.4593
+  type: 'test'
+  ...
+# Subtest: Minior reserve profiles preserve the native speed distinction and the selected active Meteor form
+ok 232 - Minior reserve profiles preserve the native speed distinction and the selected active Meteor form
+  ---
+  duration_ms: 27.0413
+  type: 'test'
+  ...
+# Subtest: either Minior form retains reserve HP, availability and PP when its canonical display identity changes
+ok 233 - either Minior form retains reserve HP, availability and PP when its canonical display identity changes
+  ---
+  duration_ms: 34.3897
+  type: 'test'
+  ...
+# Subtest: reserve controls follow other battle-form aliases without merging separate regional species
+ok 234 - reserve controls follow other battle-form aliases without merging separate regional species
+  ---
+  duration_ms: 9.1998
+  type: 'test'
+  ...
+# Subtest: frozen Switch into party rebuilds retain Minior core profiles and controls entered under Meteor
+ok 235 - frozen Switch into party rebuilds retain Minior core profiles and controls entered under Meteor
+  ---
+  duration_ms: 8.888
+  type: 'test'
+  ...
+# Subtest: doubles keep an active Meteor partner distinct from the core used for reserve evaluation
+ok 236 - doubles keep an active Meteor partner distinct from the core used for reserve evaluation
+  ---
+  duration_ms: 16.0088
+  type: 'test'
+  ...
+# Subtest: Darm standalone Zen and Galar Zen trainer labels resolve native models and remain distinct party members
+ok 237 - Darm standalone Zen and Galar Zen trainer labels resolve native models and remain distinct party members
+  ---
+  duration_ms: 15.3415
+  type: 'test'
+  ...
+# Subtest: native1.2.6 metadata keeps both Lanturn in one canonical trainer team without sharing KO marks
+ok 238 - native1.2.6 metadata keeps both Lanturn in one canonical trainer team without sharing KO marks
+  ---
+  duration_ms: 107.7134
+  type: 'test'
+  ...
+# Subtest: two Mega Raichu use independent native base profiles and native order; a KO or reservation excludes only its own slot
+ok 239 - two Mega Raichu use independent native base profiles and native order; a KO or reservation excludes only its own slot
+  ---
+  duration_ms: 35.2782
+  type: 'test'
+  ...
+# Subtest: new Regenor reserves use native pre-Mega forms while explicitly selected Mega remains active
+ok 240 - new Regenor reserves use native pre-Mega forms while explicitly selected Mega remains active
+  ---
+  duration_ms: 45.6254
+  type: 'test'
+  ...
+# Subtest: the four actual native Mega species are preserved in reserve evaluation
+ok 241 - the four actual native Mega species are preserved in reserve evaluation
+  ---
+  duration_ms: 72.3916
+  type: 'test'
+  ...
+# Subtest: confirmed two-trainer doubles keep replacement choices inside the selected native owner party
+ok 242 - confirmed two-trainer doubles keep replacement choices inside the selected native owner party
+  ---
+  duration_ms: 110.3071
+  type: 'test'
+  ...
+# Subtest: marking either Eiscue display form KO removes its logical trainer slot
+ok 243 - marking either Eiscue display form KO removes its logical trainer slot
+  ---
+  duration_ms: 7.5068
+  type: 'test'
+  ...
+# Subtest: Magic Room disables reserve Choice Scarf in switch-in speed prediction
+ok 244 - Magic Room disables reserve Choice Scarf in switch-in speed prediction
+  ---
+  duration_ms: 9.3062
+  type: 'test'
+  ...
+# Subtest: Lua ability spellings resolve to engine identities before reserve damage is calculated
+ok 245 - Lua ability spellings resolve to engine identities before reserve damage is calculated
+  ---
+  duration_ms: 9.8412
+  type: 'test'
+  ...
+# Subtest: Magic Room disables reserve Heavy-Duty Boots when evaluating entry hazards
+ok 246 - Magic Room disables reserve Heavy-Duty Boots when evaluating entry hazards
+  ---
+  duration_ms: 7.4776
+  type: 'test'
+  ...
+# Subtest: Magic Room seed suppression does not subtract a boost that cannot activate
+ok 247 - Magic Room seed suppression does not subtract a boost that cannot activate
+  ---
+  duration_ms: 12.9175
+  type: 'test'
+  ...
+# Subtest: Trick Room reverses faster and slower switch-in OHKO scores
+ok 248 - Trick Room reverses faster and slower switch-in OHKO scores
+  ---
+  duration_ms: 0.2978
+  type: 'test'
+  ...
+# Subtest: no valid reserve means no switch, even for Perish Song
+ok 249 - no valid reserve means no switch, even for Perish Song
+  ---
+  duration_ms: 25.068
+  type: 'test'
+  ...
+# Subtest: Perish Song guarantees a switch only into a nonnegative candidate
+ok 250 - Perish Song guarantees a switch only into a nonnegative candidate
+  ---
+  duration_ms: 2.5876
+  type: 'test'
+  ...
+# Subtest: a slow OHKOed Palafin guarantees a switch
+ok 251 - a slow OHKOed Palafin guarantees a switch
+  ---
+  duration_ms: 0.6383
+  type: 'test'
+  ...
+# Subtest: Anti-Setup switches nominal 40% and two ties split equally
+ok 252 - Anti-Setup switches nominal 40% and two ties split equally
+  ---
+  duration_ms: 1.6835
+  type: 'test'
+  ...
+# Subtest: Anti-Setup Plus alone may select negative-score reserves
+ok 253 - Anti-Setup Plus alone may select negative-score reserves
+  ---
+  duration_ms: 9.5077
+  type: 'test'
+  ...
+# Subtest: Walled respects the 10% and residual-recovery 20% threshold
+ok 254 - Walled respects the 10% and residual-recovery 20% threshold
+  ---
+  duration_ms: 1.1727
+  type: 'test'
+  ...
+# Subtest: Avoid Switch prevents Support, Weather, Walled and Anti-Stall
+ok 255 - Avoid Switch prevents Support, Weather, Walled and Anti-Stall
+  ---
+  duration_ms: 0.8839
+  type: 'test'
+  ...
+# Subtest: Support definition excludes utility moves and Imposter
+ok 256 - Support definition excludes utility moves and Imposter
+  ---
+  duration_ms: 0.2375
+  type: 'test'
+  ...
+# Subtest: 1.2.6 early slow OHKO rejection loses the Sash/Sturdy exemption after entry damage
+ok 257 - 1.2.6 early slow OHKO rejection loses the Sash/Sturdy exemption after entry damage
+  ---
+  duration_ms: 0.4017
+  type: 'test'
+  ...
+# Subtest: Regenerator uses recovered image formula HP < two thirds
+ok 258 - Regenerator uses recovered image formula HP < two thirds
+  ---
+  duration_ms: 0.4856
+  type: 'test'
+  ...
+# Subtest: Weather and Anti-Stall use their documented 20% routines
+ok 259 - Weather and Anti-Stall use their documented 20% routines
+  ---
+  duration_ms: 1.031
+  type: 'test'
+  ...
+# Subtest: absorption uses the reserve talent and does not retrigger an active immunity
+ok 260 - absorption uses the reserve talent and does not retrigger an active immunity
+  ---
+  duration_ms: 1.6379
+  type: 'test'
+  ...
+# Subtest: post-KO negative maxima expose the unprovided native fallback
+ok 261 - post-KO negative maxima expose the unprovided native fallback
+  ---
+  duration_ms: 0.9888
+  type: 'test'
+  ...
+# Subtest: entry hazards may eliminate a candidate, Trick Room reverses switch score speed
+ok 262 - entry hazards may eliminate a candidate, Trick Room reverses switch score speed
+  ---
+  duration_ms: 0.5668
+  type: 'test'
+  ...
+# Subtest: party pools cannot be silently treated as an actual trainer team
+ok 263 - party pools cannot be silently treated as an actual trainer team
+  ---
+  duration_ms: 0.3469
+  type: 'test'
+  ...
+# Subtest: a probably scenario is explicitly a user assumption
+ok 264 - a probably scenario is explicitly a user assumption
+  ---
+  duration_ms: 0.557
+  type: 'test'
+  ...
+# Subtest: move probabilities include switch and preserve the conditional distribution
+ok 265 - move probabilities include switch and preserve the conditional distribution
+  ---
+  duration_ms: 0.6739
+  type: 'test'
+  ...
+# Subtest: overlapping native checks continue after a failed roll with nominal probabilities
+ok 266 - overlapping native checks continue after a failed roll with nominal probabilities
+  ---
+  duration_ms: 1.2821
+  type: 'test'
+  ...
+# Subtest: Trick Room reverses only equal-priority speed order; priority and speed ties remain intact
+ok 267 - Trick Room reverses only equal-priority speed order; priority and speed ties remain intact
+  ---
+  duration_ms: 1.5105
+  type: 'test'
+  ...
+# Subtest: the field retains Trick Room through clone and side swap without mutating the original
+ok 268 - the field retains Trick Room through clone and side swap without mutating the original
+  ---
+  duration_ms: 0.8146
+  type: 'test'
+  ...
+# Subtest: Payback uses the reversed order while result speed values remain actual speeds
+ok 269 - Payback uses the reversed order while result speed values remain actual speeds
+  ---
+  duration_ms: 15.3711
+  type: 'test'
+  ...
+# Subtest: Fishious Rend and Bolt Beak double for the slower user under Trick Room
+ok 270 - Fishious Rend and Bolt Beak double for the slower user under Trick Room
+  ---
+  duration_ms: 11.5115
+  type: 'test'
+  ...
+# Subtest: Analytic follows reversed order and still activates against a switching target
+ok 271 - Analytic follows reversed order and still activates against a switching target
+  ---
+  duration_ms: 3.3013
+  type: 'test'
+  ...
+# Subtest: Gyro Ball and Electro Ball retain speed-ratio power rather than using reversed artificial stats
+ok 272 - Gyro Ball and Electro Ball retain speed-ratio power rather than using reversed artificial stats
+  ---
+  duration_ms: 8.3062
+  type: 'test'
+  ...
+# Subtest: paralysis, Tailwind, Choice Scarf and boosts still determine real final speed before order reverses
+ok 273 - paralysis, Tailwind, Choice Scarf and boosts still determine real final speed before order reverses
+  ---
+  duration_ms: 6.2803
+  type: 'test'
+  ...
+# Subtest: Trick Room off reproduces original mechanics, and toggling does not mutate move or Pokémon inputs
+ok 274 - Trick Room off reproduces original mechanics, and toggling does not mutate move or Pokémon inputs
+  ---
+  duration_ms: 427.2763
+  type: 'test'
+  ...
+# Subtest: Technician tests the corrected power and equal-speed damage keeps the existing tie convention
+ok 275 - Technician tests the corrected power and equal-speed damage keeps the existing tie convention
+  ---
+  duration_ms: 2.5468
+  type: 'test'
+  ...
+# Subtest: paralysis cannot claim a speed-order reversal by slowing the target under Trick Room
+ok 276 - paralysis cannot claim a speed-order reversal by slowing the target under Trick Room
+  ---
+  duration_ms: 6.6848
+  type: 'test'
+  ...
+# Subtest: 1.2.5 damaging hazard cap checks preserve the native HDM exception
+ok 277 - 1.2.5 damaging hazard cap checks preserve the native HDM exception
+  ---
+  duration_ms: 37.76
+  type: 'test'
+  ...
+# Subtest: 1.2.5 damaging hazards cannot stack setup bonuses over an available fast KO
+ok 278 - 1.2.5 damaging hazards cannot stack setup bonuses over an available fast KO
+  ---
+  duration_ms: 2.4292
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Stone Axe has one hazard bonus and Ceaseless Edge follows its Spikes layer rule once
+ok 279 - 1.2.5 Stone Axe has one hazard bonus and Ceaseless Edge follows its Spikes layer rule once
+  ---
+  duration_ms: 2.3547
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Syrup Bomb reaches speed-drop checks without relying on a secondary-chance flag
+ok 280 - 1.2.5 Syrup Bomb reaches speed-drop checks without relying on a secondary-chance flag
+  ---
+  duration_ms: 1.8835
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Take Heart uses mixed setup and respects Unaware in either attacking-category branch
+ok 281 - 1.2.5 Take Heart uses mixed setup and respects Unaware in either attacking-category branch
+  ---
+  duration_ms: 1.8899
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Stuff Cheeks and Memento retain their corrected Unaware and stat-immunity checks
+ok 282 - 1.2.5 Stuff Cheeks and Memento retain their corrected Unaware and stat-immunity checks
+  ---
+  duration_ms: 0.8437
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Sky Attack, Freeze Shock and Ice Burn use ordinary damage without the removed +9 bonus
+ok 283 - 1.2.5 Sky Attack, Freeze Shock and Ice Burn use ordinary damage without the removed +9 bonus
+  ---
+  duration_ms: 1.0968
+  type: 'test'
+  ...
+# Subtest: 1.2.6 Electro Shot is not HDM and still receives the immediate execution bonus in rain
+ok 284 - 1.2.6 Electro Shot is not HDM and still receives the immediate execution bonus in rain
+  ---
+  duration_ms: 0.5144
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Feint recognizes Protect with Wide Guard or Quick Guard alongside it
+ok 285 - 1.2.5 Feint recognizes Protect with Wide Guard or Quick Guard alongside it
+  ---
+  duration_ms: 0.9315
+  type: 'test'
+  ...
+# Subtest: 1.2.6 Upper Hand keeps the documented nominal ten-percent bonus
+ok 286 - 1.2.6 Upper Hand keeps the documented nominal ten-percent bonus
+  ---
+  duration_ms: 1.2055
+  type: 'test'
+  ...
+# Subtest: 1.2.5 only Blade receives King Shield form-change incentive; Shield retains the ordinary physical bonus
+ok 287 - 1.2.5 only Blade receives King Shield form-change incentive; Shield retains the ordinary physical bonus
+  ---
+  duration_ms: 9.2571
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Shell Smash discourages capped boosting stats, existing defense drops and a pre-setup KO
+ok 288 - 1.2.5 Shell Smash discourages capped boosting stats, existing defense drops and a pre-setup KO
+  ---
+  duration_ms: 4.8686
+  type: 'test'
+  ...
+# Subtest: 1.2.5 semi-invulnerable penalty affects native foe targets but excludes self, field and ally targets
+ok 289 - 1.2.5 semi-invulnerable penalty affects native foe targets but excludes self, field and ally targets
+  ---
+  duration_ms: 9.5894
+  type: 'test'
+  ...
+# Subtest: 1.2.6 Alluring Voice effect repair does not invent a new confusion AI routine
+ok 290 - 1.2.6 Alluring Voice effect repair does not invent a new confusion AI routine
+  ---
+  duration_ms: 1.2109
+  type: 'test'
+  ...
+# Subtest: 1.2.6 Anchor Shot and Spirit Shackle retain trapping AI with repaired guaranteed effects
+ok 291 - 1.2.6 Anchor Shot and Spirit Shackle retain trapping AI with repaired guaranteed effects
+  ---
+  duration_ms: 1.6456
+  type: 'test'
+  ...
+# Subtest: 1.2.5 Feint failed protection gate falls through to a separate KO gate
+ok 292 - 1.2.5 Feint failed protection gate falls through to a separate KO gate
+  ---
+  duration_ms: 2.8349
+  type: 'test'
+  ...
+# Subtest: 1.2.6 ability changes beyond the short patch notes reach native species
+ok 293 - 1.2.6 ability changes beyond the short patch notes reach native species
+  ---
+  duration_ms: 1.502
+  type: 'test'
+  ...
+# Subtest: Hurricane is wind, Glaive Rush is contact and the three restored effects use the native Sheer Force flag
+ok 294 - Hurricane is wind, Glaive Rush is contact and the three restored effects use the native Sheer Force flag
+  ---
+  duration_ms: 13.9541
+  type: 'test'
+  ...
+# Subtest: airborne Terrain Pulse changes type and power without granting the grounded terrain boost
+ok 295 - airborne Terrain Pulse changes type and power without granting the grounded terrain boost
+  ---
+  duration_ms: 15.3444
+  type: 'test'
+  ...
+# Subtest: Future Sight ignores Psychic Gem while ordinary Psychic still receives it and the held item stays intact
+ok 296 - Future Sight ignores Psychic Gem while ordinary Psychic still receives it and the held item stays intact
+  ---
+  duration_ms: 2.1742
+  type: 'test'
+  ...
+# Subtest: the existing engine already handles the corrected Flare Blitz/Reckless interaction
+ok 297 - the existing engine already handles the corrected Flare Blitz/Reckless interaction
+  ---
+  duration_ms: 1.5108
+  type: 'test'
+  ...
+# Subtest: Normalize cannot re-enable a Normal Gem boost on Future Sight
+ok 298 - Normalize cannot re-enable a Normal Gem boost on Future Sight
+  ---
+  duration_ms: 2.1322
+  type: 'test'
+  ...
+# Subtest: native Shield and Blade retain their names and opposite defenses in the embedded dex
+ok 299 - native Shield and Blade retain their names and opposite defenses in the embedded dex
+  ---
+  duration_ms: 521.3069
+  type: 'test'
+  ...
+# Subtest: all native dex models have explicit identities; omitted cosmetic and differently named Mega rows receive current data
+ok 300 - all native dex models have explicit identities; omitted cosmetic and differently named Mega rows receive current data
+  ---
+  duration_ms: 152.755
+  type: 'test'
+  ...
+# Subtest: new canonical forms are searchable and insertion preserves every old numeric search alias target
+ok 301 - new canonical forms are searchable and insertion preserves every old numeric search alias target
+  ---
+  duration_ms: 297.895
+  type: 'test'
+  ...
+# Subtest: embedded dex uses current native abilities, catch rates and wild item slots
+ok 302 - embedded dex uses current native abilities, catch rates and wild item slots
+  ---
+  duration_ms: 323.3246
+  type: 'test'
+  ...
+# Subtest: level-up corrections replace obsolete levels and preserve evolution and reminder entries
+ok 303 - level-up corrections replace obsolete levels and preserve evolution and reminder entries
+  ---
+  duration_ms: 187.194
+  type: 'test'
+  ...
+# Subtest: current regular tutors are offered only to species with native compatibility
+ok 304 - current regular tutors are offered only to species with native compatibility
+  ---
+  duration_ms: 156.3279
+  type: 'test'
+  ...
+# Subtest: native encounter overlays preserve grass/fishing separation and separate static pools
+ok 305 - native encounter overlays preserve grass/fishing separation and separate static pools
+  ---
+  duration_ms: 144.9836
+  type: 'test'
+  ...
+# Subtest: Rustboro Grove includes the current land, surf and fishing tables without replacing historical files
+ok 306 - Rustboro Grove includes the current land, surf and fishing tables without replacing historical files
+  ---
+  duration_ms: 107.3049
+  type: 'test'
+  ...
+# Subtest: all 245 official encounter profiles match the independently retained native slot bytes
+ok 307 - all 245 official encounter profiles match the independently retained native slot bytes
+  ---
+  duration_ms: 121.5558
+  type: 'test'
+  ...
+# Subtest: adding Recall Charm preserves every legacy search alias target and character offset
+ok 308 - adding Recall Charm preserves every legacy search alias target and character offset
+  ---
+  duration_ms: 109.5674
+  type: 'test'
+  ...
+# Subtest: 1.2.6 additive trainer migration applies all ROM patches and preserves the original dataset file
+ok 309 - 1.2.6 additive trainer migration applies all ROM patches and preserves the original dataset file
+  ---
+  duration_ms: 103.6468
+  type: 'test'
+  ...
+# Subtest: invalid trainer baseline is rejected before any migration mutation
+ok 310 - invalid trainer baseline is rejected before any migration mutation
+  ---
+  duration_ms: 43.5558
+  type: 'test'
+  ...
+# Subtest: two Lanturn and two Mega Raichu retain separate native slots in the same canonical trainer team
+ok 311 - two Lanturn and two Mega Raichu retain separate native slots in the same canonical trainer team
+  ---
+  duration_ms: 45.1901
+  type: 'test'
+  ...
+# Subtest: new Regenor doubles team has six ordered logical members and navigation inserts it before the League
+ok 312 - new Regenor doubles team has six ordered logical members and navigation inserts it before the League
+  ---
+  duration_ms: 36.5656
+  type: 'test'
+  ...
+# Subtest: native reserve metadata preserves four explicit Mega forms and the two actual Zygarde Mega displays
+ok 313 - native reserve metadata preserves four explicit Mega forms and the two actual Zygarde Mega displays
+  ---
+  duration_ms: 33.4626
+  type: 'test'
+  ...
+# Subtest: all real trainer sets have native order metadata, while the None sentinel is explicitly excluded
+ok 314 - all real trainer sets have native order metadata, while the None sentinel is explicitly excluded
+  ---
+  duration_ms: 39.2556
+  type: 'test'
+  ...
+# Subtest: two native double-trainer parties keep their own replacement bounds, including duplicate species and forms
+ok 315 - two native double-trainer parties keep their own replacement bounds, including duplicate species and forms
+  ---
+  duration_ms: 1.0184
+  type: 'test'
+  ...
+# Subtest: all 348 historical trainer groups retain their exact navigation order, with only Regenor inserted
+ok 316 - all 348 historical trainer groups retain their exact navigation order, with only Regenor inserted
+  ---
+  duration_ms: 52.3125
+  type: 'test'
+  ...
+# Subtest: party order uses historical indices independently from profile addresses, while two owner groups and Regenor use proven native order
+ok 317 - party order uses historical indices independently from profile addresses, while two owner groups and Regenor use proven native order
+  ---
+  duration_ms: 50.6969
+  type: 'test'
+  ...
+# Subtest: repeated native profiles are resolved by full sequence coherence without merging distinct regional pool entries
+ok 318 - repeated native profiles are resolved by full sequence coherence without merging distinct regional pool entries
+  ---
+  duration_ms: 0.6827
+  type: 'test'
+  ...
+# Subtest: ROM power and signed priority anchors reach the damage constructors
+ok 319 - ROM power and signed priority anchors reach the damage constructors
+  ---
+  duration_ms: 13.1023
+  type: 'test'
+  ...
+# Subtest: every mapped species uses valid native base statistics in raw and cached tables
+ok 320 - every mapped species uses valid native base statistics in raw and cached tables
+  ---
+  duration_ms: 33.7515
+  type: 'test'
+  ...
+# Subtest: battle-form identities are retained: Minior core/meteor and virtual Aegislash
+ok 321 - battle-form identities are retained: Minior core/meteor and virtual Aegislash
+  ---
+  duration_ms: 1.0121
+  type: 'test'
+  ...
+# Subtest: all native move numbers override stale Pokédex metadata, including ROM/doc conflicts
+ok 322 - all native move numbers override stale Pokédex metadata, including ROM/doc conflicts
+  ---
+  duration_ms: 3.7598
+  type: 'test'
+  ...
+# Subtest: native weight fixes change Low Kick at the correct power threshold
+ok 323 - native weight fixes change Low Kick at the correct power threshold
+  ---
+  duration_ms: 8.5483
+  type: 'test'
+  ...
+# Subtest: Null Starstorm remains Normal and selected-target with Stellar Terapagos in doubles
+ok 324 - Null Starstorm remains Normal and selected-target with Stellar Terapagos in doubles
+  ---
+  duration_ms: 3.5178
+  type: 'test'
+  ...
+# Subtest: adapter is idempotent and preserves formula-driven move power
+ok 325 - adapter is idempotent and preserves formula-driven move power
+  ---
+  duration_ms: 0.6212
+  type: 'test'
+  ...
+1..325
+# tests 325
+# suites 0
+# pass 325
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3296.503

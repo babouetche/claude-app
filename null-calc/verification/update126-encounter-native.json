@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "scope": "All 65 normal encounter slots for the 3 patch-named areas plus Route 111 static event pool; not a whole-map/script or item-location audit.",
+  "source": {
+    "workbook": "pokemon-locations-current.xlsx",
+    "workbookSHA256": "27b049c972397d188fdcc2b86bc180c1cab62ba16af2afcd6e2cc011c9b0a2be",
+    "sheet": "Encounter Tables",
+    "romSHA256": {
+      "1.2.4": "a6f4f3f9d9b68515c70b134d6f0e79b3fd22e00c2f1468dbafa5b7529d98dbf4",
+      "1.2.6": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045"
+    },
+    "legacySHA256": "8e210d77c7f70791f14446a51fbca3ad0401a4ca51d3803df65e708209d1eef4"
+  },
+  "tables": [
+    {
+      "area": "route111",
+      "method": "land",
+      "slotCount": 12,
+      "workbookRange": "BS3:BT14",
+      "oldOffset": "0x8210e0",
+      "newOffset": "0x82653c",
+      "nativeInfoOffset": "0x82656c",
+      "nativeArrayPointer": "0x882653c",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "2828c10128281102282828022828cf002828b2032828e30028282b022828750228283002282870002828fb012828fb01",
+      "needsOverlay": false
+    },
+    {
+      "area": "route111",
+      "method": "surf",
+      "slotCount": 6,
+      "workbookRange": "BS23:BT28",
+      "oldOffset": "0x821118",
+      "newOffset": "0x826574",
+      "nativeInfoOffset": "0x82658c",
+      "nativeArrayPointer": "0x8826574",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "2828040128286a0228285804282842042828a70128285b02",
+      "needsOverlay": false
+    },
+    {
+      "area": "route111",
+      "method": "fish",
+      "slotCount": 6,
+      "workbookRange": "BS16:BT21",
+      "oldOffset": "0x821168",
+      "newOffset": "0x8265c4",
+      "nativeInfoOffset": "0x8265dc",
+      "nativeArrayPointer": "0x88265b0",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "2323180223233d002323ab03232354012323aa0023234204",
+      "needsOverlay": false
+    },
+    {
+      "area": "route111",
+      "method": "rock",
+      "slotCount": 5,
+      "workbookRange": "BS30:BT34",
+      "oldOffset": "0x821138",
+      "newOffset": "0x826594",
+      "nativeInfoOffset": "0x8265a8",
+      "nativeArrayPointer": "0x8826594",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "2323100523231005232347032323470323238403",
+      "needsOverlay": false
+    },
+    {
+      "area": "route119",
+      "method": "land",
+      "slotCount": 12,
+      "workbookRange": "EA3:EB14",
+      "oldOffset": "0x82196c",
+      "newOffset": "0x826e1c",
+      "nativeInfoOffset": "0x826e4c",
+      "nativeArrayPointer": "0x8826e1c",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "464681024646810246468202464682024646850246468502464689034646890346465f01464611034646130346461303",
+      "needsOverlay": true
+    },
+    {
+      "area": "route119",
+      "method": "surf",
+      "slotCount": 6,
+      "workbookRange": "EA23:EB28",
+      "oldOffset": "0x8219a4",
+      "newOffset": "0x826e54",
+      "nativeInfoOffset": "0x826e6c",
+      "nativeArrayPointer": "0x8826e54",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "46461303464611034646ab034646e0004646c9014646b502",
+      "needsOverlay": false
+    },
+    {
+      "area": "route119",
+      "method": "fish",
+      "slotCount": 6,
+      "workbookRange": "EA16:EB21",
+      "oldOffset": "0x8219d8",
+      "newOffset": "0x826e88",
+      "nativeInfoOffset": "0x826ea0",
+      "nativeArrayPointer": "0x8826e74",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "32329203323260043232f701323249003232c00232329400",
+      "needsOverlay": true
+    },
+    {
+      "area": "magmahideout1f",
+      "method": "land",
+      "slotCount": 12,
+      "workbookRange": "FQ3:FR14",
+      "oldOffset": "0x822d90",
+      "newOffset": "0x828240",
+      "nativeInfoOffset": "0x828270",
+      "nativeArrayPointer": "0x8828240",
+      "nativeBaseRate": 50,
+      "newRecordBytes": "373761023737630337375d0437379d0037378f0337374504373732013737d0013737a9033737a903373769003737e501",
+      "needsOverlay": true
+    }
+  ],
+  "legacyCorrections": [
+    {
+      "area": "route119",
+      "method": "fish",
+      "slot": 4,
+      "legacy": {
+        "species": "goomy",
+        "minLvl": 50,
+        "maxLvl": 50
+      },
+      "native1.2.4": {
+        "species": "tentacruel",
+        "minLvl": 50,
+        "maxLvl": 50
+      },
+      "current": {
+        "species": "tentacruel",
+        "minLvl": 50,
+        "maxLvl": 50
+      }
+    },
+    {
+      "area": "route119",
+      "method": "fish",
+      "slot": 5,
+      "legacy": {
+        "species": "dragonair",
+        "minLvl": 50,
+        "maxLvl": 50
+      },
+      "native1.2.4": {
+        "species": "goomy",
+        "minLvl": 50,
+        "maxLvl": 50
+      },
+      "current": {
+        "species": "goomy",
+        "minLvl": 50,
+        "maxLvl": 50
+      }
+    },
+    {
+      "area": "magmahideout1f",
+      "method": "land",
+      "slot": 2,
+      "legacy": {
+        "species": "chandelure",
+        "minLvl": 55,
+        "maxLvl": 55
+      },
+      "native1.2.4": {
+        "species": "runerigus",
+        "minLvl": 55,
+        "maxLvl": 55
+      },
+      "current": {
+        "species": "runerigus",
+        "minLvl": 55,
+        "maxLvl": 55
+      }
+    }
+  ],
+  "gameChanges": [
+    {
+      "area": "route119",
+      "method": "land",
+      "slot": 10,
+      "old": {
+        "species": "castform",
+        "minLvl": 70,
+        "maxLvl": 70
+      },
+      "current": {
+        "species": "tapukoko",
+        "minLvl": 70,
+        "maxLvl": 70
+      }
+    },
+    {
+      "area": "route119",
+      "method": "land",
+      "slot": 11,
+      "old": {
+        "species": "tapukoko",
+        "minLvl": 70,
+        "maxLvl": 70
+      },
+      "current": {
+        "species": "tapubulu",
+        "minLvl": 70,
+        "maxLvl": 70
+      }
+    },
+    {
+      "area": "route119",
+      "method": "fish",
+      "slot": 1,
+      "old": {
+        "species": "quaquaval",
+        "minLvl": 25,
+        "maxLvl": 30
+      },
+      "current": {
+        "species": "quaquaval",
+        "minLvl": 50,
+        "maxLvl": 50
+      }
+    },
+    {
+      "area": "magmahideout1f",
+      "method": "land",
+      "slot": 12,
+      "old": {
+        "species": "marowak",
+        "minLvl": 55,
+        "maxLvl": 55
+      },
+      "current": {
+        "species": "heatran",
+        "minLvl": 55,
+        "maxLvl": 55
+      }
+    }
+  ],
+  "staticPool": {
+    "area": "route111",
+    "workbookSheet": "Special Encounters",
+    "workbookRange": "A11:B11",
+    "old": [
+      {
+        "species": "golett",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "sandygast",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "sandshrew",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "phanpy",
+        "minLvl": 40,
+        "maxLvl": 40
+      }
+    ],
+    "current": [
+      {
+        "species": "golett",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "sandygast",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "sandshrew",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "phanpy",
+        "minLvl": 40,
+        "maxLvl": 40
+      },
+      {
+        "species": "orthworm",
+        "minLvl": 40,
+        "maxLvl": 40
+      }
+    ],
+    "oldBranchOffsets": [
+      "0x22bd14",
+      "0x22bd26",
+      "0x22bd38",
+      "0x22bd4a"
+    ],
+    "newBranchOffsets": [
+      "0x22cce1",
+      "0x22ccf3",
+      "0x22cd05",
+      "0x22cd17",
+      "0x22cd29"
+    ],
+    "oldRandomOffset": "0x22bd5e",
+    "oldRandomBytes": "8f0400",
+    "newRandomOffset": "0x22cd3d",
+    "newRandomBytes": "8f0500",
+    "probabilityScope": "Pool membership and level confirmed. Exact PRNG distribution was not recovered; no probability invented in overlay."
+  },
+  "summary": {
+    "verifiedNormalSlots": 65,
+    "methodReplacements": 3,
+    "actualNativeNormalSlotChanges": 4,
+    "staleLegacySlotsCorrected": 3,
+    "staticMembersAdded": 1
+  }
+}

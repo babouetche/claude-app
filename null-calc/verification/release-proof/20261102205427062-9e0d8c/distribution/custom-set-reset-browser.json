@@ -1,0 +1,12 @@
+{
+  "revision": "custom-set-reset",
+  "checkedAt": "2026-11-02T21:05:13.290Z",
+  "htmlSHA256": "fab532181ff9d93c6e270b4b723d7564cdb665b1746f872f4a99b90d5934f565",
+  "trainerDataSHA256": "5750c9d5eb796deea5ded6d40b8932a3f9dddf4a37c03af0125d08650f865826",
+  "checks": [
+    "Cancel leaves all duplicate sets, storage, four zones, active doubles partners and settings unchanged.",
+    "Accepted reset clears all saved and ghost customs in nine tables, Team/Box/Box 2/Trash and main/doubles selectors. Trainer sets, opposing active partner, battle format and preferences are preserved.",
+    "Fresh import restarts numbering at Custom Set, exports only eight new individuals and survives reload; clearing survives another reload and next import starts at Custom Set again."
+  ],
+  "errors": []
+}

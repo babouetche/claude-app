@@ -1,0 +1,23 @@
+/* Same three columns for the extreme-weather row and the room row. */
+#extreme-weather-grid, #room-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    max-width: 30em;
+    margin: 5px auto;
+}
+#extreme-weather-grid > label.btn, #room-grid > label.btn {
+    box-sizing: border-box;
+    width: auto;
+    min-width: 0;
+    margin: 0 -1px 0 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    white-space: nowrap;
+}
+.trick-room-note {
+    max-width: 30em;
+    margin: 4px auto;
+    font-size: 0.9em;
+    line-height: 1.35;
+}

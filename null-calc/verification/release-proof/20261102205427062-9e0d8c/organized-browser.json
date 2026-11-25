@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-02T21:06:50.021Z",
+  "equivalent": true,
+  "errors": [],
+  "checks": [
+    "Middle-click and Ctrl+click open a working standalone local Pokédex tab and preserve the calculator selection, HP, URL and custom sets.",
+    "Equivalent generated data, trainer sets, damage/AI, Belly Drum, Mirror Move, languages, doubles, post-KO, KO/Restore, export/save and embedded dex."
+  ],
+  "comparedSnapshots": [
+    "data-sets",
+    "data-metadata",
+    "data-verified",
+    "initial",
+    "belly-drum",
+    "mirror-move",
+    "french",
+    "english",
+    "doubles",
+    "post-ko",
+    "marked",
+    "restored",
+    "export",
+    "saved",
+    "dex",
+    "dexData"
+  ],
+  "scriptRequests": {
+    "original": 105,
+    "optimized": 85
+  },
+  "distributionFilesVerified": 6688
+}

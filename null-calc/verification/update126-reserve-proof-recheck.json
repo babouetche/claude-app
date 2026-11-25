@@ -1,0 +1,426 @@
+{
+  "romSHA256": "78455d8dabf57ab6b90cf2041bdc173c1b825cc035a9f416c5e96903717e9045",
+  "fixtureSHA256": "d52ad5227ad6b2b179768bf6d015f9cdea22ef1627f83420c7769c5be219c6dc",
+  "legacyFixtureSHA256": "a4b57960f328842bd9c416573fd976662e3ba0f8e203c097af3769dc4ee7fcf9",
+  "groups": 29,
+  "records": 30,
+  "corrections": [
+    {
+      "trainer": "Leader Liza",
+      "recordIndex": 1,
+      "oldFixtureAnchor": "0x3c2594",
+      "correctAnchor": "0x3c256c",
+      "wrongDecodedSpeciesID": 765,
+      "correctSpeciesID": 555,
+      "reason": "The old duplicate-profile block lies in a later party area whose shift is not the main trainer-area shift. Exact 40-byte relocation and the native trainer271 header prove the correct occurrence. This copy belongs to Tate&Liza, not Leader Liza795."
+    },
+    {
+      "trainer": "Trainer Maxie",
+      "species": "Groudon",
+      "moveSlot": 3,
+      "beforeID": 339,
+      "afterID": 630,
+      "reason": "The proof hash was refreshed but its decoded moves still described Bulk Up from1.2.4; native1.2.6 and the additive trainer patch both use High Horsepower."
+    },
+    {
+      "trainer": "Trainer Archie",
+      "species": "Kyogre",
+      "moveSlot": 3,
+      "beforeID": 347,
+      "afterID": 250,
+      "reason": "The proof hash was refreshed but its decoded moves still described Calm Mind from1.2.4; native1.2.6 and the additive trainer patch both use Whirlpool."
+    }
+  ],
+  "checkedRecords": [
+    {
+      "trainer": "Hiker Marcster",
+      "anchor": "0x3a7d04",
+      "speciesID": 1321,
+      "level": 37,
+      "moves": [
+        504,
+        408,
+        605,
+        512
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Camper Charlie",
+      "anchor": "0x3aaec4",
+      "speciesID": 1322,
+      "level": 65,
+      "moves": [
+        728,
+        177,
+        451,
+        414
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Leader Winona 2",
+      "anchor": "0x3afcbc",
+      "speciesID": 1325,
+      "level": 77,
+      "moves": [
+        157,
+        89,
+        504,
+        678
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Triathlete Benjamin & Triathlete Alyssa",
+      "anchor": "0x3aa174",
+      "speciesID": 875,
+      "level": 63,
+      "moves": [
+        789,
+        740,
+        487,
+        364
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Picnicker Frieren",
+      "anchor": "0x3ac7a0",
+      "speciesID": 875,
+      "level": 70,
+      "moves": [
+        556,
+        457,
+        428,
+        187
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Woods Team Aqua Grunt",
+      "anchor": "0x3a7914",
+      "speciesID": 746,
+      "level": 36,
+      "moves": [
+        740,
+        89,
+        58,
+        487
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Ninja Boy Hideo",
+      "anchor": "0x3af61c",
+      "speciesID": 746,
+      "level": 77,
+      "moves": [
+        762,
+        89,
+        740,
+        58
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Leader Roxanne",
+      "anchor": "0x3a7df4",
+      "speciesID": 1288,
+      "level": 37,
+      "moves": [
+        616,
+        525,
+        734,
+        245
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Adventurer Brandon 1",
+      "anchor": "0x3b6268",
+      "speciesID": 1288,
+      "level": 99,
+      "moves": [
+        650,
+        414,
+        182,
+        410
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Adventurer Brandon 2",
+      "anchor": "0x3b6358",
+      "speciesID": 1288,
+      "level": 99,
+      "moves": [
+        650,
+        414,
+        182,
+        137
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Battle Girl Jocelyn",
+      "anchor": "0x3a893c",
+      "speciesID": 877,
+      "level": 44,
+      "moves": [
+        711,
+        720,
+        402,
+        661
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Space Center Team Magma Grunt #2",
+      "anchor": "0x3b2f30",
+      "speciesID": 877,
+      "level": 87,
+      "moves": [
+        711,
+        609,
+        226,
+        720
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Mt.Chimney Team Magma Grunt",
+      "anchor": "0x3ace08",
+      "speciesID": 555,
+      "level": 71,
+      "moves": [
+        53,
+        94,
+        182,
+        447
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Hideout Team Magma Grunt Zeldest",
+      "anchor": "0x3b1344",
+      "speciesID": 555,
+      "level": 80,
+      "moves": [
+        394,
+        89,
+        157,
+        369
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Leader Liza",
+      "anchor": "0x3b2cd8",
+      "speciesID": 555,
+      "level": 86,
+      "moves": [
+        557,
+        276,
+        94,
+        257
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Leader Liza",
+      "anchor": "0x3c256c",
+      "speciesID": 555,
+      "level": 86,
+      "moves": [
+        557,
+        276,
+        94,
+        257
+      ],
+      "bindingRole": "equivalent duplicate profile in a different native trainer party; not evidence of Leader Liza membership"
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "anchor": "0x3b6e8c",
+      "speciesID": 555,
+      "level": 100,
+      "moves": [
+        394,
+        442,
+        428,
+        339
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "anchor": "0x3b6e3c",
+      "speciesID": 1214,
+      "level": 100,
+      "moves": [
+        126,
+        248,
+        447,
+        281
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Cooltrainer Axle",
+      "anchor": "0x3ad684",
+      "speciesID": 1110,
+      "level": 72,
+      "moves": [
+        556,
+        394,
+        89,
+        339
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Hideout Team Magma Grunt #3",
+      "anchor": "0x3b14fc",
+      "speciesID": 1110,
+      "level": 81,
+      "moves": [
+        556,
+        394,
+        89,
+        339
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Pokéfan Annika",
+      "anchor": "0x3b4d8c",
+      "speciesID": 1110,
+      "level": 95,
+      "moves": [
+        556,
+        394,
+        89,
+        369
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "anchor": "0x3b6e64",
+      "speciesID": 1110,
+      "level": 100,
+      "moves": [
+        764,
+        89,
+        276,
+        369
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "anchor": "0x3b6eb4",
+      "speciesID": 1215,
+      "level": 100,
+      "moves": [
+        556,
+        299,
+        89,
+        612
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Leader Liza",
+      "anchor": "0x3b2d50",
+      "speciesID": 1329,
+      "level": 89,
+      "moves": [
+        675,
+        667,
+        200,
+        349
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Pokémaniac Shinji (Inverse Room)",
+      "anchor": "0x3ab5fc",
+      "speciesID": 1024,
+      "level": 64,
+      "moves": [
+        844,
+        58,
+        576,
+        160
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Cooltrainer Reyna",
+      "anchor": "0x3b580c",
+      "speciesID": 1024,
+      "level": 97,
+      "moves": [
+        504,
+        834,
+        399,
+        330
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Team Magma Leader Maxie 2",
+      "anchor": "0x3b1c5c",
+      "speciesID": 383,
+      "level": 95,
+      "moves": [
+        619,
+        535,
+        86,
+        525
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Trainer Maxie",
+      "anchor": "0x3b6b1c",
+      "speciesID": 383,
+      "level": 100,
+      "moves": [
+        619,
+        535,
+        444,
+        630
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Team Aqua Leader Archie 2",
+      "anchor": "0x3b3ea8",
+      "speciesID": 382,
+      "level": 95,
+      "moves": [
+        323,
+        618,
+        87,
+        58
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    },
+    {
+      "trainer": "Trainer Archie",
+      "anchor": "0x3b6be4",
+      "speciesID": 382,
+      "level": 100,
+      "moves": [
+        618,
+        87,
+        58,
+        250
+      ],
+      "bindingRole": "selected final trainer profile anchor"
+    }
+  ]
+}

@@ -1,0 +1,2919 @@
+{
+  "moves": [
+    {
+      "name": "Hurricane",
+      "id": 542,
+      "semanticChanges": {},
+      "byteChanges": [
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 2,
+          "xor": 2
+        }
+      ],
+      "before": {
+        "name": "Hurricane",
+        "id": 542,
+        "offset": "0x3da37c",
+        "bytes": "0c016e0002500a1e00000001000000000200010000000000",
+        "effect": 268,
+        "basePower": 110,
+        "type": "Flying",
+        "accuracy": 80,
+        "pp": 10,
+        "secondaryChance": 30,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Special",
+        "slicing": false
+      },
+      "after": {
+        "id": 542,
+        "offset": "0x3deb24",
+        "bytes": "0c016e0002500a1e00000001000000000202010000000000",
+        "effect": 268,
+        "basePower": 110,
+        "type": "Flying",
+        "accuracy": 80,
+        "pp": 10,
+        "secondaryChance": 30,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Special",
+        "slicing": false,
+        "sheerForceBoosted": true,
+        "wind": true,
+        "powder": false
+      }
+    },
+    {
+      "name": "Powder",
+      "id": 600,
+      "semanticChanges": {},
+      "byteChanges": [
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 128,
+          "xor": 128
+        }
+      ],
+      "before": {
+        "name": "Powder",
+        "id": 600,
+        "offset": "0x3da8ec",
+        "bytes": "3c0100000664050000000102000013080000000000000000",
+        "effect": 316,
+        "basePower": 0,
+        "type": "Bug",
+        "accuracy": 100,
+        "pp": 5,
+        "secondaryChance": 0,
+        "targetBits": 0,
+        "priority": 1,
+        "category": "Status",
+        "slicing": false
+      },
+      "after": {
+        "id": 600,
+        "offset": "0x3df094",
+        "bytes": "3c0100000664050000000102000013088000000000000000",
+        "effect": 316,
+        "basePower": 0,
+        "type": "Bug",
+        "accuracy": 100,
+        "pp": 5,
+        "secondaryChance": 0,
+        "targetBits": 0,
+        "priority": 1,
+        "category": "Status",
+        "slicing": false,
+        "sheerForceBoosted": false,
+        "wind": false,
+        "powder": true
+      }
+    },
+    {
+      "name": "Spirit Shackle",
+      "id": 625,
+      "semanticChanges": {
+        "secondaryChance": {
+          "before": 0,
+          "after": 100
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 7,
+          "before": 0,
+          "after": 100,
+          "xor": 100
+        }
+      ],
+      "before": {
+        "name": "Spirit Shackle",
+        "id": 625,
+        "offset": "0x3dab44",
+        "bytes": "3201500007640a0000000000000000000200000000000000",
+        "effect": 306,
+        "basePower": 80,
+        "type": "Ghost",
+        "accuracy": 100,
+        "pp": 10,
+        "secondaryChance": 0,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Physical",
+        "slicing": false
+      },
+      "after": {
+        "id": 625,
+        "offset": "0x3df2ec",
+        "bytes": "3201500007640a6400000000000000000200000000000000",
+        "effect": 306,
+        "basePower": 80,
+        "type": "Ghost",
+        "accuracy": 100,
+        "pp": 10,
+        "secondaryChance": 100,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Physical",
+        "slicing": false,
+        "sheerForceBoosted": true,
+        "wind": false,
+        "powder": false
+      }
+    },
+    {
+      "name": "Anchor Shot",
+      "id": 640,
+      "semanticChanges": {
+        "secondaryChance": {
+          "before": 0,
+          "after": 100
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 7,
+          "before": 0,
+          "after": 100,
+          "xor": 100
+        }
+      ],
+      "before": {
+        "name": "Anchor Shot",
+        "id": 640,
+        "offset": "0x3dacac",
+        "bytes": "320150000864140000000000000000020200000000000000",
+        "effect": 306,
+        "basePower": 80,
+        "type": "Steel",
+        "accuracy": 100,
+        "pp": 20,
+        "secondaryChance": 0,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Physical",
+        "slicing": false
+      },
+      "after": {
+        "id": 640,
+        "offset": "0x3df454",
+        "bytes": "320150000864146400000000000000020200000000000000",
+        "effect": 306,
+        "basePower": 80,
+        "type": "Steel",
+        "accuracy": 100,
+        "pp": 20,
+        "secondaryChance": 100,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Physical",
+        "slicing": false,
+        "sheerForceBoosted": true,
+        "wind": false,
+        "powder": false
+      }
+    },
+    {
+      "name": "Alluring Voice",
+      "id": 842,
+      "semanticChanges": {
+        "secondaryChance": {
+          "before": 0,
+          "after": 100
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 7,
+          "before": 0,
+          "after": 100,
+          "xor": 100
+        }
+      ],
+      "before": {
+        "name": "Alluring Voice",
+        "id": 842,
+        "offset": "0x3dbf9c",
+        "bytes": "4b00500012640a0000000001000000001200100000000000",
+        "effect": 75,
+        "basePower": 80,
+        "type": "Fairy",
+        "accuracy": 100,
+        "pp": 10,
+        "secondaryChance": 0,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Special",
+        "slicing": false
+      },
+      "after": {
+        "id": 842,
+        "offset": "0x3e0744",
+        "bytes": "4b00500012640a6400000001000000001200100000000000",
+        "effect": 75,
+        "basePower": 80,
+        "type": "Fairy",
+        "accuracy": 100,
+        "pp": 10,
+        "secondaryChance": 100,
+        "targetBits": 0,
+        "priority": 0,
+        "category": "Special",
+        "slicing": false,
+        "sheerForceBoosted": true,
+        "wind": false,
+        "powder": false
+      }
+    }
+  ],
+  "species": [
+    {
+      "name": "Slowking",
+      "id": 199,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Shell Armor",
+            "1": "Shell Armor",
+            "H": "Regenerator"
+          },
+          "after": {
+            "0": "Regenerator",
+            "1": "Regenerator",
+            "H": "Shell Armor"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 24,
+          "before": 75,
+          "after": 144,
+          "xor": 219
+        },
+        {
+          "offset": 26,
+          "before": 75,
+          "after": 144,
+          "xor": 219
+        },
+        {
+          "offset": 28,
+          "before": 144,
+          "after": 75,
+          "xor": 219
+        }
+      ],
+      "before": {
+        "name": "Slowking",
+        "id": 199,
+        "offset": "0x3e2044",
+        "bytes": "5f4b501e646e0b0ec800ac00000c000000007f14460001024b004b009000000900020000",
+        "baseStats": {
+          "hp": 95,
+          "atk": 75,
+          "def": 80,
+          "spe": 30,
+          "spa": 100,
+          "spd": 110
+        },
+        "types": [
+          "Water",
+          "Psychic"
+        ],
+        "abilities": {
+          "0": "Shell Armor",
+          "1": "Shell Armor",
+          "H": "Regenerator"
+        },
+        "weightOffset": "0x85668c",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 79.5
+      },
+      "after": {
+        "luaName": "Slowking",
+        "id": 199,
+        "offset": "0x3e67ec",
+        "bytes": "5f4b501e646e0b0ec800ac00000c000000007f1446000102900090004b00000900020000",
+        "baseStats": {
+          "hp": 95,
+          "atk": 75,
+          "def": 80,
+          "spe": 30,
+          "spa": 100,
+          "spd": 110
+        },
+        "types": [
+          "Water",
+          "Psychic"
+        ],
+        "abilities": {
+          "0": "Regenerator",
+          "1": "Regenerator",
+          "H": "Shell Armor"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 79.5,
+        "weightOffset": "0x85bb3c"
+      }
+    },
+    {
+      "name": "Conkeldurr",
+      "id": 534,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 200,
+          "after": 90
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 200,
+          "after": 90,
+          "xor": 146
+        }
+      ],
+      "before": {
+        "name": "Conkeldurr",
+        "id": 534,
+        "offset": "0x3e4f60",
+        "bytes": "698c5f2d37410101c800e3000c00000000003f14460308083e003e005900000500020000",
+        "baseStats": {
+          "hp": 105,
+          "atk": 140,
+          "def": 95,
+          "spe": 45,
+          "spa": 55,
+          "spd": 65
+        },
+        "types": [
+          "Fighting"
+        ],
+        "abilities": {
+          "0": "Guts",
+          "1": "Guts",
+          "H": "Iron Fist"
+        },
+        "weightOffset": "0x8595a8",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 87.0
+      },
+      "after": {
+        "luaName": "Conkeldurr",
+        "id": 534,
+        "offset": "0x3e9708",
+        "bytes": "698c5f2d374101015a00e3000c00000000003f14460308083e003e005900000500020000",
+        "baseStats": {
+          "hp": 105,
+          "atk": 140,
+          "def": 95,
+          "spe": 45,
+          "spa": 55,
+          "spd": 65
+        },
+        "types": [
+          "Fighting"
+        ],
+        "abilities": {
+          "0": "Guts",
+          "1": "Guts",
+          "H": "Iron Fist"
+        },
+        "catchRate": 90,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 87.0,
+        "weightOffset": "0x85ea58"
+      }
+    },
+    {
+      "name": "Karrablast",
+      "id": 588,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Swarm",
+            "1": "Shed Skin",
+            "H": "No Guard"
+          },
+          "after": {
+            "0": "No Guard",
+            "1": "No Guard",
+            "H": "Swarm"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 24,
+          "before": 68,
+          "after": 99,
+          "xor": 39
+        },
+        {
+          "offset": 26,
+          "before": 61,
+          "after": 99,
+          "xor": 94
+        },
+        {
+          "offset": 28,
+          "before": 99,
+          "after": 68,
+          "xor": 39
+        }
+      ],
+      "before": {
+        "name": "Karrablast",
+        "id": 588,
+        "offset": "0x3e56f8",
+        "bytes": "324b2d3c282d0606c8003f000400000000007f0f4600030344003d006300000100020000",
+        "baseStats": {
+          "hp": 50,
+          "atk": 75,
+          "def": 45,
+          "spe": 60,
+          "spa": 40,
+          "spd": 45
+        },
+        "types": [
+          "Bug"
+        ],
+        "abilities": {
+          "0": "Swarm",
+          "1": "Shed Skin",
+          "H": "No Guard"
+        },
+        "weightOffset": "0x859d40",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 5.9
+      },
+      "after": {
+        "luaName": "Karrablast",
+        "id": 588,
+        "offset": "0x3e9ea0",
+        "bytes": "324b2d3c282d0606c8003f000400000000007f0f46000303630063004400000100020000",
+        "baseStats": {
+          "hp": 50,
+          "atk": 75,
+          "def": 45,
+          "spe": 60,
+          "spa": 40,
+          "spd": 45
+        },
+        "types": [
+          "Bug"
+        ],
+        "abilities": {
+          "0": "No Guard",
+          "1": "No Guard",
+          "H": "Swarm"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 5.9,
+        "weightOffset": "0x85f1f0"
+      }
+    },
+    {
+      "name": "Diancie",
+      "id": 719,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 200,
+          "after": 60
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 200,
+          "after": 60,
+          "xor": 244
+        }
+      ],
+      "before": {
+        "name": "Diancie",
+        "id": 719,
+        "offset": "0x3e6964",
+        "bytes": "3264963264960512c8000e01100800000000ff1946050f0f1d0000000000000902020000",
+        "baseStats": {
+          "hp": 50,
+          "atk": 100,
+          "def": 150,
+          "spe": 50,
+          "spa": 100,
+          "spd": 150
+        },
+        "types": [
+          "Rock",
+          "Fairy"
+        ],
+        "abilities": {
+          "0": "Clear Body"
+        },
+        "weightOffset": "0x85afac",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 8.8
+      },
+      "after": {
+        "luaName": "Diancie",
+        "id": 719,
+        "offset": "0x3eb10c",
+        "bytes": "32649632649605123c000e01100800000000ff1946050f0f1d0000000000000902020000",
+        "baseStats": {
+          "hp": 50,
+          "atk": 100,
+          "def": 150,
+          "spe": 50,
+          "spa": 100,
+          "spd": 150
+        },
+        "types": [
+          "Rock",
+          "Fairy"
+        ],
+        "abilities": {
+          "0": "Clear Body"
+        },
+        "catchRate": 60,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 8.8,
+        "weightOffset": "0x86045c"
+      }
+    },
+    {
+      "name": "Golisopod",
+      "id": 768,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 15,
+          "after": 1
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 15,
+          "after": 1,
+          "xor": 14
+        }
+      ],
+      "before": {
+        "name": "Golisopod",
+        "id": 768,
+        "offset": "0x3e7048",
+        "bytes": "4b7d8c283c5a060b0f00ba002000000000007f1446000309c20000000000000700020000",
+        "baseStats": {
+          "hp": 75,
+          "atk": 125,
+          "def": 140,
+          "spe": 40,
+          "spa": 60,
+          "spd": 90
+        },
+        "types": [
+          "Bug",
+          "Water"
+        ],
+        "abilities": {
+          "0": "Emergency Exit"
+        },
+        "weightOffset": "0x85b690",
+        "catchRate": 15,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 108.0
+      },
+      "after": {
+        "luaName": "Golisopod",
+        "id": 768,
+        "offset": "0x3eb7f0",
+        "bytes": "4b7d8c283c5a060b0100ba002000000000007f1446000309c20000000000000700020000",
+        "baseStats": {
+          "hp": 75,
+          "atk": 125,
+          "def": 140,
+          "spe": 40,
+          "spa": 60,
+          "spd": 90
+        },
+        "types": [
+          "Bug",
+          "Water"
+        ],
+        "abilities": {
+          "0": "Emergency Exit"
+        },
+        "catchRate": 1,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 108.0,
+        "weightOffset": "0x860b40"
+      }
+    },
+    {
+      "name": "Mimikyu",
+      "id": 778,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 200,
+          "after": 90
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 200,
+          "after": 90,
+          "xor": 146
+        }
+      ],
+      "before": {
+        "name": "Mimikyu",
+        "id": 778,
+        "offset": "0x3e71b0",
+        "bytes": "375a506032690712c800a7000008000000007f1446000b0bd10000000000000200020000",
+        "baseStats": {
+          "hp": 55,
+          "atk": 90,
+          "def": 80,
+          "spe": 96,
+          "spa": 50,
+          "spd": 105
+        },
+        "types": [
+          "Ghost",
+          "Fairy"
+        ],
+        "abilities": {
+          "0": "Disguise"
+        },
+        "weightOffset": "0x85b7f8",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 0.7
+      },
+      "after": {
+        "luaName": "Mimikyu",
+        "id": 778,
+        "offset": "0x3eb958",
+        "bytes": "375a5060326907125a00a7000008000000007f1446000b0bd10000000000000200020000",
+        "baseStats": {
+          "hp": 55,
+          "atk": 90,
+          "def": 80,
+          "spe": 96,
+          "spa": 50,
+          "spd": 105
+        },
+        "types": [
+          "Ghost",
+          "Fairy"
+        ],
+        "abilities": {
+          "0": "Disguise"
+        },
+        "catchRate": 90,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 0.7,
+        "weightOffset": "0x860ca8"
+      }
+    },
+    {
+      "name": "Nihilego",
+      "id": 793,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Nihilego",
+        "id": 793,
+        "offset": "0x3e73cc",
+        "bytes": "6d352f677f830503c8000101000c00000000ff7800050f0f7f000000e000000810020000",
+        "baseStats": {
+          "hp": 109,
+          "atk": 53,
+          "def": 47,
+          "spe": 103,
+          "spa": 127,
+          "spd": 131
+        },
+        "types": [
+          "Rock",
+          "Poison"
+        ],
+        "abilities": {
+          "0": "Unnerve",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85ba14",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 55.5
+      },
+      "after": {
+        "luaName": "Nihilego",
+        "id": 793,
+        "offset": "0x3ebb74",
+        "bytes": "6d352f677f830503c8000101000c1e031e03ff7800050f0f7f000000e000000810020000",
+        "baseStats": {
+          "hp": 109,
+          "atk": 53,
+          "def": 47,
+          "spe": 103,
+          "spa": 127,
+          "spd": 131
+        },
+        "types": [
+          "Rock",
+          "Poison"
+        ],
+        "abilities": {
+          "0": "Unnerve",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 55.5,
+        "weightOffset": "0x860ec4"
+      }
+    },
+    {
+      "name": "Buzzwole",
+      "id": 794,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Buzzwole",
+        "id": 794,
+        "offset": "0x3e73f0",
+        "bytes": "6b8b8b4f35350601c8000101240000000000ff7800050f0f59000000e000000010020000",
+        "baseStats": {
+          "hp": 107,
+          "atk": 139,
+          "def": 139,
+          "spe": 79,
+          "spa": 53,
+          "spd": 53
+        },
+        "types": [
+          "Bug",
+          "Fighting"
+        ],
+        "abilities": {
+          "0": "Iron Fist",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85ba38",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 333.6
+      },
+      "after": {
+        "luaName": "Buzzwole",
+        "id": 794,
+        "offset": "0x3ebb98",
+        "bytes": "6b8b8b4f35350601c800010124001e031e03ff7800050f0f59000000e000000010020000",
+        "baseStats": {
+          "hp": 107,
+          "atk": 139,
+          "def": 139,
+          "spe": 79,
+          "spa": 53,
+          "spd": 53
+        },
+        "types": [
+          "Bug",
+          "Fighting"
+        ],
+        "abilities": {
+          "0": "Iron Fist",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 333.6,
+        "weightOffset": "0x860ee8"
+      }
+    },
+    {
+      "name": "Pheromosa",
+      "id": 795,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Pheromosa",
+        "id": 795,
+        "offset": "0x3e7414",
+        "bytes": "4789259789250601c8000101c00000000000ff7800050f0f93000000e000000810020000",
+        "baseStats": {
+          "hp": 71,
+          "atk": 137,
+          "def": 37,
+          "spe": 151,
+          "spa": 137,
+          "spd": 37
+        },
+        "types": [
+          "Bug",
+          "Fighting"
+        ],
+        "abilities": {
+          "0": "Wonder Skin",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85ba5c",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 25.0
+      },
+      "after": {
+        "luaName": "Pheromosa",
+        "id": 795,
+        "offset": "0x3ebbbc",
+        "bytes": "4789259789250601c8000101c0001e031e03ff7800050f0f93000000e000000810020000",
+        "baseStats": {
+          "hp": 71,
+          "atk": 137,
+          "def": 37,
+          "spe": 151,
+          "spa": 137,
+          "spd": 37
+        },
+        "types": [
+          "Bug",
+          "Fighting"
+        ],
+        "abilities": {
+          "0": "Wonder Skin",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 25.0,
+        "weightOffset": "0x860f0c"
+      }
+    },
+    {
+      "name": "Xurkitree",
+      "id": 796,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Xurkitree",
+        "id": 796,
+        "offset": "0x3e7438",
+        "bytes": "53594753ad470d0dc8000101000300000000ff7800050f0fd9000000e000000410020000",
+        "baseStats": {
+          "hp": 83,
+          "atk": 89,
+          "def": 71,
+          "spe": 83,
+          "spa": 173,
+          "spd": 71
+        },
+        "types": [
+          "Electric"
+        ],
+        "abilities": {
+          "0": "Battery",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85ba80",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 100.0
+      },
+      "after": {
+        "luaName": "Xurkitree",
+        "id": 796,
+        "offset": "0x3ebbe0",
+        "bytes": "53594753ad470d0dc800010100031e031e03ff7800050f0fd9000000e000000410020000",
+        "baseStats": {
+          "hp": 83,
+          "atk": 89,
+          "def": 71,
+          "spe": 83,
+          "spa": 173,
+          "spd": 71
+        },
+        "types": [
+          "Electric"
+        ],
+        "abilities": {
+          "0": "Battery",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 100.0,
+        "weightOffset": "0x860f30"
+      }
+    },
+    {
+      "name": "Celesteela",
+      "id": 797,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Celesteela",
+        "id": 797,
+        "offset": "0x3e745c",
+        "bytes": "6165673d6b650802c8000101140100000000ff7800050f0f86000000e000000310020000",
+        "baseStats": {
+          "hp": 97,
+          "atk": 101,
+          "def": 103,
+          "spe": 61,
+          "spa": 107,
+          "spd": 101
+        },
+        "types": [
+          "Steel",
+          "Flying"
+        ],
+        "abilities": {
+          "0": "Heavy Metal",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85baa4",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 999.9
+      },
+      "after": {
+        "luaName": "Celesteela",
+        "id": 797,
+        "offset": "0x3ebc04",
+        "bytes": "6165673d6b650802c800010114011e031e03ff7800050f0f86000000e000000310020000",
+        "baseStats": {
+          "hp": 97,
+          "atk": 101,
+          "def": 103,
+          "spe": 61,
+          "spa": 107,
+          "spd": 101
+        },
+        "types": [
+          "Steel",
+          "Flying"
+        ],
+        "abilities": {
+          "0": "Heavy Metal",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 999.9,
+        "weightOffset": "0x860f54"
+      }
+    },
+    {
+      "name": "Kartana",
+      "id": 798,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Kartana",
+        "id": 798,
+        "offset": "0x3e7480",
+        "bytes": "3bb5836d3b1f0c08c80001010c0000000000ff7800050f0f6b000000e000000810020000",
+        "baseStats": {
+          "hp": 59,
+          "atk": 181,
+          "def": 131,
+          "spe": 109,
+          "spa": 59,
+          "spd": 31
+        },
+        "types": [
+          "Grass",
+          "Steel"
+        ],
+        "abilities": {
+          "0": "Anticipation",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85bac8",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 0.1
+      },
+      "after": {
+        "luaName": "Kartana",
+        "id": 798,
+        "offset": "0x3ebc28",
+        "bytes": "3bb5836d3b1f0c08c80001010c001e031e03ff7800050f0f6b000000e000000810020000",
+        "baseStats": {
+          "hp": 59,
+          "atk": 181,
+          "def": 131,
+          "spe": 109,
+          "spa": 59,
+          "spd": 31
+        },
+        "types": [
+          "Grass",
+          "Steel"
+        ],
+        "abilities": {
+          "0": "Anticipation",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 0.1,
+        "weightOffset": "0x860f78"
+      }
+    },
+    {
+      "name": "Guzzlord",
+      "id": 799,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Guzzlord",
+        "id": 799,
+        "offset": "0x3e74a4",
+        "bytes": "df65352b61351110c8000101030000000000ff7800050f0f16000000e000000410020000",
+        "baseStats": {
+          "hp": 223,
+          "atk": 101,
+          "def": 53,
+          "spe": 43,
+          "spa": 97,
+          "spd": 53
+        },
+        "types": [
+          "Dark",
+          "Dragon"
+        ],
+        "abilities": {
+          "0": "Intimidate",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85baec",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 888.0
+      },
+      "after": {
+        "luaName": "Guzzlord",
+        "id": 799,
+        "offset": "0x3ebc4c",
+        "bytes": "df65352b61351110c800010103001e031e03ff7800050f0f16000000e000000410020000",
+        "baseStats": {
+          "hp": 223,
+          "atk": 101,
+          "def": 53,
+          "spe": 43,
+          "spa": 97,
+          "spd": 53
+        },
+        "types": [
+          "Dark",
+          "Dragon"
+        ],
+        "abilities": {
+          "0": "Intimidate",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 888.0,
+        "weightOffset": "0x860f9c"
+      }
+    },
+    {
+      "name": "Necrozma",
+      "id": 800,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 200,
+          "after": 20
+        },
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 200,
+          "after": 20,
+          "xor": 220
+        },
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Necrozma",
+        "id": 800,
+        "offset": "0x3e74c8",
+        "bytes": "616b654f7f590e0ec8000e01040200000000ff7800050f0fe80000000000008401020000",
+        "baseStats": {
+          "hp": 97,
+          "atk": 107,
+          "def": 101,
+          "spe": 79,
+          "spa": 127,
+          "spd": 89
+        },
+        "types": [
+          "Psychic"
+        ],
+        "abilities": {
+          "0": "Prism Armor"
+        },
+        "weightOffset": "0x85bb10",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 230.0
+      },
+      "after": {
+        "luaName": "Necrozma",
+        "id": 800,
+        "offset": "0x3ebc70",
+        "bytes": "616b654f7f590e0e14000e0104021e031e03ff7800050f0fe80000000000008401020000",
+        "baseStats": {
+          "hp": 97,
+          "atk": 107,
+          "def": 101,
+          "spe": 79,
+          "spa": 127,
+          "spd": 89
+        },
+        "types": [
+          "Psychic"
+        ],
+        "abilities": {
+          "0": "Prism Armor"
+        },
+        "catchRate": 20,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 230.0,
+        "weightOffset": "0x860fc0"
+      }
+    },
+    {
+      "name": "Marshadow",
+      "id": 802,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Marshadow",
+        "id": 802,
+        "offset": "0x3e7510",
+        "bytes": "5a7d507d5a5a0107c8000e01480000000000ff7800050f0f650000000000008702020000",
+        "baseStats": {
+          "hp": 90,
+          "atk": 125,
+          "def": 80,
+          "spe": 125,
+          "spa": 90,
+          "spd": 90
+        },
+        "types": [
+          "Fighting",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Technician"
+        },
+        "weightOffset": "0x85bb58",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 22.2
+      },
+      "after": {
+        "luaName": "Marshadow",
+        "id": 802,
+        "offset": "0x3ebcb8",
+        "bytes": "5a7d507d5a5a0107c8000e0148001e031e03ff7800050f0f650000000000008702020000",
+        "baseStats": {
+          "hp": 90,
+          "atk": 125,
+          "def": 80,
+          "spe": 125,
+          "spa": 90,
+          "spd": 90
+        },
+        "types": [
+          "Fighting",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Technician"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 22.2,
+        "weightOffset": "0x861008"
+      }
+    },
+    {
+      "name": "Poipole",
+      "id": 803,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Poipole",
+        "id": 803,
+        "offset": "0x3e7534",
+        "bytes": "4349434949430303c800bd00400000000000ff7800050f0fe00000000000000610020000",
+        "baseStats": {
+          "hp": 67,
+          "atk": 73,
+          "def": 67,
+          "spe": 73,
+          "spa": 73,
+          "spd": 67
+        },
+        "types": [
+          "Poison"
+        ],
+        "abilities": {
+          "0": "Beast Boost"
+        },
+        "weightOffset": "0x85bb7c",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 1.8
+      },
+      "after": {
+        "luaName": "Poipole",
+        "id": 803,
+        "offset": "0x3ebcdc",
+        "bytes": "4349434949430303c800bd0040001e031e03ff7800050f0fe00000000000000610020000",
+        "baseStats": {
+          "hp": 67,
+          "atk": 73,
+          "def": 67,
+          "spe": 73,
+          "spa": 73,
+          "spd": 67
+        },
+        "types": [
+          "Poison"
+        ],
+        "abilities": {
+          "0": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 1.8,
+        "weightOffset": "0x86102c"
+      }
+    },
+    {
+      "name": "Naganadel",
+      "id": 804,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Naganadel",
+        "id": 804,
+        "offset": "0x3e7558",
+        "bytes": "494949797f490310c800f300000300000000ff7800050f0fc4000000e000000610020000",
+        "baseStats": {
+          "hp": 73,
+          "atk": 73,
+          "def": 73,
+          "spe": 121,
+          "spa": 127,
+          "spd": 73
+        },
+        "types": [
+          "Poison",
+          "Dragon"
+        ],
+        "abilities": {
+          "0": "Merciless",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85bba0",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 150.0
+      },
+      "after": {
+        "luaName": "Naganadel",
+        "id": 804,
+        "offset": "0x3ebd00",
+        "bytes": "494949797f490310c800f30000031e031e03ff7800050f0fc4000000e000000610020000",
+        "baseStats": {
+          "hp": 73,
+          "atk": 73,
+          "def": 73,
+          "spe": 121,
+          "spa": 127,
+          "spd": 73
+        },
+        "types": [
+          "Poison",
+          "Dragon"
+        ],
+        "abilities": {
+          "0": "Merciless",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 150.0,
+        "weightOffset": "0x861050"
+      }
+    },
+    {
+      "name": "Stakataka",
+      "id": 805,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Stakataka",
+        "id": 805,
+        "offset": "0x3e757c",
+        "bytes": "3d83d30d35650508c8000101300000000000ff7800050f0fb4000000e000008710020000",
+        "baseStats": {
+          "hp": 61,
+          "atk": 131,
+          "def": 211,
+          "spe": 13,
+          "spa": 53,
+          "spd": 101
+        },
+        "types": [
+          "Rock",
+          "Steel"
+        ],
+        "abilities": {
+          "0": "Symbiosis",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85bbc4",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 820.0
+      },
+      "after": {
+        "luaName": "Stakataka",
+        "id": 805,
+        "offset": "0x3ebd24",
+        "bytes": "3d83d30d35650508c800010130001e031e03ff7800050f0fb4000000e000008710020000",
+        "baseStats": {
+          "hp": 61,
+          "atk": 131,
+          "def": 211,
+          "spe": 13,
+          "spa": 53,
+          "spd": 101
+        },
+        "types": [
+          "Rock",
+          "Steel"
+        ],
+        "abilities": {
+          "0": "Symbiosis",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 820.0,
+        "weightOffset": "0x861074"
+      }
+    },
+    {
+      "name": "Blacephalon",
+      "id": 806,
+      "semanticChanges": {
+        "wildHeldItems": {
+          "before": [
+            0,
+            0
+          ],
+          "after": [
+            798,
+            798
+          ]
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 14,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 15,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        },
+        {
+          "offset": 16,
+          "before": 0,
+          "after": 30,
+          "xor": 30
+        },
+        {
+          "offset": 17,
+          "before": 0,
+          "after": 3,
+          "xor": 3
+        }
+      ],
+      "before": {
+        "name": "Blacephalon",
+        "id": 806,
+        "offset": "0x3e75a0",
+        "bytes": "357f356b974f0a07c8000101000300000000ff7800050f0f6a000000e000008810020000",
+        "baseStats": {
+          "hp": 53,
+          "atk": 127,
+          "def": 53,
+          "spe": 107,
+          "spa": 151,
+          "spd": 79
+        },
+        "types": [
+          "Fire",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Aftermath",
+          "H": "Beast Boost"
+        },
+        "weightOffset": "0x85bbe8",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 13.0
+      },
+      "after": {
+        "luaName": "Blacephalon",
+        "id": 806,
+        "offset": "0x3ebd48",
+        "bytes": "357f356b974f0a07c800010100031e031e03ff7800050f0f6a000000e000008810020000",
+        "baseStats": {
+          "hp": 53,
+          "atk": 127,
+          "def": 53,
+          "spe": 107,
+          "spa": 151,
+          "spd": 79
+        },
+        "types": [
+          "Fire",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Aftermath",
+          "H": "Beast Boost"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          798,
+          798
+        ],
+        "weightkg": 13.0,
+        "weightOffset": "0x861098"
+      }
+    },
+    {
+      "name": "Dudunsparce",
+      "id": 982,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Serene Grace",
+            "H": "Rattled"
+          },
+          "after": {
+            "0": "Serene Grace",
+            "1": "Rattled",
+            "H": "Rattled"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 26,
+          "before": 0,
+          "after": 155,
+          "xor": 155
+        }
+      ],
+      "before": {
+        "name": "Dudunsparce",
+        "id": 982,
+        "offset": "0x3e8e60",
+        "bytes": "7d645037554b0000c800b6000200000000007f1432000505200000009b00000200020000",
+        "baseStats": {
+          "hp": 125,
+          "atk": 100,
+          "def": 80,
+          "spe": 55,
+          "spa": 85,
+          "spd": 75
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Serene Grace",
+          "H": "Rattled"
+        },
+        "weightOffset": "0x85d4a8",
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 39.2
+      },
+      "after": {
+        "luaName": "Dudunsparce",
+        "id": 982,
+        "offset": "0x3ed608",
+        "bytes": "7d645037554b0000c800b6000200000000007f143200050520009b009b00000200020000",
+        "baseStats": {
+          "hp": 125,
+          "atk": 100,
+          "def": 80,
+          "spe": 55,
+          "spa": 85,
+          "spd": 75
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Serene Grace",
+          "1": "Rattled",
+          "H": "Rattled"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 39.2,
+        "weightOffset": "0x862958"
+      }
+    },
+    {
+      "name": "Poltchageist",
+      "id": 1012,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Hospitality",
+            "H": "Heatproof"
+          },
+          "after": {
+            "0": "Hospitality",
+            "1": "Heatproof",
+            "H": "Heatproof"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 26,
+          "before": 0,
+          "after": 85,
+          "xor": 85
+        }
+      ],
+      "before": {
+        "name": "Poltchageist",
+        "id": 1012,
+        "offset": "0x3e9298",
+        "bytes": "282d2d324a360c0778003e00000100000000ff1446000a0b2b0100005500000300020000",
+        "baseStats": {
+          "hp": 40,
+          "atk": 45,
+          "def": 45,
+          "spe": 50,
+          "spa": 74,
+          "spd": 54
+        },
+        "types": [
+          "Grass",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Hospitality",
+          "H": "Heatproof"
+        },
+        "weightOffset": "0x85d8e0",
+        "catchRate": 120,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 1.1
+      },
+      "after": {
+        "luaName": "Poltchageist",
+        "id": 1012,
+        "offset": "0x3eda40",
+        "bytes": "282d2d324a360c0778003e00000100000000ff1446000a0b2b0155005500000300020000",
+        "baseStats": {
+          "hp": 40,
+          "atk": 45,
+          "def": 45,
+          "spe": 50,
+          "spa": 74,
+          "spd": 54
+        },
+        "types": [
+          "Grass",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Hospitality",
+          "1": "Heatproof",
+          "H": "Heatproof"
+        },
+        "catchRate": 120,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 1.1,
+        "weightOffset": "0x862d90"
+      }
+    },
+    {
+      "name": "Sinistcha",
+      "id": 1013,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Hospitality",
+            "H": "Heatproof"
+          },
+          "after": {
+            "0": "Hospitality",
+            "1": "Heatproof",
+            "H": "Heatproof"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 26,
+          "before": 0,
+          "after": 85,
+          "xor": 85
+        }
+      ],
+      "before": {
+        "name": "Sinistcha",
+        "id": 1013,
+        "offset": "0x3e92bc",
+        "bytes": "473c6a4679500c073c00b200000200000000ff1446000a0b2b0100005500000300020000",
+        "baseStats": {
+          "hp": 71,
+          "atk": 60,
+          "def": 106,
+          "spe": 70,
+          "spa": 121,
+          "spd": 80
+        },
+        "types": [
+          "Grass",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Hospitality",
+          "H": "Heatproof"
+        },
+        "weightOffset": "0x85d904",
+        "catchRate": 60,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 2.2
+      },
+      "after": {
+        "luaName": "Sinistcha",
+        "id": 1013,
+        "offset": "0x3eda64",
+        "bytes": "473c6a4679500c073c00b200000200000000ff1446000a0b2b0155005500000300020000",
+        "baseStats": {
+          "hp": 71,
+          "atk": 60,
+          "def": 106,
+          "spe": 70,
+          "spa": 121,
+          "spd": 80
+        },
+        "types": [
+          "Grass",
+          "Ghost"
+        ],
+        "abilities": {
+          "0": "Hospitality",
+          "1": "Heatproof",
+          "H": "Heatproof"
+        },
+        "catchRate": 60,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 2.2,
+        "weightOffset": "0x862db4"
+      }
+    },
+    {
+      "name": "Terapagos",
+      "id": 1024,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 255,
+          "after": 20
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 255,
+          "after": 20,
+          "xor": 235
+        }
+      ],
+      "before": {
+        "name": "Terapagos",
+        "id": 1024,
+        "offset": "0x3e9448",
+        "bytes": "5a41553c41550000ff005a001000000000007f0546050f0f330100000000000101020000",
+        "baseStats": {
+          "hp": 90,
+          "atk": 65,
+          "def": 85,
+          "spe": 60,
+          "spa": 65,
+          "spd": 85
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Tera Shift"
+        },
+        "weightOffset": "0x85da90",
+        "catchRate": 255,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 6.5
+      },
+      "after": {
+        "luaName": "Terapagos",
+        "id": 1024,
+        "offset": "0x3edbf0",
+        "bytes": "5a41553c4155000014005a001000000000007f0546050f0f330100000000000101020000",
+        "baseStats": {
+          "hp": 90,
+          "atk": 65,
+          "def": 85,
+          "spe": 60,
+          "spa": 65,
+          "spd": 85
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Tera Shift"
+        },
+        "catchRate": 20,
+        "wildHeldItems": [
+          0,
+          0
+        ],
+        "weightkg": 6.5,
+        "weightOffset": "0x862f40"
+      }
+    },
+    {
+      "name": "Deoxys-Attack",
+      "id": 1176,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Scrappy"
+          },
+          "after": {
+            "0": "Contrary"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 24,
+          "before": 113,
+          "after": 126,
+          "xor": 15
+        }
+      ],
+      "before": {
+        "name": "Deoxys-Attack",
+        "id": 1176,
+        "offset": "0x3ea9a8",
+        "bytes": "32b41496b4140e0ec8000e01080100000000ff7800050f0f710000000000000000000000",
+        "baseStats": {
+          "hp": 50,
+          "atk": 180,
+          "def": 20,
+          "spe": 150,
+          "spa": 180,
+          "spd": 20
+        },
+        "types": [
+          "Psychic"
+        ],
+        "abilities": {
+          "0": "Scrappy"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      },
+      "after": {
+        "luaName": "Deoxys-Attack",
+        "id": 1176,
+        "offset": "0x3ef150",
+        "bytes": "32b41496b4140e0ec8000e01080100000000ff7800050f0f7e0000000000000000000000",
+        "baseStats": {
+          "hp": 50,
+          "atk": 180,
+          "def": 20,
+          "spe": 150,
+          "spa": 180,
+          "spd": 20
+        },
+        "types": [
+          "Psychic"
+        ],
+        "abilities": {
+          "0": "Contrary"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "Zygarde-10",
+      "id": 1286,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 200,
+          "after": 20
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 200,
+          "after": 20,
+          "xor": 220
+        }
+      ],
+      "before": {
+        "name": "Zygarde-10",
+        "id": 1286,
+        "offset": "0x3eb920",
+        "bytes": "366447733d551004c800db00030000000000ff7800050f0fbc0000000000008401020000",
+        "baseStats": {
+          "hp": 54,
+          "atk": 100,
+          "def": 71,
+          "spe": 115,
+          "spa": 61,
+          "spd": 85
+        },
+        "types": [
+          "Dragon",
+          "Ground"
+        ],
+        "abilities": {
+          "0": "Aura Break"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      },
+      "after": {
+        "luaName": "Zygarde-10",
+        "id": 1286,
+        "offset": "0x3f00c8",
+        "bytes": "366447733d5510041400db00030000000000ff7800050f0fbc0000000000008401020000",
+        "baseStats": {
+          "hp": 54,
+          "atk": 100,
+          "def": 71,
+          "spe": 115,
+          "spa": 61,
+          "spd": 85
+        },
+        "types": [
+          "Dragon",
+          "Ground"
+        ],
+        "abilities": {
+          "0": "Aura Break"
+        },
+        "catchRate": 20,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "Mimikyu-Busted",
+      "id": 1328,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 200,
+          "after": 90
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 200,
+          "after": 90,
+          "xor": 146
+        }
+      ],
+      "before": {
+        "name": "Mimikyu-Busted",
+        "id": 1328,
+        "offset": "0x3ebf08",
+        "bytes": "375a506032690712c800a7000008000000007f1446000b0bd10000000000000200020000",
+        "baseStats": {
+          "hp": 55,
+          "atk": 90,
+          "def": 80,
+          "spe": 96,
+          "spa": 50,
+          "spd": 105
+        },
+        "types": [
+          "Ghost",
+          "Fairy"
+        ],
+        "abilities": {
+          "0": "Disguise"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      },
+      "after": {
+        "luaName": "Mimikyu-Busted",
+        "id": 1328,
+        "offset": "0x3f06b0",
+        "bytes": "375a5060326907125a00a7000008000000007f1446000b0bd10000000000000200020000",
+        "baseStats": {
+          "hp": 55,
+          "atk": 90,
+          "def": 80,
+          "spe": 96,
+          "spa": 50,
+          "spd": 105
+        },
+        "types": [
+          "Ghost",
+          "Fairy"
+        ],
+        "abilities": {
+          "0": "Disguise"
+        },
+        "catchRate": 90,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "Dudunsparce-Three-Segment",
+      "id": 1365,
+      "semanticChanges": {
+        "abilities": {
+          "before": {
+            "0": "Serene Grace",
+            "H": "Rattled"
+          },
+          "after": {
+            "0": "Serene Grace",
+            "1": "Rattled",
+            "H": "Rattled"
+          }
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 26,
+          "before": 0,
+          "after": 155,
+          "xor": 155
+        }
+      ],
+      "before": {
+        "name": "Dudunsparce-Three-Segment",
+        "id": 1365,
+        "offset": "0x3ec43c",
+        "bytes": "7d645037554b0000c800b6000200000000007f1432000505200000009b00000200020000",
+        "baseStats": {
+          "hp": 125,
+          "atk": 100,
+          "def": 80,
+          "spe": 55,
+          "spa": 85,
+          "spd": 75
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Serene Grace",
+          "H": "Rattled"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      },
+      "after": {
+        "luaName": "Dudunsparce-Three-Segment",
+        "id": 1365,
+        "offset": "0x3f0be4",
+        "bytes": "7d645037554b0000c800b6000200000000007f143200050520009b009b00000200020000",
+        "baseStats": {
+          "hp": 125,
+          "atk": 100,
+          "def": 80,
+          "spe": 55,
+          "spa": 85,
+          "spd": 75
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Serene Grace",
+          "1": "Rattled",
+          "H": "Rattled"
+        },
+        "catchRate": 200,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "Terapagos-Terastal",
+      "id": 1377,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 255,
+          "after": 20
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 255,
+          "after": 20,
+          "xor": 235
+        }
+      ],
+      "before": {
+        "name": "Terapagos-Terastal",
+        "id": 1377,
+        "offset": "0x3ec5ec",
+        "bytes": "5f5f6e55696e0000ff005a001000000000007f0546050f0f340100000000000101020000",
+        "baseStats": {
+          "hp": 95,
+          "atk": 95,
+          "def": 110,
+          "spe": 85,
+          "spa": 105,
+          "spd": 110
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Tera Shell"
+        },
+        "catchRate": 255,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      },
+      "after": {
+        "luaName": "Terapagos-Terastal",
+        "id": 1377,
+        "offset": "0x3f0d94",
+        "bytes": "5f5f6e55696e000014005a001000000000007f0546050f0f340100000000000101020000",
+        "baseStats": {
+          "hp": 95,
+          "atk": 95,
+          "def": 110,
+          "spe": 85,
+          "spa": 105,
+          "spd": 110
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Tera Shell"
+        },
+        "catchRate": 20,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "Terapagos-Stellar",
+      "id": 1378,
+      "semanticChanges": {
+        "catchRate": {
+          "before": 255,
+          "after": 20
+        }
+      },
+      "byteChanges": [
+        {
+          "offset": 8,
+          "before": 255,
+          "after": 20,
+          "xor": 235
+        }
+      ],
+      "before": {
+        "name": "Terapagos-Stellar",
+        "id": 1378,
+        "offset": "0x3ec610",
+        "bytes": "a0696e55826e0000ff005a001000000000007f0546050f0f350100003401000101000000",
+        "baseStats": {
+          "hp": 160,
+          "atk": 105,
+          "def": 110,
+          "spe": 85,
+          "spa": 130,
+          "spd": 110
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Teraform Zero",
+          "H": "Tera Shell"
+        },
+        "catchRate": 255,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      },
+      "after": {
+        "luaName": "Terapagos-Stellar",
+        "id": 1378,
+        "offset": "0x3f0db8",
+        "bytes": "a0696e55826e000014005a001000000000007f0546050f0f350100003401000101000000",
+        "baseStats": {
+          "hp": 160,
+          "atk": 105,
+          "def": 110,
+          "spe": 85,
+          "spa": 130,
+          "spd": 110
+        },
+        "types": [
+          "Normal"
+        ],
+        "abilities": {
+          "0": "Teraform Zero",
+          "H": "Tera Shell"
+        },
+        "catchRate": 20,
+        "wildHeldItems": [
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "weights": [],
+  "enum": [],
+  "berries": [],
+  "items": [
+    {
+      "id": 690,
+      "beforeName": "Oval Charm",
+      "afterName": "Recall Charm",
+      "luaName": "Poke Ball",
+      "byteChanges": [
+        {
+          "offset": 0,
+          "before": 201,
+          "after": 204,
+          "xor": 5
+        },
+        {
+          "offset": 1,
+          "before": 234,
+          "after": 217,
+          "xor": 51
+        },
+        {
+          "offset": 2,
+          "before": 213,
+          "after": 215,
+          "xor": 2
+        },
+        {
+          "offset": 3,
+          "before": 224,
+          "after": 213,
+          "xor": 53
+        },
+        {
+          "offset": 4,
+          "before": 0,
+          "after": 224,
+          "xor": 224
+        },
+        {
+          "offset": 5,
+          "before": 189,
+          "after": 224,
+          "xor": 93
+        },
+        {
+          "offset": 6,
+          "before": 220,
+          "after": 0,
+          "xor": 220
+        },
+        {
+          "offset": 7,
+          "before": 213,
+          "after": 189,
+          "xor": 104
+        },
+        {
+          "offset": 8,
+          "before": 230,
+          "after": 220,
+          "xor": 58
+        },
+        {
+          "offset": 9,
+          "before": 225,
+          "after": 213,
+          "xor": 52
+        },
+        {
+          "offset": 10,
+          "before": 255,
+          "after": 230,
+          "xor": 25
+        },
+        {
+          "offset": 11,
+          "before": 0,
+          "after": 225,
+          "xor": 225
+        },
+        {
+          "offset": 12,
+          "before": 0,
+          "after": 255,
+          "xor": 255
+        },
+        {
+          "offset": 22,
+          "before": 0,
+          "after": 32,
+          "xor": 32
+        },
+        {
+          "offset": 23,
+          "before": 0,
+          "after": 78,
+          "xor": 78
+        },
+        {
+          "offset": 32,
+          "before": 1,
+          "after": 0,
+          "xor": 1
+        },
+        {
+          "offset": 34,
+          "before": 10,
+          "after": 1,
+          "xor": 11
+        },
+        {
+          "offset": 35,
+          "before": 4,
+          "after": 1,
+          "xor": 5
+        }
+      ],
+      "beforeBytes": "c9ead5e000bddcd5e6e1ff000000000000000000b202000000000000ce43880801000a040d60120800000000",
+      "afterBytes": "ccd9d7d5e0e000bddcd5e6e1ff00000000000000b202204e000000007e98880800000101f562120800000000"
+    }
+  ]
+}

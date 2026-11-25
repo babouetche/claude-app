@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/pokemon/(.*)", "destination": "/index.html" },
+    { "source": "/abilities/(.*)", "destination": "/index.html" },
+    { "source": "/moves/(.*)", "destination": "/index.html" },
+    { "source": "/items/(.*)", "destination": "/index.html" },
+    { "source": "/encounters/(.*)", "destination": "/index.html" },
+    { "source": "/egggroups/(.*)", "destination": "/index.html" }
+  ]
+}

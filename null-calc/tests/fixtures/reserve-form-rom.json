@@ -1,0 +1,888 @@
+{
+  "schemaVersion": 1,
+  "romSHA256": "a6f4f3f9d9b68515c70b134d6f0e79b3fd22e00c2f1468dbafa5b7529d98dbf4",
+  "scope": "Reserve form identities for the eleven grouped non-Mega battle-form families. Record lookup uses the exact four moves, level and native family; all matches must agree on the form. Trainer IDs and arbitrary saved battle-form history are not decoded.",
+  "layout": {
+    "recordSize": 40,
+    "ivs": 0,
+    "moves": 4,
+    "species": 12,
+    "item": 14,
+    "ability": 16,
+    "level": 18,
+    "speciesTable": "0x3e0448",
+    "speciesStride": 36
+  },
+  "copySpeciesProof": {
+    "offset": "0x8ae9a",
+    "length": 12,
+    "sha256": "742f57a18160d16f2bc706ae7c85fa479dfbbb350af1e1370d672f03a53e4e09"
+  },
+  "cases": [
+    {
+      "trainer": "Hiker Marcster",
+      "displayForms": [
+        "Minior-Meteor",
+        "Minior"
+      ],
+      "expectedReserveForm": "Minior",
+      "records": [
+        {
+          "offset": "0x3a3624",
+          "length": 40,
+          "sha256": "aaff2b2a1ae8729adce4c7ea783a3417eb2c8949d87bcab0b3fc6dcc15b11dc5",
+          "speciesID": 1321,
+          "level": 37,
+          "moves": [
+            504,
+            408,
+            605,
+            512
+          ],
+          "speciesProof": {
+            "offset": "0x3ebe0c",
+            "length": 36,
+            "sha256": "889b671c2a7940e943c4b99940f933a8e043fcbafc6c92a1cf9cf43fff0f6e00"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Camper Charlie",
+      "displayForms": [
+        "Minior-Meteor",
+        "Minior"
+      ],
+      "expectedReserveForm": "Minior",
+      "records": [
+        {
+          "offset": "0x3a67e4",
+          "length": 40,
+          "sha256": "a8edf9ae8369f989bbc6ad95ed2db5f3fd07ebe29ee727a72b88d229d73eba23",
+          "speciesID": 1322,
+          "level": 65,
+          "moves": [
+            728,
+            177,
+            451,
+            414
+          ],
+          "speciesProof": {
+            "offset": "0x3ebe30",
+            "length": 36,
+            "sha256": "889b671c2a7940e943c4b99940f933a8e043fcbafc6c92a1cf9cf43fff0f6e00"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Leader Winona 2",
+      "displayForms": [
+        "Minior-Meteor",
+        "Minior"
+      ],
+      "expectedReserveForm": "Minior",
+      "records": [
+        {
+          "offset": "0x3ab5dc",
+          "length": 40,
+          "sha256": "3b74e68b20f149904e9845d49412418f7ed4d5b0782b9ff85e72b922fd34a5ea",
+          "speciesID": 1325,
+          "level": 77,
+          "moves": [
+            157,
+            89,
+            504,
+            678
+          ],
+          "speciesProof": {
+            "offset": "0x3ebe9c",
+            "length": 36,
+            "sha256": "14e92c9408fcb0aef6852a973788f4ff8c66c73fe5955dd3373e6f660d46eeaf"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Triathlete Benjamin & Triathlete Alyssa",
+      "displayForms": [
+        "Eiscue",
+        "Eiscue-Noice"
+      ],
+      "expectedReserveForm": "Eiscue",
+      "records": [
+        {
+          "offset": "0x3a5a94",
+          "length": 40,
+          "sha256": "e979e8ba4cbf083021cf22486971d24aff2ddab1920110706dc021cd847c1934",
+          "speciesID": 875,
+          "level": 63,
+          "moves": [
+            789,
+            740,
+            487,
+            364
+          ],
+          "speciesProof": {
+            "offset": "0x3e7f54",
+            "length": 36,
+            "sha256": "9ab663cc5a67ab0305e3bdb72f12affa47bbccee5581bfc0eaea217c8ff6edd9"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Picnicker Frieren",
+      "displayForms": [
+        "Eiscue",
+        "Eiscue-Noice"
+      ],
+      "expectedReserveForm": "Eiscue",
+      "records": [
+        {
+          "offset": "0x3a80c0",
+          "length": 40,
+          "sha256": "b6dfea6eff3f7d1cd58e39ccbf5e6642ad352a93cc767e935ba69c13fb732473",
+          "speciesID": 875,
+          "level": 70,
+          "moves": [
+            556,
+            457,
+            428,
+            187
+          ],
+          "speciesProof": {
+            "offset": "0x3e7f54",
+            "length": 36,
+            "sha256": "9ab663cc5a67ab0305e3bdb72f12affa47bbccee5581bfc0eaea217c8ff6edd9"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Woods Team Aqua Grunt",
+      "displayForms": [
+        "Wishiwashi",
+        "Wishiwashi-School"
+      ],
+      "expectedReserveForm": "Wishiwashi",
+      "records": [
+        {
+          "offset": "0x3a3234",
+          "length": 40,
+          "sha256": "b890d4c3d688f8f4e6abd9fa04107e0e8bef97d4bf88f77a9e2d310bb568fa1e",
+          "speciesID": 746,
+          "level": 36,
+          "moves": [
+            740,
+            89,
+            58,
+            487
+          ],
+          "speciesProof": {
+            "offset": "0x3e6d30",
+            "length": 36,
+            "sha256": "7b05cee95ac9e28e093eafd51812e37fe293bddbac3fafbb54c6fda3269d50ab"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Ninja Boy Hideo",
+      "displayForms": [
+        "Wishiwashi",
+        "Wishiwashi-School"
+      ],
+      "expectedReserveForm": "Wishiwashi",
+      "records": [
+        {
+          "offset": "0x3aaf3c",
+          "length": 40,
+          "sha256": "32baca16fa7a9977e6fca2862ec1f4d7743601fc6133b8f39cc71fe88625ce38",
+          "speciesID": 746,
+          "level": 77,
+          "moves": [
+            762,
+            89,
+            740,
+            58
+          ],
+          "speciesProof": {
+            "offset": "0x3e6d30",
+            "length": 36,
+            "sha256": "7b05cee95ac9e28e093eafd51812e37fe293bddbac3fafbb54c6fda3269d50ab"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Leader Roxanne",
+      "displayForms": [
+        "Zygarde",
+        "Zygarde-Complete"
+      ],
+      "expectedReserveForm": "Zygarde",
+      "records": [
+        {
+          "offset": "0x3a3714",
+          "length": 40,
+          "sha256": "7404856f9b2b150122691935221e470a0016ebfe27db7d88d853148e41c6e036",
+          "speciesID": 1288,
+          "level": 37,
+          "moves": [
+            616,
+            525,
+            734,
+            245
+          ],
+          "speciesProof": {
+            "offset": "0x3eb968",
+            "length": 36,
+            "sha256": "5b6110f35d86e928bed9eb0ddb6938490ee0bf54dfd4bdf52a89418d6b1f8ba3"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Adventurer Brandon 1",
+      "displayForms": [
+        "Zygarde",
+        "Zygarde-Complete"
+      ],
+      "expectedReserveForm": "Zygarde",
+      "records": [
+        {
+          "offset": "0x3b1b88",
+          "length": 40,
+          "sha256": "86b086e643096d6394f25c9e2eecae6cfea1fedcf8b92381d9fe959487c67776",
+          "speciesID": 1288,
+          "level": 99,
+          "moves": [
+            650,
+            414,
+            182,
+            410
+          ],
+          "speciesProof": {
+            "offset": "0x3eb968",
+            "length": 36,
+            "sha256": "5b6110f35d86e928bed9eb0ddb6938490ee0bf54dfd4bdf52a89418d6b1f8ba3"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Adventurer Brandon 2",
+      "displayForms": [
+        "Zygarde",
+        "Zygarde-Complete"
+      ],
+      "expectedReserveForm": "Zygarde",
+      "records": [
+        {
+          "offset": "0x3b1c78",
+          "length": 40,
+          "sha256": "42aa99cb24dd3a1b0317a84a0b2e3a7c892982d577e2257a7f4c70e4ae9d27f9",
+          "speciesID": 1288,
+          "level": 99,
+          "moves": [
+            650,
+            414,
+            182,
+            137
+          ],
+          "speciesProof": {
+            "offset": "0x3eb968",
+            "length": 36,
+            "sha256": "5b6110f35d86e928bed9eb0ddb6938490ee0bf54dfd4bdf52a89418d6b1f8ba3"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Battle Girl Jocelyn",
+      "displayForms": [
+        "Morpeko",
+        "Morpeko-Hangry"
+      ],
+      "expectedReserveForm": "Morpeko",
+      "records": [
+        {
+          "offset": "0x3a425c",
+          "length": 40,
+          "sha256": "b822dfa80575e5cd37bb9f8bb8e5b244336cb4cf94b377b90d6622c7aa20325c",
+          "speciesID": 877,
+          "level": 44,
+          "moves": [
+            711,
+            720,
+            402,
+            661
+          ],
+          "speciesProof": {
+            "offset": "0x3e7f9c",
+            "length": 36,
+            "sha256": "1d1b23e2a68fa018bc32550b145f0b5f9ff0664052148e0d5dcfa226d88eeae8"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Space Center Team Magma Grunt #2",
+      "displayForms": [
+        "Morpeko",
+        "Morpeko-Hangry"
+      ],
+      "expectedReserveForm": "Morpeko",
+      "records": [
+        {
+          "offset": "0x3ae850",
+          "length": 40,
+          "sha256": "ef87e89061d6fd7b7dfd714f3aa13c315445e300c1ddbc69d8adfabe2a38cdd5",
+          "speciesID": 877,
+          "level": 87,
+          "moves": [
+            711,
+            609,
+            226,
+            720
+          ],
+          "speciesProof": {
+            "offset": "0x3e7f9c",
+            "length": 36,
+            "sha256": "1d1b23e2a68fa018bc32550b145f0b5f9ff0664052148e0d5dcfa226d88eeae8"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Mt.Chimney Team Magma Grunt",
+      "displayForms": [
+        "Darmanitan",
+        "Darmanitan-Zen"
+      ],
+      "expectedReserveForm": "Darmanitan",
+      "records": [
+        {
+          "offset": "0x3a8728",
+          "length": 40,
+          "sha256": "fe83a7a7c204d82aa1c9864831f2f9eeb0640164923f1d2f933bce0f8a23cebb",
+          "speciesID": 555,
+          "level": 71,
+          "moves": [
+            53,
+            94,
+            182,
+            447
+          ],
+          "speciesProof": {
+            "offset": "0x3e5254",
+            "length": 36,
+            "sha256": "0c5a9302ff976c5ce258ff7de99d086b729bf6c0e60e9634d3219dece8c70696"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Hideout Team Magma Grunt Zeldest",
+      "displayForms": [
+        "Darmanitan"
+      ],
+      "expectedReserveForm": "Darmanitan",
+      "records": [
+        {
+          "offset": "0x3acc64",
+          "length": 40,
+          "sha256": "8e0b0b74ef2e3fc41b3cb74e51363cd628224b7a1995ba8e4c9970d0e334e79f",
+          "speciesID": 555,
+          "level": 80,
+          "moves": [
+            394,
+            89,
+            157,
+            369
+          ],
+          "speciesProof": {
+            "offset": "0x3e5254",
+            "length": 36,
+            "sha256": "0c5a9302ff976c5ce258ff7de99d086b729bf6c0e60e9634d3219dece8c70696"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Leader Liza",
+      "displayForms": [
+        "Darmanitan",
+        "Darmanitan-Zen"
+      ],
+      "expectedReserveForm": "Darmanitan",
+      "records": [
+        {
+          "offset": "0x3ae5f8",
+          "length": 40,
+          "sha256": "e5c42e5b06411ff1a0db9a9a93945d48ac61b4ccc34ae57dcff83a07dd92c9a8",
+          "speciesID": 555,
+          "level": 86,
+          "moves": [
+            557,
+            276,
+            94,
+            257
+          ],
+          "speciesProof": {
+            "offset": "0x3e5254",
+            "length": 36,
+            "sha256": "0c5a9302ff976c5ce258ff7de99d086b729bf6c0e60e9634d3219dece8c70696"
+          }
+        },
+        {
+          "offset": "0x3bddc4",
+          "length": 40,
+          "sha256": "e5c42e5b06411ff1a0db9a9a93945d48ac61b4ccc34ae57dcff83a07dd92c9a8",
+          "speciesID": 555,
+          "level": 86,
+          "moves": [
+            557,
+            276,
+            94,
+            257
+          ],
+          "speciesProof": {
+            "offset": "0x3e5254",
+            "length": 36,
+            "sha256": "0c5a9302ff976c5ce258ff7de99d086b729bf6c0e60e9634d3219dece8c70696"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "displayForms": [
+        "Darmanitan"
+      ],
+      "expectedReserveForm": "Darmanitan",
+      "records": [
+        {
+          "offset": "0x3b27ac",
+          "length": 40,
+          "sha256": "7d279c4664cec405abfa96ad9ec2c3e8528b77eee9f03476e9c6271b70893535",
+          "speciesID": 555,
+          "level": 100,
+          "moves": [
+            394,
+            442,
+            428,
+            339
+          ],
+          "speciesProof": {
+            "offset": "0x3e5254",
+            "length": 36,
+            "sha256": "0c5a9302ff976c5ce258ff7de99d086b729bf6c0e60e9634d3219dece8c70696"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "displayForms": [
+        "Darmanitan-Zen-Mode"
+      ],
+      "expectedReserveForm": "Darmanitan-Zen-Mode",
+      "records": [
+        {
+          "offset": "0x3b275c",
+          "length": 40,
+          "sha256": "9f45908964d0f99bf1dd13b4afb45b2518effa4e92ea9f6480de4cbee87309dd",
+          "speciesID": 1214,
+          "level": 100,
+          "moves": [
+            126,
+            248,
+            447,
+            281
+          ],
+          "speciesProof": {
+            "offset": "0x3eaf00",
+            "length": 36,
+            "sha256": "5b29ba4af32567ffad47bfd7daab8fe43c1c45be1cbdd31fb87580f21cb4cb96"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Cooltrainer Axle",
+      "displayForms": [
+        "Darmanitan-Galar",
+        "Darmanitan-Galar-Zen"
+      ],
+      "expectedReserveForm": "Darmanitan-Galar",
+      "records": [
+        {
+          "offset": "0x3a8fa4",
+          "length": 40,
+          "sha256": "7794b832e47a580eae13c795a089825473c75d7b3efbedd0e595de3f8e1a3206",
+          "speciesID": 1110,
+          "level": 72,
+          "moves": [
+            556,
+            394,
+            89,
+            339
+          ],
+          "speciesProof": {
+            "offset": "0x3ea060",
+            "length": 36,
+            "sha256": "7359576344c0160e4143e1efb0d02a0d6084bb8daa657e1aada17f90ba35a13e"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Hideout Team Magma Grunt #3",
+      "displayForms": [
+        "Darmanitan-Galar",
+        "Darmanitan-Galar-Zen"
+      ],
+      "expectedReserveForm": "Darmanitan-Galar",
+      "records": [
+        {
+          "offset": "0x3ace1c",
+          "length": 40,
+          "sha256": "1eedb319e470106045da8b13eac1ce3c29cdd409aa91d046c09e09449154565d",
+          "speciesID": 1110,
+          "level": 81,
+          "moves": [
+            556,
+            394,
+            89,
+            339
+          ],
+          "speciesProof": {
+            "offset": "0x3ea060",
+            "length": 36,
+            "sha256": "7359576344c0160e4143e1efb0d02a0d6084bb8daa657e1aada17f90ba35a13e"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Pokéfan Annika",
+      "displayForms": [
+        "Darmanitan-Galar"
+      ],
+      "expectedReserveForm": "Darmanitan-Galar",
+      "records": [
+        {
+          "offset": "0x3b06ac",
+          "length": 40,
+          "sha256": "80c7688bbdb88cfea6de9f91c87b3073a0de479d501c1358d741b391f0e4daeb",
+          "speciesID": 1110,
+          "level": 95,
+          "moves": [
+            556,
+            394,
+            89,
+            369
+          ],
+          "speciesProof": {
+            "offset": "0x3ea060",
+            "length": 36,
+            "sha256": "7359576344c0160e4143e1efb0d02a0d6084bb8daa657e1aada17f90ba35a13e"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "displayForms": [
+        "Darmanitan-Galar"
+      ],
+      "expectedReserveForm": "Darmanitan-Galar",
+      "records": [
+        {
+          "offset": "0x3b2784",
+          "length": 40,
+          "sha256": "7510f50eee177ac000a78d477706032ee7a10435e7e86ca55f4a86e97ac5a046",
+          "speciesID": 1110,
+          "level": 100,
+          "moves": [
+            764,
+            89,
+            276,
+            369
+          ],
+          "speciesProof": {
+            "offset": "0x3ea060",
+            "length": 36,
+            "sha256": "7359576344c0160e4143e1efb0d02a0d6084bb8daa657e1aada17f90ba35a13e"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Darm",
+      "displayForms": [
+        "Darmanitan-Zen-Mode-Galar"
+      ],
+      "expectedReserveForm": "Darmanitan-Zen-Mode-Galar",
+      "records": [
+        {
+          "offset": "0x3b27d4",
+          "length": 40,
+          "sha256": "54fe4bb4ae08e36ba742f583138deedcc3d9bd0a7300132e33e6df1bb5b7b98e",
+          "speciesID": 1215,
+          "level": 100,
+          "moves": [
+            556,
+            299,
+            89,
+            612
+          ],
+          "speciesProof": {
+            "offset": "0x3eaf24",
+            "length": 36,
+            "sha256": "3cfa6b593553a458318beb4c88964aca20770b401166eb418a6062d18ab5b010"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Leader Liza",
+      "displayForms": [
+        "Necrozma-Dusk-Mane",
+        "Necrozma-Ultra"
+      ],
+      "expectedReserveForm": "Necrozma-Dusk-Mane",
+      "records": [
+        {
+          "offset": "0x3ae670",
+          "length": 40,
+          "sha256": "674cf60d587c4a8e512f2118036a6c1e1ad3f561af9498e065a5155649f4cad3",
+          "speciesID": 1329,
+          "level": 89,
+          "moves": [
+            675,
+            667,
+            200,
+            349
+          ],
+          "speciesProof": {
+            "offset": "0x3ebf2c",
+            "length": 36,
+            "sha256": "573429ba1f15254e699a15ebac901278229ca3238934bd55a46d33dc71c81f19"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Pokémaniac Shinji (Inverse Room)",
+      "displayForms": [
+        "Terapagos",
+        "Terapagos-Terastal"
+      ],
+      "expectedReserveForm": "Terapagos",
+      "records": [
+        {
+          "offset": "0x3a6f1c",
+          "length": 40,
+          "sha256": "41b063524fc8e54a67748b51bcc237f8e915aadae1003021a53195aa620ddc4a",
+          "speciesID": 1024,
+          "level": 64,
+          "moves": [
+            844,
+            58,
+            576,
+            160
+          ],
+          "speciesProof": {
+            "offset": "0x3e9448",
+            "length": 36,
+            "sha256": "c9866c6998242afb47cdb9563dcde268fb0441e542704aa8d7e4dfd9ff3459e4"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Cooltrainer Reyna",
+      "displayForms": [
+        "Terapagos",
+        "Terapagos-Stellar"
+      ],
+      "expectedReserveForm": "Terapagos",
+      "records": [
+        {
+          "offset": "0x3b112c",
+          "length": 40,
+          "sha256": "336ca163499bf226a0d31140f2b0b3a8a4d6d1998da2bfb0f3e6eb15ff3f7d81",
+          "speciesID": 1024,
+          "level": 97,
+          "moves": [
+            504,
+            834,
+            399,
+            330
+          ],
+          "speciesProof": {
+            "offset": "0x3e9448",
+            "length": 36,
+            "sha256": "c9866c6998242afb47cdb9563dcde268fb0441e542704aa8d7e4dfd9ff3459e4"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Team Magma Leader Maxie 2",
+      "displayForms": [
+        "Groudon"
+      ],
+      "expectedReserveForm": "Groudon",
+      "records": [
+        {
+          "offset": "0x3ad57c",
+          "length": 40,
+          "sha256": "383328205b3e27db606e1d20be1ea216a91341c16228ae8d68ea6c35da836ce1",
+          "speciesID": 383,
+          "level": 95,
+          "moves": [
+            619,
+            535,
+            86,
+            525
+          ],
+          "speciesProof": {
+            "offset": "0x3e3a24",
+            "length": 36,
+            "sha256": "5fac2bca2f7f748ad0ca681585833c0b644c97f338dd7974f3823ddbf56a3c85"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Trainer Maxie",
+      "displayForms": [
+        "Groudon",
+        "Groudon-Primal"
+      ],
+      "expectedReserveForm": "Groudon",
+      "records": [
+        {
+          "offset": "0x3b243c",
+          "length": 40,
+          "sha256": "6a5561e7fe621483df870154d9617d91cff065a1b395614b2e41e76c18e20ef6",
+          "speciesID": 383,
+          "level": 100,
+          "moves": [
+            619,
+            535,
+            444,
+            339
+          ],
+          "speciesProof": {
+            "offset": "0x3e3a24",
+            "length": 36,
+            "sha256": "5fac2bca2f7f748ad0ca681585833c0b644c97f338dd7974f3823ddbf56a3c85"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Team Aqua Leader Archie 2",
+      "displayForms": [
+        "Kyogre"
+      ],
+      "expectedReserveForm": "Kyogre",
+      "records": [
+        {
+          "offset": "0x3af7c8",
+          "length": 40,
+          "sha256": "4e383950cc5eb76f158a45159c8a6deeec387b32fd35b74931be59e17fc1b4c9",
+          "speciesID": 382,
+          "level": 95,
+          "moves": [
+            323,
+            618,
+            87,
+            58
+          ],
+          "speciesProof": {
+            "offset": "0x3e3a00",
+            "length": 36,
+            "sha256": "00341ba602237caf14e141ebe1d14dbe8d6ca89614c5439cdd0a16e51b07ffe6"
+          }
+        }
+      ]
+    },
+    {
+      "trainer": "Trainer Archie",
+      "displayForms": [
+        "Kyogre",
+        "Kyogre-Primal"
+      ],
+      "expectedReserveForm": "Kyogre",
+      "records": [
+        {
+          "offset": "0x3b2504",
+          "length": 40,
+          "sha256": "1d87b4aa4cca64e3306aced4477a0f1acd605c39c70d3c3f821fe00138fb895c",
+          "speciesID": 382,
+          "level": 100,
+          "moves": [
+            618,
+            87,
+            58,
+            347
+          ],
+          "speciesProof": {
+            "offset": "0x3e3a00",
+            "length": 36,
+            "sha256": "00341ba602237caf14e141ebe1d14dbe8d6ca89614c5439cdd0a16e51b07ffe6"
+          }
+        }
+      ]
+    }
+  ],
+  "observedBattle": {
+    "trainer": "Hiker Marcster",
+    "opponent": "Glimmet",
+    "player": "Feraligatr",
+    "level": 38,
+    "nature": "Hasty",
+    "ability": "Sheer Force",
+    "ivs": {
+      "hp": 10,
+      "at": 20,
+      "df": 11,
+      "sa": 11,
+      "sd": 15,
+      "sp": 3
+    },
+    "moves": [
+      "Aqua Cutter",
+      "Ice Fang",
+      "Crunch",
+      "Aqua Jet"
+    ],
+    "hp": 116,
+    "scores": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "probabilities": [
+      0.9,
+      0,
+      0.1,
+      0
+    ],
+    "names": [
+      "Minior",
+      "Mareanie",
+      "Corsola-Galar",
+      "Lunatone"
+    ],
+    "coreSpeed": 115,
+    "meteorSpeed": 66
+  }
+}

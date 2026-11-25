@@ -1,0 +1,26 @@
+{
+  "revision": "last-resort-normalize",
+  "checkedAt": "2026-11-02T20:59:06.137Z",
+  "htmlSHA256": "e97dd031c43bcef5216609e534aa923ff196b733add3f9c16fbdaf7c74409092",
+  "screenshotPredictions": {
+    "raticate": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "delcatty": [
+      0.08251953125,
+      0,
+      0.91748046875,
+      0
+    ]
+  },
+  "trainerDataSHA256": "5750c9d5eb796deea5ded6d40b8932a3f9dddf4a37c03af0125d08650f865826",
+  "checks": [
+    "First-turn Raticate chooses Sucker Punch 100%; a failed attempt unlocks Last Resort, PP still applies, Last move infers the attempt, reset/strict/languages preserve HP and damage.",
+    "Delcatty screenshot: Normal Thunder Wave about 91.7%, Headbutt about 8.3%, independently derived from documented paralysis/flinch synergy, damage rolls, HDM bonus and uniform ties. Ground no longer blocks; Ghost, Electric, Limber and Misty Terrain remain protected. Trainers and damage unchanged.",
+    "Doubles main and partner slots share Last Resort eligibility and independent histories; frozen Switch into accepts history edits; partner new-entry reset relocks the move."
+  ],
+  "errors": []
+}

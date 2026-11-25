@@ -1,0 +1,1981 @@
+/* header */
+:root {
+    --box-icon-size: 64px;
+    /* Full-size sprite tile (big icon mode); panel preview always uses this, not --box-icon-size when small */
+    --big-icon-size: 64px;
+    /* Row height for one team/box icon (for min-heights); equals height for square modes */
+    --box-icon-row: 64px;
+    /* emi.dev ck+ calc — speed column (script/display.js, style.css) */
+    --speed-faster: #3cd9f5;
+    --speed-tied: #ecdf68;
+    --speed-slower: #d47070;
+}
+a img {
+    border: 0;
+}
+.header {
+    margin: 0 0 30px 0;
+
+    background: #E5ECFB;
+    background: -webkit-gradient(linear, left top, left bottom, from(#E8EEFC), to(#D7DEEA));
+    background: -moz-linear-gradient(top,  #E8EEFC,  #D7DEEA);
+    background: linear-gradient(top,  #E8EEFC,  #D7DEEA);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#E8EEFC', endColorstr='#D7DEEA');
+
+    border-bottom: 1px solid #AAA;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, .6), 0px 2px 2px rgba(0, 0, 0, .15);
+}
+.header-color {
+    margin: 0 auto;
+}
+.header-inner {
+    max-width: 565px;
+    margin: 0 auto;
+}
+.nav, .nav li, .nav-play, .nav-play li {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+.nav {
+    padding: 15px 6px 15px 6px;
+}
+.header .nav {
+    padding: 15px 0 15px 155px;
+}
+.header .nav-play {
+    padding: 15px 0 15px 10px;
+}
+.nav .button {
+    position: relative;
+    padding: 5px 10px;
+    margin: 0 -1px 0 0;
+    border-radius: 0;
+}
+.nav .button img {
+    position: absolute;
+    top: -8px;
+    left: -150px;
+}
+.nav .button.cur,
+.nav .button.cur:hover {
+    color: #777777;
+    background: #f8f8f8;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.nav .button.cur:hover {
+    border: solid 1px #888888;
+}
+.nav .button:hover {
+    z-index: 10;
+}
+.nav .button.nav-first {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.nav .button.nav-last {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.button {
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.4);
+    border-radius: 0;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2), inset 0 -1px 2px rgba(255,255,255,1);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2), inset 0 -1px 2px rgba(255,255,255,1);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2), inset 0 -1px 2px rgba(255,255,255,1);
+    white-space: nowrap;
+
+    /* default colors */
+    color: #222222;
+    border: solid 1px #AAAAAA;
+    background: #e3e3e3;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f6f6f6), to(#e3e3e3));
+    background: -moz-linear-gradient(top,  #f6f6f6,  #e3e3e3);
+    background: linear-gradient(top,  #f6f6f6,  #e3e3e3);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#e3e3e3');
+}
+.button:hover {
+    background: #cfcfcf;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#cfcfcf));
+    background: -moz-linear-gradient(top,  #f2f2f2,  #cfcfcf);
+    background: linear-gradient(top,  #f2f2f2,  #cfcfcf);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#cfcfcf');
+    border-color: #606060;
+}
+.button:active {
+    background: -webkit-gradient(linear, left top, left bottom, from(#cfcfcf), to(#f2f2f2));
+    background: -moz-linear-gradient(top,  #cfcfcf,  #f2f2f2);
+    background: linear-gradient(top,  #cfcfcf,  #f2f2f2);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#cfcfcf', endColorstr='#f2f2f2');
+}
+
+.greenbutton {
+    background: hsl(100,30%,93%);
+    background: -webkit-gradient(linear, left top, left bottom, from(hsl(100,30%,97%)), to(hsl(100,30%,84%)));
+    background: -moz-linear-gradient(top,  hsl(100,30%,97%),  hsl(100,30%,84%));
+    background: linear-gradient(top,  hsl(100,30%,97%),  hsl(100,30%,84%));
+    border-color: hsl(100,30%,70%);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#e3e3e3');
+}
+.greenbutton:hover {
+    background: hsl(100,30%,87%);
+    background: -webkit-gradient(linear, left top, left bottom, from(hsl(100,30%,94%)), to(hsl(100,30%,77%)));
+    background: -moz-linear-gradient(top,  hsl(100,30%,94%),  hsl(100,30%,77%));
+    background: linear-gradient(top,  hsl(100,30%,94%),  hsl(100,30%,77%));
+    border-color: hsl(100,30%,41%);
+}
+.greenbutton:active {
+    background: hsl(100,30%,77%);
+    background: -webkit-gradient(linear, left top, left bottom, from(hsl(100,30%,77%)), to(hsl(100,30%,83%)));
+    background: -moz-linear-gradient(top,  hsl(100,30%,77%),  hsl(100,30%,83%));
+    background: linear-gradient(top,  hsl(100,30%,77%),  hsl(100,30%,83%));
+    border-color: hsl(100,30%,41%);
+}
+
+/* general page styling */
+html, body {
+    font: 10pt Verdana, sans-serif;
+    background-color: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+    min-width: 100em;
+}
+
+/* Vertical scroll: no layout jump when scrollbar appears. Prefer overlay where supported. */
+html {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+@supports (overflow: overlay) {
+    html {
+        overflow-y: overlay;
+        scrollbar-gutter: auto;
+    }
+}
+
+.trainer-poks-label {
+    margin:  10px 0px;
+}
+
+/* Opposing team: own box under Pokemon 2; same width as .poke-info (narrower than team-box when that stays px) */
+fieldset.opposing-team-box {
+    border: 1px solid #000 !important;
+    margin-top: 0.4em;
+    clear: left;
+    float: left;
+    /* Same box model as .poke-info (content-box): 30em content width + border outside, not 30em total like border-box */
+    box-sizing: content-box;
+    width: 30em !important;
+    min-width: 30em !important;
+    min-height: calc(var(--box-icon-row, var(--box-icon-size, 64px)) + 44px);
+    padding-bottom: 3px;
+    position: relative;
+    overflow: visible;
+}
+.opposing-team-box .opposing-team-title {
+    font-size: inherit;
+    font-weight: bold;
+    margin: 0;
+    padding: 0 6px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+/* Team/Box: own box under Pokemon 1; same width as .poke-info (matches opposing-team-box) */
+fieldset.team-box-box {
+    border: 1px solid #000 !important;
+    margin-top: 0.4em;
+    clear: left;
+    float: left;
+    box-sizing: content-box;
+    width: 30em !important;
+    min-width: 30em !important;
+    position: relative;
+    overflow: visible;
+}
+/* Tag Partner row: Aqua Grunt & Steve → Partner Rival sets; Magma Maxie & Tabitha → Partner Steven (clickable → player) */
+.tag-partner-team-section {
+    margin-top: 0.4em;
+}
+.tag-partner-team-section .tag-partner-poke-list {
+    min-height: var(--box-icon-row, var(--box-icon-size, 64px));
+}
+.tag-partner-poke-list .tag-partner-pok {
+    cursor: pointer;
+}
+.tag-partner-poke-list .tag-partner-pok:hover {
+    outline: 2px solid #1abc9c;
+    outline-offset: -2px;
+}
+.tag-partner-poke-list .tag-partner-pok.tag-partner-dead {
+    background: rgba(231, 76, 60, 0.5);
+    outline: 2px solid #c0392b;
+    outline-offset: -2px;
+}
+.team-box-box .team-box-title,
+.import-export-box .team-box-title,
+.battle-notes-box .team-box-title {
+    font-size: inherit;
+    font-weight: bold;
+    margin: 0;
+    padding: 0 6px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+/* Gauntlet layout: Team 1 -> Prev/Next/Reset -> Team 2 -> Team 3 -> ... */
+.opposing-team-box .opposing-teams-wrapper {
+    padding-top: 0.3em;
+}
+fieldset.opposing-team-box:has(#trainer-poks-remaining .trainer-pok-list-opposing) .opposing-teams-wrapper {
+    padding-bottom: 0;
+}
+/* Gauntlet: box height = content only; extra slack belongs at the bottom of the fieldset, not inside #trainer-poks-remaining */
+fieldset.opposing-team-box:has(#trainer-poks-remaining .trainer-pok-list-opposing) {
+    min-height: 0;
+    height: fit-content;
+    padding-bottom: 0.75em;
+}
+.opposing-teams-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    min-height: 0;
+}
+/* Ensure gauntlet team boxes stack vertically (not side-by-side) */
+#trainer-poks-first,
+#trainer-poks-remaining {
+    display: flex;
+    flex-direction: column;
+    /* Same 3px as .trainer-pok-list grid gap (horizontal = vertical between teams) */
+    gap: 3px;
+    width: 100%;
+    min-width: 0; /* Allow flex children to shrink if needed */
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    min-height: 0;
+}
+.gauntlet-nav {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0;
+    flex: 0 0 auto;
+}
+.gauntlet-nav-next-wrap {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35em;
+}
+.gauntlet-name-label {
+    font-weight: bold;
+    font-size: 0.95em;
+    opacity: 0.92;
+    white-space: nowrap;
+}
+.opposing-team-box .gauntlet-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+#reset-trainer {
+    margin-left: auto;
+}
+#trainer-poks-first .trainer-pok-list-opposing,
+#trainer-poks-remaining .trainer-pok-list-opposing {
+    margin-bottom: 0;
+    flex: 0 0 auto;
+}
+/* Gauntlet: compact trainer name header and spacing between teams */
+.trainer-box-header {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 2px;
+    padding: 2px 4px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+.trainer-pok-list,
+.trainer-pok-list-opposing {
+    /* auto-fill uses the real inner width (flex-wrap + fieldset could stop at 10 icons with room for 11) */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--box-icon-size, 64px));
+    gap: 3px;
+    justify-content: start;
+    align-content: start;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.trainer-pok {
+    /* Big: square grid. Small: original-calc flex row (overridden under html.icon-size-small). */
+    width: var(--box-icon-w, var(--box-icon-size, 64px));
+    height: var(--box-icon-h, var(--box-icon-size, 64px));
+    object-fit: contain;
+    object-position: top center;
+    display: block;
+    margin: 0;
+    flex-shrink: 0;
+    /* Smaller radii at small --box-icon-size so corners don’t soften the whole bitmap */
+    border-radius: min(6px, calc(var(--box-icon-size, 64px) * 0.12));
+    cursor: pointer;
+    box-sizing: border-box;
+    /* Nearest-neighbor: do not use -webkit-optimize-contrast after pixelated — it wins in WebKit and blurs. Order: legacy → crisp-edges → pixelated (standard). */
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+.trainer-pok:hover {
+    outline: 2px solid #1abc9c;
+    outline-offset: -2px;
+}
+.trainer-pok.right-side.opponent-marked {
+    background: rgba(231, 76, 60, 0.5);
+    outline: 2px solid #c0392b;
+    outline-offset: -2px;
+}
+
+.trainer-pok.trainer-gap-slot {
+    width: var(--box-icon-w, var(--box-icon-size, 64px));
+    height: var(--box-icon-h, var(--box-icon-size, 64px));
+    pointer-events: none;
+    opacity: 0;
+}
+
+.forme-row.forme-empty {
+    min-height: 1em;
+}
+.forme-row.forme-empty label,
+.forme-row.forme-empty .forme {
+    visibility: hidden;
+}
+
+.gender-row.gender-empty {
+    min-height: 1em;
+}
+.gender-row.gender-empty label,
+.gender-row.gender-empty .gender {
+    visibility: hidden;
+}
+
+.wrapper {
+    position: relative;
+    padding: 0 1em;
+    max-width: 1285px;
+    margin: 0 auto;
+}
+.app-header-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.65em;
+    row-gap: 0.45em;
+    padding-top: 0.55em;
+    padding-bottom: 0.35em;
+}
+.app-menu-dropdown {
+    position: relative;
+    z-index: 200;
+    flex-shrink: 0;
+}
+.app-header-tabs {
+    margin-left: auto;
+    margin-right: 0;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+.app-header-tab {
+    min-width: 7.5em;
+    /* Use base `.btn` negative margins to visually connect. */
+    margin-right: 0;
+}
+.app-header-tabs .app-header-tab {
+    border-radius: 0;
+}
+.app-header-tabs a.app-header-tab {
+    line-height: normal;
+    text-decoration: none;
+}
+.app-header-tabs a.app-header-tab:hover,
+.app-header-tabs a.app-header-tab:focus {
+    color: var(--text, #555555);
+    text-decoration: none;
+}
+.app-header-tabs .app-header-tab:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.app-header-tabs .app-header-tab:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+.app-header-tabs .app-header-tab.app-header-tab-active,
+.app-header-tabs .app-header-tab.app-header-tab-active:hover,
+.app-header-tabs .app-header-tab.app-header-tab-active:focus {
+    background: var(--button-selected, #f5f5f5);
+    border-color: var(--fieldset-color, #222222);
+    color: var(--text, #111111);
+    font-weight: bold;
+    z-index: 2;
+}
+.app-dex-subpage {
+    display: none;
+    width: 100%;
+    margin-top: 0.5em;
+}
+.app-dex-iframe {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    height: calc(100vh - var(--app-header-bar-height, 80px));
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    outline: 0;
+}
+body.dex-mode .wrapper > :not(.app-header-bar):not(.app-dex-subpage) {
+    display: none !important;
+}
+body.dex-mode .app-dex-subpage {
+    display: block;
+    margin-top: 0;
+}
+
+/* In Dex mode, let the iframe span full page width */
+body.dex-mode .wrapper {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+body.dex-mode .app-header-bar {
+    /* Same horizontal box as .wrapper on the calculator page (centered 1285px + 1em side padding) */
+    max-width: 1285px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+    transform: translateX(-8px);
+}
+.app-menu-cog {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid #222222;
+    border-radius: 8px;
+    background-color: #F1F4F9;
+    color: inherit;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.app-menu-cog:hover {
+    filter: brightness(1.06);
+}
+.app-menu-cog[aria-expanded="true"] {
+    box-shadow: inset 0 0 0 2px #2563eb;
+}
+.app-menu-panel {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 4px);
+    min-width: 280px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+    background-color: #1a1a1a;
+    color: #f3f4f6;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+.app-menu-panel[hidden] {
+    display: none !important;
+}
+.app-menu-item {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 14px;
+    border: none;
+    background: transparent;
+    font: inherit;
+    font-size: 0.95em;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+}
+.app-menu-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.app-menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    margin: 0;
+    font: inherit;
+    font-size: 0.95em;
+    font-weight: normal;
+    color: inherit;
+    text-align: left;
+}
+.app-menu-row + .app-menu-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.app-menu-row--theme {
+    flex-wrap: wrap;
+}
+.app-menu-row-label {
+    flex: 0 0 auto;
+    line-height: 1.25;
+}
+.app-menu-mega-availability-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.app-menu-row--sub {
+    padding-left: 18px;
+    border-left: 3px solid rgba(255, 255, 255, 0.14);
+    margin-left: 4px;
+}
+.app-menu-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.95em;
+    font-weight: normal;
+    color: inherit;
+    text-align: left;
+}
+.app-menu-toggle-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.app-menu-toggle-label {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.25;
+}
+.app-menu-toggle {
+    position: relative;
+    flex-shrink: 0;
+    width: 36px;
+    height: 20px;
+}
+.app-menu-toggle-input {
+    position: absolute;
+    opacity: 0;
+    width: 36px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+.app-menu-toggle-input:focus {
+    outline: none;
+}
+.app-menu-toggle-input:focus-visible + .app-menu-toggle-track {
+    box-shadow: 0 0 0 2px #2563eb;
+}
+.app-menu-toggle-track {
+    display: block;
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: #c4c4ce;
+    transition: background 0.2s ease;
+    position: relative;
+    pointer-events: none;
+}
+.app-menu-toggle-track::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    top: 3px;
+    left: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+.app-menu-toggle-input:checked + .app-menu-toggle-track {
+    background: #2563eb;
+}
+.app-menu-toggle-input:checked + .app-menu-toggle-track::after {
+    transform: translateX(16px);
+}
+.app-top-offset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 4px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.credits {
+    clear: both;
+    padding: 20px;
+    max-width: 1285px;
+    margin: 0px auto;
+}
+body.dex-mode .credits {
+    display: none;
+}
+.theme-picker {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 0;
+}
+.app-menu-theme-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.theme-picker-label {
+    font-weight: bold;
+    margin-right: 4px;
+}
+.credits .theme-option {
+    font-size: inherit;
+    padding: 4px 10px;
+    cursor: pointer;
+    border: 1px solid #222222;
+    border-radius: 6px;
+    background: #e9e9e9;
+    color: #555555;
+}
+.credits .theme-option:hover {
+    background: #dddddd;
+}
+.credits .theme-option[aria-pressed="true"] {
+    font-weight: bold;
+    background: #d0d0d0;
+    box-shadow: inset 0 0 0 1px #222222;
+}
+.app-menu-panel .theme-option {
+    font-size: inherit;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Slight top bias so label sits a bit lower in the pill */
+    padding: 4px 8px 1px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: #f3f4f6;
+}
+.app-menu-panel .theme-option:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+.app-menu-panel .theme-option[aria-pressed="true"] {
+    font-weight: bold;
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #fff;
+    box-shadow: none;
+}
+
+/* Light theme: white menu + white pill fills; pressed state keeps white text on blue */
+html[data-theme="light"] .app-menu-panel {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+html[data-theme="light"] .app-menu-row + .app-menu-row {
+    border-top-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .app-menu-row-label {
+    color: #1a1a1a;
+}
+html[data-theme="light"] .app-menu-mega-availability-section {
+    border-top-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .app-menu-row--sub {
+    border-left-color: rgba(0, 0, 0, 0.12);
+}
+html[data-theme="light"] .app-menu-toggle-row {
+    color: #1a1a1a;
+}
+html[data-theme="light"] .app-menu-toggle-row:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+html[data-theme="light"] .app-menu-panel .theme-option {
+    color: #1e293b;
+    border-color: #e2e8f0;
+    background: #ffffff;
+}
+html[data-theme="light"] .app-menu-panel .theme-option:hover {
+    background: #f1f5f9;
+}
+html[data-theme="light"] .app-menu-panel .theme-option[aria-pressed="true"] {
+    color: #ffffff;
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.battle-notes-box[hidden] {
+    display: none !important;
+}
+/* Match Battle Notes + Import/Export field chrome (subtle border, full width of 27.5em box) */
+.battle-notes-box .battle-notes-textarea,
+.import-export-box .import-name-text,
+.import-export-box .import-team-text {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font: inherit;
+    color: inherit;
+    border: 1px solid #222222;
+    border-radius: 6px;
+    padding: 8px;
+    resize: vertical;
+    text-align: left;
+}
+.battle-notes-box .battle-notes-textarea {
+    margin: 0.35em auto 0;
+    min-height: 120px;
+}
+.import-export-box .import-name-text {
+    margin-top: 0.35em;
+}
+.import-export-box .import-team-text {
+    margin-top: 4px;
+    min-height: 10em;
+}
+.import-export-box #import.bs-btn {
+    margin-top: 6px;
+    border: 1px solid #222222;
+    border-radius: 6px;
+    background-color: #e9e9e9;
+    color: #555555;
+}
+.import-export-box #import.bs-btn:hover,
+.import-export-box #import.bs-btn:focus {
+    background-color: #dddddd;
+    border-color: #222222;
+}
+div.wrapper .app-top-offset > span {
+    padding-right: 5px;
+}
+fieldset {
+    float: left;
+    background-color: #F1F4F9;
+    border: 1px solid #222222;
+    border-radius: 0;
+}
+legend {
+    font-weight: bold;
+    text-align: center;
+}
+input, textarea, select {
+    border: 1px solid #222222;
+    border-radius: 6px;
+}
+th, td {
+    padding: 0;
+}
+th {
+    font-size: 0.8em;
+}
+.title-text {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 0;
+    line-height: 1.2;
+    /* Let header tabs stay pinned to the far right. */
+    flex: 44 1 auto;
+    min-width: 0;
+}
+body.dex-mode .title-text {
+    transform: translateX(0.4px);
+}
+.big-text {
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin: 0.5em 0;
+    line-height: 1.35;
+    /* Slight reserve (~2 lines) + cap so long lines scroll instead of pushing panels down */
+    min-height: 3em;
+    max-height: 10em;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.big-text #mainResult:hover {  /* indicates the presence of click-to-copy function */
+    cursor: pointer;
+    opacity: 0.7;
+}
+#tooltipText {
+    font-size: 0.8em;
+    visibility: hidden;
+    border-radius: 0;
+    width: 120px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    margin-left: 10px;
+}
+.small-text {
+    font-size: 0.8em;
+}
+.main-result-group > .small-text {
+    line-height: 1.35;
+    min-height: 2em;
+    max-height: 6em;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.panel {
+    float: left;
+    display: inline-block; /* required for honkaculate to work */
+}
+.poke-info {
+    box-sizing: content-box;
+    width: 30em;
+    max-width: 30em;
+    min-width: 0;
+    overflow-x: clip;
+    border: 1px solid #000 !important;
+}
+.field-info {
+    border: 1px solid #000 !important;
+}
+fieldset.import-export-box,
+fieldset.battle-notes-box {
+    border: 1px solid #000 !important;
+    margin-top: 0.35em;
+    box-sizing: content-box;
+    clear: left;
+    position: relative;
+    overflow: visible;
+}
+.field-info, .poke-import, .import-export-box, .battle-notes-box {
+    text-align: center;
+    width: 27.5em;
+}
+.holder-0 {
+    position: absolute;
+    top: 151px;
+}
+#holder-2 tr {
+    white-space: nowrap;
+}
+.field-info #exportAll {
+    margin-left: 0;
+}
+
+/* general button styling */
+.btn {
+    text-align: center;
+    border: solid 1px #222222;
+    padding: 4px 4px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #555555;
+    background: #e9e9e9;
+    margin: -1px -3px 0;
+    display: inline-block;
+    width: 5em;
+}
+.btn-wide {
+    width: 7em;
+}
+.btn-xwide {
+    width: 8em;
+}
+.btn-xxwide {
+    width: 9em;
+}
+.btn-xxxwide {
+    width: 10em;
+}
+.btn-small {
+    width: 4em;
+}
+.btn-xsmall {
+    width: 1em;
+}
+.btn-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.btn-right {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.btn-top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.btn-bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.btn-mid {
+    border-radius: 0;
+}
+
+/* Terrain/field/inverse group: round only the outer perimeter (one big graphic) */
+div[aria-labelledby="selectTerrainInstruction"] label.btn {
+    border-radius: 0;
+}
+/* Outer edge: match ruin row (btn-left / btn-right = full 6px on that side, not only top). */
+div[aria-labelledby="selectTerrainInstruction"] label[for="electric"] {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+div[aria-labelledby="selectTerrainInstruction"] label[for="misty"] {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+div[aria-labelledby="selectTerrainInstruction"] label[for="inverse"] {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+/* Terrain / Ruin: 3-column grid so row-2 (Psychic / Vessel) matches middle column width (Grassy / Tablets) */
+.terrain-button-grid,
+.ruin-button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    max-width: 30em;
+    margin: 0 auto;
+}
+.terrain-cell,
+.ruin-cell {
+    min-width: 0;
+}
+.terrain-cell-span-mid,
+.ruin-cell-span-mid {
+    grid-column: 2;
+}
+.terrain-button-grid .terrain-cell label.btn,
+.ruin-button-grid .ruin-cell label.btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+/* Outer columns: slight shift toward center (shared-border alignment) */
+.terrain-button-grid label[for="electric"],
+.ruin-button-grid label[for="beads"] {
+    position: relative;
+    left: 1px;
+}
+.terrain-button-grid label[for="misty"],
+.ruin-button-grid label[for="sword"] {
+    position: relative;
+    left: -1px;
+}
+div[aria-labelledby="selectTerrainInstruction"] label[for="psychic"] {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+div[aria-labelledby="selectRuinInstruction selectFieldAuraInstruction"] label[for="vessel"] {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+/* Same vertical gap as terrain → ruin (parent uses margin-top: 5px); replaces a loose <br> */
+.field-aura-row {
+    margin-top: 5px;
+}
+
+.visually-hidden:focus-visible + .btn, /* Keyboard focus only; avoids persistent hover look after click */
+.btn:hover {
+    z-index: 10;
+    background: #e3e3e3;
+    outline: none;
+}
+.visually-hidden:checked + .btn {
+    font-weight: bold;
+    color: #111111;
+    background: #f5f5f5;
+}
+.visually-hidden[type="radio"]:checked + .btn {
+    cursor: default;
+}
+
+/* Hide element visually, but not from screen readers. See http://adrianroselli.com/2017/05/under-engineered-custom-radio-buttons-and-checkboxen.html */
+.visually-hidden {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    top: auto;
+    white-space: nowrap; /* https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe */
+}
+
+.visually-hidden:disabled + .btn {
+    color: #999999;
+}
+.btn-group {
+    display: inline-block;
+    width: 100%;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.locked-move:checked + .btn {
+    background: #ffff99;
+}
+
+.genSelection, .notationSelection {
+    display: inline-block;
+    position: relative;
+    top: 0;
+}
+
+/* header */
+.move-result-group {
+    min-width: 50em;
+    margin: 0.75em 0 11.5em;
+    padding-left: 0.3em;
+    clear: both;
+}
+.move-result-subgroup {
+    float: left;
+    width: 50%;
+}
+.move-result-group .btn {
+    margin-right: 1em;
+}
+.main-result-group {
+    margin: 2em 0 1em;
+}
+.result-move-header {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 0 0 5px;
+}
+
+/* pokemon info */
+.poke-info label {
+    display: inline-block;
+    width: 6em;
+}
+.top label, .info-selectors label {
+    display: inline-block;
+    width: 5em;
+}
+.poke-info input:not([type]), .poke-info input[type="text"], .poke-info span {
+    display: inline-block;
+    width: 2.5em;
+}
+.poke-info input[type="number"] {
+    display: inline-block;
+    width: 3em;
+}
+.info-group {
+    margin: 1em 0;
+}
+.stat-changer {
+    width: 22px;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: inherit;
+    line-height: 1;
+    white-space: nowrap;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 -1px 2px rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: solid 1px #6b6b6b;
+    background: #8a8a8a;
+    background: linear-gradient(to bottom, #9a9a9a, #7a7a7a);
+}
+.stat-changer + .stat-changer {
+    margin-left: -1px;
+}
+#p1 .stat-changer + .stat-changer {
+    margin-left: -3px;
+}
+.stat-changer:hover {
+    background: #7a7a7a;
+    background: linear-gradient(to bottom, #8a8a8a, #6a6a6a);
+    border-color: #5a5a5a;
+}
+.stat-changer:active {
+    background: linear-gradient(to bottom, #6a6a6a, #8a8a8a);
+}
+
+.set-selector {
+    width: 100%;
+}
+.imported-sets-row {
+    min-height: 1.5em;
+    margin-left: -0.4em;
+}
+/* Level + Set Level: same row height as #levelL1 (override .btn padding/margins) */
+.level-row-with-set-btn {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+.level-row-with-set-btn > label {
+    display: inline-flex;
+    align-items: center;
+}
+.level-row-with-set-btn input.level {
+    align-self: center;
+    /* Restore gap after label (lost when row became flex; matches inline-block flow) */
+    margin-left: 0.35em;
+}
+.level-row-with-set-btn .set-level-from-box-btn {
+    width: auto;
+    min-width: 5em;
+    margin: 0 0 0 6px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    /* Match #levelL1 text (not .btn gray / smaller font) */
+    font: inherit;
+    color: inherit;
+    /* Match input, textarea, select (same as #levelL1) */
+    border: 1px solid #222222;
+    border-radius: 6px;
+}
+.info-selectors select {
+    width: 12em;
+}
+/* Nature / Ability / Item / Status: 2px vertical gap between each row */
+div.info-group.info-selectors.i-f-stats > .info-selector-row,
+div.info-group.info-selectors.i-f-o-stats > .info-selector-row {
+    box-sizing: border-box;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0;
+    line-height: normal;
+}
+div.info-group.info-selectors.i-f-stats > .info-selector-row + .info-selector-row,
+div.info-group.info-selectors.i-f-o-stats > .info-selector-row + .info-selector-row {
+    margin-top: 2px !important;
+}
+/* Allies fainted (legacy placement): small inline control in old ability strip */
+.poke-info .ability-toggle-strip select.alliesFainted {
+    width: 3em;
+    min-width: 2.5em;
+    max-width: 4em;
+}
+select.toxic-counter {
+    width: 5.5em;
+}
+.move-selector, .move-bp, .move-type, .move-cat, .move-hits, .stat-drops, .metronome {
+    font-size: 0.9em;
+}
+/* Move row: Crit / Z / multihit / stat-drops / Metronome stack inline (calc-master style) */
+.poke-info .move1,
+.poke-info .move2,
+.poke-info .move3,
+.poke-info .move4 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+}
+.poke-info .move2,
+.poke-info .move3,
+.poke-info .move4 {
+    margin-top: 2px;
+}
+.move-selector {
+    width: 11.5em;
+}
+.poke-info input.move-bp {
+    width: 2em;
+    border: 1px solid #222222;
+    border-radius: 6px;
+}
+.move-type {
+    width: 5.5em;
+}
+/* Move row: type + category native selects share one height (matches .small-select move dropdown at 18px). */
+.poke-info select.move-type,
+.poke-info select.move-cat {
+    height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    box-sizing: border-box;
+    line-height: normal;
+    padding: 0 2px;
+    vertical-align: middle;
+}
+.move-cat {
+    width: 5em;
+}
+.move-hits {
+    width: 2.5em;
+}
+.stat-drops {
+    width: auto;
+    min-width: 2.5em;
+    max-width: 5em;
+}
+.metronome {
+    width: 2.5em;
+}
+/* Crit / Z / Commander: same font; height matches move-type / move-cat (18px). */
+.poke-info .crit-btn,
+.poke-info .z-btn,
+.poke-info .commander-dondozo-btn {
+    font-family: Verdana, sans-serif;
+    font-size: 9pt;
+    line-height: 1;
+    font-weight: normal;
+    box-sizing: border-box;
+    width: auto;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    margin: 0;
+    position: static;
+    height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    border: 1px solid #222222;
+    border-radius: 6px;
+}
+.poke-info .crit-btn {
+    min-width: 2.5em;
+}
+.poke-info .z-btn {
+    min-width: 1.5em;
+}
+.poke-info .commander-dondozo-btn {
+    min-width: 7.5em;
+}
+.poke-info .max-btn {
+	font-size: 0.8em;
+	width: 2.5em;
+	height: 1em;
+	padding: 3px 3px;
+}
+
+/* field info */
+.field-info .btn {
+    font-size: 0.8em;
+}
+table.field {
+    width: 100%;
+}
+
+[hidden], .hide {
+    display: none;
+}
+
+/* select2 overrides */
+.select2-container .select2-choice > .select2-chosen {
+    width: 100%;
+}
+/* Set list: fixed width like a native select; Select2 may set inline px width — override */
+.poke-info .set-selector-select2.select2-container {
+    display: block;
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.poke-info .set-selector-select2.select2-container .select2-choice {
+    overflow: hidden;
+}
+.poke-info .set-selector-select2.select2-container .select2-choice > .select2-chosen {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.small-select.select2-container .select2-choice {
+    font-size: 0.9em;
+    height: 18px;
+    line-height: 18px;
+}
+.small-select.select2-container .select2-choice .select2-arrow b {
+    background-position: 0 -4px;
+}
+.small-select.select2-dropdown-open .select2-choice .select2-arrow b {
+    background-position: -18px -4px;
+}
+
+/* Bootstrap */
+.panel-group > .panel {
+    clear: left;
+}
+
+/* ColVis */
+.clear {
+  clear: right;
+}
+
+.hpbar {
+    height: 4px;
+    border-style: solid;
+    border-top-width: 2px;
+    border-right-width: 1px;
+    border-bottom-width: 2px;
+    border-left-width: 0.5px;
+    border-radius: 0;
+}
+
+.hpbar.hp-green {
+    border-top-color: #00dd60;
+    background-color: green;
+    border-bottom-color: #007734;
+    border-right-color: #007734;
+}
+
+.hpbar.hp-yellow {
+    border-top-color: #f8e379;
+    background-color: #f5d538;
+    border-bottom-color: #be9f0a;
+    border-right-color:#be9f0a;
+}
+
+.hpbar.hp-red {
+    border-top-color: #f37f67;
+    background-color: #ee4928;
+    border-bottom-color: #a3260d;
+    border-right-color: #a3260d;
+}
+
+.pool {
+    padding: 15px 0;
+}
+.ability-pool, .move-pool  {
+    padding-bottom: 5px;
+}
+/* Random Battles: ability active toggle lives under "Ability Pool" (not on Item row). */
+.ability-pool-header {
+    display: block;
+}
+.ability-toggle-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.35rem;
+    min-height: 1.1em;
+}
+.poke-info .ability-pool .ability-toggle-row input[type="checkbox"] {
+    width: auto;
+    display: inline-block;
+}
+.extraSetAbilities,
+.extraSetItems,
+.extraSetMoves {
+    width: 100%;
+}
+
+/*
+
+    F = Faster 
+    T = Speed tie
+    S = slower
+*/
+.mon-speed-F{
+    outline: 2px solid #7ee1ff;
+    outline-offset: -2px;
+    border-radius: 6px;
+}
+.mon-speed-T{
+    outline: 2px solid #894197;
+    outline-offset: -2px;
+    border-radius: 6px;
+}
+.mon-speed-S{
+    outline: 2px solid #1c1414;
+    outline-offset: -2px;
+    border-radius: 6px;
+}
+.mon-speed-none{
+    outline: none !important;
+}
+/* Speed: same Total column width as other stats — do not pad td (padding widens the column for every row). */
+.sp-total-with-speed-cell {
+    overflow: visible;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.sp-total-and-speed {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    vertical-align: baseline;
+}
+.sp-total-and-speed .total {
+    font-variant-numeric: tabular-nums;
+}
+.sp-total-and-speed .speed-indicator {
+    position: absolute;
+    left: 100%;
+    right: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 2.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Ubuntu Mono", ui-monospace, monospace;
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+    width: max-content;
+    min-width: 0;
+}
+/* Square cell so « + rotate() shares the same optical center as "-" (faster was skewing left) */
+.sp-total-and-speed .speed-indicator > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    margin: 0;
+    box-sizing: border-box;
+    transform-origin: center center;
+}
+.sp-total-and-speed .speed-faster {
+    transform: translateX(8px) rotate(90deg);
+    color: var(--speed-faster);
+}
+.sp-total-and-speed .speed-tied {
+    transform: translateX(6px) translateY(-2px);
+    color: var(--speed-tied);
+}
+.sp-total-and-speed .speed-slower {
+    transform: translateX(2.5px) rotate(-90deg);
+    color: var(--speed-slower);
+}
+.mon-dmg-none{
+    background: var(--fieldset-color) !important;
+    border-radius: 6px;
+}
+.mon-dmg-W{
+    /* Is considerable a wall*/
+    background: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
+    border-radius: 6px;
+}
+.mon-dmg-WMO{
+    /* Is considerable a wall that may OHKO*/
+    background: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
+    border-radius: 6px;
+}
+.mon-dmg-4{
+    /*Gets OHKO*/
+    background: linear-gradient(to right, var(--fieldset-color) 50%, #dd0b0b 0%);
+    border-radius: 6px;
+}
+.mon-dmg-3{
+    /*maybe gets OHKO*/
+    background: linear-gradient(to right, var(--fieldset-color) 50%, #ff7f16 0%);
+    border-radius: 6px;
+}
+.mon-dmg-1{
+    /*inflicts OHKO*/
+    background: linear-gradient(to right, #20d408 50%, var(--fieldset-color) 0%);
+    border-radius: 6px;
+}
+.mon-dmg-2{
+    /*may inflicts OHKO*/
+    background: linear-gradient(to right, #daff08 50%, var(--fieldset-color) 0%);
+    border-radius: 6px;
+}
+
+.mon-dmg-14{
+    /*both sides Gets OHKO*/
+    background: linear-gradient(to right, #20d408 50%, #dd0b0b 0%);
+    border-radius: 6px;
+}
+.mon-dmg-23{
+    /*both sides might inflict OHKO*/
+    background: linear-gradient(to right, #daff08 50%, #ff7f16 0%);
+    border-radius: 6px;
+}
+.mon-dmg-13{
+    /*inflict OHKO but may Gets OHKO*/
+    background: linear-gradient(to right, #20d408 50%, #ff7f16 0%);
+    border-radius: 6px;
+}
+.mon-dmg-24{
+    /*may inflict OHKO but Gets OHKO*/
+    background: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
+    border-radius: 6px;
+}
+
+.box-poke,
+.box-poke.dropzone {
+    min-height: var(--box-icon-row, var(--box-icon-size, 64px));
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--box-icon-size, 64px));
+    gap: 3px;
+    justify-content: start;
+    align-content: start;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+/* Small icons: original calc — flex-wrap lists, 30px-tall sprites, natural width, 10px spacing (see calc-original main.css .trainer-pok / .box-poke) */
+html.icon-size-small .trainer-pok-list,
+html.icon-size-small .trainer-pok-list-opposing {
+    display: flex;
+    flex-wrap: wrap;
+    /* Match Big grid vertical gap (3px) between wrapped rows; horizontal stays margin-right on icons */
+    row-gap: 3px;
+    column-gap: 0;
+    grid-template-columns: none;
+}
+html.icon-size-small .box-poke,
+html.icon-size-small .box-poke.dropzone {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 3px;
+    column-gap: 0;
+    grid-template-columns: none;
+    min-height: 30px;
+}
+html.icon-size-small #trainer-poks-first,
+html.icon-size-small #trainer-poks-remaining {
+    gap: 0.35em;
+}
+html.icon-size-small .trainer-pok {
+    width: auto;
+    height: 30px;
+    max-width: none;
+    object-fit: contain;
+    object-position: center center;
+    margin: 0 10px 0 0;
+}
+html.icon-size-small .trainer-pok.trainer-gap-slot {
+    width: 10px;
+    height: 30px;
+    margin-right: 10px;
+}
+html.icon-size-small .tag-partner-poke-list {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 3px;
+    column-gap: 0;
+}
+html.icon-size-small .tag-partner-poke-list .tag-partner-pok {
+    width: auto;
+    height: 30px;
+    margin: 0 10px 0 0;
+    object-fit: contain;
+    border-radius: min(6px, calc(var(--box-icon-size, 64px) * 0.12));
+}
+/* Small icons only: nudge Team / Box / opposing trainer rows slightly right */
+html.icon-size-small #team-poke-list,
+html.icon-size-small #box-poke-list,
+html.icon-size-small #box-poke-list2,
+html.icon-size-small .opposing-team-box .trainer-pok-list-opposing {
+    margin-left: 4px;
+    box-sizing: border-box;
+}
+/* Big icons only: nudge Team / Box rows slightly right */
+html:not(.icon-size-small) #team-poke-list,
+html:not(.icon-size-small) #box-poke-list,
+html:not(.icon-size-small) #box-poke-list2 {
+    margin-left: 2px;
+    box-sizing: border-box;
+}
+.deadzone:hover{
+    background: #722323;
+}
+.over{
+    background: #373232;
+    border-radius: 8px;
+}
+
+.s-arrow{
+    border: solid rgb(175, 155, 155);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+.arrowdown {
+    transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.arrowright {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+.arrowtop {
+    transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+.arrowleft{
+    transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+.l-side-button, .r-side-button{
+    position: absolute;
+}
+.side-pannel{
+    display: grid;
+    position: relative;
+}
+.left-side-pannel{
+    float: left;
+    margin-top: 0.65em;
+}
+.right-side-pannel{
+    float: none;
+    margin-top: 0.65em;
+}
+
+.poke-top-row {
+    width: 100%;
+}
+/* Level row keeps natural height; sprite is absolutely positioned and vertically centered on it
+   (flex + tall sprite was inflating row height and adding gaps between Tera/Level/Gender). */
+.poke-top-level-sprite-row {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    /* Space for sprite + gap to level row (tuned so icon can sit left via .poke-panel-sprite-slot right) */
+    padding-right: calc(var(--big-icon-size, 64px) + 1em + 0.65em);
+}
+.poke-top-level-sprite-row .poke-panel-sprite-slot {
+    position: absolute;
+    right: 6em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--big-icon-size, 64px);
+    height: var(--big-icon-size, 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.poke-top-row .info-group {
+    margin-top: 0;
+}
+/* Sprite row uses only the narrow column (type/tera/level/gender); forme/weight sit below */
+.poke-top-primary.info-group {
+    margin-bottom: 0;
+}
+.poke-top-forme-wrap.info-group {
+    margin-top: 2px;
+    margin-bottom: 1em;
+}
+/* 2px spacing between Tera Type / Level row / Gender */
+.poke-top-row .info-group div.gen-specific.g9 + .poke-top-level-sprite-row {
+    margin-top: 2px;
+}
+.poke-top-row .info-group .gender-row {
+    margin-top: 2px;
+}
+/* Top-of-panel preview: same pixel size as big icons; always full-size sprite (getSrcImgPokemon(..., true)) */
+.poke-panel-sprite,
+#p1mon, #p2mon {
+    flex-shrink: 0;
+    width: var(--big-icon-size, 64px);
+    height: var(--big-icon-size, 64px);
+    min-height: var(--big-icon-size, 64px);
+    object-fit: contain;
+    margin-left: 0;
+    margin-top: 0;
+    cursor: pointer;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+.info-paragraph > b{
+    color: rgb(15, 14, 14);
+}
+.info-paragraph > b:hover{
+    background: var(--fieldset-color);
+    color: unset;
+}
+
+/* Item selection box styles */
+#item-box-frame {
+    z-index: 3;
+    width: 650px;
+    height: 400px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    background: var(--background);
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.box-frame-header {
+    position: relative;
+    min-height: 30px;
+    padding: 5px;
+    background: var(--fieldset-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.box-frame-header > legend {
+    font-size: larger;
+    text-align: unset;
+    padding: 0 10px;
+}
+
+.close-frame {
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border: 1px solid black;
+    margin-left: auto;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#close-item-box:hover {
+    background-color: #ff6666;
+}
+
+.mdiv {
+    height: 25px;
+    width: 2px;
+    margin-left: 12px;
+    background-color: black;
+    transform: rotate(45deg);
+    z-index: 4;
+}
+
+.md {
+    height: 25px;
+    width: 2px;
+    background-color: black;
+    transform: rotate(90deg);
+}
+
+.item-box-body {
+    padding: 10px;
+}
+
+.item-box-body legend {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.item-box-body hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid var(--border-color);
+}
+
+.ic {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ic-none {
+    background: #8B4513;
+    border: 2px solid #8B4513 !important;
+    position: relative;
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    -webkit-clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.ic-none::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 60%;
+    height: 3px;
+    background: #8B4513;
+    box-shadow: 0 0 0 1px #8B4513;
+}
+
+.ic-none::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 60%;
+    height: 3px;
+    background: #8B4513;
+    box-shadow: 0 0 0 1px #8B4513;
+}
+
+.ic:hover {
+    background: var(--button-hover);
+    border-color: var(--border-color);
+}
+
+/* Ability/Item rows: keep icons out of flow so they don't affect row height */
+.ability-row, .item-row {
+    position: relative;
+}
+.ability-row {
+    padding-right: 8em;
+}
+/* Protosynthesis / Quark Drive: boosted stat dropdown sits to the right of the ability */
+.ability-line {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    column-gap: 0.35em;
+    row-gap: 2px;
+}
+.ability-line > label {
+    flex: 0 0 auto;
+}
+/* Trace: optional checkbox to mirror opponent's ability */
+.trace-copy-label {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-top: 1px;
+    cursor: pointer;
+    user-select: none;
+}
+.trace-copy-label[hidden] {
+    display: none !important;
+}
+.ability-row .trace-copy-label input.traceCopyOpponent {
+    width: 1.05em;
+    height: 1.05em;
+    margin: 0;
+    vertical-align: middle;
+}
+.ability-and-boost-wrap {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+/* Same width as Nature / other .info-selectors selects (12em) — do not flex-grow */
+.ability-row .ability-and-boost-wrap select.ability {
+    width: 12em;
+    min-width: 12em;
+    max-width: 12em;
+    flex: 0 0 12em;
+    box-sizing: border-box;
+}
+.ability-row .ability-and-boost-wrap > .select2-container {
+    width: 12em !important;
+    min-width: 12em;
+    max-width: 12em;
+    flex: 0 0 12em;
+    box-sizing: border-box;
+}
+.ability-row .ability-and-boost-wrap select.boostedStat {
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 7.5em;
+    max-width: 12em;
+    margin-top: 1px;
+}
+.ability-row select.ability {
+    margin-top: 1px;
+}
+/* Dondozo Commander: injected only for Dondozo (see .commander-dondozo-mount in JS). */
+.ability-row .commander-dondozo-wrap {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-top: 1px;
+}
+.item-row select.item {
+    margin-top: 2px;
+}
+select.status {
+    margin-top: 2px;
+}
+/* Allies fainted (Supreme Overlord): inline in the same row as boostedStat (Protosynthesis/QD layout) */
+.ability-row .ability-and-boost-wrap select.alliesFainted {
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 7.5em;
+    max-width: 12em;
+    margin-top: 1px;
+}
+.ability-row .abilityToggle {
+    position: absolute;
+    top: auto;
+    bottom: 3px;
+    right: 11.3em;
+    margin: 0;
+}

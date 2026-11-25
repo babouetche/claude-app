@@ -1,0 +1,17 @@
+{
+  "move-changes-current.csv": {
+    "url": "https://docs.google.com/spreadsheets/d/17Vyr-bXeu9MGMZt_7dttb1OF8cuIcc5LihYmL0DEUu8/export?format=csv",
+    "sha256": "ccd4f7a51cfda3db87569ae50f5392de59c59db8bcecf99838db6fa0c82eb5a3",
+    "bytes": 6988
+  },
+  "pokemon-null-ai-current.txt": {
+    "url": "https://docs.google.com/document/d/1KwkghD6eOZ026HR81C7yToDD_7fPwL2Iccc_XNL-G48/export?format=txt",
+    "sha256": "11200b5e4e0314c6b95ce5d7e88467366463fe598a43c6922aa38ff26e5e009a",
+    "bytes": 39758
+  },
+  "mechanic-changes-current.txt": {
+    "url": "https://drive.google.com/uc?export=download&id=1eT_iu57FVhxJHkjPC0zy5qAkmVxdmD85",
+    "sha256": "149300c5dae16037646e964e3dc64b05ff566b999b3ed32cb60f2e768e7a52a2",
+    "bytes": 3247
+  }
+}
