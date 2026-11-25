@@ -202,6 +202,41 @@ def main():
     assert box[0]["level"] >= 1 and box[0]["nickname"] == "Boxy"
     assert [(m["species"], m["box"]) for m in dead_list] == [("Poochyena", 12)], dead_list
 
+    # Overlay OBS : même pokemonData.txt que PokemonNullDisplay.lua (Sykless), si fourni.
+    ours = L.eval("NULL_CALC_SYNC_TEST.displayText()")
+    assert ours.startswith("PARTY|255¤14¤"), ours
+    assert "\nBOX|" in ours and "\nDEAD" in ours
+    display_lua = os.environ.get("PNDISPLAY_LUA")
+    if display_lua and os.path.isfile(display_lua):
+        ref_file = work / "pokemonData.txt"
+        os.environ["POKEMONNULLREADER_CONFFILE"] = str(ref_file)
+        R = lua54.LuaRuntime()
+        R.globals().mem = mem
+        R.execute("""
+            emu = {}
+            function emu:read8(a) return mem.read8(a) end
+            function emu:read16(a) return mem.read16(a) end
+            function emu:read32(a) return mem.read32(a) end
+            function emu:readRange(a, n) local t = {} for i = 0, n - 1 do t[#t + 1] = string.char(mem.read8(a + i)) end return table.concat(t) end
+            local buf = {print=function() end, clear=function() end, setSize=function() end}
+            console = {log=function() end, createBuffer=function() return buf end}
+            callbacks = {add=function() end}
+        """)
+        R.execute(open(display_lua, encoding="utf8").read())
+        R.execute("local t = os.clock() while os.clock() - t < 1.05 do end updateBuffer()")
+        reference = ref_file.read_text(encoding="utf8")
+        # Seule différence attendue : le niveau des Pokémon en boîte. PokemonNullDisplay lit le drapeau
+        # « œuf » à l'octet 19 (ancien format, 80 octets) : en 1.2.6 c'est la fin du surnom, souvent 0xFF,
+        # donc il affiche niveau 1. Nous lisons l'octet 0x15 comme le Lua officiel : niveau 12 (2000 exp).
+        import re
+        def without_box_levels(text):
+            lines = text.split("\n")
+            lines[1] = re.sub(r"¤\d+¤", "¤?¤", lines[1])
+            return "\n".join(lines)
+        assert without_box_levels(ours) == without_box_levels(reference), "pokemonData.txt différent :\nnous : " + repr(ours) + "\neux  : " + repr(reference)
+        assert "|278¤12¤0|" in ours and "|278¤1¤0|" in reference
+        print("OK: pokemonData.txt identique à PokemonNullDisplay.lua (niveaux en boîte corrigés)")
+
     # Un Pokémon dont le checksum est faux (écriture en cours) bloque la mise à jour.
     corrupt = bytearray(boxed)
     corrupt[0x1E] ^= 0xFF

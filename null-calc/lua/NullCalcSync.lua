@@ -284,6 +284,68 @@ local function snapshot()
 end
 
 -- ---------------------------------------------------------------------------
+-- Overlay OBS : compatibilité avec PokemonNullDisplay (Sykless, Apache-2.0)
+-- ---------------------------------------------------------------------------
+-- Si PokemonNullDisplay.exe a été lancé une fois, il définit la variable
+-- POKEMONNULLREADER_CONFFILE. On écrit alors pokemonData.txt au même format
+-- et avec la même sélection que PokemonNullDisplay.lua :
+--   PARTY|espèce¤niveau¤objet|…   BOX|…   DEAD|…
+-- Ainsi un seul script Lua suffit ; l'exe continue de dessiner les images.
+-- Seule différence voulue : le niveau des Pokémon en boîte utilise la table
+-- gSpeciesInfo de la 1.2.6 (via le Lua officiel), là où PokemonNullDisplay
+-- lit une adresse d'une version précédente (0x83de378 au lieu de 0x83e4bf0).
+local displayPath = nil
+pcall(function() displayPath = os.getenv("POKEMONNULLREADER_CONFFILE") end)
+local lastDisplay = nil
+
+local function displayText()
+	local partyText, boxText, deadText = "PARTY", "BOX", "DEAD"
+	for _, mon in ipairs(getParty()) do
+		if mon.species ~= 0 then
+			partyText = partyText .. "|" .. mon.species .. "¤" .. mon.level .. "¤" .. mon.heldItem
+		end
+	end
+	local address, i, emptyBox, alive = STORAGE_ADDR + 4, 0, false, true
+	while i < 420 do
+		if alive then boxText = boxText .. "|"
+		elseif i >= 360 then deadText = deadText .. "|" end
+		if i % 30 == 0 then
+			if emptyBox then
+				if alive then
+					alive = false
+					boxText = string.sub(boxText, 1, #boxText - 31) -- retire les 30 cases vides de la boîte vide
+				end
+			else
+				emptyBox = true
+			end
+		end
+		if emu:read32(address) ~= 0 then
+			local mon = readBoxMon(address)
+			if mon.species ~= 0 then
+				emptyBox = false
+				if alive then
+					local level = mon.isEgg == 1 and 1 or calcLevel(mon.experience, mon.species)
+					boxText = boxText .. mon.species .. "¤" .. level .. "¤" .. mon.heldItem
+				else
+					deadText = deadText .. mon.species .. "¤0¤" .. mon.heldItem
+				end
+			end
+		end
+		address = address + BOX_MON_SIZE
+		i = i + 1
+	end
+	return partyText .. "\n" .. boxText .. "\n" .. deadText
+end
+
+local function writeDisplay()
+	if not displayPath then return end
+	local ok, text = pcall(displayText)
+	if not ok or text == lastDisplay then return end
+	local f = io.open(displayPath, "w")
+	if f then f:write(text) f:close() lastDisplay = text end
+end
+
+-- ---------------------------------------------------------------------------
 -- Écriture du fichier lu par le calculateur
 -- ---------------------------------------------------------------------------
 local lastBody, lastWrite, frameCount, warned = nil, 0, 0, false
@@ -319,6 +381,7 @@ local function tick()
 		return
 	end
 	if not data then return end
+	writeDisplay()
 	local body = toJson(data)
 	if body ~= lastBody or os.time() - lastWrite >= HEARTBEAT_SECONDS then
 		writeOutput(body)
@@ -336,10 +399,12 @@ function NullCalcSyncNow()
 	tick()
 end
 
-NULL_CALC_SYNC_TEST = { snapshot = snapshot, toJson = toJson, tick = tick, output = OUTPUT, writeOutput = writeOutput }
+NULL_CALC_SYNC_TEST = { displayText = function() return displayText() end, snapshot = snapshot, toJson = toJson, tick = tick, output = OUTPUT, writeOutput = writeOutput }
 
 if callbacks and callbacks.add then
 	callbacks:add("frame", tick)
 end
 log("Actif. Fichier synchronisé : " .. OUTPUT)
 log("Tape NullCalcSyncNow() pour forcer une mise à jour.")
+if displayPath then log("Overlay OBS (PokemonNullDisplay) : " .. displayPath)
+else log("Overlay OBS : lance PokemonNullDisplay.exe une fois puis redémarre mGBA pour l'activer (facultatif).") end

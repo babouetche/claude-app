@@ -26,6 +26,14 @@ Quand tu recommences une run, tout se remet à zéro tout seul : anciens sets re
 Si le Lua ne trouve pas son dossier, tape dans la console de mGBA :
 `NULL_CALC_LUA_DIR = [[C:\chemin\vers\null-calc\lua\]]`, puis recharge le script.
 
+## Overlay OBS (PokemonNullDisplay de Sykless)
+`NullCalcSync.lua` écrit aussi le fichier `pokemonData.txt` que lit PokemonNullDisplay. Tu n'as donc plus besoin de charger `PokemonNullDisplay.lua` dans mGBA :
+1. Lance **PokemonNullDisplay.exe** comme d'habitude : c'est lui qui dessine les images pour OBS.
+2. Dans mGBA, charge **seulement** `NullCalcSync.lua`.
+3. Le message `Overlay OBS (PokemonNullDisplay) : …` confirme que c'est actif. S'il n'apparaît pas, lance l'exe une fois puis redémarre mGBA.
+
+Le fichier est identique à celui de leur script, avec une correction : les Pokémon en boîte affichent leur vrai niveau. Leur script lit l'ancien format de données et affiche souvent niveau 1.
+
 ## Google Sheets automatique
 Ta feuille de suivi se remplit toute seule à partir de ta partie. Installation : voir [google-sheets/INSTALLATION.md](google-sheets/INSTALLATION.md).
 
