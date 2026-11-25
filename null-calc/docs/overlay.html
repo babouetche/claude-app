@@ -4,53 +4,87 @@
 <meta charset="UTF-8" />
 <title>Overlay Pokémon Null</title>
 <!--
-  Overlay OBS : Source « Navigateur » > cocher « Fichier local » > choisir ce fichier.
-  Paramètres dans l'adresse (OBS : décocher « Fichier local » et coller l'URL file:///…/overlay.html?vue=equipe) :
-    vue=equipe | boite | morts | tout      (défaut : equipe)
-    taille=1 … 4                           (défaut : 2)
-    colonnes=N                             (boîte/morts, défaut 6 par ligne)
-    lignes=N                               (boîte : 5 par défaut ; morts : 1 ; au-delà défilement)
-    defilement=S                           (secondes par page de boîte, défaut 5)
-    sens=ligne | colonne                   (équipe, défaut ligne)
-    objets=0                               (masquer les objets)
-    fond=1                                 (fond sombre au lieu de transparent)
+  Overlay OBS : Source « Navigateur », décocher « Fichier local », coller le lien copié depuis
+  le calculateur (Suivi de run > Overlay OBS). Paramètres du lien :
+    vue=equipe | boite | morts | dresseur | cap | run | tout   (défaut : equipe)
+    taille=1 … 4                       (défaut : 2, décimales acceptées)
+    colonnes=N                         (boîte/morts, défaut 6 par ligne)
+    lignes=N                           (boîte : 5 ; morts : 1 ; au-delà défilement)
+    defilement=S                       (secondes par page, défaut 5)
+    sens=colonne | ligne               (équipe, défaut colonne)
+    objets=0                           (masquer les objets)
+    depart=N                           (vue run : numéro de la run en cours au premier lancement)
+    fond=1                             (fond sombre au lieu de transparent)
 -->
 <style>
   :root { --s: 2; }
   html, body { margin: 0; background: transparent; overflow: hidden; }
-  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #fff; padding: 6px; }
+  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #fff; padding: 4px; }
   body.fond { background: rgba(18, 22, 34, .85); }
-  .section { margin-bottom: 10px; }
-  .title { font-weight: 800; font-size: calc(9px * var(--s)); letter-spacing: .5px; text-shadow: 0 2px 3px #000; margin: 0 0 4px 2px; }
-  .row { display: flex; flex-wrap: wrap; gap: calc(3px * var(--s)); }
-  .row.colonne { flex-direction: column; }
-  .grid { display: grid; gap: calc(2px * var(--s)); }
-  .mon { position: relative; width: calc(40px * var(--s)); text-align: center; }
-  .team .mon { width: calc(46px * var(--s)); background: rgba(10, 14, 26, .55); border: 1px solid rgba(255, 255, 255, .18);
-    border-radius: calc(4px * var(--s)); padding: calc(2px * var(--s)) calc(2px * var(--s)) calc(3px * var(--s)); }
-  .mon img { width: calc(32px * var(--s)); height: calc(32px * var(--s)); image-rendering: pixelated; display: block; margin: 0 auto;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .7)); }
-  .lv { position: absolute; top: 0; right: calc(1px * var(--s)); font-size: calc(6.5px * var(--s)); font-weight: 800; text-shadow: 0 0 3px #000, 0 0 3px #000; }
-  .name { font-size: calc(6px * var(--s)); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000; }
-  .item { font-size: calc(5px * var(--s)); color: #f2c14e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000; }
-  .hp { height: calc(3px * var(--s)); background: rgba(255, 255, 255, .2); border-radius: 2px; overflow: hidden; margin-top: calc(1px * var(--s)); }
-  .hp > i { display: block; height: 100%; }
-  .ok { background: #2fd15a; } .mid { background: #f2c14e; } .low { background: #ef4444; }
-  .status { position: absolute; top: 0; left: calc(1px * var(--s)); font-size: calc(5px * var(--s)); font-weight: 800; padding: 0 2px; border-radius: 2px; }
+  .section { margin-bottom: 8px; }
+  .title { font-weight: 800; font-size: calc(8px * var(--s)); letter-spacing: .5px; text-shadow: 0 2px 3px #000; margin: 0 0 3px 2px; }
+  .title.page { font-size: calc(6px * var(--s)); opacity: .85; }
+  img.sprite { image-rendering: pixelated; display: block; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .75)); }
+  img.itemicon { image-rendering: pixelated; position: absolute; width: calc(16px * var(--s)); height: calc(16px * var(--s));
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .9)); }
+  .itemtext { position: absolute; font-size: calc(4.5px * var(--s)); color: #f2c14e; font-weight: 700; text-shadow: 0 0 2px #000, 0 0 2px #000; white-space: nowrap; }
+  .lv { position: absolute; font-size: calc(6px * var(--s)); font-weight: 800; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 2px #000; }
+  .status { position: absolute; font-size: calc(5px * var(--s)); font-weight: 800; padding: 0 2px; border-radius: 2px; }
   .st-brn { background: #ef6c3a; } .st-par { background: #e6c229; color: #222; } .st-psn, .st-tox { background: #a35dd6; }
   .st-slp { background: #8b95a7; } .st-frz, .st-frb { background: #59c5e8; color: #123; } .st-ko { background: #b91c1c; }
-  .ko img { filter: grayscale(1) brightness(.6); }
-  .dead img { filter: grayscale(1) brightness(.75) drop-shadow(0 2px 2px rgba(0, 0, 0, .7)); }
-  .cross { position: absolute; bottom: 0; right: calc(2px * var(--s)); font-size: calc(9px * var(--s)); color: #ff6b6b; text-shadow: 0 0 3px #000; }
-  .empty { opacity: .25; }
+  .ok { background: #2fd15a; } .mid { background: #f2c14e; } .low { background: #ef4444; }
+
+  /* Équipe verticale : une carte par ligne (sprite à gauche, infos à droite) */
+  .team { display: flex; gap: calc(2px * var(--s)); }
+  .team.colonne { flex-direction: column; }
+  .team.ligne { flex-direction: row; flex-wrap: wrap; }
+  .tcard { position: relative; display: grid; grid-template-columns: calc(34px * var(--s)) 1fr; align-items: center; column-gap: calc(2px * var(--s));
+    width: calc(112px * var(--s)); padding: calc(1px * var(--s)) calc(3px * var(--s)); box-sizing: border-box;
+    background: rgba(10, 14, 26, .6); border: 1px solid rgba(255, 255, 255, .16); border-radius: calc(4px * var(--s)); }
+  .tcard .pic { position: relative; width: calc(34px * var(--s)); height: calc(30px * var(--s)); }
+  .tcard img.sprite { width: calc(40px * var(--s)); height: calc(40px * var(--s)); margin: calc(-6px * var(--s)) 0 0 calc(-3px * var(--s)); }
+  .tcard img.itemicon { right: calc(-4px * var(--s)); bottom: calc(-2px * var(--s)); }
+  .tcard .info { min-width: 0; }
+  .tcard .line1 { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+  .tcard .name { font-size: calc(7px * var(--s)); font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000; }
+  .tcard .lvl { font-size: calc(6px * var(--s)); font-weight: 800; text-shadow: 0 1px 2px #000; flex: none; }
+  .tcard .hp { height: calc(3.5px * var(--s)); background: rgba(255, 255, 255, .2); border-radius: 2px; overflow: hidden; margin-top: calc(1.5px * var(--s)); }
+  .tcard .hp > i { display: block; height: 100%; }
+  .tcard .hptext { font-size: calc(5px * var(--s)); opacity: .9; text-shadow: 0 1px 2px #000; margin-top: 1px; }
+  .tcard .status { top: calc(1px * var(--s)); left: calc(1px * var(--s)); }
+  .tcard.ko img.sprite { filter: grayscale(1) brightness(.55); }
+  .team.ligne .tcard { width: calc(96px * var(--s)); }
+
+  /* Boîte / morts : gros sprites serrés */
+  .grid { display: grid; gap: 0; }
+  .cell { position: relative; width: calc(30px * var(--s)); height: calc(28px * var(--s)); }
+  .cell img.sprite { position: absolute; left: 50%; top: 50%; width: calc(38px * var(--s)); height: calc(38px * var(--s)); transform: translate(-50%, -56%); }
+  .cell .lv { right: 0; bottom: 0; font-size: calc(5.5px * var(--s)); }
+  .cell img.itemicon { left: calc(-1px * var(--s)); bottom: calc(-1px * var(--s)); width: calc(13px * var(--s)); height: calc(13px * var(--s)); }
+  .cell .itemtext { left: 0; bottom: 0; }
+  .cell.dead img.sprite { filter: grayscale(1) brightness(.8) drop-shadow(0 2px 2px rgba(0, 0, 0, .75)); }
+  .cell .cross { position: absolute; right: 0; bottom: calc(-1px * var(--s)); font-size: calc(8px * var(--s)); color: #ff6b6b; text-shadow: 0 0 3px #000; }
   .grid.slide { animation: slideIn .6s ease-out; }
   @keyframes slideIn { from { transform: translateX(35%); opacity: 0; } to { transform: none; opacity: 1; } }
-  .title.page { font-size: calc(6px * var(--s)); opacity: .85; }
+
+  /* Prochain dresseur */
+  .trainer .tname { font-size: calc(8px * var(--s)); font-weight: 800; text-shadow: 0 2px 3px #000; margin: 0 0 2px 2px; white-space: nowrap; }
+  .trainer .tname small { font-weight: 600; opacity: .8; font-size: calc(6px * var(--s)); margin-left: 6px; }
+  .trainer .row { display: flex; gap: calc(2px * var(--s)); }
+  .trainer .cell { width: calc(36px * var(--s)); height: calc(34px * var(--s)); }
+  .trainer .cell img.sprite { width: calc(42px * var(--s)); height: calc(42px * var(--s)); }
+  .trainer .cell img.itemicon { width: calc(15px * var(--s)); height: calc(15px * var(--s)); }
+  .trainer .note { font-size: calc(6px * var(--s)); opacity: .85; text-shadow: 0 1px 2px #000; }
+
+  /* Level cap / numéro de run */
+  .big { font-size: calc(18px * var(--s)); font-weight: 900; line-height: 1; text-shadow: 0 3px 4px #000, 0 0 2px #000; }
   .waiting { font-size: 14px; text-shadow: 0 1px 2px #000; }
 </style>
 </head>
 <body>
 <div id="overlay"><div class="waiting">En attente de mGBA (NullCalcSync.lua)…</div></div>
+<script src="./js/data/item_ids.js"></script>
+<script src="./js/run/trainers.js"></script>
 <script src="./js/run/overlay.js"></script>
 </body>
 </html>

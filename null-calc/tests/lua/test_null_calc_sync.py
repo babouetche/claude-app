@@ -164,6 +164,13 @@ def main():
         local buf = {print=function() end, clear=function() end, setSize=function() end}
         console = {log=function(_, m) print(m) end, createBuffer=function() return buf end}
     """)
+    # Équipe adverse (gEnemyParty = gPlayerParty + 6 × 104) : combat de dresseur en cours.
+    enemy1 = box_mon(0x11111111, 0x22222222, "", sid("Nosepass"), iid("Sitrus Berry"), 0,
+                     [mid("Tackle"), 0, 0, 0], [35, 0, 0, 0], (31,) * 6, 0)
+    enemy2 = box_mon(0x33333333, 0x22222222, "", sid("Tyrunt"), iid("Life Orb"), 0,
+                     [mid("Bite"), 0, 0, 0], [25, 0, 0, 0], (31,) * 6, 0)
+    mem.write(PARTY + 6 * 104, party_mon(enemy1, 36, 80, (80, 40, 90, 30, 40, 50)))
+    mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 90, (90, 70, 60, 50, 40, 40)))
     g.NULL_CALC_LUA_DIR = str(work / "lua") + "/"
     L.execute(open(work / "lua" / "NullCalcSync.lua", encoding="utf8").read())
     L.execute("NullCalcSyncNow()")
@@ -201,6 +208,21 @@ def main():
     assert [(m["species"], m["box"], m["boxSlot"]) for m in box] == [("Wingull", 1, 3)], box
     assert box[0]["level"] >= 1 and box[0]["nickname"] == "Boxy"
     assert [(m["species"], m["box"]) for m in dead_list] == [("Poochyena", 12)], dead_list
+
+    # Combat détecté et historisé (fichier lua/historique-combats.txt)
+    battle = data["battle"]
+    assert battle["runId"] == "cafebabe" and battle["runIndex"] == 1 and battle["runCount"] == 1, battle
+    assert [(m["species"], m["level"]) for m in battle["fights"][0]["team"]] == [("Nosepass", 36), ("Tyrunt", 37)], battle
+    assert battle["enemy"][1]["item"] == "Life Orb" and battle["enemy"][0]["hp"] == 80
+    hist = (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").splitlines()
+    assert hist[0].startswith("R|cafebabe|") and hist[1].startswith("F|cafebabe|") and hist[1].endswith("|Nosepass:36:%d;Tyrunt:37:%d" % (iid("Sitrus Berry"), iid("Life Orb"))), hist
+    L.execute("NullCalcSyncNow()")
+    assert len((work / "lua" / "historique-combats.txt").read_text(encoding="utf8").splitlines()) == 2, "même combat : pas de doublon"
+    # Équipe adverse corrompue (checksum) : ignorée
+    bad = bytearray(enemy2); bad[0x1E] ^= 0x55
+    mem.write(PARTY + 7 * 104, party_mon(bytes(bad), 37, 90, (90, 70, 60, 50, 40, 40)))
+    assert L.eval("NULL_CALC_SYNC_TEST.readEnemy()") is None
+    mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 90, (90, 70, 60, 50, 40, 40)))
 
     # Overlay OBS : même pokemonData.txt que PokemonNullDisplay.lua (Sykless), si fourni.
     ours = L.eval("NULL_CALC_SYNC_TEST.displayText()")

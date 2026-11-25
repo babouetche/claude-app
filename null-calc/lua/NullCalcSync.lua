@@ -24,6 +24,10 @@ local OFFICIAL_LUA_NAMES = { "Null_1.2.6.lua", "NullLuaV1.2.6.lua", "Null.lua" }
 local PARTY_ADDR       = 0x2005370 -- gPlayerParty
 local PARTY_MON_SIZE   = 104
 local PARTY_COUNT_ADDR = 0x200536d -- gPlayerPartyCount
+-- Équipe adverse : dans pokeemerald, gEnemyParty suit gPlayerParty (6 × 104 octets ici).
+-- Adresse déduite de l'agencement mémoire, pas du Lua officiel : chaque Pokémon lu
+-- doit passer le checksum du jeu, sinon rien n'est exporté.
+local ENEMY_PARTY_ADDR = 0x2005370 + 6 * 104
 local STORAGE_ADDR     = 0x200a154 -- gPokemonStorage
 local BOX_MON_SIZE     = 84
 local BOX_SIZE         = 30
@@ -210,6 +214,7 @@ local function describe(mon, address, place)
 		nature = safe(getNature, mon) or "",
 		ability = safe(getAbility, mon) or "",
 		item = (mon.heldItem ~= 0 and item[mon.heldItem]) or "",
+		itemId = mon.heldItem,
 		ivs = { hp = mon.hpIV, atk = mon.attackIV, def = mon.defenseIV, spa = mon.spAttackIV, spd = mon.spDefenseIV, spe = mon.speedIV },
 		moves = {},
 		metLocation = safe(getMetLocationName, mon.metLocation) or "",
@@ -273,6 +278,106 @@ local function readBoxes(firstBox, boxCount)
 	return list
 end
 
+-- ---------------------------------------------------------------------------
+-- Combats de dresseurs : équipe adverse + historique (fichier dans ce dossier)
+-- ---------------------------------------------------------------------------
+local HISTORY = LUA_DIR .. "historique-combats.txt"
+local history = { runs = {}, fights = {} }  -- runs : ordre d'apparition des parties ; fights : par partie
+local lastEnemySig = nil
+
+local function loadHistory()
+	local f = io.open(HISTORY, "r")
+	if not f then return end
+	for line in f:lines() do
+		local kind, run, t, rest = line:match("^(%a)|([^|]*)|(%d+)|?(.*)$")
+		if kind == "R" then history.runs[#history.runs + 1] = run
+		elseif kind == "F" then
+			local team = {}
+			for sp, lv, it in rest:gmatch("([^;:]+):(%d+):(%d+)") do team[#team + 1] = { species = sp, level = tonumber(lv), itemId = tonumber(it) } end
+			history.fights[run] = history.fights[run] or {}
+			table.insert(history.fights[run], { t = tonumber(t), team = team })
+		end
+	end
+	f:close()
+end
+local function appendHistory(line)
+	local f = io.open(HISTORY, "a")
+	if f then f:write(line .. "\n") f:close() end
+end
+
+-- Identifiant de la partie : numéro de dresseur (OT) le plus fréquent de l'équipe.
+local function runIdOf(party)
+	local counts, best, bestN = {}, nil, 0
+	for _, m in ipairs(party) do
+		local ot = m.uid:match("%-(%x+)$")
+		if ot then counts[ot] = (counts[ot] or 0) + 1 if counts[ot] > bestN then best, bestN = ot, counts[ot] end end
+	end
+	return best
+end
+
+local function readEnemy()
+	local team = {}
+	for i = 0, 5 do
+		local address = ENEMY_PARTY_ADDR + PARTY_MON_SIZE * i
+		if emu:read32(address) ~= 0 then
+			local mon = readBoxMon(address)
+			if mon.species == 0 or mons[mon.species] == nil then break end
+			if computeBoxChecksum(address) ~= mon.checksum then return nil end
+			local level = emu:read8(address + BOX_MON_SIZE + 4)
+			if level < 1 or level > 100 then return nil end
+			team[#team + 1] = { species = mons[mon.species], level = level, itemId = mon.heldItem,
+				item = (mon.heldItem ~= 0 and item[mon.heldItem]) or "",
+				hp = emu:read16(address + BOX_MON_SIZE + 6), maxHP = emu:read16(address + BOX_MON_SIZE + 8) }
+		else break end
+	end
+	if #team == 0 then return nil end
+	return team
+end
+
+local function trackFights(party)
+	local run = runIdOf(party)
+	if not run then return nil end
+	local known = false
+	for _, r in ipairs(history.runs) do if r == run then known = true end end
+	if not known then
+		history.runs[#history.runs + 1] = run
+		appendHistory("R|" .. run .. "|" .. os.time())
+	end
+	local enemy = readEnemy()
+	if enemy then
+		local parts = {}
+		for _, m in ipairs(enemy) do parts[#parts + 1] = m.species .. ":" .. m.level .. ":" .. m.itemId end
+		local sig = table.concat(parts, ";")
+		local fights = history.fights[run] or {}
+		local last = fights[#fights]
+		local lastSig = nil
+		if last then
+			local lp = {}
+			for _, m in ipairs(last.team) do lp[#lp + 1] = m.species .. ":" .. m.level .. ":" .. m.itemId end
+			lastSig = table.concat(lp, ";")
+		end
+		if sig ~= lastSig and sig ~= lastEnemySig then
+			local t = os.time()
+			history.fights[run] = fights
+			table.insert(fights, { t = t, team = enemy })
+			appendHistory("F|" .. run .. "|" .. t .. "|" .. sig)
+			log("Combat détecté : " .. sig)
+		end
+		lastEnemySig = sig
+	end
+	local list = {}
+	for i, f in ipairs(history.fights[run] or {}) do
+		local team = {}
+		for _, m in ipairs(f.team) do team[#team + 1] = { species = m.species, level = m.level, itemId = m.itemId } end
+		list[i] = { t = f.t, team = team }
+	end
+	local runIndex = 1
+	for i, r in ipairs(history.runs) do if r == run then runIndex = i end end
+	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy }
+end
+
+pcall(loadHistory)
+
 local function snapshot()
 	local party = readParty()
 	if not party then return nil end
@@ -280,7 +385,8 @@ local function snapshot()
 	if not box then return nil end
 	local dead = readBoxes(DEAD_FIRST_BOX, DEAD_BOXES)
 	if not dead then return nil end
-	return { party = party, box = box, dead = dead }
+	local ok, battle = pcall(trackFights, party)
+	return { party = party, box = box, dead = dead, battle = ok and battle or nil }
 end
 
 -- ---------------------------------------------------------------------------
@@ -399,7 +505,7 @@ function NullCalcSyncNow()
 	tick()
 end
 
-NULL_CALC_SYNC_TEST = { displayText = function() return displayText() end, snapshot = snapshot, toJson = toJson, tick = tick, output = OUTPUT, writeOutput = writeOutput }
+NULL_CALC_SYNC_TEST = { history = history, readEnemy = function() return readEnemy() end, displayText = function() return displayText() end, snapshot = snapshot, toJson = toJson, tick = tick, output = OUTPUT, writeOutput = writeOutput }
 
 if callbacks and callbacks.add then
 	callbacks:add("frame", tick)

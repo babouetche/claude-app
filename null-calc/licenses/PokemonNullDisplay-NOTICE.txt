@@ -1,0 +1,4 @@
+docs/img/items/*.png : icônes d'objets reprises de PokemonNullDisplay (Sykless),
+https://github.com/Sykless/PokemonNullDisplay — licence Apache-2.0 (voir
+PokemonNullDisplay-LICENSE-Apache-2.0.txt). Fichiers non modifiés, nommés par
+numéro d'objet de Pokémon Null.

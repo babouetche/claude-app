@@ -1,28 +1,31 @@
-// Overlay OBS : lit docs/run-data.js (écrit par lua/NullCalcSync.lua) et affiche équipe / boîte / morts.
+// Overlay OBS : lit docs/run-data.js (écrit par lua/NullCalcSync.lua).
+// Vues : équipe (verticale), boîte, morts, prochain dresseur, level cap, numéro de run.
 (function(root) {
     "use strict";
     var params = new URLSearchParams(location.search);
     var view = (params.get("vue") || "equipe").toLowerCase();
+    if (view === "cimetiere") view = "morts";
     var size = Math.max(1, Math.min(4, Number(params.get("taille")) || 2));
     var cols = Math.max(1, Math.min(30, Number(params.get("colonnes")) || 6));
     var rowsParam = Number(params.get("lignes"));
     // Boîte : 6 × 5 (une boîte du jeu). Morts : une bande de 6. Au-delà : défilement page par page.
     var LAYOUT = {
         box: { cols: cols, rows: Math.max(1, Math.min(30, rowsParam || 5)) },
-        dead: { cols: cols, rows: Math.max(1, Math.min(30, (view === "morts" || view === "cimetiere") ? (rowsParam || 1) : 1)) }
+        dead: { cols: cols, rows: Math.max(1, Math.min(30, view === "morts" ? (rowsParam || 1) : 1)) }
     };
     var pageSeconds = Math.max(2, Number(params.get("defilement")) || 5);
-    var page = { box: 0, dead: 0 }, lastData = null, animate = { box: false, dead: false };
-    var rows = LAYOUT.box.rows;
     var showItems = params.get("objets") !== "0";
-    var direction = params.get("sens") === "colonne" ? "colonne" : "ligne";
+    var direction = params.get("sens") === "ligne" ? "ligne" : "colonne";
+    var startRun = Number(params.get("depart")) || 1;
+    var needsTrainers = view === "dresseur" || view === "cap" || view === "tout";
     document.documentElement.style.setProperty("--s", size);
     if (params.get("fond") === "1") document.body.classList.add("fond");
 
     var STATUS = { brn: "BRÛ", par: "PAR", psn: "PSN", tox: "TOX", slp: "SOM", frz: "GEL", frb: "GLR" };
-    var lastBody = null, pollTag = null;
+    var page = { box: 0, dead: 0 }, animate = { box: false, dead: false };
+    var lastData = null, lastBody = null, pollTag = null, trainers = null;
 
-    // Nom d'espèce du jeu → icône du calculateur (docs/icons/<Nom>.png).
+    // ------------------------------------------------------------- Icônes
     var ICON_EXCEPTIONS = {
         "Aegislash-Both": "Aegislash", "Aegislash-Shield": "Aegislash", "Type: Null": "Type-Null", "Zygarde-10": "Zygarde-10%25",
         "Oricorio-Pa'u ": "Oricorio-Pa'u", "Pichu-Spiky-eared": "Pichu", "Mime Jr.": "Mime%20Jr.", "Jangmo-o": "Jangmo-O", "Hakamo-o": "Hakamo-O",
@@ -45,75 +48,121 @@
         list.push("None");
         return list;
     }
-    function icon(species) {
+    function sprite(species) {
         var img = document.createElement("img"), list = iconCandidates(species), i = 0;
-        img.alt = species;
+        img.className = "sprite"; img.alt = species;
         img.src = "icons/" + list[0] + ".png";
         img.onerror = function() { if (++i < list.length) img.src = "icons/" + list[i] + ".png"; };
         return img;
     }
+    // Icône d'objet : numéro du jeu (Lua) ou nom → numéro ; sinon le nom en texte.
+    function itemBadge(mon) {
+        if (!showItems || !mon.item || mon.item === "None") return null;
+        var id = mon.itemId || (root.NULL_ITEM_IDS && root.NULL_ITEM_IDS[mon.item]);
+        if (!id) return el("span", "itemtext", mon.item);
+        var img = document.createElement("img");
+        img.className = "itemicon"; img.alt = mon.item; img.title = mon.item;
+        img.src = "img/items/" + id + ".png";
+        img.onerror = function() { var t = el("span", "itemtext", mon.item); if (img.parentNode) img.parentNode.replaceChild(t, img); };
+        return img;
+    }
     function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
     function display(mon) { return mon.nickname && mon.nickname.trim() ? mon.nickname.trim() : mon.species; }
+    function add(parent, child) { if (child) parent.appendChild(child); return parent; }
 
-    function monCard(mon, kind) {
-        var ko = kind === "team" && mon.hp === 0;
-        var card = el("div", "mon" + (ko ? " ko" : "") + (kind === "dead" ? " dead" : ""));
+    // ------------------------------------------------------------- Cartes
+    function teamCard(mon) {
+        var ko = mon.hp === 0, card = el("div", "tcard" + (ko ? " ko" : "")), pic = el("div", "pic"), info = el("div", "info");
         card.title = display(mon) + " (" + mon.species + ")";
-        card.appendChild(icon(mon.species));
-        if (kind !== "dead") card.appendChild(el("span", "lv", "N." + mon.level));
-        if (kind === "dead") card.appendChild(el("span", "cross", "✝"));
-        if (ko) card.appendChild(el("span", "status st-ko", "K.O."));
-        else if (mon.status && STATUS[mon.status]) card.appendChild(el("span", "status st-" + mon.status, STATUS[mon.status]));
-        if (kind === "team") {
-            card.appendChild(el("div", "name", display(mon)));
-            var pct = mon.maxHP ? Math.max(0, Math.min(100, mon.hp * 100 / mon.maxHP)) : 0, bar = el("div", "hp"), fill = el("i", pct > 50 ? "ok" : pct > 20 ? "mid" : "low");
-            fill.style.width = pct + "%"; bar.appendChild(fill); card.appendChild(bar);
-        }
-        if (showItems && mon.item && kind !== "dead") card.appendChild(el("div", "item", mon.item));
+        pic.appendChild(sprite(mon.species)); add(pic, itemBadge(mon));
+        if (ko) pic.appendChild(el("span", "status st-ko", "K.O."));
+        else if (mon.status && STATUS[mon.status]) pic.appendChild(el("span", "status st-" + mon.status, STATUS[mon.status]));
+        var line = el("div", "line1"); line.appendChild(el("span", "name", display(mon))); line.appendChild(el("span", "lvl", "N." + mon.level));
+        var pct = mon.maxHP ? Math.max(0, Math.min(100, mon.hp * 100 / mon.maxHP)) : 0, bar = el("div", "hp"), fill = el("i", pct > 50 ? "ok" : pct > 20 ? "mid" : "low");
+        fill.style.width = pct + "%"; bar.appendChild(fill);
+        info.appendChild(line); info.appendChild(bar); info.appendChild(el("div", "hptext", mon.hp + " / " + mon.maxHP));
+        card.appendChild(pic); card.appendChild(info);
         return card;
     }
+    function cell(mon, kind) {
+        var c = el("div", "cell" + (kind === "dead" ? " dead" : ""));
+        c.title = display(mon) + " (" + mon.species + ")";
+        c.appendChild(sprite(mon.species));
+        if (kind === "dead") c.appendChild(el("span", "cross", "✝"));
+        else { c.appendChild(el("span", "lv", "N." + mon.level)); add(c, itemBadge(mon)); }
+        return c;
+    }
 
-    function section(title, children, layout) {
+    function section(title, body) {
         var s = el("div", "section");
-        if (view === "tout") s.appendChild(el("div", "title", title));
-        s.appendChild(layout); children.forEach(function(c) { layout.appendChild(c); });
+        if (view === "tout" && title) s.appendChild(el("div", "title", title));
+        s.appendChild(body);
         return s;
     }
-    function grid(n) { var g = el("div", "grid"); g.style.gridTemplateColumns = "repeat(" + (n || cols) + ", calc(40px * var(--s)))"; return g; }
-
-    function render(data) {
-        var out = document.getElementById("overlay");
-        out.innerHTML = "";
-        if (view === "equipe" || view === "tout") {
-            var team = data.party.map(function(m) { return monCard(m, "team"); });
-            out.appendChild(section("ÉQUIPE", team, el("div", "row team " + direction)));
-        }
-        if (view === "boite" || view === "tout") out.appendChild(paged("box", "BOÎTE", data.box));
-        if (view === "morts" || view === "cimetiere" || view === "tout") out.appendChild(paged("dead", "MORTS", data.dead));
-    }
-
+    function grid(n) { var g = el("div", "grid"); g.style.gridTemplateColumns = "repeat(" + n + ", calc(30px * var(--s)))"; return g; }
     function pagesOf(kind, list) { var l = LAYOUT[kind]; return Math.max(1, Math.ceil(list.length / (l.cols * l.rows))); }
     // Une page de la liste ; quand la page change, la grille glisse depuis la droite.
     function paged(kind, label, list) {
         var l = LAYOUT[kind], perPage = l.cols * l.rows, pages = pagesOf(kind, list);
         if (page[kind] >= pages) page[kind] = 0;
-        var shown = list.slice(page[kind] * perPage, (page[kind] + 1) * perPage);
         var g = grid(l.cols);
+        list.slice(page[kind] * perPage, (page[kind] + 1) * perPage).forEach(function(m) { g.appendChild(cell(m, kind)); });
         if (animate[kind]) { g.classList.add("slide"); animate[kind] = false; }
-        var sec = section(label + " (" + list.length + ")" + (pages > 1 ? " · " + (page[kind] + 1) + "/" + pages : ""),
-            shown.map(function(m) { return monCard(m, kind === "box" ? "box" : "dead"); }), g);
+        var sec = section(label + " (" + list.length + ")" + (pages > 1 ? " · " + (page[kind] + 1) + "/" + pages : ""), g);
         sec.dataset.pages = pages;
         if (view !== "tout" && pages > 1) sec.insertBefore(el("div", "title page", (page[kind] + 1) + "/" + pages), sec.firstChild);
         return sec;
     }
 
+    // ------------------------------------------------------------- Dresseurs / level cap / run
+    function progressOf(data) {
+        if (!trainers || !root.NullTrainers) return null;
+        return root.NullTrainers.progress(trainers, (data.battle && data.battle.fights) || []);
+    }
+    function trainerView(data) {
+        var p = progressOf(data), box = el("div", "trainer");
+        if (!p) { box.appendChild(el("div", "note", "Chargement des dresseurs…")); return box; }
+        if (!p.next) { box.appendChild(el("div", "tname", "Tous les dresseurs sont battus !")); return box; }
+        var t = p.next, title = el("div", "tname", t.name.replace(/^Root Academy Trainer #(\d+)$/, "Root Academy — dresseur $1"));
+        title.appendChild(el("small", "", "Niv. max " + t.maxLevel));
+        box.appendChild(title);
+        if (t.random) { box.appendChild(el("div", "note", "Équipe tirée au hasard (" + t.slotCount + " Pokémon parmi " + t.mons.length + ")")); return box; }
+        var row = el("div", "row");
+        t.mons.forEach(function(m) { row.appendChild(cell({ species: m.species, level: m.level, item: m.item }, "trainer")); });
+        box.appendChild(row);
+        return box;
+    }
+    function capView(data) {
+        var p = progressOf(data);
+        return el("div", "big", p ? String(p.cap) : "…");
+    }
+    function runView(data) {
+        var b = data.battle;
+        return el("div", "big", String(startRun + (b && b.runIndex ? b.runIndex - 1 : 0)));
+    }
+
+    function render(data) {
+        var out = document.getElementById("overlay");
+        out.innerHTML = "";
+        if (view === "equipe" || view === "tout") {
+            var team = el("div", "team " + direction);
+            data.party.forEach(function(m) { team.appendChild(teamCard(m)); });
+            out.appendChild(section("ÉQUIPE", team));
+        }
+        if (view === "boite" || view === "tout") out.appendChild(paged("box", "BOÎTE", data.box));
+        if (view === "morts" || view === "tout") out.appendChild(paged("dead", "MORTS", data.dead));
+        if (view === "dresseur" || view === "tout") out.appendChild(section("PROCHAIN DRESSEUR", trainerView(data)));
+        if (view === "cap" || view === "tout") out.appendChild(section("LEVEL CAP", capView(data)));
+        if (view === "run" || view === "tout") out.appendChild(section("RUN", runView(data)));
+    }
+
+    // ------------------------------------------------------------- Données
     root.NullRunSync = {
         receive: function(payload) {
             if (!payload || !payload.data || !Array.isArray(payload.data.party)) return;
             var body = JSON.stringify(payload.data);
             if (body === lastBody) return;
-            lastBody = body;
-            lastData = payload.data;
+            lastBody = body; lastData = payload.data;
             render(payload.data);
         }
     };
@@ -123,14 +172,28 @@
         tag.src = "run-data.js?t=" + Date.now();
         document.head.appendChild(tag); pollTag = tag;
     }
-    root.NullOverlay = { iconName: iconName, iconCandidates: iconCandidates };
+    function loadScript(src, done) {
+        var tag = document.createElement("script");
+        tag.src = src; tag.onload = done; tag.onerror = done;
+        document.head.appendChild(tag);
+    }
+    // Dresseurs : mêmes données que le calculateur (sets 1.2.6 corrigés par la ROM).
+    if (needsTrainers) {
+        loadScript("js/data/sets/gen9.js", function() {
+            loadScript("js/null_ai/version126-trainers.js", function() {
+                if (root.SETDEX_SV && root.NullTrainers) trainers = root.NullTrainers.buildTrainers(root.SETDEX_SV);
+                if (lastData) render(lastData);
+            });
+        });
+    }
+    root.NullOverlay = { iconName: iconName, iconCandidates: iconCandidates, progress: function() { return lastData && progressOf(lastData); } };
     poll();
     setInterval(poll, 1000);
     // Défilement page par page (boîte et morts)
     setInterval(function() {
         if (!lastData) return;
         var changed = false;
-        [["box", lastData.box, view === "boite" || view === "tout"], ["dead", lastData.dead, view === "morts" || view === "cimetiere" || view === "tout"]].forEach(function(k) {
+        [["box", lastData.box, view === "boite" || view === "tout"], ["dead", lastData.dead, view === "morts" || view === "tout"]].forEach(function(k) {
             if (!k[2]) return;
             var pages = pagesOf(k[0], k[1]);
             if (pages < 2) return;
