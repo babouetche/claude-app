@@ -100,12 +100,20 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
       d.box = []; d.dead = [];
       d.battle = { runId: '0000beef', runIndex: 2, runCount: 2, fights: [{ t: 1, team: [{ species: 'Oinkologne', level: 33 }, { species: 'Gumshoos', level: 33 }, { species: 'Talonflame', level: 34 }] }],
         enemy: [{ species: 'Lumineon', level: 33, hp: 0, maxHP: 100 }, { species: 'Butterfree', level: 33, hp: 50, maxHP: 100 }, { species: 'Spidops', level: 33, hp: 100, maxHP: 100 }, { species: 'Ledian', level: 34, hp: 100, maxHP: 100 }],
-        active: { player: '99999999-0000beef', enemy: 2 } };
+        active: { player: '99999999-0000beef', enemy: 2 },
+        live: { player: [{ uid: '99999999-0000beef', hp: 40, maxHP: 80, boosts: { atk: 2, def: 0, spe: -1, spa: 0, spd: 0, acc: 0, eva: 0 } }],
+          enemy: [{ index: 2, hp: 50, maxHP: 100, boosts: { atk: 0, def: 1, spe: 0, spa: 0, spd: 0, acc: 0, eva: 0 } }],
+          field: { weather: 'Rain', terrain: 'Electric', trickRoom: true, magicRoom: false, wonderRoom: false, gravity: false,
+            sides: [{ reflect: true, lightScreen: false, auroraVeil: false, tailwind: true, stealthRock: false, spikes: 0 }, { reflect: false, lightScreen: false, auroraVeil: false, tailwind: false, stealthRock: true, spikes: 2 }] } } };
     });
     await page.click('#header-calc-button');
     await page.waitForFunction(() => /Butterfree \(Bug Catcher Beni\)/.test($('.opposing').val() || ''), null, { timeout: 8000 });
     await page.waitForFunction(() => $('#p2 .percent-hp').first().val() === '50', null, { timeout: 8000 });
     assert(/Mudkip \(Mud \[Run\]\)/.test(await page.evaluate(() => $('.player').val())), 'mon Pokémon actif à gauche');
+    const field = await page.evaluate(() => ({ rain: $('#rain').prop('checked'), electric: $('#electric').prop('checked'), tr: $('#trickroom').prop('checked'),
+      reflectL: $('#reflectL').prop('checked'), tailwindL: $('#tailwindL').prop('checked'), srR: $('#srR').prop('checked'), spikesR2: $('#spikesR2').prop('checked'),
+      atk: $('#p1 .at .boost').first().val(), spe: $('#p1 .sp .boost').first().val(), foeDef: $('#p2 .df .boost').first().val() }));
+    assert(JSON.stringify(field) === JSON.stringify({ rain: true, electric: true, tr: true, reflectL: true, tailwindL: true, srR: true, spikesR2: true, atk: '2', spe: '-1', foeDef: '1' }), 'terrain en direct : ' + JSON.stringify(field));
     assert(!errors.length, 'Erreurs JS : ' + errors.join(' | '));
     console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap, nouvelle run, boss cochés par les combats détectés, combat en direct.');
   } finally {

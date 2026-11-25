@@ -178,6 +178,26 @@ def main():
     assert not (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").count("\nF|"), "combat en cours compté"
     live = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))["battle"]
     assert live["active"] == {"player": "12345678-cafebabe", "enemy": 1}, live.get("active")
+    # Terrain de combat (adresses trouvées dans la ROM 1.2.6) : gBattleMons, météo, terrain, côtés
+    BM = 0x2004D58
+    def battle_mon(i, personality, hp, max_hp, stages):
+        mem.write(BM + 0x60 * i + 0x18, bytes(stages))
+        mem.write(BM + 0x60 * i + 0x2A, struct.pack("<H", hp)); mem.write(BM + 0x60 * i + 0x2E, struct.pack("<H", max_hp))
+        mem.write(BM + 0x60 * i + 0x4C, struct.pack("<I", personality))
+    battle_mon(0, 0x12345678, 30, 40, [6, 8, 6, 5, 6, 6, 6, 6])
+    battle_mon(1, 0x33333333, 70, 90, [6, 6, 7, 6, 6, 6, 6, 6])
+    mem.write(0x20051E4, struct.pack("<H", 0x1)); mem.write(0x2005324, struct.pack("<I", 0x100 | 0x2))
+    mem.write(0x2004F84, struct.pack("<I", 0x1 | 0x400)); mem.write(0x2004F88, struct.pack("<I", 0x4000 | 0x10)); mem.write(0x2004FB8 + 0x10, bytes([2]))
+    live = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))["battle"]
+    assert live["active"] == {"player": "12345678-cafebabe", "enemy": 2}, live["active"]
+    lv = live["live"]
+    assert lv["player"][0]["boosts"]["atk"] == 2 and lv["player"][0]["boosts"]["spe"] == -1 and lv["enemy"][0]["boosts"]["def"] == 1, lv
+    assert lv["player"][0]["hp"] == 30 and lv["enemy"][0]["hp"] == 70
+    f = lv["field"]
+    assert f["weather"] == "Rain" and f["terrain"] == "Electric" and f["trickRoom"] is True, f
+    assert f["sides"][0]["reflect"] and f["sides"][0]["tailwind"] and f["sides"][1]["stealthRock"] and f["sides"][1]["spikes"] == 2, f["sides"]
+    for i in range(2): mem.write(BM + 0x60 * i, bytes(0x60))
+    mem.write(0x20051E4, bytes(2)); mem.write(0x2005324, bytes(4)); mem.write(0x2004F84, bytes(8))
     # Pyro attaque (PP d'Ember 25 → 24) et met K.O. le premier adversaire
     torchic_atk = box_mon(0x12345678, 0xCAFEBABE, "Pyro", sid("Torchic"), iid("Leftovers"), 1000,
                           [mid("Ember"), mid("Scratch"), explosion, 0], [24, 35, 5, 0], (31, 30, 29, 28, 27, 26), 0x10)

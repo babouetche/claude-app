@@ -29,6 +29,14 @@ local PARTY_COUNT_ADDR = 0x200536d -- gPlayerPartyCount
 -- doit passer le checksum du jeu, sinon rien n'est exporté.
 local ENEMY_PARTY_ADDR = 0x2005370 + 6 * 104
 local STORAGE_ADDR     = 0x200a154 -- gPokemonStorage
+-- Combat (trouvé dans la ROM 1.2.6 en jouant des tours : météo, terrains, écrans, pièges, boosts).
+local BATTLE_MONS      = 0x2004d58 -- gBattleMons[4], 0x60 octets chacun
+local BATTLE_MON_SIZE  = 0x60
+local SIDE_STATUSES    = 0x2004f84 -- u32 par côté (0 = moi, 1 = adversaire)
+local SIDE_TIMERS      = 0x2004f8c -- 0x2C octets par côté (+0x10 couches de Picots, +0x12 Picots Toxik)
+local SIDE_TIMER_SIZE  = 0x2c
+local BATTLE_WEATHER   = 0x20051e4
+local FIELD_STATUSES   = 0x2005324
 local BOX_MON_SIZE     = 84
 local BOX_SIZE         = 30
 local ALIVE_BOXES      = 11        -- boîtes 1 à 11
@@ -464,6 +472,50 @@ local function followBattle(party, enemy)
 	end
 end
 
+-- Terrain de combat : météo, terrain, salles, écrans et pièges de chaque côté, boosts des Pokémon actifs.
+local function sideInfo(side)
+	local st = emu:read32(SIDE_STATUSES + 4 * side)
+	local t = SIDE_TIMERS + SIDE_TIMER_SIZE * side
+	return { reflect = (st & 0x1) ~= 0, lightScreen = (st & 0x2) ~= 0, stickyWeb = (st & 0x4) ~= 0,
+		spikes = (st & 0x10) ~= 0 and math.max(1, math.min(3, emu:read8(t + 0x10))) or 0,
+		safeguard = (st & 0x20) ~= 0, mist = (st & 0x100) ~= 0, tailwind = (st & 0x400) ~= 0, auroraVeil = (st & 0x800) ~= 0,
+		toxicSpikes = (st & 0x2000) ~= 0 and math.max(1, math.min(2, emu:read8(t + 0x12))) or 0, stealthRock = (st & 0x4000) ~= 0 }
+end
+local function battleMon(i)
+	local a = BATTLE_MONS + BATTLE_MON_SIZE * i
+	local boosts, names = {}, { "hp", "atk", "def", "spe", "spa", "spd", "acc", "eva" }
+	for k = 2, 8 do boosts[names[k]] = emu:read8(a + 0x18 + k - 1) - 6 end
+	return { personality = emu:read32(a + 0x4C), hp = emu:read16(a + 0x2A), maxHP = emu:read16(a + 0x2E), level = emu:read8(a + 0x2C), boosts = boosts }
+end
+local function readField()
+	local w, f = emu:read16(BATTLE_WEATHER), emu:read32(FIELD_STATUSES)
+	local weather = ""
+	if (w & 0x2) ~= 0 then weather = "Heavy Rain" elseif (w & 0x5) ~= 0 then weather = "Rain"
+	elseif (w & 0x10) ~= 0 then weather = "Harsh Sunshine" elseif (w & 0x8) ~= 0 then weather = "Sun"
+	elseif (w & 0x20) ~= 0 then weather = "Sand" elseif (w & 0x40) ~= 0 then weather = "Hail" elseif (w & 0x80) ~= 0 then weather = "Snow" end
+	local terrain = ""
+	if (f & 0x40) ~= 0 then terrain = "Grassy" elseif (f & 0x80) ~= 0 then terrain = "Misty" elseif (f & 0x100) ~= 0 then terrain = "Electric" elseif (f & 0x200) ~= 0 then terrain = "Psychic" end
+	return { weather = weather, terrain = terrain, magicRoom = (f & 0x1) ~= 0, trickRoom = (f & 0x2) ~= 0, wonderRoom = (f & 0x4) ~= 0,
+		gravity = (f & 0x20) ~= 0, sides = { sideInfo(0), sideInfo(1) } }
+end
+-- Pokémon actifs lus dans gBattleMons (personnalité → Pokémon de mon équipe / de l'équipe adverse).
+local function readLive(party, enemy)
+	if not enemy then return nil end
+	local mine = {}
+	for _, m in ipairs(party) do mine[tonumber(m.uid:sub(1, 8), 16)] = m.uid end
+	local foes = {}
+	for i, m in ipairs(enemy) do foes[m.personality] = i end
+	local live = { player = {}, enemy = {} }
+	for b = 0, 3 do
+		local bm = battleMon(b)
+		if mine[bm.personality] then live.player[#live.player + 1] = { uid = mine[bm.personality], boosts = bm.boosts, hp = bm.hp, maxHP = bm.maxHP }
+		elseif foes[bm.personality] then live.enemy[#live.enemy + 1] = { index = foes[bm.personality], boosts = bm.boosts, hp = bm.hp, maxHP = bm.maxHP } end
+	end
+	if #live.player == 0 or #live.enemy == 0 then return nil end
+	live.field = readField()
+	return live
+end
+
 local function trackFights(party)
 	local run = runIdOf(party)
 	if not run then return nil end
@@ -515,9 +567,14 @@ local function trackFights(party)
 	end
 	local runIndex = 1
 	for i, r in ipairs(history.runs) do if r == run then runIndex = i end end
-	local active = nil
-	if battle and enemy and battle.sig == sigOf(enemy) then active = { player = battle.player, enemy = battle.enemy } end
-	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy, active = active }
+	local active, live = nil, nil
+	if battle and enemy and battle.sig == sigOf(enemy) then
+		live = readLive(party, enemy)
+		-- Pokémon actifs exacts quand gBattleMons est lisible, sinon déduits des PP/PV.
+		if live then active = { player = live.player[1].uid, enemy = live.enemy[1].index }
+		else active = { player = battle.player, enemy = battle.enemy } end
+	end
+	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy, active = active, live = live }
 end
 
 pcall(loadHistory)
