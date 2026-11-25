@@ -2,34 +2,41 @@
 
 Ta feuille : **[Pokémon Null — Suivi de run (auto)](https://docs.google.com/spreadsheets/d/1FHTM-H3T4Yx9E5s_VXVgNOH2kOkKku1OWgDUkLG6sR8/edit)**
 
-## 1. Coller le script dans la feuille
-1. Ouvre la feuille, puis va dans **Extensions > Apps Script**.
-2. Efface tout le contenu de `Code.gs`, colle le contenu de [`Code.gs`](Code.gs) (ce dossier) et enregistre (💾).
+## 1. Coller le script
+1. Dans la feuille, va dans **Extensions > Apps Script**.
+2. Efface tout le contenu de `Code.gs`, colle le contenu de [`Code.gs`](Code.gs) et enregistre (💾).
 
-## 2. Le publier en « Application Web »
-1. Clique sur **Déployer > Nouveau déploiement**, puis sur la roue ⚙ et choisis **Application Web**.
-2. Règle **Exécuter en tant que : Moi** et **Qui a accès : Tout le monde**.
-3. Clique sur **Déployer** et autorise l'accès. Si Google affiche « Application non validée », clique sur **Paramètres avancés > Accéder au projet (non sécurisé)** : c'est ton propre script.
-4. Copie l'**URL de l'application Web**. Elle finit par `/exec`.
+## 2. Tout installer
+1. Recharge la feuille : un menu **⚡ Null Run** apparaît.
+2. Clique sur **⚡ Null Run > Installer / tout mettre à jour** et autorise l'accès. Si Google affiche « Application non validée », clique sur **Paramètres avancés > Accéder au projet (non sécurisé)** : c'est ton propre script.
 
-## 3. La relier au calculateur
-1. Dans CALCULATEUR.html, ouvre l'onglet **Suivi de run** puis le bloc **Google Sheets**.
-2. Colle l'URL et clique sur **Enregistrer**.
-3. Le message « ✔ Feuille à jour » confirme que tout marche.
+Le script crée et met en forme tous les onglets, puis importe les données officielles de Null : rencontres et taux, dresseurs, objets. Il programme aussi leur mise à jour automatique chaque lundi.
 
-## Ce qui se remplit tout seul
-- **Pokémon** : une ligne par Pokémon capturé. On y trouve la zone, l'espèce, le surnom, le niveau, le statut (Équipe / K.O. / Boîte / Mort / Absent), le talent, la nature, les IV et leur moyenne, le type de Puissance Cachée, l'objet, les attaques et le niveau de capture.
-- **Run** : la dernière synchro, le nombre de Pokémon en équipe, en boîte et morts, le niveau max, le level cap et le prochain boss (d'après les cases cochées dans le calculateur). On y trouve aussi l'équipe actuelle avec ses PV, le top frags, le cimetière et les frags par split.
+## 3. Le relier au calculateur
+1. Dans Apps Script, va dans **Déployer > Nouveau déploiement**, puis ⚙ > **Application Web**.
+2. Règle **Exécuter en tant que : Moi** et **Qui a accès : Tout le monde**, puis clique sur **Déployer** et copie l'URL (elle finit par `/exec`).
+3. Dans CALCULATEUR.html, ouvre l'onglet **Suivi de run** puis le bloc **Google Sheets**, colle l'URL et clique sur **Enregistrer**. Le message « ✔ Feuille à jour » confirme que tout marche.
 
-## Ce que tu remplis à la main
-- **Combats** : une ligne par combat, avec le dresseur, le split (menu déroulant), le lead, puis chaque Pokémon utilisé avec ses frags.
-  Les **frags, leads et combats joués** de chaque Pokémon se recalculent alors tout seuls, au total et par split.
-- **Pokémon > Mort contre** (colonne orange) : le dresseur qui a tué ce Pokémon.
+Si tu avais déjà déployé l'ancienne version, va dans **Déployer > Gérer les déploiements > ✏ > Nouvelle version** au lieu de créer un nouveau déploiement : l'URL reste la même.
 
-Le script ne touche jamais ces colonnes manuelles.
+## Les onglets
+
+| Onglet | Contenu | Mis à jour |
+| --- | --- | --- |
+| 🏠 **Run** | Tableau de bord : équipe (PV en couleur), captures, morts, level cap, prochain boss et prochain dresseur, top frags, cimetière, frags par split | Automatiquement |
+| 🐾 **Pokémon** | Une ligne par Pokémon capturé : zone, niveau, statut, talent, nature, IV (dégradé de couleur), objet, attaques, frags | Automatiquement. La colonne orange **Mort contre** se remplit à la main |
+| ⚔️ **Combats** | Une ligne par combat : choisis le dresseur dans la liste (le split se remplit tout seul), puis le lead et les frags | À la main |
+| 🎯 **Dresseurs** | Tous les dresseurs officiels, avec équipe, niveaux, objets, talents, natures et attaques. Les boss sont surlignés, les dresseurs battus apparaissent en vert | Données officielles chaque semaine, « Battu » automatique |
+| 🌿 **Rencontres** | Toutes les rencontres avec leur %, par zone et méthode (herbes, pêche, surf, Éclate-Roc, cadeaux, échanges, casino). On y voit ta capture dans la zone (✔ vivant / ✝ mort) et si l'espèce est déjà capturée | Données officielles chaque semaine, captures automatiques |
+| 🎒 **Objets** | Objets tenus, baies, CT, tuteurs, méga-gemmes, mémoires, Écailles Cœur, menthes, boutique de la Ligue et objets sauvages, avec une case **Récupéré** | Données officielles chaque semaine. Tes cases cochées sont conservées |
+
+## Ce qui est automatique (ou pas)
+- **Automatique** : ton équipe, tes boîtes et tes morts (via mGBA et le calculateur), les zones déjà capturées, les espèces déjà possédées, les dresseurs battus, le prochain dresseur, ainsi que les frags, leads et combats calculés depuis l'onglet Combats.
+- **Level cap et prochain boss** : ils se déduisent de l'onglet Combats dès que tu y as noté un boss. Avant ça, la feuille reprend les cases cochées dans le calculateur.
+- **À la main** : les frags de chaque combat et « Mort contre ». Le jeu ne garde pas en mémoire qui a mis K.O. qui, donc rien ne permet de le lire.
 
 ## À savoir
-- La feuille se met à jour au plus toutes les 8 secondes, et seulement quand ta partie change.
+- La feuille se met à jour au plus toutes les 8 secondes, et seulement quand ta partie change. Quand seuls les PV changent, seule l'équipe est réécrite, pour que ça reste fluide.
 - Garde l'URL pour toi : quiconque l'a peut envoyer des données dans ta feuille.
-- Si tu modifies le script plus tard, va dans **Déployer > Gérer les déploiements > ✏ > Nouvelle version**. L'URL ne change pas.
-- Le menu **Null Run > Créer / réparer la mise en page** remet les en-têtes en place si besoin.
+- **⚡ Null Run > Réimporter les données officielles** force une mise à jour immédiate si le créateur du jeu a corrigé ses documents.
+- Aucune formule n'est utilisée : la feuille marche en français comme en anglais.

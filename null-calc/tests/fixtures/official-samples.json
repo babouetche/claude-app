@@ -1,0 +1,1275 @@
+{
+ "_source": "Extraits réels des feuilles officielles Pokémon Null (Drive), lus le 25/11/2026",
+ "encounterGrid": [
+  [
+   "",
+   "",
+   "Littleroot Town",
+   "",
+   "Littleroot Grove",
+   "",
+   "Route 101",
+   "",
+   "Oldale Town",
+   "",
+   "Oldale Grove",
+   "",
+   "Route 103",
+   "",
+   "Verdanturf Tunnel",
+   ""
+  ],
+  [
+   "",
+   "",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon"
+  ],
+  [
+   "Land",
+   "10%",
+   "5",
+   "Tepig",
+   "5",
+   "Gossifleur",
+   "5",
+   "Smoliv",
+   "5",
+   "Growlithe",
+   "5",
+   "Stantler",
+   "5",
+   "Budew",
+   "5",
+   "Klawf"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Oshawott",
+   "5",
+   "Toedscool",
+   "5",
+   "Bunnelby",
+   "5",
+   "Fletchling",
+   "5",
+   "Ekans",
+   "5",
+   "Gossifleur",
+   "5",
+   "Klawf"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Snivy",
+   "5",
+   "Slugma",
+   "5",
+   "Aipom",
+   "5",
+   "Houndour",
+   "5",
+   "Snubbull",
+   "5",
+   "Tangela",
+   "5",
+   "Geodude"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Cyndaquil",
+   "5",
+   "Rolycoly",
+   "5",
+   "Stantler",
+   "5",
+   "Salandit",
+   "5",
+   "Maschiff",
+   "5",
+   "Shroomish",
+   "5",
+   "Geodude-Alola"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Totodile",
+   "5",
+   "Quaxly",
+   "5",
+   "Litleo",
+   "5",
+   "Charcadet",
+   "5",
+   "Roggenrola",
+   "5",
+   "Exeggcute",
+   "5",
+   "Rhyhorn"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Chikorita",
+   "5",
+   "Spheal",
+   "5",
+   "Bidoof",
+   "5",
+   "Numel",
+   "5",
+   "Electrike",
+   "5",
+   "Applin",
+   "5",
+   "Nacli"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Charmander",
+   "5",
+   "Sandshrew-Alola",
+   "5",
+   "Zigzagoon-Galar",
+   "5",
+   "Darumaka",
+   "5",
+   "Shinx",
+   "5",
+   "Morelull",
+   "5",
+   "Rockruff"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Squirtle",
+   "5",
+   "Morpeko",
+   "5",
+   "Pidgey",
+   "5",
+   "Growlithe-Hisui",
+   "5",
+   "Surskit",
+   "5",
+   "Smoliv",
+   "5",
+   "Roggenrola"
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Bulbasaur",
+   "5",
+   "Gulpin",
+   "5",
+   "Wooloo",
+   "5",
+   "Sizzlipede",
+   "5",
+   "Oddish",
+   "5",
+   "Sewaddle",
+   "5",
+   "Rolycoly"
+  ],
+  [
+   "",
+   "5%",
+   "5",
+   "Growlithe",
+   "5",
+   "Minior",
+   "5",
+   "Helioptile",
+   "5",
+   "Capsakid",
+   "5",
+   "Lillipup",
+   "5",
+   "Capsakid",
+   "5",
+   "Nosepass"
+  ],
+  [
+   "",
+   "4%",
+   "5",
+   "Tangela",
+   "5",
+   "Minior",
+   "5",
+   "Helioptile",
+   "5",
+   "Capsakid",
+   "5",
+   "Lillipup",
+   "5",
+   "Capsakid",
+   "5",
+   "Bergmite"
+  ],
+  [
+   "",
+   "1%",
+   "5",
+   "Poliwag",
+   "5",
+   "Minior",
+   "5",
+   "Helioptile",
+   "5",
+   "Litleo",
+   "5",
+   "Scraggy",
+   "5",
+   "Lotad",
+   "5",
+   "Aron"
+  ],
+  [],
+  [
+   "Fishing",
+   "20%",
+   "5",
+   "Shellos",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Shellder",
+   "",
+   ""
+  ],
+  [
+   "",
+   "20%",
+   "5",
+   "Tympole",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Seel",
+   "",
+   ""
+  ],
+  [
+   "",
+   "20%",
+   "5",
+   "Wooper",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Spheal",
+   "",
+   ""
+  ],
+  [
+   "",
+   "20%",
+   "5",
+   "Barboach",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Arctovish",
+   "",
+   ""
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Mudkip",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Lapras",
+   "",
+   ""
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Mudkip",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Lapras",
+   "",
+   ""
+  ],
+  [],
+  [
+   "Surf",
+   "20%",
+   "5",
+   "Mudkip",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "40",
+   "Ludicolo",
+   "",
+   ""
+  ],
+  [
+   "",
+   "20%",
+   "5",
+   "Piplup",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "40",
+   "Avalugg",
+   "",
+   ""
+  ],
+  [
+   "",
+   "20%",
+   "5",
+   "Squirtle",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "40",
+   "Avalugg-Hisui",
+   "",
+   ""
+  ],
+  [
+   "",
+   "20%",
+   "5",
+   "Popplio",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "40",
+   "Sneasel",
+   "",
+   ""
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Sobble",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "40",
+   "Sneasel",
+   "",
+   ""
+  ],
+  [
+   "",
+   "10%",
+   "5",
+   "Sobble",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "40",
+   "Arctozolt",
+   "",
+   ""
+  ],
+  [],
+  [
+   "Rock Smash",
+   "25%",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Dwebble"
+  ],
+  [
+   "",
+   "25%",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Cranidos"
+  ],
+  [
+   "",
+   "25%",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Binacle"
+  ],
+  [
+   "",
+   "15%",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Binacle"
+  ],
+  [
+   "",
+   "10%",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Binacle"
+  ],
+  [],
+  [
+   "Other",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "5",
+   "Game Corner",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "otherTables": [
+  [
+   "",
+   "",
+   "Safari Zone South",
+   "",
+   "Safari Zone North",
+   "",
+   "",
+   "Safari Zone Southwest",
+   ""
+  ],
+  [
+   "",
+   "",
+   "Level",
+   "Pokémon",
+   "Level",
+   "Pokémon",
+   "",
+   "Level",
+   "Pokémon"
+  ],
+  [
+   "Land",
+   "10%",
+   "76",
+   "Uxie",
+   "76",
+   "Regieleki",
+   "",
+   "78",
+   "Raikou"
+  ],
+  [
+   "",
+   "10%",
+   "76",
+   "Uxie",
+   "76",
+   "Regieleki",
+   "",
+   "78",
+   "Raikou"
+  ],
+  [
+   "",
+   "10%",
+   "76",
+   "Azelf",
+   "76",
+   "Regidrago",
+   "",
+   "78",
+   "Entei"
+  ]
+ ],
+ "specialEncounters": [
+  [
+   "Trades"
+  ],
+  [
+   "Wanted Pokémon",
+   "Location",
+   "Offered Pokémon"
+  ],
+  [
+   "Qwilfish",
+   "Rustboro City",
+   "Qwilfish-Hisui"
+  ],
+  [
+   "Stoutland",
+   "Mirage Tower 3F",
+   "Houndstone"
+  ],
+  [],
+  [
+   "Gifts / Statics"
+  ],
+  [
+   "Location",
+   "Pokémon"
+  ],
+  [
+   "Trainer Hill",
+   "Random Eeveelution"
+  ],
+  [
+   "Battle Frontier",
+   "Type: Null"
+  ],
+  [],
+  [
+   "Game Corner (Available after New Mauville Quest)"
+  ],
+  [
+   "Pool",
+   "Pokémon"
+  ],
+  [
+   "Pool 1",
+   "Random Minior / Pumpkaboo / Flabébé / Shellos"
+  ]
+ ],
+ "roxanneSplit": [
+  [],
+  [
+   "Route 103"
+  ],
+  [
+   "Name",
+   "Route 103 Rival"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "Oshawott",
+   "Litten",
+   "Riolu"
+  ],
+  [
+   "Level",
+   "10",
+   "10",
+   "11"
+  ],
+  [
+   "Held Item",
+   "Oran Berry",
+   "Oran Berry",
+   "Berry Juice"
+  ],
+  [
+   "Ability",
+   "Torrent",
+   "Intimidate",
+   "Prankster"
+  ],
+  [
+   "Nature",
+   "Hasty",
+   "Adamant",
+   "Jolly"
+  ],
+  [
+   "Moves",
+   "Chilling Water",
+   "Fake Out",
+   "Mach Punch"
+  ],
+  [
+   "",
+   "Razor Shell",
+   "Flame Charge",
+   "Metal Claw"
+  ],
+  [
+   "",
+   "Grass Knot",
+   "Trailblaze",
+   "Copycat"
+  ],
+  [
+   "",
+   "Encore",
+   "Torment"
+  ],
+  [
+   "Root Academy"
+  ],
+  [
+   "Name",
+   "Youngster Ren"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "None"
+  ],
+  [
+   "Level",
+   "0"
+  ],
+  [
+   "Held Item",
+   "None"
+  ],
+  [
+   "Ability",
+   "None"
+  ],
+  [
+   "Nature",
+   "Hardy"
+  ],
+  [
+   "Moves",
+   "None"
+  ],
+  [],
+  [],
+  [],
+  [
+   "Name",
+   "Youngster Levi"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "None"
+  ],
+  [
+   "Level",
+   "0"
+  ],
+  [
+   "Held Item",
+   "None"
+  ],
+  [
+   "Ability",
+   "None"
+  ],
+  [
+   "Nature",
+   "Hardy"
+  ],
+  [
+   "Moves",
+   "None"
+  ],
+  [],
+  [],
+  [],
+  [
+   "Name",
+   "Hiker Marcster"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "Glimmet",
+   "Minior",
+   "Mareanie",
+   "Corsola-Galar",
+   "Lunatone"
+  ],
+  [
+   "Level",
+   "36",
+   "37",
+   "37",
+   "36",
+   "37"
+  ],
+  [
+   "Held Item",
+   "Sticky Barb",
+   "Flying Gem",
+   "Black Sludge",
+   "Eviolite",
+   "Absorb Bulb"
+  ],
+  [
+   "Ability",
+   "Toxic Debris",
+   "Shields Down",
+   "Merciless",
+   "Cursed Body",
+   "Levitate"
+  ],
+  [
+   "Nature",
+   "Calm",
+   "Hasty",
+   "Modest",
+   "Modest",
+   "Timid"
+  ],
+  [
+   "Moves",
+   "Toxic Spikes",
+   "Shell Smash",
+   "Toxic Spikes",
+   "Strength Sap",
+   "Iron Defense"
+  ],
+  [
+   "",
+   "Stealth Rock",
+   "Power Gem",
+   "Venoshock",
+   "Will-O-Wisp",
+   "Moonlight"
+  ],
+  [
+   "",
+   "Spikes",
+   "Dazzling Gleam",
+   "Toxic",
+   "Ancient Power",
+   "Ancient Power"
+  ],
+  [
+   "",
+   "Sticky Web",
+   "Acrobatics",
+   "Hydro Pump",
+   "Calm Mind",
+   "Stored Power"
+  ],
+  [
+   "Name",
+   "Leader Roxanne"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "Tyranitar",
+   "Solrock",
+   "Zygarde",
+   "Cradily",
+   "Omastar",
+   "Aerodactyl-Mega"
+  ],
+  [
+   "Level",
+   "37",
+   "38",
+   "37",
+   "37",
+   "37",
+   "38"
+  ],
+  [
+   "Held Item",
+   "Hard Stone",
+   "Weakness Policy",
+   "Sticky Barb",
+   "Leftovers",
+   "Assault Vest",
+   "Aerodactylite"
+  ],
+  [
+   "Ability",
+   "Sand Stream",
+   "Levitate",
+   "Power Construct",
+   "Storm Drain",
+   "Shell Armor",
+   "Tough Claws"
+  ],
+  [
+   "Nature",
+   "Relaxed",
+   "Quiet",
+   "Serious",
+   "Bold",
+   "Brave",
+   "Timid"
+  ],
+  [
+   "Moves",
+   "Stealth Rock",
+   "Psycho Cut",
+   "Land's Wrath",
+   "Recover",
+   "Ancient Power",
+   "Rock Tomb"
+  ],
+  [
+   "",
+   "Crunch",
+   "Ancient Power",
+   "Dragon Tail",
+   "Stockpile",
+   "Scald",
+   "Wing Attack"
+  ],
+  [
+   "",
+   "Rock Tomb",
+   "Morning Sun",
+   "Skitter Smack",
+   "Sand Tomb",
+   "Ice Beam",
+   "Earthquake"
+  ],
+  [
+   "",
+   "Sand Tomb",
+   "Bulldoze",
+   "Extreme Speed",
+   "Ancient Power",
+   "Seismic Toss",
+   "Ancient Power"
+  ]
+ ],
+ "heldItems": [
+  [
+   "Item",
+   "",
+   "Location",
+   "",
+   "Berry",
+   "Location",
+   "Amount"
+  ],
+  [
+   false,
+   "Miracle Seed",
+   "Petalburg Woods (Cut required)",
+   "",
+   "Oran Berry",
+   "Oldale Town (From Brendan/May), Route 102, Route 116",
+   "80, 50"
+  ],
+  [
+   false,
+   "Silver Powder",
+   "Petalburg Woods (Cut required)",
+   "",
+   "Pecha Berry",
+   "Oldale Town (From Brendan/May)",
+   "50"
+  ],
+  [
+   false,
+   "Charcoal",
+   "Land Cave entrance",
+   "",
+   "Jaboca Berry",
+   "Route 117",
+   "3"
+  ]
+ ],
+ "resources": [
+  [
+   "Heart Scale Locations",
+   "",
+   "",
+   "Nature Mint Locations"
+  ],
+  [
+   false,
+   "Route 104",
+   "Under Briney's house",
+   false,
+   "Serious Mint",
+   "Route 116 (Next to the berry trees)"
+  ],
+  [
+   false,
+   "Route 116",
+   "Right of the entrance of Rusturf Tunnel",
+   false,
+   "Serious Mint",
+   "Route 115 (After Meteor Falls gauntlet)"
+  ],
+  [
+   false,
+   "Route 106",
+   "Above the entrance of Granite Cave",
+   "Other"
+  ],
+  [
+   false,
+   "Icicle Cave",
+   "Near the left entrance",
+   false,
+   "Ability Capsule",
+   "Route 111 Rest House (If a Pokémon with an RNG ability with an alternative is shown)"
+  ]
+ ],
+ "tms": [
+  [
+   "Item",
+   "",
+   "Location",
+   "",
+   "Move",
+   "Location"
+  ],
+  [
+   false,
+   "TM01 Aerial Ace",
+   "Route 116 (Left of the entrance of Rusturf Tunnel)",
+   "",
+   "Helping Hand",
+   "Petalburg City (House to the right of the L-shaped pond)"
+  ],
+  [
+   false,
+   "TM06 Rock Tomb",
+   "From Roxanne after the Gym battle",
+   "",
+   "Brick Break",
+   "Slateport City (Top of the market)"
+  ]
+ ],
+ "evolution": [
+  [
+   "All items are also sold at the Lilycove Department Store."
+  ],
+  [
+   "Item",
+   "Location"
+  ],
+  [
+   "Tart Apple",
+   "Sold at Oldale Town Pokémon Mart"
+  ],
+  [
+   "Moon Stone",
+   "Sold at Petalburg City and Verdanturf Town Pokémon Mart"
+  ]
+ ],
+ "special": [
+  [
+   "Item",
+   "",
+   "Location",
+   "Item",
+   "Location"
+  ],
+  [
+   false,
+   "Abomasite",
+   " Route 114 (After Picnicker Frieren)",
+   "Fire Memory",
+   "Lavaridge Town - From the Rival after beating the Gym (decision)"
+  ],
+  [
+   false,
+   "Ampharosite",
+   "Verdanturf Tunnel B1F",
+   "Dark Memory",
+   "Mt. Pyre 1F - From an Old Lady (decision)"
+  ]
+ ],
+ "other": [
+  [
+   "League Shop",
+   "",
+   "Wild Held Items"
+  ],
+  [
+   "Item",
+   "Price with Heart Scales",
+   "Item",
+   "Pokémon",
+   "Chance"
+  ],
+  [
+   "Gems",
+   "3",
+   "Light Ball",
+   "Pichu / Pikachu",
+   "100%"
+  ],
+  [
+   "Choice Scarf",
+   "9",
+   "Metal Powder",
+   "Ditto",
+   "100%"
+  ]
+ ],
+ "_note_roxanneSplit": "Lignes 1-37 puis 241-262 de 'Roxanne Split' (extraits réels, assemblés).",
+ "pokemonLeague": [
+  [],
+  [
+   "Pokémon League"
+  ],
+  [
+   "Name",
+   "Elite Four Sidney Singles"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "Greninja-Mega",
+   "Overqwil",
+   "Grimmsnarl",
+   "Chi Yu",
+   "Yveltal",
+   "Kingambit"
+  ],
+  [
+   "Level",
+   "100",
+   "100",
+   "100",
+   "100",
+   "100",
+   "100"
+  ],
+  [
+   "Held Item",
+   "Greninjite",
+   "Assault Vest",
+   "Light Clay",
+   "Heavy-Duty Boots",
+   "Black Glasses",
+   "Chople Berry"
+  ],
+  [
+   "Ability",
+   "Sniper",
+   "Intimidate",
+   "Prankster",
+   "Beads of Ruin",
+   "Dark Aura",
+   "Supreme Overlord"
+  ],
+  [
+   "Nature",
+   "Timid",
+   "Adamant",
+   "Impish",
+   "Timid",
+   "Timid",
+   "Brave"
+  ],
+  [
+   "Moves",
+   "Water Shuriken",
+   "Gunk Shot",
+   "Reflect",
+   "Flamethrower",
+   "Dark Pulse",
+   "Knock Off"
+  ],
+  [
+   "",
+   "Night Daze",
+   "Crunch",
+   "Light Screen",
+   "Fiery Wrath",
+   "Oblivion Wing",
+   "Sucker Punch"
+  ],
+  [
+   "",
+   "Spikes",
+   "Liquidation",
+   "Spirit Break",
+   "Flame Charge",
+   "Heat Wave",
+   "Iron Head"
+  ],
+  [
+   "",
+   "Toxic Spikes",
+   "Explosion",
+   "Parting Shot",
+   "Nasty Plot",
+   "Disable",
+   "Swords Dance"
+  ],
+  [
+   "Name",
+   "Elite Four Sidney Doubles [Double]"
+  ],
+  [
+   "Pokémon"
+  ],
+  [
+   "",
+   "Scrafty",
+   "Chien Pao",
+   "Overqwil",
+   "Yveltal",
+   "Gyarados-Mega",
+   "Kingambit"
+  ]
+ ]
+}

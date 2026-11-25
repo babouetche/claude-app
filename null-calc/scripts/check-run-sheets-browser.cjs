@@ -4,14 +4,16 @@ const fs = require('node:fs'), path = require('node:path'), vm = require('node:v
 const { chromium } = require(process.env.NULL_AI_PLAYWRIGHT_MODULE || 'playwright');
 const root = path.resolve(__dirname, '..'), out = path.join(root, 'docs', 'run-data.js');
 const SHEET_URL = 'https://script.google.com/macros/s/TEST_deploiement-123/exec';
-const testSrc = fs.readFileSync(path.join(root, 'tests/google-sheets.test.cjs'), 'utf8');
-const fakeSpreadsheet = new Function('assert', testSrc.slice(testSrc.indexOf('function fakeSpreadsheet'), testSrc.indexOf('const ctx =')) + '; return fakeSpreadsheet;')(assert);
-const props = {};
-const ctx = { module: { exports: {} }, SpreadsheetApp: { newDataValidation: () => { throw new Error('test'); } }, Utilities: { formatDate: d => d.toISOString() },
+const { load, fakeSpreadsheet } = require('../tests/helpers/fake-sheets.cjs');
+const OFFICIAL = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/official-samples.json'), 'utf8'));
+const { ctx } = load({
+  '1EdJf2JRe5dLPEX1vWmbeRFeCIh-7hgos-t52JQd1Xb8': { 'Encounter Tables': OFFICIAL.encounterGrid, 'Special Encounters': OFFICIAL.specialEncounters },
+  '1ForxCI9BczgfLYHEOTd-3Cg4tEa3Nn_VNk5nx-OLedo': { 'Held Items': OFFICIAL.heldItems },
+  '1mwHPt0AMzOJ_hfmDrVZpKP-Hf4eTT0ROhY8Wa7bY7r8': { 'Roxanne Split': OFFICIAL.roxanneSplit }
+}, {
   LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
-  PropertiesService: { getScriptProperties: () => ({ setProperty: (k, v) => { props[k] = v; }, getProperty: k => props[k] || null }) },
-  ContentService: { MimeType: { JSON: 'json', JAVASCRIPT: 'js' }, createTextOutput: t => ({ text: t, setMimeType() { return this; } }) } };
-vm.createContext(ctx); vm.runInContext(fs.readFileSync(path.join(root, 'google-sheets/Code.gs'), 'utf8'), ctx);
+  ContentService: { MimeType: { JSON: 'json', JAVASCRIPT: 'js' }, createTextOutput: t => ({ text: t, setMimeType() { return this; } }) }
+});
 const sheet = fakeSpreadsheet();
 ctx.SpreadsheetApp.getActiveSpreadsheet = () => sheet;
 (async () => {
@@ -43,9 +45,11 @@ ctx.SpreadsheetApp.getActiveSpreadsheet = () => sheet;
     await page.fill('#run-sheets-url', SHEET_URL);
     await page.click('#run-sheets >> text=Enregistrer');
     await page.waitForFunction(() => /Feuille à jour/.test(document.getElementById('run-sheets-status').textContent), null, { timeout: 15000 });
-    const pk = sheet.sheets['Pokémon'];
+    const pk = sheet.sheets['🐾 Pokémon'], run = sheet.sheets['🏠 Run'];
     assert.equal(pk.cells['2,5'].v, 'Pyro'); assert.equal(pk.cells['5,7'].v, 'Mort');
-    assert.equal(sheet.sheets['Run'].cells['7,2'].v, 1, 'compteur de morts');
+    assert.equal(run.cells['5,5'].v, 1, 'compteur de morts');
+    assert.equal(run.cells['5,11'].v, 'Route 103 Rival', 'prochain dresseur');
+    assert.ok(sheet.sheets['🌿 Rencontres'].getLastRow() > 50, 'rencontres officielles importées');
     assert.equal(posts, 1, 'un seul envoi pour des données identiques');
     // Sans changement dans le jeu, aucun nouvel envoi
     await page.waitForTimeout(4000);
