@@ -46,7 +46,7 @@ ctx.SpreadsheetApp.getActiveSpreadsheet = () => sheet;
     await page.click('#run-sheets >> text=Enregistrer');
     await page.waitForFunction(() => /Feuille à jour/.test(document.getElementById('run-sheets-status').textContent), null, { timeout: 15000 });
     const pk = sheet.sheets['🐾 Pokémon'], run = sheet.sheets['🏠 Run'];
-    assert.equal(pk.cells['2,5'].v, 'Pyro'); assert.equal(pk.cells['5,7'].v, 'Mort');
+    assert.equal(pk.cells['2,6'].v, 'Pyro'); assert.equal(pk.cells['5,8'].v, 'Mort');
     assert.equal(run.cells['5,5'].v, 1, 'compteur de morts');
     assert.equal(run.cells['5,11'].v, 'Route 103 Rival', 'prochain dresseur');
     assert.ok(sheet.sheets['🌿 Rencontres'].getLastRow() > 50, 'rencontres officielles importées');

@@ -69,8 +69,8 @@ test('dresseurs : blocs officiels lus avec équipe, niveaux, objets, talents, na
   assert.deepEqual(rox[5], { species: 'Aerodactyl-Mega', level: '38', item: 'Aerodactylite', ability: 'Tough Claws', nature: 'Timid', moves: ['Rock Tomb', 'Wing Attack', 'Earthquake', 'Ancient Power'] });
   const rows = G.trainerRows(t, { leaderroxanne: true });
   const roxRow = rows.findIndex(r => r[2] === 'Leader Roxanne');
-  assert.deepEqual([rows[roxRow][10], rows[roxRow][11], rows[roxRow + 1][2]], ['✔', 38, '']);
-  assert.equal(rows.find(r => r[2] === 'Youngster Ren')[4], 'Équipe aléatoire (voir doc officiel)');
+  assert.deepEqual([rows[roxRow][11], rows[roxRow][12], rows[roxRow + 1][2]], ['✔', 38, '']);
+  assert.equal(rows.find(r => r[2] === 'Youngster Ren')[5], 'Équipe aléatoire (voir doc officiel)');
   const relu = G.trainersFromRows(rows);
   assert.equal(relu.length, 5);
   assert.equal(G.nextTrainer(relu, { route103rival: true }).name, 'Youngster Ren');
@@ -117,9 +117,10 @@ test('première synchro : onglets créés, données officielles importées, stat
   assert.deepEqual(Object.keys(ss.sheets).sort(), Object.values(S).sort());
   const pk = ss.sheets[S.pokemon], run = ss.sheets[S.run], enc = ss.sheets[S.encounters], tr = ss.sheets[S.trainers], items = ss.sheets[S.items];
   const r2 = row(pk, 2);
-  assert.deepEqual([r2[0], r2[1], r2[3], r2[4], r2[6]], ['12345678-cafebabe', 1, 'Torchic', 'Pyro', 'Équipe']);
-  assert.deepEqual(r2.slice(9, 16), [31, 30, 29, 27, 26, 28, 28.5]);
-  assert.equal(row(pk, 5)[6], 'Mort');
+  assert.deepEqual([r2[0], r2[1], r2[4], r2[5], r2[7]], ['12345678-cafebabe', 1, 'Torchic', 'Pyro', 'Équipe']);
+  assert.equal(r2[3].sprite, 'https://play.pokemonshowdown.com/sprites/gen5/torchic.png', 'sprite à côté du nom');
+  assert.deepEqual(r2.slice(10, 17), [31, 30, 29, 27, 26, 28, 28.5]);
+  assert.equal(row(pk, 5)[7], 'Mort');
   // Tableau de bord
   assert.equal(v(run, R.kpiValue, 1), '2 / 6');
   assert.equal(v(run, R.kpiValue, 3), 4);
@@ -132,16 +133,17 @@ test('première synchro : onglets créés, données officielles importées, stat
   assert.equal(v(run, R.teamFirst + 1, 7), 'K.O.');
   assert.equal(v(run, R.tablesFirst, 8), 'Rip', 'morts');
   // Rencontres : Pyro (Route 101), Zig/Boxy (Route 102 → absente de l'extrait), Rip (Route 103)
-  const encRows = Array.from({ length: enc.getLastRow() - 1 }, (_, i) => row(enc, i + 2, 8));
+  const encRows = Array.from({ length: enc.getLastRow() - 1 }, (_, i) => row(enc, i + 2, 9));
   assert.ok(encRows.length > 100);
   const r101 = encRows.find(r => r[0] === 'Route 101');
-  assert.equal(r101[6], '✔ Pyro (Torchic)');
-  assert.equal(encRows.find(r => r[0] === 'Route 103')[6], '✝ Rip (Poochyena)');
-  assert.equal(encRows.find(r => r[0] === 'Littleroot Town')[6], '');
-  assert.equal(encRows.find(r => r[3] === 'Shroomish')[7], '');
+  assert.equal(r101[7], '✔ Pyro (Torchic)');
+  assert.equal(encRows.find(r => r[0] === 'Route 103')[7], '✝ Rip (Poochyena)');
+  assert.equal(encRows.find(r => r[0] === 'Littleroot Town')[7], '');
+  assert.equal(encRows.find(r => r[4] === 'Shroomish')[8], '');
   // Dresseurs
   assert.equal(v(tr, 2, 3), 'Route 103 Rival');
-  assert.equal(v(tr, 2, 10), 'Chilling Water, Razor Shell, Grass Knot, Encore');
+  assert.equal(v(tr, 2, 11), 'Chilling Water, Razor Shell, Grass Knot, Encore');
+  assert.equal(v(tr, 2, 6), 'Oshawott');
   // Objets avec cases « Récupéré »
   assert.equal(v(items, 2, 4), false);
 });
@@ -165,10 +167,11 @@ test('synchros suivantes : mise à jour sur place, colonnes manuelles intactes, 
     d.box = [];
   }), new Date());
   assert.equal(pk.getLastRow(), 5, 'aucune ligne en double');
-  assert.deepEqual([row(pk, 2)[3], row(pk, 2)[5], row(pk, 2)[1]], ['Combusken', 15, 1]);
-  assert.equal(row(pk, 3)[6], 'Mort');
+  assert.deepEqual([row(pk, 2)[4], row(pk, 2)[6], row(pk, 2)[1]], ['Combusken', 15, 1]);
+  assert.equal(row(pk, 2)[3].sprite, 'https://play.pokemonshowdown.com/sprites/gen5/combusken.png', 'sprite mis à jour à l\'évolution');
+  assert.equal(row(pk, 3)[7], 'Mort');
   assert.equal(v(pk, 3, C.deathCause), 'Youngster Ren', 'saisie manuelle conservée');
-  assert.equal(row(pk, 4)[6], 'Absent');
+  assert.equal(row(pk, 4)[7], 'Absent');
   // Split rempli automatiquement depuis l'onglet Dresseurs
   assert.equal(v(f, 2, 2), 'Roxanne');
   assert.equal(v(f, 4, 2), 'Roxanne');
@@ -179,12 +182,11 @@ test('synchros suivantes : mise à jour sur place, colonnes manuelles intactes, 
   assert.deepEqual([v(run, R.tablesFirst, 14), v(run, R.tablesFirst, 15)], ['Roxanne', 8.5]);
   assert.ok(String(v(run, R.tablesFirst, 16)).startsWith('█'));
   // Dresseurs battus + prochain dresseur
-  const battu = Array.from({ length: tr.getLastRow() - 1 }, (_, i) => [v(tr, i + 2, 3), v(tr, i + 2, 11)]).filter(x => x[0]);
+  const battu = Array.from({ length: tr.getLastRow() - 1 }, (_, i) => [v(tr, i + 2, 3), v(tr, i + 2, 12)]).filter(x => x[0]);
   assert.deepEqual(battu, [['Route 103 Rival', '✔'], ['Youngster Ren', '✔'], ['Youngster Levi', '✔'], ['Hiker Marcster', ''], ['Leader Roxanne', '✔']]);
-  assert.equal(v(run, R.kpiValue, 11), 'Hiker Marcster');
+  assert.equal(v(run, R.kpiValue, 11), 'Tous battus', 'rien après Roxanne dans l\'extrait');
   // Level cap déduit des combats : Ren et Levi battus → prochain boss Lass Videl, cap 25
   assert.deepEqual([v(run, R.kpiValue, 7), v(run, R.kpiValue, 9)], ['Niv. 25', 'Lass Videl']);
-  assert.equal(v(run, R.kpiSub, 11), 'Roxanne · Root Academy · Niv. max 37');
 });
 
 test('réimport : les cases « Récupéré » cochées sont conservées', () => {
@@ -220,12 +222,12 @@ test('synchro où seuls les PV changent : les gros onglets ne sont pas réécrit
   const ss = fakeSpreadsheet();
   G2.applyPayload(ss, payload(), new Date());
   const enc = ss.sheets[S.encounters];
-  enc.cells['2,7'] = { v: 'MARQUEUR' };
+  enc.cells['2,8'] = { v: 'MARQUEUR' };
   G2.applyPayload(ss, payload(d => { d.party[0].hp = 5; }), new Date());
-  assert.equal(enc.cells['2,7'].v, 'MARQUEUR', 'Rencontres non réécrites');
+  assert.equal(enc.cells['2,8'].v, 'MARQUEUR', 'Rencontres non réécrites');
   assert.equal(v(ss.sheets[S.run], R.teamFirst, 5), '5 / 40', 'équipe mise à jour');
   G2.applyPayload(ss, payload(d => { d.box[0].level = 13; d.box[0].nickname = 'Plume'; }), new Date());
-  assert.notEqual(enc.cells['2,7'] && enc.cells['2,7'].v, 'MARQUEUR', 'captures modifiées → statuts recalculés');
+  assert.notEqual(enc.cells['2,8'] && enc.cells['2,8'].v, 'MARQUEUR', 'captures modifiées → statuts recalculés');
 });
 
 test('nouvelle run : ancienne run archivée, feuille remise à zéro, tentative +1', () => {
@@ -252,7 +254,7 @@ test('nouvelle run : ancienne run archivée, feuille remise à zéro, tentative 
   // Nouvelle run propre
   assert.equal(v(run, R.info, 2), 2, 'tentative n°2');
   assert.equal(pk.getLastRow(), 2);
-  assert.deepEqual([v(pk, 2, 4), v(pk, 2, 2), v(pk, 2, C.deathCause)], ['Mudkip', 1, '']);
+  assert.deepEqual([v(pk, 2, C.species), v(pk, 2, 2), v(pk, 2, C.deathCause)], ['Mudkip', 1, '']);
   assert.equal(f.getLastRow(), 1, 'combats vidés (en-tête seul)');
   assert.equal(v(run, R.kpiValue, 3), 1, 'captures de la nouvelle run');
   assert.equal(v(run, R.tablesFirst, 8), 'Aucun mort 🎉');
@@ -279,4 +281,40 @@ test('combats détectés par le Lua : ajoutés une fois dans Combats, split remp
   assert.equal(v(f, 3, 3), 'Pyro', 'saisie conservée');
   assert.equal(v(f, 4, 1), 'Leader Roxanne');
   assert.equal(f.getLastRow(), 4, 'pas de doublon');
+});
+
+test('dresseurs : conditions de combat (gauntlet, B2B, météo permanente, PV de départ)', () => {
+  const blk = name => [['Name', name], ['Pokémon'], ['', 'Pikachu'], ['Level', '40'], ['Held Item', 'None'], ['Ability', 'Static'], ['Nature', 'Hardy'], ['Moves', 'Thunderbolt'], [], [], []];
+  const values = [[], ['Route 119'], ['Start of Perma Rain + Grassy Terrain\nBug Maniac Taylor until Fisherman Noxie are optional']]
+    .concat(blk('A'), [['B2B']], blk('B'), blk('C'), blk('D'), [['End of Rain + Grassy Terrain'], ['Start of Gauntlet'], ['Typhlosion-Hisui 61HP | Primarina 153HP']], blk('E'), [['End of Gauntlet'], ['Fortree Gym']], blk('F'));
+  const t = G.parseTrainerSheet(values, 'Winona');
+  const c = Object.fromEntries(t.map(x => [x.name, x.conditions]));
+  assert.deepEqual(c.A, ['Perma Rain + Grassy Terrain — Bug Maniac Taylor until Fisherman Noxie are optional']);
+  assert.deepEqual(c.B, ['Perma Rain + Grassy Terrain — Bug Maniac Taylor until Fisherman Noxie are optional', 'B2B']);
+  assert.deepEqual(c.C.length, 2, 'B2B : 2 dresseurs');
+  assert.deepEqual(c.D.length, 1);
+  assert.deepEqual(c.E, ['Gauntlet', 'Typhlosion-Hisui 61HP | Primarina 153HP']);
+  assert.deepEqual(c.F, []);
+  assert.deepEqual(t.map(x => x.area), ['Route 119', 'Route 119', 'Route 119', 'Route 119', 'Route 119', 'Fortree Gym'], 'une condition n\'est pas un lieu');
+  const rows = G.trainerRows(t, {});
+  assert.equal(rows.find(r => r[2] === 'E')[13], 'Gauntlet · Typhlosion-Hisui 61HP | Primarina 153HP');
+  assert.equal(G.trainersFromRows(rows).find(x => x.name === 'E').conditions, 'Gauntlet · Typhlosion-Hisui 61HP | Primarina 153HP');
+});
+
+test('sprites : noms de fichiers Showdown', () => {
+  assert.equal(G.spriteId('Darmanitan-Galar-Zen'), 'darmanitan-galarzen');
+  assert.equal(G.spriteId('Mr. Mime-Galar'), 'mrmime-galar');
+  assert.equal(G.spriteId('Jangmo-o'), 'jangmoo');
+  assert.equal(G.spriteId('Ho-Oh'), 'hooh');
+  assert.equal(G.spriteId('Type: Null'), 'typenull');
+  assert.equal(G.spriteId('Heracross-Mega'), 'heracross-mega');
+  assert.equal(G.spriteId('Flabébé'), 'flabebe');
+  assert.equal(G.spriteId('Farfetch’d-Galar'), 'farfetchd-galar');
+  assert.equal(G.spriteId('Nidoran-F'), 'nidoranf');
+  assert.equal(G.spriteId('Tauros-Paldea-Blaze'), 'tauros-paldeablaze');
+});
+
+test('objets : groupés par catégorie, ordre du doc conservé', () => {
+  const sorted = G.sortItems([['Baie', 'Oran', ''], ['Objet tenu', 'Miracle Seed', ''], ['Baie', 'Pecha', ''], ['Objet tenu', 'Silver Powder', ''], ['CT / CS', 'TM01', '']]);
+  assert.deepEqual(JSON.parse(JSON.stringify(sorted)).map(x => x[1]), ['Miracle Seed', 'Silver Powder', 'TM01', 'Oran', 'Pecha']);
 });

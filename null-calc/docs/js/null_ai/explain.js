@@ -159,15 +159,17 @@
     function container() {
         var holder = document.getElementById("null-ai-explain");
         if (holder) return holder;
-        var anchor = document.getElementById("null-ai-switch-destination");
-        if (!anchor) return null;
+        // Pleine largeur sous les deux colonnes d'attaques : les cartes s'affichent côte à côte.
+        var group = document.querySelector(".move-result-group");
+        if (!group || !document.getElementById("null-ai-switch-destination")) return null;
         holder = el("details", "null-ai-explain"); holder.id = "null-ai-explain";
         var stored = null; try { stored = root.localStorage.getItem("nullcalc_aiExplainOpen"); } catch (e) {}
         holder.open = stored !== "false";
         holder.addEventListener("toggle", function() { try { root.localStorage.setItem("nullcalc_aiExplainOpen", String(holder.open)); } catch (e) {} });
         holder.appendChild(el("summary", "", "Pourquoi ces % ? — explication de l'IA"));
         holder.appendChild(el("div", "null-ai-explain-body"));
-        anchor.parentNode.insertBefore(holder, anchor.nextSibling);
+        holder.classList.add("null-ai-explain--wide");
+        group.appendChild(holder);
         return holder;
     }
 

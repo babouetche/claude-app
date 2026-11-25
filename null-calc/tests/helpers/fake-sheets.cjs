@@ -63,6 +63,7 @@ function load(sourcesById, extra) {
     SpreadsheetApp: chain({
       newConditionalFormatRule: () => chain({ build: () => ({}) }), newDataValidation: () => chain({ build: () => ({}) }),
       BorderStyle: {}, InterpolationType: {},
+      newCellImage: () => { const img = { url: '' }; const b = { setSourceUrl: u => { img.url = u; return b; }, setAltTextTitle: () => b, build: () => ({ sprite: img.url }) }; return b; },
       openById: id => { const src = sourcesById && sourcesById[id]; if (!src) throw new Error('source inconnue ' + id); return makeSource(src); }
     }),
     PropertiesService: { getDocumentProperties: () => store('doc'), getScriptProperties: () => store('script') },
