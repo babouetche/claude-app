@@ -5,9 +5,15 @@
     var view = (params.get("vue") || "equipe").toLowerCase();
     var size = Math.max(1, Math.min(4, Number(params.get("taille")) || 2));
     var cols = Math.max(1, Math.min(30, Number(params.get("colonnes")) || 6));
-    var rows = Math.max(1, Math.min(30, Number(params.get("lignes")) || 5));
+    var rowsParam = Number(params.get("lignes"));
+    // Boîte : 6 × 5 (une boîte du jeu). Morts : une bande de 6. Au-delà : défilement page par page.
+    var LAYOUT = {
+        box: { cols: cols, rows: Math.max(1, Math.min(30, rowsParam || 5)) },
+        dead: { cols: cols, rows: Math.max(1, Math.min(30, (view === "morts" || view === "cimetiere") ? (rowsParam || 1) : 1)) }
+    };
     var pageSeconds = Math.max(2, Number(params.get("defilement")) || 5);
-    var boxPage = 0, lastData = null;
+    var page = { box: 0, dead: 0 }, lastData = null, animate = { box: false, dead: false };
+    var rows = LAYOUT.box.rows;
     var showItems = params.get("objets") !== "0";
     var direction = params.get("sens") === "colonne" ? "colonne" : "ligne";
     document.documentElement.style.setProperty("--s", size);
@@ -73,7 +79,7 @@
         s.appendChild(layout); children.forEach(function(c) { layout.appendChild(c); });
         return s;
     }
-    function grid() { var g = el("div", "grid"); g.style.gridTemplateColumns = "repeat(" + cols + ", calc(40px * var(--s)))"; return g; }
+    function grid(n) { var g = el("div", "grid"); g.style.gridTemplateColumns = "repeat(" + (n || cols) + ", calc(40px * var(--s)))"; return g; }
 
     function render(data) {
         var out = document.getElementById("overlay");
@@ -82,19 +88,23 @@
             var team = data.party.map(function(m) { return monCard(m, "team"); });
             out.appendChild(section("ÉQUIPE", team, el("div", "row team " + direction)));
         }
-        if (view === "boite" || view === "tout") {
-            // 6 × 5 par défaut (une boîte du jeu). Au-delà, défilement entre les pages.
-            var perPage = cols * rows, pages = Math.max(1, Math.ceil(data.box.length / perPage));
-            if (boxPage >= pages) boxPage = 0;
-            var shown = data.box.slice(boxPage * perPage, (boxPage + 1) * perPage);
-            var boxSection = section("BOÎTE (" + data.box.length + ")" + (pages > 1 ? " · " + (boxPage + 1) + "/" + pages : ""), shown.map(function(m) { return monCard(m, "box"); }), grid());
-            boxSection.dataset.pages = pages;
-            if (view !== "tout" && pages > 1) boxSection.insertBefore(el("div", "title", (boxPage + 1) + "/" + pages), boxSection.firstChild);
-            out.appendChild(boxSection);
-        }
-        if (view === "morts" || view === "cimetiere" || view === "tout") {
-            out.appendChild(section("MORTS (" + data.dead.length + ")", data.dead.map(function(m) { return monCard(m, "dead"); }), grid()));
-        }
+        if (view === "boite" || view === "tout") out.appendChild(paged("box", "BOÎTE", data.box));
+        if (view === "morts" || view === "cimetiere" || view === "tout") out.appendChild(paged("dead", "MORTS", data.dead));
+    }
+
+    function pagesOf(kind, list) { var l = LAYOUT[kind]; return Math.max(1, Math.ceil(list.length / (l.cols * l.rows))); }
+    // Une page de la liste ; quand la page change, la grille glisse depuis la droite.
+    function paged(kind, label, list) {
+        var l = LAYOUT[kind], perPage = l.cols * l.rows, pages = pagesOf(kind, list);
+        if (page[kind] >= pages) page[kind] = 0;
+        var shown = list.slice(page[kind] * perPage, (page[kind] + 1) * perPage);
+        var g = grid(l.cols);
+        if (animate[kind]) { g.classList.add("slide"); animate[kind] = false; }
+        var sec = section(label + " (" + list.length + ")" + (pages > 1 ? " · " + (page[kind] + 1) + "/" + pages : ""),
+            shown.map(function(m) { return monCard(m, kind === "box" ? "box" : "dead"); }), g);
+        sec.dataset.pages = pages;
+        if (view !== "tout" && pages > 1) sec.insertBefore(el("div", "title page", (page[kind] + 1) + "/" + pages), sec.firstChild);
+        return sec;
     }
 
     root.NullRunSync = {
@@ -116,12 +126,16 @@
     root.NullOverlay = { iconName: iconName, iconCandidates: iconCandidates };
     poll();
     setInterval(poll, 1000);
-    // Défilement des pages de la boîte
+    // Défilement page par page (boîte et morts)
     setInterval(function() {
-        if (!lastData || !(view === "boite" || view === "tout")) return;
-        var pages = Math.max(1, Math.ceil(lastData.box.length / (cols * rows)));
-        if (pages < 2) return;
-        boxPage = (boxPage + 1) % pages;
-        render(lastData);
+        if (!lastData) return;
+        var changed = false;
+        [["box", lastData.box, view === "boite" || view === "tout"], ["dead", lastData.dead, view === "morts" || view === "cimetiere" || view === "tout"]].forEach(function(k) {
+            if (!k[2]) return;
+            var pages = pagesOf(k[0], k[1]);
+            if (pages < 2) return;
+            page[k[0]] = (page[k[0]] + 1) % pages; animate[k[0]] = true; changed = true;
+        });
+        if (changed) render(lastData);
     }, pageSeconds * 1000);
 })(window);

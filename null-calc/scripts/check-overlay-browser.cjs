@@ -47,6 +47,15 @@ function fixture(mutate) {
     assert((await page.textContent('#overlay')).includes('1/2'), 'page 1/2');
     await page.waitForFunction(() => document.querySelectorAll('.grid .mon').length === 10, null, { timeout: 5000 });
     assert((await page.textContent('#overlay')).includes('2/2'), 'page 2/2');
+    // Morts : bande de 6, défilement 6 par 6 (14 morts → 6, 6, 2)
+    fixture(d => { const m = d.dead[0]; d.dead = Array.from({ length: 14 }, (_, i) => Object.assign({}, m, { uid: 'd' + i })); });
+    await page.goto(url + '?vue=morts&defilement=2');
+    await page.waitForFunction(() => document.querySelectorAll('.grid .mon').length === 6);
+    const deadCols = await page.evaluate(() => getComputedStyle(document.querySelector('.grid')).gridTemplateColumns.split(' ').length);
+    assert(deadCols === 6, 'colonnes morts : ' + deadCols);
+    assert((await page.textContent('#overlay')).includes('1/3'), 'morts page 1/3');
+    await page.waitForFunction(() => document.querySelector('#overlay').textContent.includes('3/3') && document.querySelectorAll('.grid .mon').length === 2, null, { timeout: 7000 });
+    assert(await page.evaluate(() => !!document.querySelector('.grid.slide')), 'animation de glissement');
     fixture(d => { d.party[0].hp = 10; });
     // Vue équipe seule, transparente
     await page.goto(url + '?vue=equipe&taille=3');
