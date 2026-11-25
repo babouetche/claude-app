@@ -44,6 +44,7 @@ def options(mode, clients):
         "retries": 5,
         "fragment_retries": 10,
         "overwrites": True,
+        "updatetime": False,  # date du fichier = maintenant (sinon Photos le range à la date de publication)
     }
     if clients:
         o["extractor_args"] = {"youtube": {"player_client": clients}}
