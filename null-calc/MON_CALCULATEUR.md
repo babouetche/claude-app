@@ -7,7 +7,7 @@ Base : [PokemonNullCalculator](https://github.com/Heroless-code/PokemonNullCalcu
 2. Double-clique sur **CALCULATEUR.html** (Chrome ou Edge).
 
 ## 1. Suivi de run (onglet « Suivi de run »)
-Il affiche l'équipe (PV, statut, PP), les boîtes, le cimetière (boîtes 12 à 14), les captures par zone, ainsi que le level cap et le prochain boss. Pour les boss, coche-les au fur et à mesure.
+Il affiche l'équipe (PV, statut, PP), les boîtes, les morts (boîtes 12 à 14), les captures par zone, ainsi que le level cap et le prochain boss. Pour les boss, coche-les au fur et à mesure.
 
 ### Synchro automatique avec mGBA
 1. Utilise **mGBA 0.10 ou plus récent**.
@@ -16,7 +16,7 @@ Il affiche l'équipe (PV, statut, PP), les boîtes, le cimetière (boîtes 12 à
 4. Laisse CALCULATEUR.html ouvert : tout se met à jour seul, environ toutes les 1,5 s.
 
 Ce que fait la synchro :
-- Elle crée tes sets **« Surnom [Run] »** dans le calculateur : l'équipe va dans *Team* et le reste dans la boîte. Les Pokémon du cimetière sont retirés.
+- Elle crée tes sets **« Surnom [Run] »** dans le calculateur : l'équipe va dans *Team* et le reste dans la boîte. Les Pokémon morts sont retirés.
 - Quand le Pokémon affiché à gauche est l'un des tiens, ses **PV et son statut** suivent ceux du jeu.
 - Les évolutions, changements d'attaques, d'objets et de niveaux sont suivis automatiquement.
 - Le script **ne modifie jamais ta partie** : il lit seulement la mémoire du jeu.
@@ -29,7 +29,7 @@ Si le Lua ne trouve pas son dossier, tape dans la console de mGBA :
 ## Overlay OBS (intégré, remplace PokemonNullDisplay)
 Il n'y a plus besoin de PokemonNullDisplay.exe ni de son script Lua :
 1. Dans mGBA, charge `NullCalcSync.lua` (comme d'habitude).
-2. Dans le calculateur, onglet **Suivi de run > Overlay OBS**, copie le lien de la vue voulue : Équipe, Boîte, Cimetière ou Tout.
+2. Dans le calculateur, onglet **Suivi de run > Overlay OBS**, copie le lien de la vue voulue : Équipe, Boîte, Morts ou Tout.
 3. Dans OBS, ajoute une source **Navigateur**, décoche « Fichier local », colle le lien et règle la taille (par exemple 900 × 300).
 
 L'overlay affiche les icônes, le niveau, la barre de PV, le statut, le K.O. et l'objet tenu, avec un fond transparent. Il se met à jour en direct, chaque seconde. Options à ajouter au lien : `taille=1..4`, `colonnes=N`, `sens=colonne`, `objets=0`, `fond=1`.

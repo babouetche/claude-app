@@ -387,7 +387,7 @@ local function tick()
 		writeOutput(body)
 		if body ~= lastBody then
 			lastBody = body
-			log(string.format("Mis à jour : équipe %d, boîtes %d, cimetière %d.", #data.party, #data.box, #data.dead))
+			log(string.format("Mis à jour : équipe %d, boîtes %d, morts %d.", #data.party, #data.box, #data.dead))
 		end
 	end
 end

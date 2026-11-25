@@ -130,7 +130,7 @@ test('première synchro : onglets créés, données officielles importées, stat
   assert.equal(v(run, R.teamFirst, 6), 0.83);
   assert.equal(v(run, R.teamFirst, 7), 'Brûlé');
   assert.equal(v(run, R.teamFirst + 1, 7), 'K.O.');
-  assert.equal(v(run, R.tablesFirst, 8), 'Rip', 'cimetière');
+  assert.equal(v(run, R.tablesFirst, 8), 'Rip', 'morts');
   // Rencontres : Pyro (Route 101), Zig/Boxy (Route 102 → absente de l'extrait), Rip (Route 103)
   const encRows = Array.from({ length: enc.getLastRow() - 1 }, (_, i) => row(enc, i + 2, 8));
   assert.ok(encRows.length > 100);
@@ -246,7 +246,7 @@ test('nouvelle run : ancienne run archivée, feuille remise à zéro, tentative 
   // Archive : résumé + 4 Pokémon de l'ancienne run
   assert.equal(arch.getLastRow(), 6);
   assert.deepEqual([v(arch, 2, 1), v(arch, 2, 3), v(arch, 2, 4), v(arch, 2, 5), v(arch, 2, 8), v(arch, 2, 10)],
-    [1, '▶ RÉSUMÉ', '4 captures · 1 au cimetière', 'Dernier boss battu : Roxanne', 5, 2]);
+    [1, '▶ RÉSUMÉ', '4 captures · 1 morts', 'Dernier boss battu : Roxanne', 5, 2]);
   assert.deepEqual([v(arch, 3, 3), v(arch, 3, 8), v(arch, 3, 9)], ['Pyro', 5, 2]);
   assert.deepEqual([v(arch, 6, 3), v(arch, 6, 7), v(arch, 6, 11)], ['Rip', 'Mort', 'Youngster Ren']);
   // Nouvelle run propre
@@ -255,7 +255,7 @@ test('nouvelle run : ancienne run archivée, feuille remise à zéro, tentative 
   assert.deepEqual([v(pk, 2, 4), v(pk, 2, 2), v(pk, 2, C.deathCause)], ['Mudkip', 1, '']);
   assert.equal(f.getLastRow(), 1, 'combats vidés (en-tête seul)');
   assert.equal(v(run, R.kpiValue, 3), 1, 'captures de la nouvelle run');
-  assert.equal(v(run, R.tablesFirst, 8), 'Cimetière vide 🎉');
+  assert.equal(v(run, R.tablesFirst, 8), 'Aucun mort 🎉');
   assert.equal(v(run, R.kpiValue, 11), 'Route 103 Rival', 'prochain dresseur repart du début');
 });
 

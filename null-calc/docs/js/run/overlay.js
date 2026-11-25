@@ -82,8 +82,8 @@
         if (view === "boite" || view === "tout") {
             out.appendChild(section("BOÎTE (" + data.box.length + ")", data.box.map(function(m) { return monCard(m, "box"); }), grid()));
         }
-        if (view === "cimetiere" || view === "morts" || view === "tout") {
-            out.appendChild(section("CIMETIÈRE (" + data.dead.length + ")", data.dead.map(function(m) { return monCard(m, "dead"); }), grid()));
+        if (view === "morts" || view === "cimetiere" || view === "tout") {
+            out.appendChild(section("MORTS (" + data.dead.length + ")", data.dead.map(function(m) { return monCard(m, "dead"); }), grid()));
         }
     }
 
