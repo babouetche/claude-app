@@ -102,7 +102,7 @@
         c.title = display(mon) + " (" + mon.species + ")";
         c.appendChild(sprite(mon.species));
         if (kind === "dead") c.appendChild(el("span", "cross", "✝"));
-        else { c.appendChild(el("span", "lv", "N." + mon.level)); add(c, itemBadge(mon)); }
+        else { if (kind !== "trainer") c.appendChild(el("span", "lv", "N." + mon.level)); add(c, itemBadge(mon)); }
         return c;
     }
 

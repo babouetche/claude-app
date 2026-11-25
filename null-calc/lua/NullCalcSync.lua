@@ -421,7 +421,10 @@ local function trackFights(party)
 		appendHistory("R|" .. run .. "|" .. os.time())
 	end
 	local enemy = readEnemy()
-	if enemy then
+	-- Un combat n'est compté qu'une fois gagné : tous les Pokémon adverses K.O.
+	local won = enemy ~= nil
+	if enemy then for _, m in ipairs(enemy) do if m.hp > 0 then won = false end end end
+	if won then
 		local parts = {}
 		for _, m in ipairs(enemy) do parts[#parts + 1] = m.species .. ":" .. m.level .. ":" .. m.itemId end
 		local sig = table.concat(parts, ";")
@@ -438,7 +441,7 @@ local function trackFights(party)
 			history.fights[run] = fights
 			table.insert(fights, { t = t, team = enemy })
 			appendHistory("F|" .. run .. "|" .. t .. "|" .. sig)
-			log("Combat détecté : " .. sig)
+			log("Combat gagné : " .. sig)
 		end
 		lastEnemySig = sig
 	end

@@ -173,6 +173,12 @@ def main():
     mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 90, (90, 70, 60, 50, 40, 40)))
     g.NULL_CALC_LUA_DIR = str(work / "lua") + "/"
     L.execute(open(work / "lua" / "NullCalcSync.lua", encoding="utf8").read())
+    # Combat en cours (adversaires encore debout) : pas encore compté
+    L.execute("NullCalcSyncNow()")
+    assert not (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").count("\nF|"), "combat en cours compté"
+    # Combat gagné : tous les adversaires K.O.
+    mem.write(PARTY + 6 * 104, party_mon(enemy1, 36, 0, (80, 40, 90, 30, 40, 50)))
+    mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 0, (90, 70, 60, 50, 40, 40)))
     L.execute("NullCalcSyncNow()")
     if os.environ.get("DEBUG"):
         print("output:", g.NULL_CALC_SYNC_TEST.output)
@@ -213,16 +219,16 @@ def main():
     battle = data["battle"]
     assert battle["runId"] == "cafebabe" and battle["runIndex"] == 1 and battle["runCount"] == 1, battle
     assert [(m["species"], m["level"]) for m in battle["fights"][0]["team"]] == [("Nosepass", 36), ("Tyrunt", 37)], battle
-    assert battle["enemy"][1]["item"] == "Life Orb" and battle["enemy"][0]["hp"] == 80
+    assert battle["enemy"][1]["item"] == "Life Orb" and battle["enemy"][0]["hp"] == 0
     hist = (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").splitlines()
     assert hist[0].startswith("R|cafebabe|") and hist[1].startswith("F|cafebabe|") and hist[1].endswith("|Nosepass:36:%d;Tyrunt:37:%d" % (iid("Sitrus Berry"), iid("Life Orb"))), hist
     L.execute("NullCalcSyncNow()")
     assert len((work / "lua" / "historique-combats.txt").read_text(encoding="utf8").splitlines()) == 2, "même combat : pas de doublon"
     # Équipe adverse corrompue (checksum) : ignorée
     bad = bytearray(enemy2); bad[0x1E] ^= 0x55
-    mem.write(PARTY + 7 * 104, party_mon(bytes(bad), 37, 90, (90, 70, 60, 50, 40, 40)))
+    mem.write(PARTY + 7 * 104, party_mon(bytes(bad), 37, 0, (90, 70, 60, 50, 40, 40)))
     assert L.eval("NULL_CALC_SYNC_TEST.readEnemy()") is None
-    mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 90, (90, 70, 60, 50, 40, 40)))
+    mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 0, (90, 70, 60, 50, 40, 40)))
     addr_file = work / "lua" / "adresse-adversaire.txt"
     assert addr_file.read_text().strip() == hex(PARTY + 6 * 104), "adresse retenue"
 
