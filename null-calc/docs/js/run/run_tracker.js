@@ -271,6 +271,26 @@
         content.appendChild(installHelp(false));
     }
 
+    // Liens de l'overlay OBS (docs/overlay.html), à coller dans une source « Navigateur ».
+    function overlayHelp() {
+        var d = el("details", "run-sheets run-overlay"); d.id = "run-overlay";
+        d.appendChild(el("summary", "", "Overlay OBS (remplace PokemonNullDisplay)"));
+        d.appendChild(el("p", "run-muted", "Dans OBS : Sources > + > Navigateur, décoche « Fichier local », colle un lien ci-dessous, largeur 900 × hauteur 300 (à ajuster). Le fond est transparent. Il suffit que mGBA tourne avec NullCalcSync.lua : l'overlay lit directement ses données, pas besoin du calculateur ni de PokemonNullDisplay.exe."));
+        [["Équipe", "vue=equipe&taille=2"], ["Boîte", "vue=boite&taille=2&colonnes=10"], ["Cimetière", "vue=morts&taille=2&colonnes=10"], ["Tout", "vue=tout&taille=2"]].forEach(function(v) {
+            var url = new URL("overlay.html?" + v[1], document.baseURI).href;
+            var row = el("div", "run-sheets-row"), input = el("input"), btn = el("button", "btn btn-small", "Copier");
+            input.readOnly = true; input.value = url; btn.type = "button";
+            btn.addEventListener("click", function() {
+                input.select();
+                try { (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).catch(function() { document.execCommand("copy"); }); } catch (e) { document.execCommand("copy"); }
+                btn.textContent = "Copié ✔"; setTimeout(function() { btn.textContent = "Copier"; }, 1500);
+            });
+            row.appendChild(el("strong", "", v[0])); row.appendChild(input); row.appendChild(btn); d.appendChild(row);
+        });
+        d.appendChild(el("p", "run-muted", "Options dans le lien : taille=1 à 4, colonnes=N, sens=colonne (équipe verticale), objets=0 (sans objets), fond=1 (fond sombre)."));
+        return d;
+    }
+
     function installHelp(open) {
         var d = el("details", "run-section run-install"); d.open = !!open;
         d.appendChild(el("summary", "run-section-title", "Installation de la synchro automatique (mGBA)"));
@@ -311,7 +331,9 @@
             cb.addEventListener("change", function() { save(opt[0], cb.checked); if (cb.checked && latest) { lastAppliedBody = null; root.NullRunSync.receive(latest); } });
             label.appendChild(cb); label.appendChild(document.createTextNode(" " + opt[1])); options.appendChild(label);
         });
-        bar.appendChild(options); page.appendChild(bar);
+        bar.appendChild(options);
+        bar.appendChild(overlayHelp());
+        page.appendChild(bar);
         var content = el("div", "run-content"); content.id = "run-content"; page.appendChild(content);
         var dex = document.getElementById("dex-subpage");
         dex.parentNode.insertBefore(page, dex.nextSibling);

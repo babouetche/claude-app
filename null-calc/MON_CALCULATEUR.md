@@ -26,13 +26,15 @@ Quand tu recommences une run, tout se remet à zéro tout seul : anciens sets re
 Si le Lua ne trouve pas son dossier, tape dans la console de mGBA :
 `NULL_CALC_LUA_DIR = [[C:\chemin\vers\null-calc\lua\]]`, puis recharge le script.
 
-## Overlay OBS (PokemonNullDisplay de Sykless)
-`NullCalcSync.lua` écrit aussi le fichier `pokemonData.txt` que lit PokemonNullDisplay. Tu n'as donc plus besoin de charger `PokemonNullDisplay.lua` dans mGBA :
-1. Lance **PokemonNullDisplay.exe** comme d'habitude : c'est lui qui dessine les images pour OBS.
-2. Dans mGBA, charge **seulement** `NullCalcSync.lua`.
-3. Le message `Overlay OBS (PokemonNullDisplay) : …` confirme que c'est actif. S'il n'apparaît pas, lance l'exe une fois puis redémarre mGBA.
+## Overlay OBS (intégré, remplace PokemonNullDisplay)
+Il n'y a plus besoin de PokemonNullDisplay.exe ni de son script Lua :
+1. Dans mGBA, charge `NullCalcSync.lua` (comme d'habitude).
+2. Dans le calculateur, onglet **Suivi de run > Overlay OBS**, copie le lien de la vue voulue : Équipe, Boîte, Cimetière ou Tout.
+3. Dans OBS, ajoute une source **Navigateur**, décoche « Fichier local », colle le lien et règle la taille (par exemple 900 × 300).
 
-Le fichier est identique à celui de leur script, avec une correction : les Pokémon en boîte affichent leur vrai niveau. Leur script lit l'ancien format de données et affiche souvent niveau 1.
+L'overlay affiche les icônes, le niveau, la barre de PV, le statut, le K.O. et l'objet tenu, avec un fond transparent. Il se met à jour en direct, chaque seconde. Options à ajouter au lien : `taille=1..4`, `colonnes=N`, `sens=colonne`, `objets=0`, `fond=1`.
+
+Si tu préfères garder PokemonNullDisplay.exe, ça marche toujours : `NullCalcSync.lua` écrit aussi son fichier `pokemonData.txt`.
 
 ## Google Sheets automatique
 Ta feuille de suivi se remplit toute seule à partir de ta partie. Installation : voir [google-sheets/INSTALLATION.md](google-sheets/INSTALLATION.md).

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Overlay Pokémon Null</title>
+<!--
+  Overlay OBS : Source « Navigateur » > cocher « Fichier local » > choisir ce fichier.
+  Paramètres dans l'adresse (OBS : décocher « Fichier local » et coller l'URL file:///…/overlay.html?vue=equipe) :
+    vue=equipe | boite | morts | tout      (défaut : equipe)
+    taille=1 … 4                           (défaut : 2)
+    colonnes=N                             (boîte/morts, défaut 10)
+    sens=ligne | colonne                   (équipe, défaut ligne)
+    objets=0                               (masquer les objets)
+    fond=1                                 (fond sombre au lieu de transparent)
+-->
+<style>
+  :root { --s: 2; }
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #fff; padding: 6px; }
+  body.fond { background: rgba(18, 22, 34, .85); }
+  .section { margin-bottom: 10px; }
+  .title { font-weight: 800; font-size: calc(9px * var(--s)); letter-spacing: .5px; text-shadow: 0 2px 3px #000; margin: 0 0 4px 2px; }
+  .row { display: flex; flex-wrap: wrap; gap: calc(3px * var(--s)); }
+  .row.colonne { flex-direction: column; }
+  .grid { display: grid; gap: calc(2px * var(--s)); }
+  .mon { position: relative; width: calc(40px * var(--s)); text-align: center; }
+  .team .mon { width: calc(46px * var(--s)); background: rgba(10, 14, 26, .55); border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: calc(4px * var(--s)); padding: calc(2px * var(--s)) calc(2px * var(--s)) calc(3px * var(--s)); }
+  .mon img { width: calc(32px * var(--s)); height: calc(32px * var(--s)); image-rendering: pixelated; display: block; margin: 0 auto;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .7)); }
+  .lv { position: absolute; top: 0; right: calc(1px * var(--s)); font-size: calc(6.5px * var(--s)); font-weight: 800; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+  .name { font-size: calc(6px * var(--s)); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000; }
+  .item { font-size: calc(5px * var(--s)); color: #f2c14e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000; }
+  .hp { height: calc(3px * var(--s)); background: rgba(255, 255, 255, .2); border-radius: 2px; overflow: hidden; margin-top: calc(1px * var(--s)); }
+  .hp > i { display: block; height: 100%; }
+  .ok { background: #2fd15a; } .mid { background: #f2c14e; } .low { background: #ef4444; }
+  .status { position: absolute; top: 0; left: calc(1px * var(--s)); font-size: calc(5px * var(--s)); font-weight: 800; padding: 0 2px; border-radius: 2px; }
+  .st-brn { background: #ef6c3a; } .st-par { background: #e6c229; color: #222; } .st-psn, .st-tox { background: #a35dd6; }
+  .st-slp { background: #8b95a7; } .st-frz, .st-frb { background: #59c5e8; color: #123; } .st-ko { background: #b91c1c; }
+  .ko img { filter: grayscale(1) brightness(.6); }
+  .dead img { filter: grayscale(1) brightness(.75) drop-shadow(0 2px 2px rgba(0, 0, 0, .7)); }
+  .cross { position: absolute; bottom: 0; right: calc(2px * var(--s)); font-size: calc(9px * var(--s)); color: #ff6b6b; text-shadow: 0 0 3px #000; }
+  .empty { opacity: .25; }
+  .waiting { font-size: 14px; text-shadow: 0 1px 2px #000; }
+</style>
+</head>
+<body>
+<div id="overlay"><div class="waiting">En attente de mGBA (NullCalcSync.lua)…</div></div>
+<script src="./js/run/overlay.js"></script>
+</body>
+</html>

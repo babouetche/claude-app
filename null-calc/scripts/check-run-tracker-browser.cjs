@@ -46,6 +46,8 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     assert(cards[0] === 2, 'Cartes équipe : ' + cards);
     assert((await page.textContent('#run-status')).includes('Synchronisé'), 'Statut : ' + await page.textContent('#run-status'));
     assert((await page.textContent('.run-stat--dead .run-stat-value')) === '1', 'Compteur de morts');
+    const overlayUrls = await page.$$eval('#run-overlay input', els => els.map(e => e.value));
+    assert(overlayUrls.length === 4 && overlayUrls.every(u => /\/docs\/overlay\.html\?vue=/.test(u)), 'Liens overlay : ' + overlayUrls);
     if (shots) await page.screenshot({ path: path.join(shots, 'run-tracker.png'), fullPage: true });
     // Level cap
     await page.click('.run-bosses summary');
