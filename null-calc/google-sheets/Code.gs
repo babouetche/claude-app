@@ -15,7 +15,8 @@
 var SOURCES = {
   encounters: '1EdJf2JRe5dLPEX1vWmbeRFeCIh-7hgos-t52JQd1Xb8',  // Pokémon Locations (officiel)
   items: '1ForxCI9BczgfLYHEOTd-3Cg4tEa3Nn_VNk5nx-OLedo',       // Item Locations (officiel)
-  trainers: '1mwHPt0AMzOJ_hfmDrVZpKP-Hf4eTT0ROhY8Wa7bY7r8'     // Trainer Battles (officiel)
+  trainers: '1ack17Gkn_sRG94HD9CP2UE0NcJ0RZz8FvBf6OgRxDMI',    // Colour Coded Trainer Battles - Null V1.2
+  trainersFallback: '1mwHPt0AMzOJ_hfmDrVZpKP-Hf4eTT0ROhY8Wa7bY7r8' // Trainer Battles (officiel), si le premier est inaccessible
 };
 var TRAINER_SHEETS = [['Roxanne Split', 'Roxanne'], ['Brawly Split', 'Brawly'], ['Wattson Split', 'Wattson'], ['Norman Split', 'Norman'],
   ['Flannery Split', 'Flannery'], ['Winona Split', 'Winona'], ['Tate&Liza Split', 'Tate & Liza'], ['Steven Split', 'Steven'],
@@ -634,8 +635,12 @@ function importReference(ss, s) {
     log.push(enc.length + ' rencontres');
   } catch (e) { log.push('Rencontres non importées (' + e.message + ')'); }
   try {
-    var src = SpreadsheetApp.openById(SOURCES.trainers), trainers = [];
-    TRAINER_SHEETS.forEach(function(t) { var sh = src.getSheetByName(t[0]); if (sh) trainers = trainers.concat(parseTrainerSheet(sh.getDataRange().getValues(), t[1])); });
+    var trainers = [];
+    [SOURCES.trainers, SOURCES.trainersFallback].forEach(function(id) {
+      if (trainers.length) return;
+      var src; try { src = SpreadsheetApp.openById(id); } catch (err) { return; }
+      TRAINER_SHEETS.forEach(function(t) { var sh = src.getSheetByName(t[0]); if (sh) trainers = trainers.concat(parseTrainerSheet(sh.getDataRange().getValues(), t[1])); });
+    });
     if (!trainers.length) throw new Error('aucun dresseur lu');
     writeTable_(s.trainers, TRAINER_HEADERS.length, trainerRows(trainers, {}));
     log.push(trainers.length + ' dresseurs');
@@ -668,7 +673,8 @@ function fillFightSplits_(s) {
   var splitOf = {};
   trainersFromRows(trainerSheetRows_(s)).forEach(function(t) { splitOf[key_(t.name)] = t.split; });
   fightRows_(s).forEach(function(r, i) {
-    if (str_(r[0]) && !str_(r[1]) && splitOf[key_(r[0])]) s.fights.getRange(i + 2, 2).setValue(splitOf[key_(r[0])]);
+    var split = splitOf[key_(r[0])] || (/^Root Academy/.test(str_(r[0])) ? 'Roxanne' : '');
+    if (str_(r[0]) && !str_(r[1]) && split) s.fights.getRange(i + 2, 2).setValue(split);
   });
 }
 
@@ -780,6 +786,27 @@ function archiveRun_(ss, s, stamp) {
   return { attempt: attempt + 1, archived: rows.length };
 }
 
+// Combats détectés par le Lua : une ligne par dresseur battu, ajoutée une seule fois (frags à remplir).
+function addDetectedFights_(s, fights) {
+  if (!Array.isArray(fights) || !fights.length) return 0;
+  var have = {}, rows = [];
+  fightRows_(s).forEach(function(r) { if (str_(r[0])) have[key_(r[0])] = true; });
+  fights.forEach(function(f) {
+    var name = str_(f && f.name);
+    if (!name || have[key_(name)]) return;
+    have[key_(name)] = true;
+    var row = fill_(FIGHT_HEADERS.length, ''); row[0] = name; row[FIGHT_HEADERS.length - 1] = 'Détecté automatiquement';
+    rows.push(row);
+  });
+  if (rows.length) {
+    var start = 2, n = s.fights.getLastRow();
+    if (n > 1) { var col = s.fights.getRange(2, 1, n - 1, 1).getValues(), lastFilled = 0; col.forEach(function(c, i) { if (str_(c[0])) lastFilled = i + 1; }); start = lastFilled + 2; }
+    if (s.fights.getMaxRows() < start + rows.length - 1) s.fights.insertRowsAfter(s.fights.getMaxRows(), start + rows.length - 1 - s.fights.getMaxRows());
+    s.fights.getRange(start, 1, rows.length, FIGHT_HEADERS.length).setValues(rows);
+  }
+  return rows.length;
+}
+
 function applyPayload(ss, payload, now) {
   var s = ensureStructure(ss), pk = s.pokemon;
   var stamp = Utilities.formatDate(now, ss.getSpreadsheetTimeZone(), 'dd/MM/yyyy HH:mm:ss');
@@ -793,6 +820,7 @@ function applyPayload(ss, payload, now) {
     pk.getRange(u.row, 1, 1, u.values.length).setValues([u.values]);
     pk.getRange(u.row, COL.sync).setValue(u.stamp);
   });
+  addDetectedFights_(s, payload.fights);
   s.run.getRange(RUN.info, 4).setValue(stamp);
   s.run.getRange(RUN.teamFirst, 1, 6, 10).setValues(teamRows(payload));
   // Première synchro sans données officielles : import unique.
@@ -802,7 +830,7 @@ function applyPayload(ss, payload, now) {
 }
 
 // Export pour les tests Node (sans effet dans Apps Script).
-if (typeof module !== 'undefined') module.exports = { planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
+if (typeof module !== 'undefined') module.exports = { addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
   runSummary: runSummary, teamRows: teamRows, applyPayload: applyPayload, ensureStructure: ensureStructure, refreshAll: refreshAll,
   parseEncounterGrid: parseEncounterGrid, parseSpecialEncounters: parseSpecialEncounters, parseTrainerSheet: parseTrainerSheet,
   parseItemSheet: parseItemSheet, trainerRows: trainerRows, trainersFromRows: trainersFromRows, nextTrainer: nextTrainer,

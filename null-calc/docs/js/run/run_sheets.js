@@ -17,11 +17,18 @@
         return { cap: info.cap, next: info.boss ? info.boss.name : "", beaten: Object.keys(beaten) };
     }
 
+    // Dresseurs affrontés, reconnus à partir des combats détectés par le Lua.
+    function detectedFights(data) {
+        var p = root.NullTrainers && root.NullTrainers.auto(data);
+        return p ? p.fights.map(function(f) { return { name: f.name, t: f.t }; }) : [];
+    }
+
     // Données envoyées : tout sauf le texte d'export Showdown (inutile pour la feuille).
     function buildPayload(data) {
         function strip(list) { return (list || []).map(function(m) { var c = Object.assign({}, m); delete c.showdown; return c; }); }
         return { kind: "null-run", version: 1, sentAt: new Date().toISOString(), bosses: bosses(),
             runId: root.NullRunModel ? root.NullRunModel.runIdOf(data) : "",
+            fights: detectedFights(data),
             data: { party: strip(data.party), box: strip(data.box), dead: strip(data.dead) } };
     }
 
@@ -55,7 +62,7 @@
 
     function onData(data, force) {
         if (!data || !validUrl(getUrl())) return;
-        var payload = buildPayload(data), key = JSON.stringify([payload.data, payload.bosses]);
+        var payload = buildPayload(data), key = JSON.stringify([payload.data, payload.bosses, payload.fights]);
         if (!force && key === lastKey) return;
         lastKey = key; pending = payload;
         var wait = Math.max(0, MIN_INTERVAL_MS - (Date.now() - lastSent));

@@ -136,5 +136,18 @@
         return { fought: fought, next: next, cap: cap, nextBoss: nextBoss, bossesBeaten: beaten, lastOrder: last };
     }
 
-    return { BOSSES: BOSSES, keysOf: keysOf, buildTrainers: buildTrainers, matchTeam: matchTeam, progress: progress, groupName: groupName };
+    // Progression à partir des données du Lua (data.battle.fights), avec les dresseurs du calculateur.
+    var cache = null;
+    function auto(data, setdex) {
+        var g = typeof window !== "undefined" ? window : globalThis;
+        setdex = setdex || g.SETDEX_SV;
+        if (!setdex || !data || !data.battle) return null;
+        if (!cache) cache = buildTrainers(setdex);
+        var p = progress(cache, data.battle.fights || []);
+        p.fights = Object.keys(p.fought).map(function(n) { return { name: n, t: p.fought[n].at, order: p.fought[n].trainer.order }; })
+            .sort(function(a, b) { return a.t - b.t || a.order - b.order; });
+        return p;
+    }
+
+    return { auto: auto, BOSSES: BOSSES, keysOf: keysOf, buildTrainers: buildTrainers, matchTeam: matchTeam, progress: progress, groupName: groupName };
 });

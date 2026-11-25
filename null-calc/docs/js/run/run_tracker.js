@@ -23,6 +23,18 @@
         return resolvers;
     }
 
+    // Boss battus détectés par le Lua (combats de dresseurs) : cochés automatiquement.
+    function autoBosses(data) {
+        var p = root.NullTrainers && root.NullTrainers.auto(data);
+        if (!p) return null;
+        var beaten = load(KEYS.beaten, {}), changed = false;
+        for (var i = 0; i < p.bossesBeaten && i < Model.BOSSES.length; i++) {
+            if (!beaten[Model.BOSSES[i].name]) { beaten[Model.BOSSES[i].name] = true; changed = true; }
+        }
+        if (changed) save(KEYS.beaten, beaten);
+        return p;
+    }
+
     // ------------------------------------------------------------------ Réception
     root.NullRunSync = {
         receive: function(payload) {
@@ -36,6 +48,7 @@
                 save(KEYS.newRun, Date.now());
             }
             if (runId) save(KEYS.runId, runId);
+            autoBosses(payload.data);
             latest = payload; receivedAt = Date.now();
             save(KEYS.last, payload);
             if (root.NullRunSheets) root.NullRunSheets.onData(payload.data);
@@ -216,8 +229,10 @@
         top.appendChild(stats);
         var capBox = el("div", "run-cap");
         capBox.appendChild(el("div", "run-cap-title", capInfo.boss ? "Prochain boss : " + capInfo.boss.name : "Tous les boss sont battus"));
+        var autoP = data && root.NullTrainers && root.NullTrainers.auto(data);
+        if (autoP && autoP.next) capBox.appendChild(el("div", "run-cap-title", "Prochain dresseur : " + autoP.next.name));
         capBox.appendChild(el("div", "run-cap-value" + (sum.maxLevel > capInfo.cap ? " run-cap-value--over" : ""), "Level cap : " + capInfo.cap));
-        var details = el("details", "run-bosses"); details.appendChild(el("summary", "", "Boss battus (coche au fur et à mesure)"));
+        var details = el("details", "run-bosses"); details.appendChild(el("summary", "", "Boss battus (cochés automatiquement à chaque combat détecté)"));
         Model.BOSSES.forEach(function(b) {
             var label = el("label", "run-boss"), cb = el("input"); cb.type = "checkbox"; cb.checked = !!beaten[b.name];
             cb.addEventListener("change", function() { var next = load(KEYS.beaten, {}); if (cb.checked) next[b.name] = true; else delete next[b.name]; save(KEYS.beaten, next); render(); });

@@ -264,3 +264,19 @@ test('données invalides refusées', () => {
   assert.ok(G.validatePayload({ kind: 'null-run', data: { party: Array(7).fill({}), box: [], dead: [] } }));
   assert.equal(G.validatePayload(payload()), '');
 });
+
+test('combats détectés par le Lua : ajoutés une fois dans Combats, split rempli', () => {
+  const { G: G2 } = load(SOURCES);
+  const ss = fakeSpreadsheet();
+  const p1 = payload(); p1.fights = [{ name: 'Root Academy Trainer #1', t: 1 }, { name: 'Route 103 Rival', t: 2 }];
+  G2.applyPayload(ss, p1, new Date());
+  const f = ss.sheets[S.fights];
+  assert.deepEqual([v(f, 2, 1), v(f, 2, 2), v(f, 3, 1)], ['Root Academy Trainer #1', 'Roxanne', 'Route 103 Rival']);
+  assert.equal(v(f, 2, 15), 'Détecté automatiquement');
+  f.cells['3,3'] = { v: 'Pyro' };
+  const p2 = payload(); p2.fights = p1.fights.concat([{ name: 'Leader Roxanne', t: 3 }]);
+  G2.applyPayload(ss, p2, new Date());
+  assert.equal(v(f, 3, 3), 'Pyro', 'saisie conservée');
+  assert.equal(v(f, 4, 1), 'Leader Roxanne');
+  assert.equal(f.getLastRow(), 4, 'pas de doublon');
+});

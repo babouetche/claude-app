@@ -86,8 +86,16 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     await page.waitForSelector('.run-newrun');
     assert((await page.textContent('.run-newrun')).includes('tentative n°2'), 'bannière');
     if (shots) await page.screenshot({ path: path.join(shots, 'run-newrun.png') });
+    // Combat détecté par le Lua (dresseur après Root Academy 4) : boss cochés et cap à jour automatiquement
+    fixture(d => {
+      d.party = [Object.assign({}, d.party[0], { uid: '99999999-0000beef', species: 'Mudkip', nickname: 'Mud', level: 30, moves: [{ name: 'Water Gun', pp: 25 }] })];
+      d.box = []; d.dead = [];
+      d.battle = { runId: '0000beef', runIndex: 2, runCount: 2, fights: [{ t: 1, team: [{ species: 'Oinkologne', level: 33 }, { species: 'Gumshoos', level: 33 }, { species: 'Talonflame', level: 34 }] }] };
+    });
+    await page.waitForFunction(() => document.querySelector('.run-cap-value') && document.querySelector('.run-cap-value').textContent.includes('38'), null, { timeout: 8000 });
+    assert(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('nullcalc_runBeaten') || '{}')).length === 4), '4 boss Root Academy cochés');
     assert(!errors.length, 'Erreurs JS : ' + errors.join(' | '));
-    console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap, nouvelle run.');
+    console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap, nouvelle run, boss cochés par les combats détectés.');
   } finally {
     await browser.close();
     if (!existed && fs.existsSync(out)) fs.unlinkSync(out);
