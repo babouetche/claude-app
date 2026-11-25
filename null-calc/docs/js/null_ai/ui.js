@@ -1,6 +1,6 @@
 (function(root) {
     "use strict";
-    var lastEnemyKey, lastEnemyIdentity, lastPlayerKey, lastPartyKey, lastFaintTrainer, lastResult;
+    var lastEnemyKey, lastEnemyIdentity, lastPlayerKey, lastPartyKey, lastFaintTrainer, lastResult, explainState = null;
     var FACTS = [
         ["playerConfused", "Joueur confus", "null-ai-player-confused"], ["playerInfatuated", "Joueur sous Attraction", "null-ai-player-infatuated"],
         ["playerIncapacitated", "Joueur incapable d’attaquer ce tour"], ["playerSubstitute", "Joueur derrière un Clonage"],
@@ -102,6 +102,7 @@
     function clear() {
         if (root.NullDoubleUI) root.NullDoubleUI.clear();
         if (root.NullPostKOUI) root.NullPostKOUI.clear();
+        if (root.NullAIExplain) root.NullAIExplain.clear();
         group().parent().removeClass("null-ai-enabled"); $(".null-ai-probability, #null-ai-context, #null-ai-action-summary, #null-ai-switch-destination").remove(); $(".null-ai-row").removeClass("null-ai-row");
         for (var i = 1; i <= 4; i++) $("#resultMoveR" + i).attr("aria-describedby", "resultDamageR" + i);
         lastEnemyKey = lastPlayerKey = lastEnemyIdentity = lastPartyKey = lastFaintTrainer = lastResult = null;
@@ -221,11 +222,13 @@
         (switchResult && switchResult.candidates || []).forEach(function(c) { $("#null-ai-party .null-ai-party-row").filter(function() { return $(this).attr("data-id") === c.id; }).find(".null-ai-party-score").text("Score " + ((c.scoreStatus || c.status) === "estimated" ? "≈ " : "") + c.score + "; switch into : " + (typeof c.probability === "number" ? ((c.probabilityStatus || c.status) === "estimated" ? "≈ " : "") + percentage(c.probability) : "indéterminé") + " si switch"); });
         $("#null-ai-reason").text(explanation || "Les pourcentages de dégâts restent indépendants des probabilités de choix. Les égalités de choix d’attaque sont départagées uniformément.");
         var assumptions = Array.from(new Set((moveResult.assumptions || []).concat(switchResult && switchResult.assumptions || [],action.assumptions||[]))); $("#null-ai-assumptions").empty(); assumptions.forEach(function(a) { $("#null-ai-assumptions").append($("<li>").text(a)); });
+        if (root.NullAIExplain) root.NullAIExplain.update(explainState, moveResult, action);
     }
     function refresh(results) {
         root.NullBattleStore.cancel("ui");
         if (!active()) { clear(); return; } ensureElements(); results = results || (typeof damageResults !== "undefined" ? damageResults : null); if (!results || !results[0] || !results[1]) { if (root.NullAI18n) root.NullAI18n.refresh(); return; }
         var controls = overrides(results);
+        explainState = null;
         try {
             var state = root.NullMoveAIState.readBattleState(results, controls);
             if (state.field.gameType === "Doubles" && root.NullDoubleUI) {
@@ -255,6 +258,7 @@
                     $("#null-ai-switch-into-note").text("Pokémon actif mémorisé : " + state.player.name + ". Dégâts sur l’entrant affiché à gauche ; décisions IA basées sur " + state.player.name + ". Revenez à Pokémon déjà actif pour actualiser la référence.");
                 }
             } else { $("#null-ai-switch-into-note").text("Sélectionnez Switch into AVANT de choisir votre Pokémon entrant à gauche. Les dégâts se recalculent sur l’entrant ; les probabilités IA restent basées sur le Pokémon actif mémorisé."); }
+            explainState = state;
             render(root.NullMoveAI.getNullAIMoveProbabilities(state), root.NullSwitchAI && root.NullSwitchAI.getSwitchProbabilities(state));
         }
         catch (err) { if (root.NullDoubleUI) root.NullDoubleUI.invalidate(); if (root.NullPostKOUI) root.NullPostKOUI.refresh(null); render({ status: "unavailable", reasons: [err.message], moves: results[1].map(function(r, i) { var name = r.move.originalName || r.move.name; return { move: name, probability: name === "(No Move)" || controls.moves[i].pp === 0 || controls.moves[i].usable === false || (controls.context.forcedMoveSlot !== undefined && controls.context.forcedMoveSlot !== i) ? 0 : null }; }) }); }

@@ -114,3 +114,18 @@ html:not([data-theme=light]) .null-ai-action-summary { border-color: #8be9fd; }
     .null-ai-action-summary { max-width: 100%; box-sizing: border-box; }
     .null-ai-switch-destination { max-width: 100%; box-sizing: border-box; }
 }
+
+/* « Pourquoi ces % ? » — explications de l'IA */
+.null-ai-explain { margin: .4em 0; border: 1px solid var(--border-ui, #aaa); border-radius: 4px; padding: .3em .6em; }
+.null-ai-explain > summary { cursor: pointer; font-weight: bold; }
+.null-ai-explain-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .5em; margin-top: .4em; }
+.null-ai-explain-body > p, .null-ai-explain-how { grid-column: 1 / -1; }
+.null-ai-explain-move { border: 1px solid var(--border-ui-muted, #ccc); border-radius: 4px; padding: .35em .5em; font-size: 12px; }
+.null-ai-explain-head { display: flex; justify-content: space-between; gap: .5em; }
+.null-ai-explain-pct { font-weight: bold; color: #6fb7ff; }
+.null-ai-explain-scores { margin-top: .2em; font-family: ui-monospace, Consolas, monospace; }
+.null-ai-explain-reading { margin-top: .2em; font-style: italic; opacity: .9; }
+.null-ai-explain-rules { margin: .3em 0 0 1.1em; padding: 0; }
+.null-ai-explain-rules li { margin: .05em 0; }
+.null-ai-explain-how summary { cursor: pointer; }
+.null-ai-explain-how ul { margin: .3em 0 0 1.2em; padding: 0; font-size: 12px; }
