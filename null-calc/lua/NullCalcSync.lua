@@ -68,12 +68,39 @@ end
 -- Chargement du Lua officiel (tables de noms + décodage)
 -- ---------------------------------------------------------------------------
 local officialPath
-for _, name in ipairs(OFFICIAL_LUA_NAMES) do
-	if fileExists(LUA_DIR .. name) then officialPath = LUA_DIR .. name break end
+if NULL_OFFICIAL_LUA and fileExists(NULL_OFFICIAL_LUA) then officialPath = NULL_OFFICIAL_LUA end
+if not officialPath then
+	for _, name in ipairs(OFFICIAL_LUA_NAMES) do
+		-- ".lua.lua" : Windows masque souvent l'extension, le fichier peut avoir été renommé deux fois.
+		for _, candidate in ipairs({ name, name .. ".lua" }) do
+			if not officialPath and fileExists(LUA_DIR .. candidate) then officialPath = LUA_DIR .. candidate end
+		end
+	end
+end
+-- Sinon : n'importe quel .lua du dossier dont le nom contient « null » (sauf ce script).
+local seenLua = {}
+if not officialPath and io.popen then
+	local isWindows = LUA_DIR:match("^%a:") ~= nil
+	local cmd = isWindows and ('dir /b "' .. LUA_DIR:gsub("/", "\\") .. '"') or ('ls -1 "' .. LUA_DIR .. '"')
+	local ok, pipe = pcall(io.popen, cmd)
+	if ok and pipe then
+		for file in pipe:lines() do
+			seenLua[#seenLua + 1] = file
+			local lower = file:lower()
+			if not officialPath and lower:match("%.lua$") and lower:find("null", 1, true) and not lower:find("nullcalcsync", 1, true) then
+				officialPath = LUA_DIR .. file
+			end
+		end
+		pipe:close()
+	end
 end
 if not officialPath then
-	error("Lua officiel introuvable. Copie 'Null_1.2.6.lua' dans " .. (LUA_DIR ~= "" and LUA_DIR or "le dossier de ce script") .. " puis relance NullCalcSync.lua.")
+	error("Lua officiel introuvable dans " .. LUA_DIR .. "\n" ..
+		"Fichiers vus : " .. (#seenLua > 0 and table.concat(seenLua, ", ") or "(liste indisponible)") .. "\n" ..
+		"Renomme le Lua du jeu en Null_1.2.6.lua et mets-le dans ce dossier, ou tape dans la console :\n" ..
+		"NULL_OFFICIAL_LUA = [[C:\\chemin\\vers\\le\\fichier.lua]] puis recharge NullCalcSync.lua.")
 end
+log("Lua officiel : " .. officialPath)
 dofile(officialPath)
 
 for _, fn in ipairs({ "readBoxMon", "readPartyMon", "getAbility", "getNature", "getHP", "calcLevel",
