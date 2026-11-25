@@ -106,7 +106,13 @@ def main():
                         "-i", os.path.join(DOSSIER, "dl.mp3"), "-t", "29",
                         "-af", "afade=t=in:d=0.5,afade=t=out:st=27.5:d=1.5",
                         "-c:a", "aac", "-b:a", "192k", os.path.join(DOSSIER, "sonnerie.m4a")])
-    print("✅ OK")
+    print("✅ OK — retour au raccourci « Enregistrer »…")
+    # Relance le 2e raccourci qui range le fichier (Photos / Fichiers)
+    url = "shortcuts://run-shortcut?name=Enregistrer&input=text&text=" + mode
+    try:
+        subprocess.run(["open", url])
+    except Exception as e:
+        print("Ouvre Raccourcis et lance « Enregistrer » à la main :", e)
 
 
 if __name__ == "__main__":
