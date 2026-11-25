@@ -33,6 +33,7 @@
     "start": "node scripts/serve.cjs",
     "test:run-tracker-browser": "node scripts/check-run-tracker-browser.cjs",
     "test:ai-explain-browser": "node scripts/check-ai-explain-browser.cjs",
-    "test:lua": "python3 tests/lua/test_null_calc_sync.py"
+    "test:lua": "python3 tests/lua/test_null_calc_sync.py",
+    "test:run-sheets-browser": "node scripts/check-run-sheets-browser.cjs"
   }
 }

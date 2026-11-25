@@ -75,3 +75,13 @@ details.run-section > summary.run-section-title { cursor: pointer; }
 .run-row--ko td { color: #ffb347; }
 .run-install ol { margin: .3em 0 .5em 1.4em; }
 .run-install li { margin-bottom: .2em; }
+
+/* Google Sheets */
+.run-sheets { flex-basis: 100%; border: 1px solid var(--border-ui, #aaa); border-radius: 6px; padding: .35em .7em; }
+.run-sheets > summary { cursor: pointer; font-weight: bold; }
+.run-sheets-row { display: flex; gap: .4em; margin: .4em 0; flex-wrap: wrap; }
+.run-sheets-row input { flex: 1 1 28em; min-width: 0; padding: .2em .4em; }
+.run-sheets-row .btn { width: auto; min-width: 0; padding: .15em .7em; white-space: nowrap; }
+.run-sheets-status { font-size: .95em; }
+.run-sheets-status--ok { color: #4cd36b; }
+.run-sheets-status--error { color: #ff6b6b; }

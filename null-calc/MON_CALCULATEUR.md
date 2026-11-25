@@ -24,6 +24,9 @@ Ce que fait la synchro :
 Si le Lua ne trouve pas son dossier, tape dans la console de mGBA :
 `NULL_CALC_LUA_DIR = [[C:\chemin\vers\null-calc\lua\]]`, puis recharge le script.
 
+## Google Sheets automatique
+Ta feuille de suivi se remplit toute seule à partir de ta partie. Installation : voir [google-sheets/INSTALLATION.md](google-sheets/INSTALLATION.md).
+
 ## 2. « Pourquoi ces % ? » (panneau IA, à droite)
 Pour chaque attaque adverse, le panneau affiche :
 - son score possible (par exemple +6 à 75 % / +8 à 25 %) ;
@@ -33,7 +36,8 @@ Pour chaque attaque adverse, le panneau affiche :
 En bas du panneau, un rappel explique comment l'IA de Null choisit son attaque.
 
 ## Vérifications
-- `npm test` : 330 tests unitaires.
+- `npm test` : tests unitaires.
+- `npm run test:run-sheets-browser` : envoi vers Google Sheets, de bout en bout.
 - `npm run test:run-tracker-browser` et `npm run test:ai-explain-browser` : tests dans le navigateur.
 - `NULL_OFFICIAL_LUA=…/Null_1.2.6.lua npm run test:lua` : test du script Lua sur une mémoire simulée.
 

@@ -30,6 +30,7 @@
             var body = JSON.stringify(payload.data);
             latest = payload; receivedAt = Date.now();
             save(KEYS.last, payload);
+            if (root.NullRunSheets) root.NullRunSheets.onData(payload.data);
             if (body !== lastAppliedBody) {
                 lastAppliedBody = body;
                 if (load(KEYS.auto, true)) applyToCalc(payload.data);
