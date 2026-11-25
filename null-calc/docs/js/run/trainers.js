@@ -128,7 +128,8 @@
             for (var j = 0; j < trainers.length; j++) if (trainers[j].order > after && boss.match.test(trainers[j].name)) { resolved = trainers[j]; break; }
             if (!resolved) continue;
             after = resolved.order;
-            var done = !!fought[resolved.name] || (boss.label === "Tate & Liza" && Object.keys(fought).some(function(n) { return /Leader (Tate|Liza)/.test(n); }));
+            // Un boss placé avant le dernier dresseur affronté est considéré comme battu (combats manqués par la synchro).
+            var done = !!fought[resolved.name] || resolved.order < last || (boss.label === "Tate & Liza" && Object.keys(fought).some(function(n) { return /Leader (Tate|Liza)/.test(n); }));
             if (!done) { cap = boss.cap; nextBoss = { label: boss.label, trainer: resolved }; break; }
             beaten++;
         }

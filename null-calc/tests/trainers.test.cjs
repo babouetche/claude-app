@@ -73,3 +73,9 @@ test('Root Academy : reconnu même si le niveau tiré diffère, pas un sauvage s
   assert.equal(T.matchTeam(trainers, [{ species: 'Ralts', level: 14 }]), null);
   assert.equal(T.progress(trainers, [{ t: 1, team }]).next.order > ra1.order, true);
 });
+
+test('level cap : boss antérieurs au dernier combat détecté comptés comme battus', () => {
+  const youngster = trainers.find(t => t.name === 'Youngster Calvin');
+  const team = youngster.mons.map(m => ({ species: m.species, level: m.level }));
+  assert.equal(T.progress(trainers, [{ t: 1, team }]).cap, 38);
+});
