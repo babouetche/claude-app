@@ -176,9 +176,16 @@ def main():
     # Combat en cours (adversaires encore debout) : pas encore compté
     L.execute("NullCalcSyncNow()")
     assert not (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").count("\nF|"), "combat en cours compté"
-    # Combat gagné : tous les adversaires K.O.
+    # Pyro attaque (PP d'Ember 25 → 24) et met K.O. le premier adversaire
+    torchic_atk = box_mon(0x12345678, 0xCAFEBABE, "Pyro", sid("Torchic"), iid("Leftovers"), 1000,
+                          [mid("Ember"), mid("Scratch"), explosion, 0], [24, 35, 5, 0], (31, 30, 29, 28, 27, 26), 0x10)
+    mem.write(PARTY, party_mon(torchic_atk, 14, 33, (40, 22, 18, 20, 25, 19), status=1 << 4))
     mem.write(PARTY + 6 * 104, party_mon(enemy1, 36, 0, (80, 40, 90, 30, 40, 50)))
+    L.execute("NullCalcSyncNow()")
+    # Combat gagné : tous les adversaires K.O.
     mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 0, (90, 70, 60, 50, 40, 40)))
+    L.execute("NullCalcSyncNow()")
+    mem.write(PARTY, party_mon(torchic, 14, 33, (40, 22, 18, 20, 25, 19), status=1 << 4))
     L.execute("NullCalcSyncNow()")
     if os.environ.get("DEBUG"):
         print("output:", g.NULL_CALC_SYNC_TEST.output)
@@ -221,7 +228,9 @@ def main():
     assert [(m["species"], m["level"]) for m in battle["fights"][0]["team"]] == [("Nosepass", 36), ("Tyrunt", 37)], battle
     assert battle["enemy"][1]["item"] == "Life Orb" and battle["enemy"][0]["hp"] == 0
     hist = (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").splitlines()
-    assert hist[0].startswith("R|cafebabe|") and hist[1].startswith("F|cafebabe|") and hist[1].endswith("|Nosepass:36:%d;Tyrunt:37:%d" % (iid("Sitrus Berry"), iid("Life Orb"))), hist
+    assert hist[0].startswith("R|cafebabe|") and hist[1].startswith("F|cafebabe|") and hist[1].endswith("|Nosepass:36:%d;Tyrunt:37:%d|L=12345678-cafebabe|K=12345678-cafebabe:2" % (iid("Sitrus Berry"), iid("Life Orb"))), hist
+    f0 = battle["fights"][0]
+    assert f0["lead"] == "12345678-cafebabe" and f0["frags"] == [{"uid": "12345678-cafebabe", "n": 2}], f0
     L.execute("NullCalcSyncNow()")
     assert len((work / "lua" / "historique-combats.txt").read_text(encoding="utf8").splitlines()) == 2, "même combat : pas de doublon"
     # Équipe adverse corrompue (checksum) : ignorée

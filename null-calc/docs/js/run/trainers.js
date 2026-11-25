@@ -115,7 +115,7 @@
         var fought = {}, last = -1;
         (fights || []).forEach(function(f) {
             var t = matchTeam(trainers, f.team, last);
-            if (t) { fought[t.name] = { trainer: t, at: f.t }; last = Math.max(last, t.order); }
+            if (t) { fought[t.name] = { trainer: t, at: f.t, lead: f.lead || null, frags: f.frags || [] }; last = Math.max(last, t.order); }
         });
         var next = null;
         for (var i = 0; i < trainers.length; i++) {
@@ -144,7 +144,7 @@
         if (!setdex || !data || !data.battle) return null;
         if (!cache) cache = buildTrainers(setdex);
         var p = progress(cache, data.battle.fights || []);
-        p.fights = Object.keys(p.fought).map(function(n) { return { name: n, t: p.fought[n].at, order: p.fought[n].trainer.order }; })
+        p.fights = Object.keys(p.fought).map(function(n) { var f = p.fought[n]; return { name: n, t: f.at, order: f.trainer.order, lead: f.lead, frags: f.frags }; })
             .sort(function(a, b) { return a.t - b.t || a.order - b.order; });
         return p;
     }

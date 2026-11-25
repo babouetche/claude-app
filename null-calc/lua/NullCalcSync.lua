@@ -292,10 +292,19 @@ local function loadHistory()
 		local kind, run, t, rest = line:match("^(%a)|([^|]*)|(%d+)|?(.*)$")
 		if kind == "R" then history.runs[#history.runs + 1] = run
 		elseif kind == "F" then
-			local team = {}
-			for sp, lv, it in rest:gmatch("([^;:]+):(%d+):(%d+)") do team[#team + 1] = { species = sp, level = tonumber(lv), itemId = tonumber(it) } end
+			local team, sigText, lead, frags = {}, rest, nil, {}
+			local p1 = rest:find("|", 1, true)
+			if p1 then
+				sigText = rest:sub(1, p1 - 1)
+				for field in rest:sub(p1 + 1):gmatch("[^|]+") do
+					local key, val = field:match("^(%a)=(.*)$")
+					if key == "L" and val ~= "" then lead = val
+					elseif key == "K" then for uid, n in val:gmatch("([^,:]+):(%d+)") do frags[#frags + 1] = { uid = uid, n = tonumber(n) } end end
+				end
+			end
+			for sp, lv, it in sigText:gmatch("([^;:]+):(%d+):(%d+)") do team[#team + 1] = { species = sp, level = tonumber(lv), itemId = tonumber(it) } end
 			history.fights[run] = history.fights[run] or {}
-			table.insert(history.fights[run], { t = tonumber(t), team = team })
+			table.insert(history.fights[run], { t = tonumber(t), team = team, lead = lead, frags = frags })
 		end
 	end
 	f:close()
@@ -411,6 +420,40 @@ local function readEnemy()
 	return nil
 end
 
+-- Combat en cours : lead (premier Pokémon debout au début), dernier attaquant (ses PP ont baissé),
+-- et frags (adversaire qui tombe à 0 PV → attribué au dernier Pokémon qui a attaqué).
+local battle = nil
+local function ppSum(m) local s = 0 for _, mv in ipairs(m.moves or {}) do s = s + (mv.pp or 0) end return s end
+local function sigOf(team) local p = {} for _, m in ipairs(team) do p[#p + 1] = m.species .. ":" .. m.level .. ":" .. m.itemId end return table.concat(p, ";") end
+local function followBattle(party, enemy)
+	if not enemy then return end
+	local sig, alive = sigOf(enemy), false
+	for _, m in ipairs(enemy) do if m.hp > 0 then alive = true end end
+	if alive and (not battle or battle.sig ~= sig) then
+		battle = { sig = sig, pp = {}, hp = {}, frags = {}, order = {} }
+		for _, m in ipairs(party) do if m.hp > 0 and not battle.lead then battle.lead = m.uid end end
+		for _, m in ipairs(party) do battle.pp[m.uid] = ppSum(m) end
+		for i, m in ipairs(enemy) do battle.hp[i] = m.hp end
+		return
+	end
+	if not battle or battle.sig ~= sig then return end
+	for _, m in ipairs(party) do
+		local s = ppSum(m)
+		if battle.pp[m.uid] and s < battle.pp[m.uid] then battle.last = m.uid end
+		battle.pp[m.uid] = s
+	end
+	for i, m in ipairs(enemy) do
+		if (battle.hp[i] or 0) > 0 and m.hp == 0 then
+			local who = battle.last or battle.lead
+			if who then
+				if not battle.frags[who] then battle.order[#battle.order + 1] = who end
+				battle.frags[who] = (battle.frags[who] or 0) + 1
+			end
+		end
+		battle.hp[i] = m.hp
+	end
+end
+
 local function trackFights(party)
 	local run = runIdOf(party)
 	if not run then return nil end
@@ -421,6 +464,7 @@ local function trackFights(party)
 		appendHistory("R|" .. run .. "|" .. os.time())
 	end
 	local enemy = readEnemy()
+	followBattle(party, enemy)
 	-- Un combat n'est compté qu'une fois gagné : tous les Pokémon adverses K.O.
 	local won = enemy ~= nil
 	if enemy then for _, m in ipairs(enemy) do if m.hp > 0 then won = false end end end
@@ -439,17 +483,25 @@ local function trackFights(party)
 		if sig ~= lastSig and sig ~= lastEnemySig then
 			local t = os.time()
 			history.fights[run] = fights
-			table.insert(fights, { t = t, team = enemy })
-			appendHistory("F|" .. run .. "|" .. t .. "|" .. sig)
-			log("Combat gagné : " .. sig)
+			local lead, frags, kText = nil, {}, {}
+			if battle and battle.sig == sig then
+				lead = battle.lead
+				for _, uid in ipairs(battle.order) do frags[#frags + 1] = { uid = uid, n = battle.frags[uid] } kText[#kText + 1] = uid .. ":" .. battle.frags[uid] end
+			end
+			table.insert(fights, { t = t, team = enemy, lead = lead, frags = frags })
+			appendHistory("F|" .. run .. "|" .. t .. "|" .. sig .. "|L=" .. (lead or "") .. "|K=" .. table.concat(kText, ","))
+			log("Combat gagné : " .. sig .. (#kText > 0 and ("  (frags : " .. table.concat(kText, ", ") .. ")") or ""))
 		end
 		lastEnemySig = sig
+		battle = nil
 	end
 	local list = {}
 	for i, f in ipairs(history.fights[run] or {}) do
 		local team = {}
 		for _, m in ipairs(f.team) do team[#team + 1] = { species = m.species, level = m.level, itemId = m.itemId } end
-		list[i] = { t = f.t, team = team }
+		local frags = {}
+		for _, k in ipairs(f.frags or {}) do frags[#frags + 1] = { uid = k.uid, n = k.n } end
+		list[i] = { t = f.t, team = team, lead = f.lead, frags = frags }
 	end
 	local runIndex = 1
 	for i, r in ipairs(history.runs) do if r == run then runIndex = i end end

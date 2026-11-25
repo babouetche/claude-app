@@ -907,21 +907,36 @@ function archiveRun_(ss, s, stamp) {
   return { attempt: attempt + 1, archived: rows.length };
 }
 
-// Combats détectés par le Lua : une ligne par dresseur battu, ajoutée une seule fois (frags à remplir).
+// Combats détectés par le Lua : une ligne par dresseur battu, avec lead et frags (dernier Pokémon qui a
+// attaqué quand l'adversaire tombe K.O.). Une ligne existante n'est complétée que si le lead est vide.
+function fightCells_(f) {
+  var cells = fill_(FIGHT_HEADERS.length - 1, ''), frags = {}, order = [];
+  (f.frags || []).forEach(function(k) { var n = str_(k && k.name); if (!n) return; if (!(n in frags)) order.push(n); frags[n] = (frags[n] || 0) + (Number(k.n) || 0); });
+  var lead = str_(f.lead);
+  cells[0] = str_(f.name);
+  if (lead) { cells[2] = lead; cells[3] = frags[lead] || 0; }
+  var col = 4;
+  order.filter(function(n) { return n !== lead; }).slice(0, 5).forEach(function(n) { cells[col] = n; cells[col + 1] = frags[n]; col += 2; });
+  return cells;
+}
 function addDetectedFights_(s, fights) {
   if (!Array.isArray(fights) || !fights.length) return 0;
-  var have = {}, rows = [];
-  fightRows_(s).forEach(function(r) { if (str_(r[0])) have[key_(r[0])] = true; });
+  var have = {}, rows = [], existing = fightRows_(s), lastFilled = 0;
+  existing.forEach(function(r, i) { if (str_(r[0])) { have[key_(r[0])] = i; lastFilled = i + 1; } });
   fights.forEach(function(f) {
     var name = str_(f && f.name);
-    if (!name || have[key_(name)]) return;
-    have[key_(name)] = true;
-    var row = fill_(FIGHT_HEADERS.length, ''); row[0] = name; row[FIGHT_HEADERS.length - 1] = 'Détecté automatiquement';
-    rows.push(row);
+    if (!name) return;
+    var cells = fightCells_(f);
+    if (have.hasOwnProperty(key_(name))) {
+      var i = have[key_(name)], r = existing[i];
+      if (!str_(r[2]) && cells[2]) s.fights.getRange(i + 2, 3, 1, FIGHT_HEADERS.length - 3).setValues([cells.slice(2, FIGHT_HEADERS.length - 1)]);
+      return;
+    }
+    have[key_(name)] = -1;
+    rows.push(cells.concat(['Détecté automatiquement']));
   });
   if (rows.length) {
-    var start = 2, n = s.fights.getLastRow();
-    if (n > 1) { var col = s.fights.getRange(2, 1, n - 1, 1).getValues(), lastFilled = 0; col.forEach(function(c, i) { if (str_(c[0])) lastFilled = i + 1; }); start = lastFilled + 2; }
+    var start = lastFilled + 2;
     if (s.fights.getMaxRows() < start + rows.length - 1) s.fights.insertRowsAfter(s.fights.getMaxRows(), start + rows.length - 1 - s.fights.getMaxRows());
     s.fights.getRange(start, 1, rows.length, FIGHT_HEADERS.length).setValues(rows);
   }

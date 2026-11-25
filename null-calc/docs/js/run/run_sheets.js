@@ -20,7 +20,16 @@
     // Dresseurs affrontés, reconnus à partir des combats détectés par le Lua.
     function detectedFights(data) {
         var p = root.NullTrainers && root.NullTrainers.auto(data);
-        return p ? p.fights.map(function(f) { return { name: f.name, t: f.t }; }) : [];
+        if (!p) return [];
+        // Lead et frags : numéros (uid) du Lua → noms affichés dans la feuille (surnom, sinon espèce).
+        var names = {};
+        (data.party || []).concat(data.box || [], data.dead || []).forEach(function(m) {
+            names[m.uid] = m.nickname && String(m.nickname).trim() ? String(m.nickname).trim() : m.species;
+        });
+        return p.fights.map(function(f) {
+            return { name: f.name, t: f.t, lead: f.lead && names[f.lead] || "",
+                frags: (f.frags || []).filter(function(k) { return names[k.uid]; }).map(function(k) { return { name: names[k.uid], n: k.n }; }) };
+        });
     }
 
     // Données envoyées : tout sauf le texte d'export Showdown (inutile pour la feuille).

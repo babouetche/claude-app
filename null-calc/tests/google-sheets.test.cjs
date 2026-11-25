@@ -318,3 +318,23 @@ test('objets : groupés par catégorie, ordre du doc conservé', () => {
   const sorted = G.sortItems([['Baie', 'Oran', ''], ['Objet tenu', 'Miracle Seed', ''], ['Baie', 'Pecha', ''], ['Objet tenu', 'Silver Powder', ''], ['CT / CS', 'TM01', '']]);
   assert.deepEqual(JSON.parse(JSON.stringify(sorted)).map(x => x[1]), ['Miracle Seed', 'Silver Powder', 'TM01', 'Oran', 'Pecha']);
 });
+
+test('combats détectés : lead et frags remplis automatiquement, stats calculées', () => {
+  const { G: G2 } = load(SOURCES);
+  const ss = fakeSpreadsheet();
+  const p1 = payload(); p1.fights = [{ name: 'Youngster Calvin', t: 1 }];
+  G2.applyPayload(ss, p1, new Date());
+  const f = ss.sheets[S.fights], pk = ss.sheets[S.pokemon];
+  assert.equal(v(f, 2, 3), '', 'pas encore de lead');
+  // Synchro suivante avec lead/frags : la ligne existante est complétée
+  const p2 = payload(); p2.fights = [{ name: 'Youngster Calvin', t: 1, lead: 'Pyro', frags: [{ name: 'Zig', n: 1 }, { name: 'Pyro', n: 2 }] },
+    { name: 'Bug Catcher Beni', t: 2, lead: 'Zig', frags: [{ name: 'Pyro', n: 4 }] }];
+  G2.applyPayload(ss, p2, new Date());
+  assert.deepEqual([v(f, 2, 1), v(f, 2, 3), v(f, 2, 4), v(f, 2, 5), v(f, 2, 6), v(f, 2, 15)], ['Youngster Calvin', 'Pyro', 2, 'Zig', 1, 'Détecté automatiquement']);
+  assert.deepEqual([v(f, 3, 1), v(f, 3, 3), v(f, 3, 4), v(f, 3, 5), v(f, 3, 6)], ['Bug Catcher Beni', 'Zig', 0, 'Pyro', 4]);
+  assert.deepEqual([v(pk, 2, C.frags), v(pk, 2, C.leads), v(pk, 2, C.fights)], [6, 1, 2], 'Pyro : 6 frags, 1 lead, 2 combats');
+  // Une saisie manuelle n'est jamais écrasée
+  f.cells['2,4'] = { v: 3 };
+  G2.applyPayload(ss, p2, new Date());
+  assert.equal(v(f, 2, 4), 3);
+});
