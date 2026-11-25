@@ -208,8 +208,8 @@
         var top = el("div", "run-top");
         var stats = el("div", "run-stats");
         var sum = data ? Model.summary(data) : { party: 0, fainted: 0, box: 0, dead: 0, maxLevel: 0 };
-        [["Équipe", sum.party + "/6"], ["En boîte", sum.box], ["Morts", sum.dead], ["Niveau max", sum.maxLevel || "—"]].forEach(function(s) {
-            var tile = el("div", "run-stat" + (s[0] === "Morts" && sum.dead ? " run-stat--dead" : ""));
+        [["Équipe", sum.party + "/6"], ["En boîte", sum.box], ["Cimetière", sum.dead], ["Niveau max", sum.maxLevel || "—"]].forEach(function(s) {
+            var tile = el("div", "run-stat" + (s[0] === "Cimetière" && sum.dead ? " run-stat--dead" : ""));
             tile.appendChild(el("span", "run-stat-value", String(s[1]))); tile.appendChild(el("span", "run-stat-label", s[0]));
             stats.appendChild(tile);
         });
@@ -251,9 +251,9 @@
         if (!data.box.length) boxS.appendChild(el("p", "run-muted", "Aucun Pokémon en boîte."));
         boxS.appendChild(boxGrid); content.appendChild(boxS);
 
-        var deadS = section("Cimetière (boîtes 12 à 14)", data.dead.length), deadGrid = el("div", "run-grid run-grid--compact");
+        var deadS = section("Cimetière (dernières boîtes du PC)", data.dead.length), deadGrid = el("div", "run-grid run-grid--compact");
         data.dead.forEach(function(m) { deadGrid.appendChild(monCard(m, "dead")); });
-        if (!data.dead.length) deadS.appendChild(el("p", "run-muted", "Aucun mort pour l'instant. Continue comme ça !"));
+        if (!data.dead.length) deadS.appendChild(el("p", "run-muted", "Cimetière vide pour l'instant. Continue comme ça !"));
         deadS.appendChild(deadGrid); content.appendChild(deadS);
 
         var encS = section("Captures par zone", Model.encounters(data).length), table = el("table", "run-table");
@@ -276,7 +276,7 @@
         var d = el("details", "run-sheets run-overlay"); d.id = "run-overlay";
         d.appendChild(el("summary", "", "Overlay OBS (remplace PokemonNullDisplay)"));
         d.appendChild(el("p", "run-muted", "Dans OBS : Sources > + > Navigateur, décoche « Fichier local », colle un lien ci-dessous, largeur 900 × hauteur 300 (à ajuster). Le fond est transparent. Il suffit que mGBA tourne avec NullCalcSync.lua : l'overlay lit directement ses données, pas besoin du calculateur ni de PokemonNullDisplay.exe."));
-        [["Équipe", "vue=equipe&taille=2"], ["Boîte", "vue=boite&taille=2&colonnes=10"], ["Cimetière", "vue=morts&taille=2&colonnes=10"], ["Tout", "vue=tout&taille=2"]].forEach(function(v) {
+        [["Équipe", "vue=equipe&taille=2"], ["Boîte", "vue=boite&taille=2&colonnes=10"], ["Cimetière", "vue=cimetiere&taille=2&colonnes=10"], ["Tout", "vue=tout&taille=2"]].forEach(function(v) {
             var url = new URL("overlay.html?" + v[1], document.baseURI).href;
             var row = el("div", "run-sheets-row"), input = el("input"), btn = el("button", "btn btn-small", "Copier");
             input.readOnly = true; input.value = url; btn.type = "button";

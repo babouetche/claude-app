@@ -433,14 +433,14 @@ function runTables(pokemonRows, stats) {
   top = top.map(function(r, i) { return [i < 3 ? ['🥇', '🥈', '🥉'][i] : '#' + (i + 1)].concat(r); });
   return {
     top: block_(top, 6, 15, 'Aucun frag pour l\'instant'),
-    dead: block_(dead, 5, 15, 'Aucun mort 🎉'),
+    dead: block_(dead, 5, 15, 'Cimetière vide 🎉'),
     splits: perSplit.map(function(p) { return [p[0], p[1], bar_(p[1], max)]; })
   };
 }
 
 // =================================================================== ÉCRITURE
 var RUN = { title: 1, info: 2, kpiLabel: 4, kpiValue: 5, kpiSub: 6, teamTitle: 8, teamHead: 9, teamFirst: 10, tablesTitle: 17, tablesHead: 18, tablesFirst: 19 };
-var KPIS = ['Équipe', 'Captures', 'Morts', 'Level cap', 'Prochain boss', 'Prochain dresseur'];
+var KPIS = ['Équipe', 'Captures', 'Cimetière', 'Level cap', 'Prochain boss', 'Prochain dresseur'];
 
 function sheets_(ss) {
   function get(key) {
@@ -740,7 +740,7 @@ function refreshAll(ss, s, summary, force) {
   if (summary) {
     var cap = caps.any ? caps.cap : summary.cap, nextBoss = caps.any ? caps.next : summary.nextBoss, beaten = caps.any ? caps.beaten : summary.beaten;
     s.run.getRange(RUN.kpiValue, 1, 1, 10).setValues([[summary.party + ' / 6', '', summary.captures, '', summary.dead, '', cap ? 'Niv. ' + cap : '—', '', nextBoss, '']]);
-    s.run.getRange(RUN.kpiSub, 1, 1, 10).setValues([[summary.ko ? summary.ko + ' K.O.' : 'Tous debout', '', summary.box + ' en boîte', '', summary.dead ? 'Repose en paix' : 'Aucun mort', '',
+    s.run.getRange(RUN.kpiSub, 1, 1, 10).setValues([[summary.ko ? summary.ko + ' K.O.' : 'Tous debout', '', summary.box + ' en boîte', '', summary.dead ? 'Repose en paix' : 'Cimetière vide', '',
       'Niv. max équipe : ' + summary.maxLevel, '', beaten + ' boss battu' + (beaten > 1 ? 's' : '') + (caps.any ? ' (Combats)' : ''), '']]);
   }
 }
@@ -760,7 +760,7 @@ function archiveRun_(ss, s, stamp) {
     var stats = computeStats(fights), dead = rows.filter(function(r) { return r[COL.status - 1] === STATUS.dead; }).length;
     var frags = rows.reduce(function(t, r) { var st = stats[str_(r[COL.name - 1])]; return t + (st ? st.frags : 0); }, 0);
     var foughtNames = fights.map(function(r) { return str_(r[0]); }).filter(Boolean), caps = capFromFights(foughtNames);
-    var summary = [attempt, stamp, '▶ RÉSUMÉ', rows.length + ' captures · ' + dead + ' morts', caps.last ? 'Dernier boss battu : ' + caps.last : '',
+    var summary = [attempt, stamp, '▶ RÉSUMÉ', rows.length + ' captures · ' + dead + ' au cimetière', caps.last ? 'Dernier boss battu : ' + caps.last : '',
       rows.reduce(function(m, r) { return Math.max(m, Number(r[COL.level - 1]) || 0); }, 0), '', frags, '', fights.length, ''];
     var out = [summary].concat(rows.map(function(r) {
       var st = stats[str_(r[COL.name - 1])] || { frags: 0, leads: 0, fights: 0 };

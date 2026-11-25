@@ -16,7 +16,7 @@ Il affiche l'équipe (PV, statut, PP), les boîtes, le cimetière (boîtes 12 à
 4. Laisse CALCULATEUR.html ouvert : tout se met à jour seul, environ toutes les 1,5 s.
 
 Ce que fait la synchro :
-- Elle crée tes sets **« Surnom [Run] »** dans le calculateur : l'équipe va dans *Team* et le reste dans la boîte. Les Pokémon morts sont retirés.
+- Elle crée tes sets **« Surnom [Run] »** dans le calculateur : l'équipe va dans *Team* et le reste dans la boîte. Les Pokémon du cimetière sont retirés.
 - Quand le Pokémon affiché à gauche est l'un des tiens, ses **PV et son statut** suivent ceux du jeu.
 - Les évolutions, changements d'attaques, d'objets et de niveaux sont suivis automatiquement.
 - Le script **ne modifie jamais ta partie** : il lit seulement la mémoire du jeu.
