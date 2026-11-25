@@ -21,7 +21,7 @@ var TRAINER_SHEETS = [['Roxanne Split', 'Roxanne'], ['Brawly Split', 'Brawly'], 
   ['Flannery Split', 'Flannery'], ['Winona Split', 'Winona'], ['Tate&Liza Split', 'Tate & Liza'], ['Steven Split', 'Steven'],
   ['Victory Road Split', 'Victory Road'], ['Pokémon League', 'Ligue'], ['Other', 'Autres']];
 var SPLITS = TRAINER_SHEETS.map(function(t) { return t[1]; });
-var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets' };
+var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets', archive: '📦 Archives' };
 var LEGACY_NAMES = { 'Run': 'run', 'Pokémon': 'pokemon', 'Combats': 'fights' };
 
 var AUTO_HEADERS = ['UID', '#', 'Zone', 'Pokémon', 'Nom', 'Niveau', 'Statut', 'Talent', 'Nature',
@@ -36,6 +36,7 @@ var FIGHT_HEADERS = ['Dresseur', 'Split', 'Lead', 'Frags', 'Pokémon 2', 'Frags'
 var ENC_HEADERS = ['Zone', 'Zone Nuzlocke', 'Méthode', 'Pokémon', 'Niveau', 'Taux', 'Ma capture', 'Espèce déjà capturée'];
 var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Pokémon', 'Niv.', 'Objet', 'Talent', 'Nature', 'Attaques', 'Battu', 'Niv. max'];
 var ITEM_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Récupéré'];
+var ARCHIVE_HEADERS = ['Tentative', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
 var STATUS_FR = { slp: 'Endormi', psn: 'Empoisonné', tox: 'Gravement empoisonné', brn: 'Brûlé', par: 'Paralysé', frz: 'Gelé', frb: 'Gelure' };
 var STATUS = { team: 'Équipe', ko: 'K.O. (équipe)', box: 'Boîte', dead: 'Mort', gone: 'Absent' };
 var METHODS_FR = { 'Land': 'Herbes', 'Fishing': 'Pêche', 'Surf': 'Surf', 'Rock Smash': 'Éclate-Roc', 'Other': 'Spécial' };
@@ -321,8 +322,9 @@ function capFromFights(foughtNames) {
     if (b[2] === 'glacia2') return glacia.length >= 2;
     return keys.some(function(k) { return k.indexOf(key_(b[0])) >= 0; });
   });
-  var any = beaten.some(Boolean), i = beaten.indexOf(false);
-  return { any: any, beaten: beaten.filter(Boolean).length, cap: i < 0 ? 100 : BOSS_CAPS[i][1], next: i < 0 ? 'Tous battus' : BOSS_CAPS[i][0] };
+  var any = beaten.some(Boolean), i = beaten.indexOf(false), lastIdx = beaten.lastIndexOf(true);
+  return { any: any, beaten: beaten.filter(Boolean).length, cap: i < 0 ? 100 : BOSS_CAPS[i][1], next: i < 0 ? 'Tous battus' : BOSS_CAPS[i][0],
+    last: lastIdx < 0 ? '' : BOSS_CAPS[lastIdx][0] };
 }
 
 function isBoss(name) { return /\b(Leader|Elite Four|Champion|Rival)\b|\[Boss\]/i.test(name); }
@@ -447,13 +449,13 @@ function sheets_(ss) {
     for (var old in LEGACY_NAMES) if (LEGACY_NAMES[old] === key && ss.getSheetByName(old)) { sh = ss.getSheetByName(old); sh.setName(name); return sh; }
     return ss.insertSheet(name);
   }
-  return { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items') };
+  return { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive') };
 }
 function tryFormat_(fn) { try { fn(); } catch (e) { if (typeof Logger !== 'undefined') Logger.log('Mise en forme ignorée : ' + e); } }
 
 function ensureStructure(ss) {
   var s = sheets_(ss), created = false;
-  [[s.pokemon, headers_()], [s.fights, FIGHT_HEADERS], [s.encounters, ENC_HEADERS], [s.trainers, TRAINER_HEADERS], [s.items, ITEM_HEADERS]].forEach(function(p) {
+  [[s.pokemon, headers_()], [s.fights, FIGHT_HEADERS], [s.encounters, ENC_HEADERS], [s.trainers, TRAINER_HEADERS], [s.items, ITEM_HEADERS], [s.archive, ARCHIVE_HEADERS]].forEach(function(p) {
     var range = p[0].getRange(1, 1, 1, p[1].length);
     if (range.getValues()[0].join('|') !== p[1].join('|')) { range.setValues([p[1]]); created = true; }
   });
@@ -471,9 +473,9 @@ function ensureStructure(ss) {
     run.getRange(RUN.tablesHead, 1, 1, 16).setValues([['Rang', 'Nom', 'Pokémon', 'Frags', 'Leads', 'Combats', '', 'Nom', 'Pokémon', 'Niv.', 'Zone', 'Mort contre', '', 'Split', 'Frags', '']]);
   }
   // La mise en forme complète est appliquée à l'installation (ou si la page vient d'être créée).
-  if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '2') {
+  if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '3') {
     tryFormat_(function() { styleAll_(ss, s); });
-    PropertiesService.getDocumentProperties().setProperty('styleVersion', '2');
+    PropertiesService.getDocumentProperties().setProperty('styleVersion', '3');
   }
   return s;
 }
@@ -482,8 +484,8 @@ function header_(range) { range.setFontWeight('bold').setBackground(C_.navy).set
 function rule_() { return SpreadsheetApp.newConditionalFormatRule(); }
 
 function styleAll_(ss, s) {
-  var tabs = { run: C_.gold, pokemon: '#22c55e', fights: '#ef4444', trainers: '#3b82f6', encounters: '#10b981', items: '#a855f7' };
-  ['run', 'pokemon', 'fights', 'trainers', 'encounters', 'items'].forEach(function(k, i) {
+  var tabs = { run: C_.gold, pokemon: '#22c55e', fights: '#ef4444', trainers: '#3b82f6', encounters: '#10b981', items: '#a855f7', archive: '#64748b' };
+  ['run', 'pokemon', 'fights', 'trainers', 'encounters', 'items', 'archive'].forEach(function(k, i) {
     s[k].setTabColor(tabs[k]); ss.setActiveSheet(s[k]); ss.moveActiveSheet(i + 1);
   });
   ss.getSheets().forEach(function(sh) { if (sh.getName() === 'Feuille 1' || sh.getName() === 'Sheet1') { if (sh.getLastRow() === 0) ss.deleteSheet(sh); } });
@@ -575,7 +577,7 @@ function styleAll_(ss, s) {
 
   // --- 🌿 Rencontres / 🎯 Dresseurs / 🎒 Objets
   [[s.encounters, ENC_HEADERS, [170, 150, 95, 150, 60, 60, 230, 130]], [s.trainers, TRAINER_HEADERS, [100, 160, 250, 30, 130, 45, 120, 120, 75, 340, 55, 65]],
-   [s.items, ITEM_HEADERS, [180, 200, 460, 85]]].forEach(function(p) {
+   [s.items, ITEM_HEADERS, [180, 200, 460, 85]], [s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
     p[0].setFrozenRows(1); header_(p[0].getRange(1, 1, 1, p[1].length)); p[0].setRowHeight(1, 32);
     p[2].forEach(function(w, i) { p[0].setColumnWidth(i + 1, w); });
     p[0].getRange(2, 1, Math.max(p[0].getMaxRows() - 1, 1), p[1].length).setVerticalAlignment('middle').setFontSize(10);
@@ -743,9 +745,47 @@ function refreshAll(ss, s, summary, force) {
   }
 }
 
+// ---------------------------------------------------------------- Nouvelle run
+/**
+ * Nouvelle partie détectée (le numéro de dresseur de la sauvegarde a changé) :
+ * la run précédente est archivée dans 📦 Archives, puis Pokémon, Combats et le
+ * tableau de bord repartent de zéro et la tentative augmente de 1.
+ */
+function archiveRun_(ss, s, stamp) {
+  var props = PropertiesService.getDocumentProperties();
+  var last = s.pokemon.getLastRow(), rows = last > 1 ? s.pokemon.getRange(2, 1, last - 1, COL.sync).getValues().filter(function(r) { return str_(r[COL.name - 1]); }) : [];
+  var fights = fightRows_(s).filter(function(r) { return r.some(function(c) { return str_(c); }); });
+  var attempt = Number(s.run.getRange(RUN.info, 2).getValue()) || 1;
+  if (rows.length || fights.length) {
+    var stats = computeStats(fights), dead = rows.filter(function(r) { return r[COL.status - 1] === STATUS.dead; }).length;
+    var frags = rows.reduce(function(t, r) { var st = stats[str_(r[COL.name - 1])]; return t + (st ? st.frags : 0); }, 0);
+    var foughtNames = fights.map(function(r) { return str_(r[0]); }).filter(Boolean), caps = capFromFights(foughtNames);
+    var summary = [attempt, stamp, '▶ RÉSUMÉ', rows.length + ' captures · ' + dead + ' morts', caps.last ? 'Dernier boss battu : ' + caps.last : '',
+      rows.reduce(function(m, r) { return Math.max(m, Number(r[COL.level - 1]) || 0); }, 0), '', frags, '', fights.length, ''];
+    var out = [summary].concat(rows.map(function(r) {
+      var st = stats[str_(r[COL.name - 1])] || { frags: 0, leads: 0, fights: 0 };
+      return [attempt, stamp, r[COL.name - 1], r[COL.species - 1], r[COL.zone - 1], r[COL.level - 1], r[COL.status - 1], st.frags, st.leads, st.fights, r[COL.deathCause - 1]];
+    }));
+    var start = Math.max(s.archive.getLastRow(), 1) + 1;
+    if (s.archive.getMaxRows() < start + out.length) s.archive.insertRowsAfter(s.archive.getMaxRows(), start + out.length - s.archive.getMaxRows());
+    s.archive.getRange(start, 1, out.length, ARCHIVE_HEADERS.length).setValues(out);
+    tryFormat_(function() { s.archive.getRange(start, 1, 1, ARCHIVE_HEADERS.length).setFontWeight('bold').setBackground(C_.blue).setFontColor(C_.blueInk); });
+  }
+  if (last > 1) s.pokemon.getRange(2, 1, last - 1, COL.sync).clearContent();
+  var fl = s.fights.getLastRow();
+  if (fl > 1) s.fights.getRange(2, 1, fl - 1, FIGHT_HEADERS.length).clearContent();
+  s.run.getRange(RUN.info, 2).setValue(attempt + 1);
+  s.run.getRange(RUN.teamFirst, 1, 6, 10).clearContent();
+  ['hashFought', 'hashCaptures', 'lastSummary'].forEach(function(k) { props.setProperty(k, ''); });
+  return { attempt: attempt + 1, archived: rows.length };
+}
+
 function applyPayload(ss, payload, now) {
   var s = ensureStructure(ss), pk = s.pokemon;
   var stamp = Utilities.formatDate(now, ss.getSpreadsheetTimeZone(), 'dd/MM/yyyy HH:mm:ss');
+  var props = PropertiesService.getDocumentProperties(), runId = str_(payload.runId), previousRun = props.getProperty('runId');
+  if (runId && previousRun && runId !== previousRun) archiveRun_(ss, s, stamp);
+  if (runId) props.setProperty('runId', runId);
   var last = pk.getLastRow();
   var existing = last > 1 ? pk.getRange(2, 1, last - 1, AUTO_HEADERS.length).getValues() : [];
   var plan = planPokemonRows(existing, payload, stamp);
@@ -767,4 +807,4 @@ if (typeof module !== 'undefined') module.exports = { planPokemonRows: planPokem
   parseEncounterGrid: parseEncounterGrid, parseSpecialEncounters: parseSpecialEncounters, parseTrainerSheet: parseTrainerSheet,
   parseItemSheet: parseItemSheet, trainerRows: trainerRows, trainersFromRows: trainersFromRows, nextTrainer: nextTrainer,
   encounterStatus: encounterStatus, mapsecFor: mapsecFor, capFromFights: capFromFights, importReference: importReference, headers_: headers_,
-  COL: COL, RUN: RUN, SHEETS: SHEETS, colLetter: colLetter, SPLITS: SPLITS };
+  COL: COL, RUN: RUN, SHEETS: SHEETS, ARCHIVE_HEADERS: ARCHIVE_HEADERS, colLetter: colLetter, SPLITS: SPLITS };

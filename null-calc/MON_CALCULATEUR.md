@@ -21,6 +21,8 @@ Ce que fait la synchro :
 - Les évolutions, changements d'attaques, d'objets et de niveaux sont suivis automatiquement.
 - Le script **ne modifie jamais ta partie** : il lit seulement la mémoire du jeu.
 
+Quand tu recommences une run, tout se remet à zéro tout seul : anciens sets retirés, boss décochés, ancienne run archivée dans Google Sheets.
+
 Si le Lua ne trouve pas son dossier, tape dans la console de mGBA :
 `NULL_CALC_LUA_DIR = [[C:\chemin\vers\null-calc\lua\]]`, puis recharge le script.
 

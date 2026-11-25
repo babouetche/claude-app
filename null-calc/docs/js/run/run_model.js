@@ -192,7 +192,19 @@
         };
     }
 
-    return { BOSSES: BOSSES, SPECIES_EQUIVALENTS: SPECIES_EQUIVALENTS, ABILITY_EQUIVALENTS: ABILITY_EQUIVALENTS,
+    // Identifiant de la partie : numéro de dresseur (OT) le plus fréquent. Il change quand on recommence une run.
+    function runIdOf(data) {
+        var counts = {}, best = "", bestN = 0;
+        (data.party || []).concat(data.box || [], data.dead || []).forEach(function(m) {
+            var ot = String(m.uid || "").split("-")[1];
+            if (!ot) return;
+            counts[ot] = (counts[ot] || 0) + 1;
+            if (counts[ot] > bestN) { bestN = counts[ot]; best = ot; }
+        });
+        return best;
+    }
+
+    return { BOSSES: BOSSES, runIdOf: runIdOf, SPECIES_EQUIVALENTS: SPECIES_EQUIVALENTS, ABILITY_EQUIVALENTS: ABILITY_EQUIVALENTS,
         STATUS_LABELS: STATUS_LABELS, STATUS_FR: STATUS_FR, makeResolver: makeResolver, makeResolvers: makeResolvers,
         buildSet: buildSet, planSync: planSync, encounters: encounters, levelCap: levelCap, summary: summary,
         displayName: displayName };

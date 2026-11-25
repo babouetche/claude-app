@@ -68,8 +68,24 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     const team2 = await page.$$eval('#team-poke-list .trainer-pok', els => els.map(e => e.getAttribute('data-id')));
     assert(JSON.stringify(team2) === JSON.stringify(['Combusken (Pyro [Run])']), 'Équipe après évolution/mort : ' + team2);
     if (shots) await page.screenshot({ path: path.join(shots, 'calc-after-sync.png') });
+    // Nouvelle run : autre sauvegarde (autre numéro de dresseur) → boss remis à zéro, anciens sets retirés, bannière
+    const before = await page.evaluate(() => JSON.parse(localStorage.getItem('nullcalc_runBeaten') || '{}'));
+    assert(Object.keys(before).length === 1, 'un boss coché avant la nouvelle run');
+    fixture(d => {
+      d.party = [Object.assign({}, d.party[0], { uid: '99999999-0000beef', species: 'Mudkip', nickname: 'Mud', level: 5, moves: [{ name: 'Water Gun', pp: 25 }] })];
+      d.box = []; d.dead = [];
+    });
+    await page.waitForFunction(() => SETDEX_SV['Mudkip'] && SETDEX_SV['Mudkip']['Mud [Run]'], null, { timeout: 8000 });
+    const team3 = await page.$$eval('#team-poke-list .trainer-pok', els => els.map(e => e.getAttribute('data-id')));
+    assert(JSON.stringify(team3) === JSON.stringify(['Mudkip (Mud [Run])']), 'Équipe après nouvelle run : ' + team3);
+    assert(!(await page.evaluate(() => SETDEX_SV['Combusken'] && SETDEX_SV['Combusken']['Pyro [Run]'])), 'ancien set retiré');
+    assert(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('nullcalc_runBeaten') || '{}')).length === 0), 'boss remis à zéro');
+    await page.click('#header-run-button');
+    await page.waitForSelector('.run-newrun');
+    assert((await page.textContent('.run-newrun')).includes('tentative n°2'), 'bannière');
+    if (shots) await page.screenshot({ path: path.join(shots, 'run-newrun.png') });
     assert(!errors.length, 'Erreurs JS : ' + errors.join(' | '));
-    console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap.');
+    console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap, nouvelle run.');
   } finally {
     await browser.close();
     if (!existed && fs.existsSync(out)) fs.unlinkSync(out);

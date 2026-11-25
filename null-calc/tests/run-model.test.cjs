@@ -69,3 +69,9 @@ test('level cap et captures par zone', () => {
     const zones = M.encounters({ party: [mon({ hp: 0 })], box: [], dead: [mon({ uid: 'c', metLocation: 'Route 102' })] });
     assert.deepEqual(zones.map(z => [z.zone, z.mons[0].state]), [['Route 101', 'ko'], ['Route 102', 'dead']]);
 });
+
+test('identifiant de partie : OT le plus fréquent (change à chaque nouvelle run)', () => {
+    const d = { party: [mon({ uid: '1-aaaa' }), mon({ uid: '2-aaaa' })], box: [mon({ uid: '3-bbbb' })], dead: [] };
+    assert.equal(M.runIdOf(d), 'aaaa');
+    assert.equal(M.runIdOf({ party: [], box: [], dead: [] }), '');
+});

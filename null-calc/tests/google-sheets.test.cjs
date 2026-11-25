@@ -209,7 +209,7 @@ test('anciens noms d’onglets (v1) renommés sans perte', () => {
 });
 
 test('level cap déduit des combats (boss de « Mechanic Changes »)', () => {
-  assert.deepEqual(JSON.parse(JSON.stringify(G.capFromFights([]))), { any: false, beaten: 0, cap: 13, next: 'Youngster Ren' });
+  assert.deepEqual(JSON.parse(JSON.stringify(G.capFromFights([]))), { any: false, beaten: 0, cap: 13, next: 'Youngster Ren', last: '' });
   const c = G.capFromFights(['Youngster Ren', 'Youngster Levi', 'Lass Videl', 'Youngster Itachi', 'Leader Roxanne', 'Leader Brawly [Boss]', 'Ex Elite Four Glacia 1 [Boss]']);
   assert.deepEqual([c.cap, c.next, c.beaten], [59, 'Wattson', 7]);
   assert.equal(G.capFromFights(['Youngster Renato']).cap, 13, 'nom exact pour la Root Academy');
@@ -226,6 +226,37 @@ test('synchro où seuls les PV changent : les gros onglets ne sont pas réécrit
   assert.equal(v(ss.sheets[S.run], R.teamFirst, 5), '5 / 40', 'équipe mise à jour');
   G2.applyPayload(ss, payload(d => { d.box[0].level = 13; d.box[0].nickname = 'Plume'; }), new Date());
   assert.notEqual(enc.cells['2,7'] && enc.cells['2,7'].v, 'MARQUEUR', 'captures modifiées → statuts recalculés');
+});
+
+test('nouvelle run : ancienne run archivée, feuille remise à zéro, tentative +1', () => {
+  const { G: G2 } = load(SOURCES);
+  const ss = fakeSpreadsheet();
+  const p1 = payload(); p1.runId = 'cafebabe';
+  G2.applyPayload(ss, p1, new Date());
+  const pk = ss.sheets[S.pokemon], f = ss.sheets[S.fights], run = ss.sheets[S.run], arch = ss.sheets[S.archive];
+  pk.cells['5,' + C.deathCause] = { v: 'Youngster Ren' };
+  [['Youngster Ren', '', 'Pyro', 2], ['Leader Roxanne', '', 'Pyro', 3]].forEach((r, i) => r.forEach((val, j) => { f.cells[(i + 2) + ',' + (j + 1)] = { v: val }; }));
+  G2.applyPayload(ss, p1, new Date());                       // même partie : rien d'archivé
+  assert.equal(arch.getLastRow(), 1);
+  const p2 = payload(d => {                                   // nouvelle sauvegarde : autre OT, autre starter
+    d.party = [Object.assign({}, d.party[0], { uid: '11111111-0000beef', species: 'Mudkip', nickname: 'Mud', level: 5 })]; d.box = []; d.dead = [];
+  });
+  p2.runId = '0000beef';
+  G2.applyPayload(ss, p2, new Date());
+  // Archive : résumé + 4 Pokémon de l'ancienne run
+  assert.equal(arch.getLastRow(), 6);
+  assert.deepEqual([v(arch, 2, 1), v(arch, 2, 3), v(arch, 2, 4), v(arch, 2, 5), v(arch, 2, 8), v(arch, 2, 10)],
+    [1, '▶ RÉSUMÉ', '4 captures · 1 morts', 'Dernier boss battu : Roxanne', 5, 2]);
+  assert.deepEqual([v(arch, 3, 3), v(arch, 3, 8), v(arch, 3, 9)], ['Pyro', 5, 2]);
+  assert.deepEqual([v(arch, 6, 3), v(arch, 6, 7), v(arch, 6, 11)], ['Rip', 'Mort', 'Youngster Ren']);
+  // Nouvelle run propre
+  assert.equal(v(run, R.info, 2), 2, 'tentative n°2');
+  assert.equal(pk.getLastRow(), 2);
+  assert.deepEqual([v(pk, 2, 4), v(pk, 2, 2), v(pk, 2, C.deathCause)], ['Mudkip', 1, '']);
+  assert.equal(f.getLastRow(), 1, 'combats vidés (en-tête seul)');
+  assert.equal(v(run, R.kpiValue, 3), 1, 'captures de la nouvelle run');
+  assert.equal(v(run, R.tablesFirst, 8), 'Aucun mort 🎉');
+  assert.equal(v(run, R.kpiValue, 11), 'Route 103 Rival', 'prochain dresseur repart du début');
 });
 
 test('données invalides refusées', () => {

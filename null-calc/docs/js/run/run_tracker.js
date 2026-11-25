@@ -7,7 +7,7 @@
 
     var POLL_MS = 1500, STALE_SECONDS = 15;
     var KEYS = { last: "nullcalc_runLast", index: "nullcalc_runIndex", beaten: "nullcalc_runBeaten",
-        auto: "nullcalc_runAutoSync", hp: "nullcalc_runAutoHp" };
+        auto: "nullcalc_runAutoSync", hp: "nullcalc_runAutoHp", runId: "nullcalc_runId", attempt: "nullcalc_runAttempt", newRun: "nullcalc_runNewRunAt" };
     var latest = null, receivedAt = 0, resolvers = null, lastWarnings = [], pollTag = null, lastAppliedBody = null;
 
     function load(k, fallback) { try { var v = root.localStorage.getItem(k); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } }
@@ -28,6 +28,14 @@
         receive: function(payload) {
             if (!payload || !payload.data || !Array.isArray(payload.data.party)) return;
             var body = JSON.stringify(payload.data);
+            // Nouvelle partie (autre numéro de dresseur) : boss et compteur remis à jour.
+            var runId = Model.runIdOf(payload.data), previousRun = load(KEYS.runId, null);
+            if (runId && previousRun && runId !== previousRun) {
+                save(KEYS.beaten, {});
+                save(KEYS.attempt, load(KEYS.attempt, 1) + 1);
+                save(KEYS.newRun, Date.now());
+            }
+            if (runId) save(KEYS.runId, runId);
             latest = payload; receivedAt = Date.now();
             save(KEYS.last, payload);
             if (root.NullRunSheets) root.NullRunSheets.onData(payload.data);
@@ -218,6 +226,14 @@
         capBox.appendChild(details); top.appendChild(capBox);
         content.appendChild(top);
 
+        var newRunAt = load(KEYS.newRun, 0);
+        if (newRunAt && Date.now() - newRunAt < 24 * 3600 * 1000) {
+            var banner = el("div", "run-newrun", "🔄 Nouvelle run détectée — tentative n°" + load(KEYS.attempt, 1) +
+                " : boss remis à zéro, anciens sets « [Run] » retirés, ancienne run archivée dans Google Sheets.");
+            var ok = el("button", "btn btn-small", "OK"); ok.type = "button";
+            ok.addEventListener("click", function() { save(KEYS.newRun, 0); render(); });
+            banner.appendChild(ok); content.appendChild(banner);
+        }
         if (!data) { content.appendChild(installHelp(true)); return; }
 
         var team = section("Équipe", data.party.length), grid = el("div", "run-grid");

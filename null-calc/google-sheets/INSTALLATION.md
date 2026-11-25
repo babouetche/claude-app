@@ -28,12 +28,18 @@ Si tu avais déjà déployé l'ancienne version, va dans **Déployer > Gérer le
 | ⚔️ **Combats** | Une ligne par combat : choisis le dresseur dans la liste (le split se remplit tout seul), puis le lead et les frags | À la main |
 | 🎯 **Dresseurs** | Tous les dresseurs officiels, avec équipe, niveaux, objets, talents, natures et attaques. Les boss sont surlignés, les dresseurs battus apparaissent en vert | Données officielles chaque semaine, « Battu » automatique |
 | 🌿 **Rencontres** | Toutes les rencontres avec leur %, par zone et méthode (herbes, pêche, surf, Éclate-Roc, cadeaux, échanges, casino). On y voit ta capture dans la zone (✔ vivant / ✝ mort) et si l'espèce est déjà capturée | Données officielles chaque semaine, captures automatiques |
+| 📦 **Archives** | Tes runs précédentes : un résumé par tentative (captures, morts, dernier boss battu, frags, combats), puis chaque Pokémon avec ses frags et « Mort contre » | Automatiquement, quand tu recommences une run |
 | 🎒 **Objets** | Objets tenus, baies, CT, tuteurs, méga-gemmes, mémoires, Écailles Cœur, menthes, boutique de la Ligue et objets sauvages, avec une case **Récupéré** | Données officielles chaque semaine. Tes cases cochées sont conservées |
 
 ## Ce qui est automatique (ou pas)
 - **Automatique** : ton équipe, tes boîtes et tes morts (via mGBA et le calculateur), les zones déjà capturées, les espèces déjà possédées, les dresseurs battus, le prochain dresseur, ainsi que les frags, leads et combats calculés depuis l'onglet Combats.
 - **Level cap et prochain boss** : ils se déduisent de l'onglet Combats dès que tu y as noté un boss. Avant ça, la feuille reprend les cases cochées dans le calculateur.
 - **À la main** : les frags de chaque combat et « Mort contre ». Le jeu ne garde pas en mémoire qui a mis K.O. qui, donc rien ne permet de le lire.
+
+## Quand tu recommences une run
+Rien à faire. Le calculateur reconnaît une nouvelle partie à son numéro de dresseur (il change à chaque nouvelle sauvegarde). Dès que ton premier Pokémon apparaît dans la nouvelle partie :
+- **La feuille** archive l'ancienne run dans 📦 Archives, vide 🐾 Pokémon, ⚔️ Combats et l'équipe du tableau de bord, puis passe à la tentative suivante. Les rencontres, dresseurs et objets repartent de zéro (zones, « Battu »), mais tes cases « Récupéré » restent cochées : décoche-les si tu veux.
+- **Le calculateur** retire les anciens sets « [Run] », décoche les boss et affiche « 🔄 Nouvelle run détectée ».
 
 ## À savoir
 - La feuille se met à jour au plus toutes les 8 secondes, et seulement quand ta partie change. Quand seuls les PV changent, seule l'équipe est réécrite, pour que ça reste fluide.
