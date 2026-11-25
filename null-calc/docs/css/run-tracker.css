@@ -1,0 +1,77 @@
+/* Onglet « Suivi de run » — reprend la palette et les bordures du calculateur. */
+body.run-mode .wrapper > :not(.app-header-bar):not(.app-run-subpage) { display: none !important; }
+body.run-mode .credits { display: none; }
+.app-run-subpage[hidden] { display: none !important; }
+.app-run-subpage {
+    display: block;
+    color: var(--text, #111);
+    padding: 0 0 2em;
+    font-size: 14px;
+}
+.run-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6em 1.2em; margin: .4em 0 1em; }
+.run-title { font-size: 1.35em; margin: 0; font-weight: bold; }
+.run-status { font-weight: bold; padding: .25em .7em; border-radius: 4px; border: 1px solid var(--border-ui, #aaa); }
+.run-status--live { color: #4cd36b; }
+.run-status--stale { color: #e8b339; }
+.run-status--off { color: #c9c9c9; }
+.run-options { display: flex; flex-direction: column; gap: .15em; margin-left: auto; }
+.run-option { font-weight: normal; margin: 0; cursor: pointer; }
+
+.run-top { display: flex; flex-wrap: wrap; gap: 1em; margin-bottom: 1em; }
+.run-stats { display: flex; gap: .6em; flex-wrap: wrap; }
+.run-stat, .run-cap, .run-card, .run-section {
+    background: var(--fieldset-color, #f4f4f4);
+    border: 1px solid var(--border-ui, #aaa);
+    border-radius: 6px;
+}
+.run-stat { min-width: 7.5em; padding: .6em .9em; display: flex; flex-direction: column; align-items: center; }
+.run-stat-value { font-size: 1.7em; font-weight: bold; line-height: 1.1; }
+.run-stat-label { opacity: .8; }
+.run-stat--dead .run-stat-value { color: #ff6b6b; }
+.run-cap { padding: .6em .9em; flex: 1 1 18em; }
+.run-cap-title { font-weight: bold; }
+.run-cap-value { font-size: 1.4em; font-weight: bold; color: #6fb7ff; }
+.run-cap-value--over { color: #ff6b6b; }
+.run-bosses summary { cursor: pointer; margin-top: .3em; }
+.run-boss { display: block; font-weight: normal; margin: .1em 0 .1em .5em; }
+
+.run-section { padding: .7em 1em 1em; margin-bottom: 1em; }
+.run-section-title { font-size: 1.1em; font-weight: bold; margin: 0 0 .6em; cursor: default; }
+details.run-section > summary.run-section-title { cursor: pointer; }
+.run-count { display: inline-block; margin-left: .5em; padding: 0 .5em; border-radius: 9px; background: var(--button-selected, #ddd); font-size: .85em; }
+.run-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: .7em; }
+.run-grid--compact { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
+.run-card { padding: .55em .7em; background: var(--background, #fff); }
+.run-card--ko, .run-card--dead { opacity: .75; }
+.run-card--dead { border-color: #a04545; }
+.run-card-head { display: flex; align-items: center; gap: .4em; flex-wrap: wrap; }
+.run-icon { width: 40px; height: 30px; object-fit: contain; image-rendering: pixelated; }
+.run-card-title { display: flex; flex-direction: column; margin-right: auto; }
+.run-muted { opacity: .7; font-weight: normal; }
+.run-badge { font-size: .78em; padding: .05em .45em; border-radius: 4px; border: 1px solid var(--border-ui, #aaa); }
+.run-badge--warn { color: #ffb347; border-color: #ffb347; }
+.run-badge--dead { color: #ff6b6b; border-color: #ff6b6b; }
+
+.run-hp { position: relative; height: 16px; margin: .4em 0; border-radius: 4px; background: rgba(127,127,127,.25); overflow: hidden; }
+.run-hp-fill { height: 100%; }
+.run-hp-fill.ok { background: #2fb350; }
+.run-hp-fill.mid { background: #d9b02c; }
+.run-hp-fill.low { background: #d64545; }
+.run-hp-text { position: absolute; inset: 0; text-align: center; font-size: 11px; line-height: 16px; font-weight: bold; text-shadow: 0 0 2px #000; color: #fff; }
+
+.run-info { display: grid; grid-template-columns: auto 1fr; gap: .05em .6em; margin: .4em 0; }
+.run-info dt { font-weight: bold; opacity: .8; }
+.run-info dd { margin: 0; }
+.run-moves { list-style: none; padding: 0; margin: .3em 0; display: grid; grid-template-columns: 1fr 1fr; gap: .2em .4em; }
+.run-moves li { border: 1px solid var(--border-ui-muted, #ccc); border-radius: 4px; padding: .1em .35em; font-size: .92em; }
+.run-actions { margin-top: .4em; text-align: right; }
+.run-actions .btn { white-space: nowrap; width: auto; min-width: 0; padding: .15em .7em; }
+
+.run-warnings li { color: #ffb347; }
+.run-table { width: 100%; border-collapse: collapse; }
+.run-table th, .run-table td { text-align: left; padding: .25em .5em; border-bottom: 1px solid var(--border-ui-muted, #ccc); }
+.run-row--dead td { color: #ff6b6b; }
+.run-row--ko td { color: #ffb347; }
+.run-install ol { margin: .3em 0 .5em 1.4em; }
+.run-install li { margin-bottom: .2em; }

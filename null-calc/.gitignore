@@ -17,3 +17,10 @@ Thumbs.db
 # Rebuilt archives and obsolete local verification runs
 *.zip
 verification/history/
+
+# Suivi de run : fichier écrit par lua/NullCalcSync.lua et Lua officiel du jeu (non redistribué)
+docs/run-data.js
+docs/run-data.js.tmp
+lua/Null_*.lua
+lua/NullLuaV*.lua
+lua/Null.lua
