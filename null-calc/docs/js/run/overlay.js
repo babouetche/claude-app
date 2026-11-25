@@ -4,7 +4,7 @@
     var params = new URLSearchParams(location.search);
     var view = (params.get("vue") || "equipe").toLowerCase();
     var size = Math.max(1, Math.min(4, Number(params.get("taille")) || 2));
-    var cols = Math.max(1, Math.min(30, Number(params.get("colonnes")) || 10));
+    var cols = Math.max(1, Math.min(30, Number(params.get("colonnes")) || 6));
     var showItems = params.get("objets") !== "0";
     var direction = params.get("sens") === "colonne" ? "colonne" : "ligne";
     document.documentElement.style.setProperty("--s", size);

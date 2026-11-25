@@ -35,6 +35,11 @@ function fixture(mutate) {
     // Mise à jour en direct
     fixture(d => { d.party[0].hp = 10; });
     await page.waitForFunction(() => document.querySelector('.hp i').style.width === '25%', null, { timeout: 5000 });
+    // Boîte : 6 Pokémon max par ligne par défaut
+    await page.goto(url + '?vue=boite');
+    await page.waitForSelector('.grid .mon');
+    const gridCols = await page.evaluate(() => getComputedStyle(document.querySelector('.grid')).gridTemplateColumns.split(' ').length);
+    assert(gridCols === 6, 'colonnes boîte : ' + gridCols);
     // Vue équipe seule, transparente
     await page.goto(url + '?vue=equipe&taille=3');
     await page.waitForSelector('.team .mon');

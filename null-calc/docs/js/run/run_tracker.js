@@ -276,7 +276,7 @@
         var d = el("details", "run-sheets run-overlay"); d.id = "run-overlay";
         d.appendChild(el("summary", "", "Overlay OBS (remplace PokemonNullDisplay)"));
         d.appendChild(el("p", "run-muted", "Dans OBS : Sources > + > Navigateur, décoche « Fichier local », colle un lien ci-dessous, largeur 900 × hauteur 300 (à ajuster). Le fond est transparent. Il suffit que mGBA tourne avec NullCalcSync.lua : l'overlay lit directement ses données, pas besoin du calculateur ni de PokemonNullDisplay.exe."));
-        [["Équipe", "vue=equipe&taille=2"], ["Boîte", "vue=boite&taille=2&colonnes=10"], ["Morts", "vue=morts&taille=2&colonnes=10"], ["Tout", "vue=tout&taille=2"]].forEach(function(v) {
+        [["Équipe", "vue=equipe&taille=2"], ["Boîte", "vue=boite&taille=2&colonnes=6"], ["Morts", "vue=morts&taille=2&colonnes=10"], ["Tout", "vue=tout&taille=2"]].forEach(function(v) {
             var url = new URL("overlay.html?" + v[1], document.baseURI).href;
             var row = el("div", "run-sheets-row"), input = el("input"), btn = el("button", "btn btn-small", "Copier");
             input.readOnly = true; input.value = url; btn.type = "button";
