@@ -432,17 +432,23 @@ local function followBattle(party, enemy)
 	if alive and (not battle or battle.sig ~= sig) then
 		battle = { sig = sig, pp = {}, hp = {}, frags = {}, order = {} }
 		for _, m in ipairs(party) do if m.hp > 0 and not battle.lead then battle.lead = m.uid end end
-		for _, m in ipairs(party) do battle.pp[m.uid] = ppSum(m) end
+		for _, m in ipairs(party) do battle.pp[m.uid] = ppSum(m) battle.php = battle.php or {} battle.php[m.uid] = m.hp end
 		for i, m in ipairs(enemy) do battle.hp[i] = m.hp end
+		battle.player, battle.enemy = battle.lead, 1
 		return
 	end
 	if not battle or battle.sig ~= sig then return end
+	-- Pokémon actifs : le mien a attaqué (PP) ou perdu des PV ; celui d'en face a perdu ou regagné des PV.
+	battle.php = battle.php or {}
 	for _, m in ipairs(party) do
 		local s = ppSum(m)
-		if battle.pp[m.uid] and s < battle.pp[m.uid] then battle.last = m.uid end
+		if battle.pp[m.uid] and s < battle.pp[m.uid] then battle.last = m.uid battle.player = m.uid end
+		if battle.php[m.uid] and m.hp ~= battle.php[m.uid] then battle.player = m.uid end
 		battle.pp[m.uid] = s
+		battle.php[m.uid] = m.hp
 	end
 	for i, m in ipairs(enemy) do
+		if battle.hp[i] and m.hp ~= battle.hp[i] and m.hp > 0 then battle.enemy = i end
 		if (battle.hp[i] or 0) > 0 and m.hp == 0 then
 			local who = battle.last or battle.lead
 			if who then
@@ -451,6 +457,10 @@ local function followBattle(party, enemy)
 			end
 		end
 		battle.hp[i] = m.hp
+	end
+	-- Adversaire actif K.O. : le suivant sera connu dès qu'il prendra des dégâts ; en attendant, premier debout.
+	if enemy[battle.enemy] and enemy[battle.enemy].hp == 0 then
+		for i, m in ipairs(enemy) do if m.hp > 0 then battle.enemy = i break end end
 	end
 end
 
@@ -505,7 +515,9 @@ local function trackFights(party)
 	end
 	local runIndex = 1
 	for i, r in ipairs(history.runs) do if r == run then runIndex = i end end
-	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy }
+	local active = nil
+	if battle and enemy and battle.sig == sigOf(enemy) then active = { player = battle.player, enemy = battle.enemy } end
+	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy, active = active }
 end
 
 pcall(loadHistory)
@@ -628,6 +640,18 @@ local function tick()
 			log(string.format("Mis à jour : équipe %d, boîtes %d, morts %d.", #data.party, #data.box, #data.dead))
 		end
 	end
+end
+
+-- Instantané de la mémoire (pour trouver météo, terrain, protections, boosts) : NullCalcSnap("pluie")
+-- écrit snap-pluie.bin (EWRAM + IWRAM) dans le dossier du script.
+function NullCalcSnap(name)
+	name = tostring(name or os.time()):gsub("[^%w_%-]", "")
+	local f = io.open(LUA_DIR .. "snap-" .. name .. ".bin", "wb")
+	if not f then log("Impossible d'écrire l'instantané.") return end
+	f:write(emu:readRange(0x2000000, 0x40000))
+	f:write(emu:readRange(0x3000000, 0x8000))
+	f:close()
+	log("Instantané enregistré : snap-" .. name .. ".bin")
 end
 
 -- Expose des fonctions utiles dans la console mGBA.

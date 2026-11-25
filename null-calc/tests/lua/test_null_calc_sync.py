@@ -176,6 +176,8 @@ def main():
     # Combat en cours (adversaires encore debout) : pas encore compté
     L.execute("NullCalcSyncNow()")
     assert not (work / "lua" / "historique-combats.txt").read_text(encoding="utf8").count("\nF|"), "combat en cours compté"
+    live = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))["battle"]
+    assert live["active"] == {"player": "12345678-cafebabe", "enemy": 1}, live.get("active")
     # Pyro attaque (PP d'Ember 25 → 24) et met K.O. le premier adversaire
     torchic_atk = box_mon(0x12345678, 0xCAFEBABE, "Pyro", sid("Torchic"), iid("Leftovers"), 1000,
                           [mid("Ember"), mid("Scratch"), explosion, 0], [24, 35, 5, 0], (31, 30, 29, 28, 27, 26), 0x10)
@@ -238,6 +240,8 @@ def main():
     mem.write(PARTY + 7 * 104, party_mon(bytes(bad), 37, 0, (90, 70, 60, 50, 40, 40)))
     assert L.eval("NULL_CALC_SYNC_TEST.readEnemy()") is None
     mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 0, (90, 70, 60, 50, 40, 40)))
+    L.execute('NullCalcSnap("pluie")')
+    assert (work / "lua" / "snap-pluie.bin").stat().st_size == 0x48000, "instantané mémoire"
     addr_file = work / "lua" / "adresse-adversaire.txt"
     assert addr_file.read_text().strip() == hex(PARTY + 6 * 104), "adresse retenue"
 

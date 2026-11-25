@@ -94,8 +94,20 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     });
     await page.waitForFunction(() => document.querySelector('.run-cap-value') && document.querySelector('.run-cap-value').textContent.includes('38'), null, { timeout: 8000 });
     assert(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('nullcalc_runBeaten') || '{}')).length === 4), '4 boss Root Academy cochés');
+    // Combat en direct : Bug Catcher Beni, 2e Pokémon actif à moitié PV → le calc le sélectionne à droite avec ses PV
+    fixture(d => {
+      d.party = [Object.assign({}, d.party[0], { uid: '99999999-0000beef', species: 'Mudkip', nickname: 'Mud', level: 30, hp: 40, maxHP: 80, moves: [{ name: 'Water Gun', pp: 25 }] })];
+      d.box = []; d.dead = [];
+      d.battle = { runId: '0000beef', runIndex: 2, runCount: 2, fights: [{ t: 1, team: [{ species: 'Oinkologne', level: 33 }, { species: 'Gumshoos', level: 33 }, { species: 'Talonflame', level: 34 }] }],
+        enemy: [{ species: 'Lumineon', level: 33, hp: 0, maxHP: 100 }, { species: 'Butterfree', level: 33, hp: 50, maxHP: 100 }, { species: 'Spidops', level: 33, hp: 100, maxHP: 100 }, { species: 'Ledian', level: 34, hp: 100, maxHP: 100 }],
+        active: { player: '99999999-0000beef', enemy: 2 } };
+    });
+    await page.click('#header-calc-button');
+    await page.waitForFunction(() => /Butterfree \(Bug Catcher Beni\)/.test($('.opposing').val() || ''), null, { timeout: 8000 });
+    await page.waitForFunction(() => $('#p2 .percent-hp').first().val() === '50', null, { timeout: 8000 });
+    assert(/Mudkip \(Mud \[Run\]\)/.test(await page.evaluate(() => $('.player').val())), 'mon Pokémon actif à gauche');
     assert(!errors.length, 'Erreurs JS : ' + errors.join(' | '));
-    console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap, nouvelle run, boss cochés par les combats détectés.');
+    console.log('OK: suivi de run — import, rangement, PV/statut, mise à jour, évolution, mort, level cap, nouvelle run, boss cochés par les combats détectés, combat en direct.');
   } finally {
     await browser.close();
     if (!existed && fs.existsSync(out)) fs.unlinkSync(out);

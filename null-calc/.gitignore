@@ -25,3 +25,4 @@ lua/Null_*.lua
 lua/NullLuaV*.lua
 lua/Null.lua
 lua/adresse-adversaire.txt
+lua/snap-*.bin

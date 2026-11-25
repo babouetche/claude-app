@@ -149,5 +149,12 @@
         return p;
     }
 
-    return { auto: auto, BOSSES: BOSSES, keysOf: keysOf, buildTrainers: buildTrainers, matchTeam: matchTeam, progress: progress, groupName: groupName };
+    function cached(setdex) {
+        var g = typeof window !== "undefined" ? window : globalThis;
+        setdex = setdex || g.SETDEX_SV;
+        if (!cache && setdex) cache = buildTrainers(setdex);
+        return cache;
+    }
+
+    return { cached: cached, auto: auto, BOSSES: BOSSES, keysOf: keysOf, buildTrainers: buildTrainers, matchTeam: matchTeam, progress: progress, groupName: groupName };
 });

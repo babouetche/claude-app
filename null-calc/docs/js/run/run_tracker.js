@@ -7,7 +7,7 @@
 
     var POLL_MS = 1500, STALE_SECONDS = 15;
     var KEYS = { last: "nullcalc_runLast", index: "nullcalc_runIndex", beaten: "nullcalc_runBeaten",
-        auto: "nullcalc_runAutoSync", hp: "nullcalc_runAutoHp", runId: "nullcalc_runId", attempt: "nullcalc_runAttempt", newRun: "nullcalc_runNewRunAt" };
+        auto: "nullcalc_runAutoSync", hp: "nullcalc_runAutoHp", runId: "nullcalc_runId", attempt: "nullcalc_runAttempt", newRun: "nullcalc_runNewRunAt", live: "nullcalc_runLiveBattle" };
     var latest = null, receivedAt = 0, resolvers = null, lastWarnings = [], pollTag = null, lastAppliedBody = null;
 
     function load(k, fallback) { try { var v = root.localStorage.getItem(k); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } }
@@ -55,6 +55,7 @@
             if (body !== lastAppliedBody) {
                 lastAppliedBody = body;
                 if (load(KEYS.auto, true)) applyToCalc(payload.data);
+                if (load(KEYS.live, true) && root.NullLiveBattle) root.NullLiveBattle.onData(payload.data, load(KEYS.index, {}));
                 render();
             } else renderStatus();
         },
@@ -342,7 +343,8 @@
         var status = el("div", "run-status"); status.id = "run-status"; bar.appendChild(status);
         var options = el("div", "run-options");
         [[KEYS.auto, "Créer et mettre à jour mes sets « [Run] » dans le calculateur"],
-         [KEYS.hp, "Mettre à jour les PV et le statut du Pokémon affiché à gauche"]].forEach(function(opt) {
+         [KEYS.hp, "Mettre à jour les PV et le statut du Pokémon affiché à gauche"],
+         [KEYS.live, "Combat en direct : mon Pokémon actif, le Pokémon adverse et leurs PV suivent le jeu"]].forEach(function(opt) {
             var label = el("label", "run-option"), cb = el("input"); cb.type = "checkbox"; cb.checked = load(opt[0], true);
             cb.addEventListener("change", function() { save(opt[0], cb.checked); if (cb.checked && latest) { lastAppliedBody = null; root.NullRunSync.receive(latest); } });
             label.appendChild(cb); label.appendChild(document.createTextNode(" " + opt[1])); options.appendChild(label);
