@@ -92,7 +92,8 @@
                 var wk = k(w.species);
                 for (var i = 0; i < t.mons.length; i++) {
                     var m = t.mons[i];
-                    if (used[i] || m.level !== w.level) continue;
+                    // Root Academy (tirage aléatoire) : le niveau peut varier, seule l'espèce compte.
+                    if (used[i] || (!t.random && m.level !== w.level)) continue;
                     if ([m.species].concat(m.alts).some(function(a) { return keysOf(a).indexOf(wk) >= 0; })) { used[i] = true; hit++; return; }
                 }
             });

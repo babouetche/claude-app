@@ -18,7 +18,7 @@
 <style>
   :root { --s: 2; }
   html, body { margin: 0; background: transparent; overflow: hidden; }
-  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #fff; padding: 4px; }
+  body { -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #fff; padding: 4px; }
   body.fond { background: rgba(18, 22, 34, .85); }
   .section { margin-bottom: 8px; }
   .title { font-weight: 800; font-size: calc(8px * var(--s)); letter-spacing: .5px; text-shadow: 0 2px 3px #000; margin: 0 0 3px 2px; }
@@ -61,7 +61,7 @@
   .cell .lv { right: 0; bottom: 0; font-size: calc(5.5px * var(--s)); }
   .cell img.itemicon { left: calc(-1px * var(--s)); bottom: calc(-1px * var(--s)); width: calc(13px * var(--s)); height: calc(13px * var(--s)); }
   .cell .itemtext { left: 0; bottom: 0; }
-  .cell.dead img.sprite { filter: grayscale(1) brightness(.8) drop-shadow(0 2px 2px rgba(0, 0, 0, .75)); }
+  .cell.dead img.sprite { filter: saturate(.55) brightness(1.1) drop-shadow(0 0 1px #000) drop-shadow(0 2px 2px rgba(0, 0, 0, .8)); }
   .cell .cross { position: absolute; right: 0; bottom: calc(-1px * var(--s)); font-size: calc(8px * var(--s)); color: #ff6b6b; text-shadow: 0 0 3px #000; }
   .grid.slide { animation: slideIn .6s ease-out; }
   @keyframes slideIn { from { transform: translateX(35%); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -75,7 +75,8 @@
   .trainer .note { font-size: calc(6px * var(--s)); opacity: .85; text-shadow: 0 1px 2px #000; }
 
   /* Level cap */
-  .big { font-size: calc(18px * var(--s)); font-weight: 900; line-height: 1; text-shadow: 0 3px 4px #000, 0 0 2px #000; }
+  .big { font-size: calc(18px * var(--s)); font-weight: 900; line-height: 1; color: #fff;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 0 #000; }
   .waiting { font-size: 14px; text-shadow: 0 1px 2px #000; }
 </style>
 </head>

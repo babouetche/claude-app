@@ -65,3 +65,11 @@ test('noms lus dans le jeu (Lua officiel) : toutes les espèces des dresseurs so
   trainers.forEach(t => t.mons.forEach(m => { if (m.species !== 'None' && ![m.species].concat(m.alts).some(a => T.keysOf(a).some(x => lua.has(x)))) missing.push(m.species); }));
   assert.deepEqual(missing, []);
 });
+
+test('Root Academy : reconnu même si le niveau tiré diffère, pas un sauvage seul', () => {
+  const ra1 = trainers.find(t => t.name === 'Root Academy Trainer #1');
+  const team = ['Sunkern', 'Ralts', 'Pidgey'].map(species => ({ species, level: 14 }));
+  assert.equal(T.matchTeam(trainers, team).name, 'Root Academy Trainer #1');
+  assert.equal(T.matchTeam(trainers, [{ species: 'Ralts', level: 14 }]), null);
+  assert.equal(T.progress(trainers, [{ t: 1, team }]).next.order > ra1.order, true);
+});

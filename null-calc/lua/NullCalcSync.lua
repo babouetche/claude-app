@@ -315,23 +315,100 @@ local function runIdOf(party)
 	return best
 end
 
-local function readEnemy()
+-- Un Pokémon d'équipe valide à cette adresse (checksum du jeu, niveau et PV cohérents) ?
+local function validPartyMon(address)
+	if emu:read32(address) == 0 then return nil end
+	local level = emu:read8(address + BOX_MON_SIZE + 4)
+	if level < 1 or level > 100 then return nil end
+	local hp, maxHP = emu:read16(address + BOX_MON_SIZE + 6), emu:read16(address + BOX_MON_SIZE + 8)
+	if maxHP == 0 or maxHP > 999 or hp > maxHP then return nil end
+	local mon = readBoxMon(address)
+	if mon.species == 0 or mons[mon.species] == nil then return nil end
+	if computeBoxChecksum(address) ~= mon.checksum then return nil end
+	return mon, level, hp, maxHP
+end
+
+local function readEnemyAt(base)
 	local team = {}
 	for i = 0, 5 do
-		local address = ENEMY_PARTY_ADDR + PARTY_MON_SIZE * i
-		if emu:read32(address) ~= 0 then
-			local mon = readBoxMon(address)
-			if mon.species == 0 or mons[mon.species] == nil then break end
-			if computeBoxChecksum(address) ~= mon.checksum then return nil end
-			local level = emu:read8(address + BOX_MON_SIZE + 4)
-			if level < 1 or level > 100 then return nil end
-			team[#team + 1] = { species = mons[mon.species], level = level, itemId = mon.heldItem,
-				item = (mon.heldItem ~= 0 and item[mon.heldItem]) or "",
-				hp = emu:read16(address + BOX_MON_SIZE + 6), maxHP = emu:read16(address + BOX_MON_SIZE + 8) }
-		else break end
+		local address = base + PARTY_MON_SIZE * i
+		if emu:read32(address) == 0 then break end
+		local mon, level, hp, maxHP = validPartyMon(address)
+		if not mon then return nil end -- donnée corrompue : rien plutôt qu'une équipe partielle
+		team[#team + 1] = { species = mons[mon.species], level = level, itemId = mon.heldItem,
+			item = (mon.heldItem ~= 0 and item[mon.heldItem]) or "", hp = hp, maxHP = maxHP, personality = mon.personality }
 	end
 	if #team == 0 then return nil end
 	return team
+end
+
+-- L'adresse de gEnemyParty n'est pas dans le Lua officiel. On essaie l'adresse déduite ;
+-- si rien n'y est jamais lu, on cherche l'équipe adverse dans toute la mémoire (par morceaux,
+-- sans ralentir le jeu) et on retient l'adresse trouvée dans adresse-adversaire.txt.
+local ENEMY_ADDR_FILE = LUA_DIR .. "adresse-adversaire.txt"
+local enemyAddr, enemyConfirmed = ENEMY_PARTY_ADDR, false
+local scanPos, SCAN_START, SCAN_END, SCAN_STEP = nil, 0x2000000, 0x2040000, 0x8000
+do
+	local f = io.open(ENEMY_ADDR_FILE, "r")
+	if f then
+		local v = tonumber((f:read("*l") or ""):match("0x%x+") or "")
+		f:close()
+		if v then enemyAddr, enemyConfirmed = v, true end
+	end
+end
+local function playerPersonalities()
+	local set, n = {}, emu:read8(PARTY_COUNT_ADDR)
+	for i = 0, math.min(n, 6) - 1 do set[emu:read32(PARTY_ADDR + PARTY_MON_SIZE * i)] = true end
+	return set
+end
+-- Équipe adverse = pas une copie de la mienne (la sauvegarde garde une copie de mon équipe).
+local function isEnemyTeam(team, mine)
+	for _, m in ipairs(team) do if mine[m.personality] then return false end end
+	return true
+end
+local function excluded(a)
+	return (a >= PARTY_ADDR and a < PARTY_ADDR + 6 * PARTY_MON_SIZE)
+		or (a >= STORAGE_ADDR and a < STORAGE_ADDR + 4 + 14 * BOX_SIZE * BOX_MON_SIZE)
+end
+local function scanStep(mine)
+	scanPos = scanPos or SCAN_START
+	local stop = math.min(scanPos + SCAN_STEP, SCAN_END)
+	for a = scanPos, stop - 4, 4 do
+		if not excluded(a) and validPartyMon(a) then
+			local base = a
+			while not excluded(base - PARTY_MON_SIZE) and base - PARTY_MON_SIZE >= SCAN_START and validPartyMon(base - PARTY_MON_SIZE) do base = base - PARTY_MON_SIZE end
+			local team = readEnemyAt(base)
+			if team and isEnemyTeam(team, mine) then scanPos = nil return base end
+		end
+	end
+	scanPos = (stop >= SCAN_END) and nil or stop
+	return nil
+end
+local function saveEnemyAddr(a)
+	local f = io.open(ENEMY_ADDR_FILE, "w")
+	if f then f:write(string.format("0x%x\n", a)) f:close() end
+end
+
+local function readEnemy()
+	local mine = playerPersonalities()
+	local team = readEnemyAt(enemyAddr)
+	if team and isEnemyTeam(team, mine) then
+		if not enemyConfirmed then
+			enemyConfirmed = true
+			saveEnemyAddr(enemyAddr)
+			log(string.format("Équipe adverse trouvée en mémoire (0x%x).", enemyAddr))
+		end
+		return team
+	end
+	if enemyConfirmed then return nil end
+	local found = scanStep(mine)
+	if found then
+		enemyAddr, enemyConfirmed = found, true
+		saveEnemyAddr(found)
+		log(string.format("Équipe adverse trouvée en mémoire (0x%x).", found))
+		return readEnemyAt(found)
+	end
+	return nil
 end
 
 local function trackFights(party)
@@ -505,7 +582,7 @@ function NullCalcSyncNow()
 	tick()
 end
 
-NULL_CALC_SYNC_TEST = { history = history, readEnemy = function() return readEnemy() end, displayText = function() return displayText() end, snapshot = snapshot, toJson = toJson, tick = tick, output = OUTPUT, writeOutput = writeOutput }
+NULL_CALC_SYNC_TEST = { history = history, readEnemy = function() return readEnemy() end, readEnemyAt = function(a) return readEnemyAt(a) end, enemyAddr = function() return enemyAddr end, displayText = function() return displayText() end, snapshot = snapshot, toJson = toJson, tick = tick, output = OUTPUT, writeOutput = writeOutput }
 
 if callbacks and callbacks.add then
 	callbacks:add("frame", tick)

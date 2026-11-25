@@ -223,6 +223,29 @@ def main():
     mem.write(PARTY + 7 * 104, party_mon(bytes(bad), 37, 90, (90, 70, 60, 50, 40, 40)))
     assert L.eval("NULL_CALC_SYNC_TEST.readEnemy()") is None
     mem.write(PARTY + 7 * 104, party_mon(enemy2, 37, 90, (90, 70, 60, 50, 40, 40)))
+    addr_file = work / "lua" / "adresse-adversaire.txt"
+    assert addr_file.read_text().strip() == hex(PARTY + 6 * 104), "adresse retenue"
+
+    # Équipe adverse ailleurs en mémoire : retrouvée par la recherche automatique.
+    # Une copie de MON équipe (sauvegarde) placée avant ne doit pas être prise pour l'adversaire.
+    addr_file.unlink()
+    for i in range(2):
+        mem.write(PARTY + (6 + i) * 104, bytes(104))
+    mem.write(0x2003000, bytes(mem.read8(PARTY + j) for j in range(2 * 104)))
+    OTHER = 0x2021234 & ~3
+    mem.write(OTHER, party_mon(enemy1, 36, 80, (80, 40, 90, 30, 40, 50)))
+    mem.write(OTHER + 104, party_mon(enemy2, 37, 90, (90, 70, 60, 50, 40, 40)))
+    L.execute(open(work / "lua" / "NullCalcSync.lua", encoding="utf8").read())
+    team = None
+    for _ in range(12):
+        team = L.eval("NULL_CALC_SYNC_TEST.readEnemy()")
+        if team: break
+    assert team and team[1]["species"] == "Nosepass" and team[2]["species"] == "Tyrunt", team
+    assert L.eval("NULL_CALC_SYNC_TEST.enemyAddr()") == OTHER
+    assert addr_file.read_text().strip() == hex(OTHER)
+    # Relance de mGBA : l'adresse est relue depuis le fichier, plus de recherche.
+    L.execute(open(work / "lua" / "NullCalcSync.lua", encoding="utf8").read())
+    assert L.eval("NULL_CALC_SYNC_TEST.enemyAddr()") == OTHER
 
     # Overlay OBS : même pokemonData.txt que PokemonNullDisplay.lua (Sykless), si fourni.
     ours = L.eval("NULL_CALC_SYNC_TEST.displayText()")
