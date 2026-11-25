@@ -5,6 +5,9 @@
     var view = (params.get("vue") || "equipe").toLowerCase();
     var size = Math.max(1, Math.min(4, Number(params.get("taille")) || 2));
     var cols = Math.max(1, Math.min(30, Number(params.get("colonnes")) || 6));
+    var rows = Math.max(1, Math.min(30, Number(params.get("lignes")) || 5));
+    var pageSeconds = Math.max(2, Number(params.get("defilement")) || 5);
+    var boxPage = 0, lastData = null;
     var showItems = params.get("objets") !== "0";
     var direction = params.get("sens") === "colonne" ? "colonne" : "ligne";
     document.documentElement.style.setProperty("--s", size);
@@ -80,7 +83,14 @@
             out.appendChild(section("ÉQUIPE", team, el("div", "row team " + direction)));
         }
         if (view === "boite" || view === "tout") {
-            out.appendChild(section("BOÎTE (" + data.box.length + ")", data.box.map(function(m) { return monCard(m, "box"); }), grid()));
+            // 6 × 5 par défaut (une boîte du jeu). Au-delà, défilement entre les pages.
+            var perPage = cols * rows, pages = Math.max(1, Math.ceil(data.box.length / perPage));
+            if (boxPage >= pages) boxPage = 0;
+            var shown = data.box.slice(boxPage * perPage, (boxPage + 1) * perPage);
+            var boxSection = section("BOÎTE (" + data.box.length + ")" + (pages > 1 ? " · " + (boxPage + 1) + "/" + pages : ""), shown.map(function(m) { return monCard(m, "box"); }), grid());
+            boxSection.dataset.pages = pages;
+            if (view !== "tout" && pages > 1) boxSection.insertBefore(el("div", "title", (boxPage + 1) + "/" + pages), boxSection.firstChild);
+            out.appendChild(boxSection);
         }
         if (view === "morts" || view === "cimetiere" || view === "tout") {
             out.appendChild(section("MORTS (" + data.dead.length + ")", data.dead.map(function(m) { return monCard(m, "dead"); }), grid()));
@@ -93,6 +103,7 @@
             var body = JSON.stringify(payload.data);
             if (body === lastBody) return;
             lastBody = body;
+            lastData = payload.data;
             render(payload.data);
         }
     };
@@ -105,4 +116,12 @@
     root.NullOverlay = { iconName: iconName, iconCandidates: iconCandidates };
     poll();
     setInterval(poll, 1000);
+    // Défilement des pages de la boîte
+    setInterval(function() {
+        if (!lastData || !(view === "boite" || view === "tout")) return;
+        var pages = Math.max(1, Math.ceil(lastData.box.length / (cols * rows)));
+        if (pages < 2) return;
+        boxPage = (boxPage + 1) % pages;
+        render(lastData);
+    }, pageSeconds * 1000);
 })(window);

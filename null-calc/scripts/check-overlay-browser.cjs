@@ -40,6 +40,14 @@ function fixture(mutate) {
     await page.waitForSelector('.grid .mon');
     const gridCols = await page.evaluate(() => getComputedStyle(document.querySelector('.grid')).gridTemplateColumns.split(' ').length);
     assert(gridCols === 6, 'colonnes boîte : ' + gridCols);
+    // 40 Pokémon en boîte : 30 affichés (6 × 5), page 1/2, puis page 2/2 après le défilement
+    fixture(d => { const m = d.box[0]; d.box = Array.from({ length: 40 }, (_, i) => Object.assign({}, m, { uid: 'b' + i, level: i + 1 })); });
+    await page.goto(url + '?vue=boite&defilement=2');
+    await page.waitForFunction(() => document.querySelectorAll('.grid .mon').length === 30);
+    assert((await page.textContent('#overlay')).includes('1/2'), 'page 1/2');
+    await page.waitForFunction(() => document.querySelectorAll('.grid .mon').length === 10, null, { timeout: 5000 });
+    assert((await page.textContent('#overlay')).includes('2/2'), 'page 2/2');
+    fixture(d => { d.party[0].hp = 10; });
     // Vue équipe seule, transparente
     await page.goto(url + '?vue=equipe&taille=3');
     await page.waitForSelector('.team .mon');
