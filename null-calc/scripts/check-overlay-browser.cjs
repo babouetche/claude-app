@@ -1,6 +1,6 @@
 'use strict';
 // Overlay OBS (docs/overlay.html) : équipe verticale, boîte 6×5, morts 6 par 6, prochain dresseur,
-// level cap et numéro de run automatiques, icônes d'objets, mise à jour en direct.
+// level cap automatique, icônes d'objets, mise à jour en direct.
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
 const { chromium } = require(process.env.NULL_AI_PLAYWRIGHT_MODULE || 'playwright');
 const root = path.resolve(__dirname, '..'), out = path.join(root, 'docs', 'run-data.js'), shots = process.argv[2];
@@ -52,6 +52,10 @@ function fixture(mutate) {
       cellW: document.querySelector('.cell').getBoundingClientRect().width, imgW: document.querySelector('.cell img.sprite').getBoundingClientRect().width }));
     assert(box.cols === 6 && box.imgW > box.cellW, 'boîte : ' + JSON.stringify(box));
     await page.waitForFunction(() => document.querySelectorAll('.grid .cell').length === 10, null, { timeout: 5000 });
+    // Méga-gemme sans icône : remplacée par l'icône d'une autre méga-gemme
+    fixture(d => { d.party[0].item = 'Crabominite'; delete d.party[0].itemId; d.battle.fights = []; });
+    await page.goto(url + '?vue=equipe');
+    await page.waitForSelector('.tcard img.itemicon[alt="Crabominite"]'); await imagesOk();
     // Morts : bande de 6, 6 par 6
     fixture(d => { const m = d.dead[0]; d.dead = Array.from({ length: 14 }, (_, i) => Object.assign({}, m, { uid: 'd' + i })); d.battle.fights = []; });
     await page.goto(url + '?vue=morts&defilement=2');
@@ -62,8 +66,6 @@ function fixture(mutate) {
     fixture(d => { d.battle.fights = fights; d.battle.runIndex = 3; });
     await page.goto(url + '?vue=cap');
     await page.waitForFunction(() => document.querySelector('.big') && document.querySelector('.big').textContent === '38', null, { timeout: 15000 });
-    await page.goto(url + '?vue=run&depart=25');
-    await page.waitForFunction(() => document.querySelector('.big') && document.querySelector('.big').textContent === '27');
     await page.goto(url + '?vue=dresseur');
     await page.waitForFunction(() => document.querySelector('.trainer .tname'), null, { timeout: 15000 });
     const nextName = await page.textContent('.trainer .tname');
@@ -80,6 +82,6 @@ function fixture(mutate) {
     await imagesOk();
     if (shots) await page.screenshot({ path: path.join(shots, 'overlay-tout.png') });
     assert(!errors.length, errors.join(' | '));
-    console.log('OK: overlay — équipe verticale, objets en icônes, boîte 6×5, morts 6 par 6, prochain dresseur (' + next2.name + '), level cap 38→45, run auto.');
+    console.log('OK: overlay — équipe verticale, objets en icônes, boîte 6×5, morts 6 par 6, prochain dresseur (' + next2.name + '), level cap 38→45, méga-gemmes sans icône remplacées.');
   } finally { await browser.close(); if (fs.existsSync(out)) fs.unlinkSync(out); }
 })().catch(e => { console.error(e); process.exit(1); });

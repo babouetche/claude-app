@@ -6,14 +6,13 @@
 <!--
   Overlay OBS : Source « Navigateur », décocher « Fichier local », coller le lien copié depuis
   le calculateur (Suivi de run > Overlay OBS). Paramètres du lien :
-    vue=equipe | boite | morts | dresseur | cap | run | tout   (défaut : equipe)
+    vue=equipe | boite | morts | dresseur | cap | tout   (défaut : equipe)
     taille=1 … 4                       (défaut : 2, décimales acceptées)
     colonnes=N                         (boîte/morts, défaut 6 par ligne)
     lignes=N                           (boîte : 5 ; morts : 1 ; au-delà défilement)
     defilement=S                       (secondes par page, défaut 5)
     sens=colonne | ligne               (équipe, défaut colonne)
     objets=0                           (masquer les objets)
-    depart=N                           (vue run : numéro de la run en cours au premier lancement)
     fond=1                             (fond sombre au lieu de transparent)
 -->
 <style>
@@ -69,14 +68,13 @@
 
   /* Prochain dresseur */
   .trainer .tname { font-size: calc(8px * var(--s)); font-weight: 800; text-shadow: 0 2px 3px #000; margin: 0 0 2px 2px; white-space: nowrap; }
-  .trainer .tname small { font-weight: 600; opacity: .8; font-size: calc(6px * var(--s)); margin-left: 6px; }
   .trainer .row { display: flex; gap: calc(2px * var(--s)); }
   .trainer .cell { width: calc(36px * var(--s)); height: calc(34px * var(--s)); }
   .trainer .cell img.sprite { width: calc(42px * var(--s)); height: calc(42px * var(--s)); }
   .trainer .cell img.itemicon { width: calc(15px * var(--s)); height: calc(15px * var(--s)); }
   .trainer .note { font-size: calc(6px * var(--s)); opacity: .85; text-shadow: 0 1px 2px #000; }
 
-  /* Level cap / numéro de run */
+  /* Level cap */
   .big { font-size: calc(18px * var(--s)); font-weight: 900; line-height: 1; text-shadow: 0 3px 4px #000, 0 0 2px #000; }
   .waiting { font-size: 14px; text-shadow: 0 1px 2px #000; }
 </style>

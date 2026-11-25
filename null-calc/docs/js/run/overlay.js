@@ -1,5 +1,5 @@
 // Overlay OBS : lit docs/run-data.js (écrit par lua/NullCalcSync.lua).
-// Vues : équipe (verticale), boîte, morts, prochain dresseur, level cap, numéro de run.
+// Vues : équipe (verticale), boîte, morts, prochain dresseur, level cap.
 (function(root) {
     "use strict";
     var params = new URLSearchParams(location.search);
@@ -16,7 +16,6 @@
     var pageSeconds = Math.max(2, Number(params.get("defilement")) || 5);
     var showItems = params.get("objets") !== "0";
     var direction = params.get("sens") === "ligne" ? "ligne" : "colonne";
-    var startRun = Number(params.get("depart")) || 1;
     var needsTrainers = view === "dresseur" || view === "cap" || view === "tout";
     document.documentElement.style.setProperty("--s", size);
     if (params.get("fond") === "1") document.body.classList.add("fond");
@@ -58,13 +57,27 @@
     // Icône d'objet : numéro du jeu (Lua) ou nom → numéro ; sinon le nom en texte.
     function itemBadge(mon) {
         if (!showItems || !mon.item || mon.item === "None") return null;
-        var id = mon.itemId || (root.NULL_ITEM_IDS && root.NULL_ITEM_IDS[mon.item]);
+        var id = mon.itemId || (root.NULL_ITEM_IDS && root.NULL_ITEM_IDS[mon.item]) || megaStoneId(mon.item);
         if (!id) return el("span", "itemtext", mon.item);
         var img = document.createElement("img");
         img.className = "itemicon"; img.alt = mon.item; img.title = mon.item;
         img.src = "img/items/" + id + ".png";
         img.onerror = function() { var t = el("span", "itemtext", mon.item); if (img.parentNode) img.parentNode.replaceChild(t, img); };
         return img;
+    }
+    // Méga-gemme sans icône (Crabominite, Tatsugirinite…) : icône d'une autre méga-gemme, toujours la même pour un nom donné.
+    var MEGA_IDS = null;
+    function megaStoneId(item) {
+        if (!/ite( [XYZ])?$/.test(item) || !root.NULL_ITEM_IDS || /^(Eviolite|Everstone|Quick Claw)$/.test(item)) return null;
+        if (!MEGA_IDS) {
+            var ids = root.NULL_ITEM_IDS;
+            MEGA_IDS = ["Venusaurite", "Charizardite X", "Charizardite Y", "Blastoisinite", "Beedrillite", "Gengarite", "Lucarionite", "Gardevoirite", "Garchompite", "Absolite"]
+                .map(function(n) { return ids[n]; }).filter(Boolean);
+        }
+        if (!MEGA_IDS.length) return null;
+        var h = 0;
+        for (var i = 0; i < item.length; i++) h = (h * 31 + item.charCodeAt(i)) >>> 0;
+        return MEGA_IDS[h % MEGA_IDS.length];
     }
     function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
     function display(mon) { return mon.nickname && mon.nickname.trim() ? mon.nickname.trim() : mon.species; }
@@ -123,9 +136,8 @@
         var p = progressOf(data), box = el("div", "trainer");
         if (!p) { box.appendChild(el("div", "note", "Chargement des dresseurs…")); return box; }
         if (!p.next) { box.appendChild(el("div", "tname", "Tous les dresseurs sont battus !")); return box; }
-        var t = p.next, title = el("div", "tname", t.name.replace(/^Root Academy Trainer #(\d+)$/, "Root Academy — dresseur $1"));
-        title.appendChild(el("small", "", "Niv. max " + t.maxLevel));
-        box.appendChild(title);
+        var t = p.next;
+        box.appendChild(el("div", "tname", t.name.replace(/^Root Academy Trainer #(\d+)$/, "Root Academy — dresseur $1")));
         if (t.random) { box.appendChild(el("div", "note", "Équipe tirée au hasard (" + t.slotCount + " Pokémon parmi " + t.mons.length + ")")); return box; }
         var row = el("div", "row");
         t.mons.forEach(function(m) { row.appendChild(cell({ species: m.species, level: m.level, item: m.item }, "trainer")); });
@@ -135,10 +147,6 @@
     function capView(data) {
         var p = progressOf(data);
         return el("div", "big", p ? String(p.cap) : "…");
-    }
-    function runView(data) {
-        var b = data.battle;
-        return el("div", "big", String(startRun + (b && b.runIndex ? b.runIndex - 1 : 0)));
     }
 
     function render(data) {
@@ -153,7 +161,6 @@
         if (view === "morts" || view === "tout") out.appendChild(paged("dead", "MORTS", data.dead));
         if (view === "dresseur" || view === "tout") out.appendChild(section("PROCHAIN DRESSEUR", trainerView(data)));
         if (view === "cap" || view === "tout") out.appendChild(section("LEVEL CAP", capView(data)));
-        if (view === "run" || view === "tout") out.appendChild(section("RUN", runView(data)));
     }
 
     // ------------------------------------------------------------- Données
