@@ -138,3 +138,7 @@ html:not([data-theme=light]) .null-ai-action-summary { border-color: #8be9fd; }
 .null-ai-explain-rules li { margin: .05em 0; }
 .null-ai-explain-how summary { cursor: pointer; }
 .null-ai-explain-how ul { margin: .3em 0 0 1.2em; padding: 0; font-size: 12px; }
+.crit-top { display: inline-block; vertical-align: middle; height: 20px; line-height: 18px; margin: 0 .6em 0 -.5em; padding: 0 7px; border-radius: 4px;
+  border: 1px solid #8a94a6; background: transparent; color: inherit; font: 600 11px/18px inherit; cursor: pointer; opacity: .7; }
+.crit-top:hover { opacity: 1; }
+.crit-top.crit-on { opacity: 1; background: #ef4444; color: #fff; border-color: #ef4444; }

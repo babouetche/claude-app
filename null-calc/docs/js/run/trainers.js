@@ -117,9 +117,10 @@
             var t = matchTeam(trainers, f.team, last);
             if (t) { fought[t.name] = { trainer: t, at: f.t, lead: f.lead || null, frags: f.frags || [] }; last = Math.max(last, t.order); }
         });
+        // Prochain dresseur : le premier de la liste (ordre du jeu) pas encore battu.
         var next = null;
         for (var i = 0; i < trainers.length; i++) {
-            if (trainers[i].order > last && !fought[trainers[i].name]) { next = trainers[i]; break; }
+            if (!fought[trainers[i].name]) { next = trainers[i]; break; }
         }
         // Level cap : premier boss non affronté.
         var after = -1, cap = 100, nextBoss = null, beaten = 0;

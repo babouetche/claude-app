@@ -48,7 +48,10 @@ test('progression : prochain dresseur et level cap automatiques', () => {
   assert.equal(p.nextBoss.label, 'Roxanne');
   p = T.progress(trainers, fights.concat([{ t: 9, team: team('Leader Roxanne') }]));
   assert.equal(p.cap, 45);
-  assert.ok(p.next.order > byName('Leader Roxanne').order, 'prochain dresseur après Roxanne');
+  assert.equal(p.next.name, 'Route 103 Rival', 'prochain dresseur = premier de la liste pas encore battu');
+  const before = trainers.filter(t => t.order < byName('Leader Roxanne').order && !t.random).map((t, i) => ({ t: 50 + i, team: t.mons.map(m => ({ species: m.species, level: m.level })) }));
+  p = T.progress(trainers, fights.concat(before, [{ t: 99, team: team('Leader Roxanne') }]));
+  assert.ok(p.next.order > byName('Leader Roxanne').order, 'tous ceux d\'avant battus : prochain après Roxanne');
   // Chaîne complète : cap 100 après Wallace, boss résolus dans l'ordre (Maxie de la base Magma, Archie des Fonds Marins)
   const all = trainers.filter(t => !t.random).map((t, i) => ({ t: 100 + i, team: t.mons.map(m => ({ species: m.species, level: m.level })) }));
   p = T.progress(trainers, fights.concat(all));

@@ -75,7 +75,7 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     assert(Object.keys(before).length === 1, 'un boss coché avant la nouvelle run');
     fixture(d => {
       d.party = [Object.assign({}, d.party[0], { uid: '99999999-0000beef', species: 'Mudkip', nickname: 'Mud', level: 5, moves: [{ name: 'Water Gun', pp: 25 }] })];
-      d.box = []; d.dead = [];
+      d.box = []; d.dead = []; d.battle = { runId: '0000beef', runIndex: 2, runCount: 2, fights: [] };
     });
     await page.waitForFunction(() => SETDEX_SV['Mudkip'] && SETDEX_SV['Mudkip']['Mud [Run]'], null, { timeout: 8000 });
     const team3 = await page.$$eval('#team-poke-list .trainer-pok', els => els.map(e => e.getAttribute('data-id')));

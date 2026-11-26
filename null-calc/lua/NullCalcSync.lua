@@ -516,14 +516,49 @@ local function readLive(party, enemy)
 	return live
 end
 
-local function trackFights(party)
-	local run = runIdOf(party)
-	if not run then return nil end
-	local known = false
-	for _, r in ipairs(history.runs) do if r == run then known = true end end
-	if not known then
+-- Nouvelle run : nouvelle sauvegarde (autre numéro de dresseur) OU retour en arrière dans la même sauvegarde
+-- (sauvegarde d'état 1/2/3 rechargée, retour au level cap 13) : plus de la moitié des Pokémon connus
+-- (équipe + boîtes + morts) ont disparu d'un coup. Une run garde alors l'identifiant « OT-heure ».
+local UIDS_FILE = LUA_DIR .. "derniere-partie.txt"
+local lastUids, lastUidsText = nil, nil
+do
+	local f = io.open(UIDS_FILE, "r")
+	if f then
+		lastUids = {}
+		for line in f:lines() do if line ~= "" then lastUids[line] = true end end
+		f:close()
+	end
+end
+local function currentRunFor(ot)
+	local cur = nil
+	for _, r in ipairs(history.runs) do if r == ot or r:sub(1, #ot + 1) == ot .. "-" then cur = r end end
+	return cur
+end
+local function trackFights(party, others)
+	local ot = runIdOf(party)
+	if not ot then return nil end
+	local run = currentRunFor(ot)
+	local now, list = {}, {}
+	for _, m in ipairs(party) do now[m.uid] = true list[#list + 1] = m.uid end
+	for _, m in ipairs(others or {}) do now[m.uid] = true list[#list + 1] = m.uid end
+	local rewind = false
+	if run and lastUids then
+		local total, kept = 0, 0
+		for uid in pairs(lastUids) do total = total + 1 if now[uid] then kept = kept + 1 end end
+		rewind = total >= 3 and kept * 2 < total
+	end
+	if not run or rewind then
+		run = rewind and (ot .. "-" .. os.time()) or ot
 		history.runs[#history.runs + 1] = run
 		appendHistory("R|" .. run .. "|" .. os.time())
+		if rewind then battle = nil lastEnemySig = nil log("Nouvelle run détectée (sauvegarde rechargée ou retour au début).") end
+	end
+	table.sort(list)
+	local text = table.concat(list, "\n")
+	if text ~= lastUidsText then
+		lastUids, lastUidsText = now, text
+		local f = io.open(UIDS_FILE, "w")
+		if f then f:write(text) f:close() end
 	end
 	local enemy = readEnemy()
 	followBattle(party, enemy)
@@ -599,7 +634,11 @@ local function snapshot()
 	if not box then return nil end
 	local dead = readBoxes(DEAD_FIRST_BOX, DEAD_BOXES)
 	if not dead then return nil end
-	local ok, battle = pcall(trackFights, party)
+	local others = {}
+	for _, m in ipairs(box) do others[#others + 1] = m end
+	for _, m in ipairs(dead) do others[#others + 1] = m end
+	local ok, battle = pcall(trackFights, party, others)
+	if not ok then NULL_CALC_SYNC_LAST_ERROR = battle end
 	return { party = party, box = box, dead = dead, battle = ok and battle or nil }
 end
 

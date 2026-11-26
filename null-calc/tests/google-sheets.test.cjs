@@ -199,6 +199,14 @@ test('synchros suivantes : mise à jour sur place, colonnes manuelles intactes, 
   assert.deepEqual([v(pk, 3, C.frags), v(pk, 3, C.leads), v(pk, 3, C.fights)], [1, 1, 2]);
   assert.deepEqual([v(run, R.tablesFirst, 1), v(run, R.tablesFirst, 2), v(run, R.tablesFirst, 4)], ['🥇', 'Pyro', 7.5]);
   assert.deepEqual([v(run, R.tablesFirst, 14), v(run, R.tablesFirst, 15)], ['Roxanne', 8.5]);
+  // 🏆 Frags : classement (sprite, frags, combats, détail par split) et bilan par split
+  const fr = ss.sheets[S.frags];
+  const top = row(fr, 5, 9);
+  assert.deepEqual([top[0], top[2], top[3], top[5], top[6]], ['🥇', 'Pyro', 'Combusken', 7.5, 4]);
+  assert.equal(top[1], '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/combusken.png")');
+  assert.equal(top[8], '7.5 frags · 4 cb', 'Roxanne : frags · combats');
+  const splitRow = Array.from({ length: fr.getLastRow() }, (_, i) => row(fr, i + 1, 7)).find(r => r[0] === 'Roxanne' && r[2]);
+  assert.deepEqual([splitRow[2], splitRow[5], splitRow[6]], ['Pyro (7.5)', 8.5, 4]);
   assert.ok(String(v(run, R.tablesFirst, 16)).startsWith('█'));
   // Dresseurs battus + prochain dresseur
   const battu = Array.from({ length: tr.getLastRow() }, (_, i) => row(tr, i + 1, 8)).filter(r => r[0] === 'Dresseur').map(r => [r[1], r[7] === '✔ Battu' ? '✔' : '']);

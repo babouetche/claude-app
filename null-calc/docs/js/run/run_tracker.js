@@ -41,7 +41,8 @@
             if (!payload || !payload.data || !Array.isArray(payload.data.party)) return;
             var body = JSON.stringify(payload.data);
             // Nouvelle partie (autre numéro de dresseur) : boss et compteur remis à jour.
-            var runId = Model.runIdOf(payload.data), previousRun = load(KEYS.runId, null);
+            // Identifiant de run donné par le Lua (change aussi quand une sauvegarde d'état du début est rechargée).
+            var runId = (payload.data.battle && payload.data.battle.runId) || Model.runIdOf(payload.data), previousRun = load(KEYS.runId, null);
             if (runId && previousRun && runId !== previousRun) {
                 // Run comptée seulement si la précédente a atteint le level cap 45 (Roxanne battue).
                 if (load(KEYS.beaten, {})["Leader Roxanne"]) save(KEYS.attempt, load(KEYS.attempt, 1) + 1);

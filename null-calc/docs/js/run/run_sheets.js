@@ -36,7 +36,7 @@
     function buildPayload(data) {
         function strip(list) { return (list || []).map(function(m) { var c = Object.assign({}, m); delete c.showdown; return c; }); }
         return { kind: "null-run", version: 1, sentAt: new Date().toISOString(), bosses: bosses(),
-            runId: root.NullRunModel ? root.NullRunModel.runIdOf(data) : "",
+            runId: (data.battle && data.battle.runId) || (root.NullRunModel ? root.NullRunModel.runIdOf(data) : ""),
             fights: detectedFights(data),
             data: { party: strip(data.party), box: strip(data.box), dead: strip(data.dead) } };
     }

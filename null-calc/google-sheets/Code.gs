@@ -23,7 +23,7 @@ var TRAINER_SHEETS = [['Roxanne Split', 'Roxanne'], ['Brawly Split', 'Brawly'], 
   ['Victory Road Split', 'Victory Road'], ['Pokémon League', 'Ligue'], ['Other', 'Autres']];
 var SPLITS = TRAINER_SHEETS.map(function(t) { return t[1]; });
 var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets', archive: '📦 Archives',
-  encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs', trainerPics: '⚙️ Images dresseurs', itemData: '⚙️ Données objets' };
+  frags: '🏆 Frags', encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs', trainerPics: '⚙️ Images dresseurs', itemData: '⚙️ Données objets' };
 var LEGACY_NAMES = { 'Run': 'run', 'Pokémon': 'pokemon', 'Combats': 'fights' };
 
 var AUTO_HEADERS = ['UID', '#', 'Zone', 'Sprite', 'Pokémon', 'Nom', 'Niveau', 'Statut', 'Talent', 'Nature',
@@ -34,13 +34,17 @@ var SYNC_HEADER = 'Dernière synchro';
 var COL = { uid: 1, order: 2, zone: 3, sprite: 4, species: 5, name: 6, level: 7, status: 8, iv: 11, deathCause: 22, frags: 23, leads: 24, fights: 25, splits: 26 };
 COL.sync = COL.splits + SPLITS.length;
 var FIGHT_ROWS = 1000;
-var FIGHT_HEADERS = ['Dresseur', 'Split', 'Lead', 'Frags', 'Pokémon 2', 'Frags', 'Pokémon 3', 'Frags', 'Pokémon 4', 'Frags', 'Pokémon 5', 'Frags', 'Pokémon 6', 'Frags', 'Notes'];
+var FIGHT_HEADERS = ['Dresseur', 'Split', 'Pokémon 1', 'Frags', 'Pokémon 2', 'Frags', 'Pokémon 3', 'Frags', 'Pokémon 4', 'Frags', 'Pokémon 5', 'Frags', 'Pokémon 6', 'Frags', 'Notes'];
 // Données brutes (onglets cachés) ; les onglets visibles 🎯 Dresseurs et 🌿 Rencontres sont des tableaux dessinés à partir d'elles.
 var ENC_HEADERS = ['Zone', 'Zone Nuzlocke', 'Méthode', 'Pokémon', 'Niveau', 'Taux'];
 var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Pokémon', 'Niv.', 'Objet', 'Talent', 'Nature', 'Attaques', 'Niv. max', 'Conditions', 'Couleurs', 'Image dresseur'];
 var TCOL = { name: 3, species: 5, level: 6, item: 7, ability: 8, nature: 9, moves: 10, maxLevel: 11, conditions: 12, colors: 13, pic: 14 };
 // Mises en évidence du doc « Colour Coded » (ses règles de mise en forme conditionnelle) : « *x » = se termine par x.
 var DOC_HIGHLIGHTS = {"#ea9999": ["*of Ruin", "Sniper", "Unnerve", "Armor Tail", "Dazzling", "Queenly Majesty", "Quick Draw", "Shadow Tag", "Moody", "Serene Grace", "Stench", "Snow Cloak", "Sand Veil", "Innards Out", "of Ruin", "Stakeout", "Dancer", "Friend Guard"], "#d5a6bd": ["Belly Drum", "Explosion", "Misty Explosion", "Destiny Bond", "Pursuit", "Shell Smash", "Minimize", "Perish Song", "Revival Blessing", "Double Team", "Self-Destruct"], "#f9cb9c": ["Bright Powder", "Focus Band", "Quick Claw", "Scope Lens", "Weakness Policy", "Custap Berry", "King's Rock", "Berserk Gene", "Grip Claw", "Blunder Policy", "Binding Band"]};
+// Images des dresseurs (TRAINER_PIC_… du doc) : sprites de face de pokeemerald-expansion (base de Pokémon Null).
+var TRAINER_PIC_BASE = 'https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/master/graphics/trainers/front_pics/';
+var TRAINER_PIC_FILES = {"TRAINER_PIC_BRENDAN":"brendan","TRAINER_PIC_MAY":"may","TRAINER_PIC_RED":"red","TRAINER_PIC_LEAF":"leaf","TRAINER_PIC_RS_BRENDAN":"brendan_rs","TRAINER_PIC_RS_MAY":"may_rs","TRAINER_PIC_WALLY":"wally","TRAINER_PIC_STEVEN":"steven","TRAINER_PIC_HIKER":"hiker","TRAINER_PIC_AQUA_GRUNT_M":"aqua_grunt_m","TRAINER_PIC_POKEMON_BREEDER_F":"pokemon_breeder_f","TRAINER_PIC_COOLTRAINER_M":"cooltrainer_m","TRAINER_PIC_BIRD_KEEPER":"bird_keeper","TRAINER_PIC_COLLECTOR":"collector","TRAINER_PIC_AQUA_GRUNT_F":"aqua_grunt_f","TRAINER_PIC_SWIMMER_M":"swimmer_m","TRAINER_PIC_MAGMA_GRUNT_M":"magma_grunt_m","TRAINER_PIC_EXPERT_M":"expert_m","TRAINER_PIC_AQUA_ADMIN_M":"aqua_admin_m","TRAINER_PIC_BLACK_BELT":"black_belt","TRAINER_PIC_AQUA_ADMIN_F":"aqua_admin_f","TRAINER_PIC_AQUA_LEADER_ARCHIE":"aqua_leader_archie","TRAINER_PIC_HEX_MANIAC":"hex_maniac","TRAINER_PIC_AROMA_LADY":"aroma_lady","TRAINER_PIC_RUIN_MANIAC":"ruin_maniac","TRAINER_PIC_INTERVIEWER":"interviewer","TRAINER_PIC_TUBER_F":"tuber_f","TRAINER_PIC_TUBER_M":"tuber_m","TRAINER_PIC_COOLTRAINER_F":"cooltrainer_f","TRAINER_PIC_LADY":"lady","TRAINER_PIC_BEAUTY":"beauty","TRAINER_PIC_RICH_BOY":"rich_boy","TRAINER_PIC_EXPERT_F":"expert_f","TRAINER_PIC_POKEMANIAC":"pokemaniac","TRAINER_PIC_MAGMA_GRUNT_F":"magma_grunt_f","TRAINER_PIC_GUITARIST":"guitarist","TRAINER_PIC_KINDLER":"kindler","TRAINER_PIC_CAMPER":"camper","TRAINER_PIC_PICNICKER":"picnicker","TRAINER_PIC_BUG_MANIAC":"bug_maniac","TRAINER_PIC_POKEMON_BREEDER_M":"pokemon_breeder_m","TRAINER_PIC_PSYCHIC_M":"psychic_m","TRAINER_PIC_PSYCHIC_F":"psychic_f","TRAINER_PIC_GENTLEMAN":"gentleman","TRAINER_PIC_ELITE_FOUR_SIDNEY":"elite_four_sidney","TRAINER_PIC_ELITE_FOUR_PHOEBE":"elite_four_phoebe","TRAINER_PIC_ELITE_FOUR_GLACIA":"elite_four_glacia","TRAINER_PIC_ELITE_FOUR_DRAKE":"elite_four_drake","TRAINER_PIC_LEADER_ROXANNE":"leader_roxanne","TRAINER_PIC_LEADER_BRAWLY":"leader_brawly","TRAINER_PIC_LEADER_WATTSON":"leader_wattson","TRAINER_PIC_LEADER_FLANNERY":"leader_flannery","TRAINER_PIC_LEADER_NORMAN":"leader_norman","TRAINER_PIC_LEADER_WINONA":"leader_winona","TRAINER_PIC_LEADER_TATE_AND_LIZA":"leader_tate_and_liza","TRAINER_PIC_LEADER_JUAN":"leader_juan","TRAINER_PIC_SCHOOL_KID_M":"school_kid_m","TRAINER_PIC_SCHOOL_KID_F":"school_kid_f","TRAINER_PIC_SR_AND_JR":"sr_and_jr","TRAINER_PIC_POKEFAN_M":"pokefan_m","TRAINER_PIC_POKEFAN_F":"pokefan_f","TRAINER_PIC_YOUNGSTER":"youngster","TRAINER_PIC_CHAMPION_WALLACE":"champion_wallace","TRAINER_PIC_FISHERMAN":"fisherman","TRAINER_PIC_CYCLING_TRIATHLETE_M":"cycling_triathlete_m","TRAINER_PIC_CYCLING_TRIATHLETE_F":"cycling_triathlete_f","TRAINER_PIC_RUNNING_TRIATHLETE_M":"running_triathlete_m","TRAINER_PIC_RUNNING_TRIATHLETE_F":"running_triathlete_f","TRAINER_PIC_SWIMMING_TRIATHLETE_M":"swimming_triathlete_m","TRAINER_PIC_SWIMMING_TRIATHLETE_F":"swimming_triathlete_f","TRAINER_PIC_DRAGON_TAMER":"dragon_tamer","TRAINER_PIC_NINJA_BOY":"ninja_boy","TRAINER_PIC_BATTLE_GIRL":"battle_girl","TRAINER_PIC_PARASOL_LADY":"parasol_lady","TRAINER_PIC_SWIMMER_F":"swimmer_f","TRAINER_PIC_TWINS":"twins","TRAINER_PIC_SAILOR":"sailor","TRAINER_PIC_MAGMA_ADMIN":"magma_admin","TRAINER_PIC_BUG_CATCHER":"bug_catcher","TRAINER_PIC_POKEMON_RANGER_M":"pokemon_ranger_m","TRAINER_PIC_POKEMON_RANGER_F":"pokemon_ranger_f","TRAINER_PIC_MAGMA_LEADER_MAXIE":"magma_leader_maxie","TRAINER_PIC_LASS":"lass","TRAINER_PIC_YOUNG_COUPLE":"young_couple","TRAINER_PIC_OLD_COUPLE":"old_couple","TRAINER_PIC_SIS_AND_BRO":"sis_and_bro","TRAINER_PIC_SALON_MAIDEN_ANABEL":"salon_maiden_anabel","TRAINER_PIC_DOME_ACE_TUCKER":"dome_ace_tucker","TRAINER_PIC_PALACE_MAVEN_SPENSER":"palace_maven_spenser","TRAINER_PIC_ARENA_TYCOON_GRETA":"arena_tycoon_greta","TRAINER_PIC_FACTORY_HEAD_NOLAND":"factory_head_noland","TRAINER_PIC_PIKE_QUEEN_LUCY":"pike_queen_lucy","TRAINER_PIC_PYRAMID_KING_BRANDON":"pyramid_king_brandon","TRAINER_PIC_YOUNGSTER_FRLG":"youngster_frlg","TRAINER_PIC_BUG_CATCHER_FRLG":"bug_catcher_frlg","TRAINER_PIC_LASS_FRLG":"lass_frlg","TRAINER_PIC_SAILOR_FRLG":"sailor_frlg","TRAINER_PIC_CAMPER_FRLG":"camper_frlg","TRAINER_PIC_PICNICKER_FRLG":"picnicker_frlg","TRAINER_PIC_POKEMANIAC_FRLG":"pokemaniac_frlg","TRAINER_PIC_SUPER_NERD_FRLG":"super_nerd_frlg","TRAINER_PIC_HIKER_FRLG":"hiker_frlg","TRAINER_PIC_BIKER_FRLG":"biker_frlg","TRAINER_PIC_BURGLAR_FRLG":"burglar_frlg","TRAINER_PIC_ENGINEER_FRLG":"engineer_frlg","TRAINER_PIC_FISHERMAN_FRLG":"fisherman_frlg","TRAINER_PIC_SWIMMER_M_FRLG":"swimmer_m_frlg","TRAINER_PIC_CUE_BALL_FRLG":"cue_ball_frlg","TRAINER_PIC_GAMER_FRLG":"gamer_frlg","TRAINER_PIC_BEAUTY_FRLG":"beauty_frlg","TRAINER_PIC_SWIMMER_F_FRLG":"swimmer_f_frlg","TRAINER_PIC_PSYCHIC_M_FRLG":"psychic_m_frlg","TRAINER_PIC_ROCKER_FRLG":"rocker_frlg","TRAINER_PIC_JUGGLER_FRLG":"juggler_frlg","TRAINER_PIC_TAMER_FRLG":"tamer_frlg","TRAINER_PIC_BIRD_KEEPER_FRLG":"bird_keeper_frlg","TRAINER_PIC_BLACK_BELT_FRLG":"black_belt_frlg","TRAINER_PIC_RIVAL_EARLY_FRLG":"rival_early_frlg","TRAINER_PIC_SCIENTIST_FRLG":"scientist_frlg","TRAINER_PIC_LEADER_GIOVANNI_FRLG":"leader_giovanni_frlg","TRAINER_PIC_ROCKET_GRUNT_M_FRLG":"rocket_grunt_m_frlg","TRAINER_PIC_COOLTRAINER_M_FRLG":"cool_trainer_m_frlg","TRAINER_PIC_COOLTRAINER_F_FRLG":"cool_trainer_f_frlg","TRAINER_PIC_ELITE_FOUR_LORELEI_FRLG":"elite_four_lorelei_frlg","TRAINER_PIC_ELITE_FOUR_BRUNO_FRLG":"elite_four_bruno_frlg","TRAINER_PIC_ELITE_FOUR_AGATHA_FRLG":"elite_four_agatha_frlg","TRAINER_PIC_ELITE_FOUR_LANCE_FRLG":"elite_four_lance_frlg","TRAINER_PIC_LEADER_BROCK_FRLG":"leader_brock_frlg","TRAINER_PIC_LEADER_MISTY_FRLG":"leader_misty_frlg","TRAINER_PIC_LEADER_LT_SURGE_FRLG":"leader_lt_surge_frlg","TRAINER_PIC_LEADER_ERIKA_FRLG":"leader_erika_frlg","TRAINER_PIC_LEADER_KOGA_FRLG":"leader_koga_frlg","TRAINER_PIC_LEADER_BLAINE_FRLG":"leader_blaine_frlg","TRAINER_PIC_LEADER_SABRINA_FRLG":"leader_sabrina_frlg","TRAINER_PIC_GENTLEMAN_FRLG":"gentleman_frlg","TRAINER_PIC_RIVAL_LATE_FRLG":"rival_late_frlg","TRAINER_PIC_CHAMPION_RIVAL_FRLG":"champion_rival_frlg","TRAINER_PIC_CHANNELER_FRLG":"channeler_frlg","TRAINER_PIC_TWINS_FRLG":"twins_frlg","TRAINER_PIC_COOL_COUPLE_FRLG":"cool_couple_frlg","TRAINER_PIC_YOUNG_COUPLE_FRLG":"young_couple_frlg","TRAINER_PIC_CRUSH_KIN_FRLG":"crush_kin_frlg","TRAINER_PIC_SIS_AND_BRO_FRLG":"sis_and_bro_frlg","TRAINER_PIC_PROFESSOR_OAK_FRLG":"professor_oak_frlg","TRAINER_PIC_ROCKET_GRUNT_F_FRLG":"rocket_grunt_f_frlg","TRAINER_PIC_PSYCHIC_F_FRLG":"psychic_f_frlg","TRAINER_PIC_CRUSH_GIRL_FRLG":"crush_girl_frlg","TRAINER_PIC_TUBER_F_FRLG":"tuber_f_frlg","TRAINER_PIC_POKEMON_BREEDER_FRLG":"pokemon_breeder_frlg","TRAINER_PIC_POKEMON_RANGER_M_FRLG":"pokemon_ranger_m_frlg","TRAINER_PIC_POKEMON_RANGER_F_FRLG":"pokemon_ranger_f_frlg","TRAINER_PIC_AROMA_LADY_FRLG":"aroma_lady_frlg","TRAINER_PIC_RUIN_MANIAC_FRLG":"ruin_maniac_frlg","TRAINER_PIC_LADY_FRLG":"lady_frlg","TRAINER_PIC_PAINTER_FRLG":"painter_frlg"};
+function trainerPicUrl(key) { var f = TRAINER_PIC_FILES[str_(key).toUpperCase()]; return f ? TRAINER_PIC_BASE + f + '.png' : ''; }
 var HIGHLIGHT_LEGEND = [['#ea9999', 'Talent à surveiller'], ['#f9cb9c', 'Objet à surveiller'], ['#d5a6bd', 'Attaque à surveiller'], ['#ffe599', 'Lead en double'], ['#4285f4', 'Pokémon de soutien']];
 // Catégories d'objets dans l'ordre d'affichage ; dans chaque catégorie, l'ordre du doc officiel (ordre d'obtention).
 var ITEM_CATEGORIES = ['Objet tenu', 'Baie', 'Méga-gemme', 'Objet spécial', 'Mémoire', 'Objet d\'évolution', 'CT / CS', 'CT rachetable', 'Tuteur', 'Menthe', 'Ressource', 'Écaille Cœur', 'Boutique de la Ligue', 'Objet sauvage'];
@@ -49,7 +53,7 @@ var ITEM_DATA_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Ligne', 'Colonne
 var ITEM_ICON_BASE = 'https://raw.githubusercontent.com/babouetche/claude-app/claude/busy-shannon-0cne71/null-calc/docs/img/items/';
 var ITEM_ICON_FALLBACK = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';
 var ITEM_ICON_IDS = {"pokeball":1,"greatball":2,"ultraball":3,"masterball":4,"premierball":5,"healball":6,"netball":7,"nestball":8,"diveball":9,"duskball":10,"timerball":11,"quickball":12,"repeatball":13,"luxuryball":14,"levelball":15,"lureball":16,"moonball":17,"friendball":18,"loveball":19,"fastball":20,"heavyball":21,"dreamball":22,"safariball":23,"sportball":24,"parkball":25,"beastball":26,"cherishball":27,"berryjuice":53,"bottlecap":133,"rarebone":154,"helixfossil":165,"domefossil":166,"oldamber":167,"rootfossil":168,"clawfossil":169,"armorfossil":170,"skullfossil":171,"coverfossil":172,"plumefossil":173,"jawfossil":174,"sailfossil":175,"fossilizedbird":176,"fossilizedfish":177,"fossilizeddrake":178,"fossilizeddino":179,"mail":199,"firestone":211,"waterstone":212,"thunderstone":213,"leafstone":214,"icestone":215,"sunstone":216,"moonstone":217,"shinystone":218,"duskstone":219,"dawnstone":220,"sweetapple":221,"tartapple":222,"crackedpot":223,"chippedpot":224,"dragonscale":227,"upgrade":228,"protector":229,"electirizer":230,"magmarizer":231,"dubiousdisc":232,"reapercloth":233,"prismscale":234,"whippeddream":235,"sachet":236,"ovalstone":237,"strawberrysweet":238,"lovesweet":239,"berrysweet":240,"cloversweet":241,"flowersweet":242,"starsweet":243,"ribbonsweet":244,"flameplate":250,"splashplate":251,"zapplate":252,"meadowplate":253,"icicleplate":254,"fistplate":255,"toxicplate":256,"earthplate":257,"skyplate":258,"mindplate":259,"insectplate":260,"stoneplate":261,"spookyplate":262,"dracoplate":263,"dreadplate":264,"ironplate":265,"pixieplate":266,"dousedrive":267,"shockdrive":268,"burndrive":269,"chilldrive":270,"firememory":271,"watermemory":272,"electricmemory":273,"grassmemory":274,"icememory":275,"fightingmemory":276,"poisonmemory":277,"groundmemory":278,"flyingmemory":279,"psychicmemory":280,"bugmemory":281,"rockmemory":282,"ghostmemory":283,"dragonmemory":284,"darkmemory":285,"steelmemory":286,"fairymemory":287,"rustedsword":288,"rustedshield":289,"redorb":290,"blueorb":291,"venusaurite":292,"charizarditex":293,"charizarditey":294,"blastoisinite":295,"beedrillite":296,"pidgeotite":297,"alakazite":298,"slowbronite":299,"gengarite":300,"kangaskhanite":301,"pinsirite":302,"gyaradosite":303,"aerodactylite":304,"mewtwonitex":305,"mewtwonitey":306,"ampharosite":307,"steelixite":308,"scizorite":309,"heracronite":310,"houndoominite":311,"tyranitarite":312,"sceptilite":313,"blazikenite":314,"swampertite":315,"gardevoirite":316,"sablenite":317,"mawilite":318,"aggronite":319,"medichamite":320,"manectite":321,"sharpedonite":322,"cameruptite":323,"altarianite":324,"banettite":325,"absolite":326,"glalitite":327,"salamencite":328,"metagrossite":329,"latiasite":330,"latiosite":331,"lopunnite":332,"garchompite":333,"lucarionite":334,"abomasite":335,"galladite":336,"audinite":337,"diancite":338,"normalgem":339,"firegem":340,"watergem":341,"electricgem":342,"grassgem":343,"icegem":344,"fightinggem":345,"poisongem":346,"groundgem":347,"flyinggem":348,"psychicgem":349,"buggem":350,"rockgem":351,"ghostgem":352,"dragongem":353,"darkgem":354,"steelgem":355,"fairygem":356,"normaliumz":357,"firiumz":358,"wateriumz":359,"electriumz":360,"grassiumz":361,"iciumz":362,"fightiniumz":363,"poisoniumz":364,"groundiumz":365,"flyiniumz":366,"psychiumz":367,"buginiumz":368,"rockiumz":369,"ghostiumz":370,"dragoniumz":371,"darkiniumz":372,"steeliumz":373,"fairiumz":374,"pikaniumz":375,"eeviumz":376,"snorliumz":377,"mewniumz":378,"decidiumz":379,"inciniumz":380,"primariumz":381,"lycaniumz":382,"mimikiumz":383,"kommoniumz":384,"tapuniumz":385,"solganiumz":386,"lunaliumz":387,"marshadiumz":388,"aloraichiumz":389,"pikashuniumz":390,"ultranecroziumz":391,"lightball":392,"leek":393,"thickclub":394,"luckypunch":395,"metalpowder":396,"quickpowder":397,"deepseascale":398,"deepseatooth":399,"souldew":400,"adamantorb":401,"lustrousorb":402,"griseousorb":403,"seaincense":404,"laxincense":405,"oddincense":406,"rockincense":407,"fullincense":408,"waveincense":409,"roseincense":410,"machobrace":418,"powerweight":419,"powerbracer":420,"powerbelt":421,"powerlens":422,"powerband":423,"poweranklet":424,"silkscarf":425,"charcoal":426,"mysticwater":427,"magnet":428,"miracleseed":429,"nevermeltice":430,"blackbelt":431,"poisonbarb":432,"softsand":433,"sharpbeak":434,"twistedspoon":435,"silverpowder":436,"hardstone":437,"spelltag":438,"dragonfang":439,"blackglasses":440,"metalcoat":441,"choiceband":442,"choicespecs":443,"choicescarf":444,"flameorb":445,"toxicorb":446,"damprock":447,"heatrock":448,"smoothrock":449,"icyrock":450,"electricseed":451,"psychicseed":452,"mistyseed":453,"grassyseed":454,"absorbbulb":455,"cellbattery":456,"luminousmoss":457,"snowball":458,"brightpowder":459,"whiteherb":460,"quickclaw":462,"mentalherb":464,"kingsrock":465,"focusband":469,"scopelens":471,"leftovers":472,"shellbell":473,"widelens":474,"muscleband":475,"wiseglasses":476,"expertbelt":477,"lightclay":478,"lifeorb":479,"powerherb":480,"focussash":481,"zoomlens":482,"metronome":483,"ironball":484,"laggingtail":485,"destinyknot":486,"blacksludge":487,"gripclaw":488,"stickybarb":489,"shedshell":490,"bigroot":491,"razorclaw":492,"razorfang":493,"eviolite":494,"floatstone":495,"rockyhelmet":496,"airballoon":497,"redcard":498,"ringtarget":499,"bindingband":500,"ejectbutton":501,"weaknesspolicy":502,"assaultvest":503,"safetygoggles":504,"adrenalineorb":505,"terrainextender":506,"protectivepads":507,"throatspray":508,"ejectpack":509,"heavydutyboots":510,"blunderpolicy":511,"roomservice":512,"utilityumbrella":513,"cheriberry":514,"chestoberry":515,"pechaberry":516,"rawstberry":517,"aspearberry":518,"leppaberry":519,"oranberry":520,"persimberry":521,"lumberry":522,"sitrusberry":523,"figyberry":524,"wikiberry":525,"magoberry":526,"aguavberry":527,"iapapaberry":528,"razzberry":529,"blukberry":530,"nanabberry":531,"wepearberry":532,"pinapberry":533,"pomegberry":534,"kelpsyberry":535,"qualotberry":536,"hondewberry":537,"grepaberry":538,"tamatoberry":539,"cornnberry":540,"magostberry":541,"rabutaberry":542,"nomelberry":543,"spelonberry":544,"pamtreberry":545,"watmelberry":546,"durinberry":547,"belueberry":548,"chilanberry":549,"occaberry":550,"passhoberry":551,"wacanberry":552,"rindoberry":553,"yacheberry":554,"chopleberry":555,"kebiaberry":556,"shucaberry":557,"cobaberry":558,"payapaberry":559,"tangaberry":560,"chartiberry":561,"kasibberry":562,"habanberry":563,"colburberry":564,"babiriberry":565,"roseliberry":566,"liechiberry":567,"ganlonberry":568,"salacberry":569,"petayaberry":570,"apicotberry":571,"lansatberry":572,"starfberry":573,"enigmaberry":574,"micleberry":575,"custapberry":576,"jabocaberry":577,"rowapberry":578,"keeberry":579,"marangaberry":580,"abilityshield":758,"clearamulet":759,"punchingglove":760,"covertcloak":761,"loadeddice":762,"auspiciousarmor":763,"boosterenergy":764,"maliciousarmor":768,"mirrorherb":769,"clefablite":774,"victreebelite":775,"starminite":776,"dragoninite":777,"meganiumite":778,"feraligite":779,"skarmorite":780,"froslassite":781,"emboarite":782,"excadrite":783,"scolipite":784,"scraftinite":785,"eelektrossite":786,"chandelurite":787,"chesnaughtite":788,"delphoxite":789,"greninjite":790,"pyroarite":791,"adamantcrystal":792,"griseouscore":793,"lustrousglobe":794,"berserkgene":798,"fairyfeather":799,"syrupyapple":800,"cornerstonemask":803,"wellspringmask":804,"hearthflamemask":805,"floettite":806,"malamarite":807,"barbaracite":808,"dragalgite":809,"hawluchanite":810,"zygardite":811,"drampanite":812,"falinksite":813,"raichunitex":818,"raichunitey":819,"chimechite":820};
-var REF_VERSION = '6';
+var REF_VERSION = '7';
 var ITEM_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Récupéré'];
 var ARCHIVE_HEADERS = ['Run', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
 var STATUS_FR = { slp: 'Endormi', psn: 'Empoisonné', tox: 'Gravement empoisonné', brn: 'Brûlé', par: 'Paralysé', frz: 'Gelé', frb: 'Gelure' };
@@ -239,7 +243,7 @@ function planPokemonRows(existing, payload, stamp) {
 function computeStats(rows) {
   var stats = {};
   function get(name) {
-    if (!stats[name]) { stats[name] = { frags: 0, leads: 0, fights: 0, splits: {} }; SPLITS.forEach(function(sp) { stats[name].splits[sp] = 0; }); }
+    if (!stats[name]) { stats[name] = { frags: 0, leads: 0, fights: 0, splits: {}, splitFights: {} }; SPLITS.forEach(function(sp) { stats[name].splits[sp] = 0; stats[name].splitFights[sp] = 0; }); }
     return stats[name];
   }
   rows.forEach(function(r) {
@@ -249,7 +253,7 @@ function computeStats(rows) {
       if (!name) continue;
       var st = get(name), raw = str_(r[c + 1]), n = Number(raw.replace(',', '.'));
       if (!raw || !isFinite(n) || n < 0) n = 0;
-      if (!seen[name]) { st.fights += 1; seen[name] = true; }
+      if (!seen[name]) { st.fights += 1; seen[name] = true; if (st.splitFights.hasOwnProperty(split)) st.splitFights[split] += 1; }
       if (c === 2) st.leads += 1;
       st.frags += n;
       if (st.splits.hasOwnProperty(split)) st.splits[split] += n;
@@ -653,12 +657,12 @@ function runTables(pokemonRows, stats) {
   pokemonRows.forEach(function(r) {
     var name = str_(r[COL.name - 1]), st = stats[name];
     if (!name) return;
-    if (st && st.frags > 0) top.push([name, r[COL.species - 1], st.frags, st.leads, st.fights]);
+    if (st && st.frags > 0) top.push([name, r[COL.species - 1], st.frags, st.fights, st.fights ? Math.round(st.frags / st.fights * 100) / 100 : 0]);
     if (r[COL.status - 1] === STATUS.dead) dead.push([name, r[COL.species - 1], r[COL.level - 1], r[COL.zone - 1], r[COL.deathCause - 1]]);
   });
   Object.keys(stats).forEach(function(name) { SPLITS.forEach(function(sp, i) { perSplit[i][1] += stats[name].splits[sp]; }); });
   var max = Math.max.apply(null, perSplit.map(function(p) { return p[1]; }).concat([0]));
-  top.sort(function(a, b) { return b[2] - a[2] || b[3] - a[3]; });
+  top.sort(function(a, b) { return b[2] - a[2] || a[3] - b[3]; });
   top = top.map(function(r, i) { return [i < 3 ? ['🥇', '🥈', '🥉'][i] : '#' + (i + 1)].concat(r); });
   return {
     top: block_(top, 6, 15, 'Aucun frag pour l\'instant'),
@@ -678,7 +682,7 @@ function sheets_(ss) {
     for (var old in LEGACY_NAMES) if (LEGACY_NAMES[old] === key && ss.getSheetByName(old)) { sh = ss.getSheetByName(old); sh.setName(name); return sh; }
     return ss.insertSheet(name);
   }
-  var out = { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive'),
+  var out = { run: get('run'), frags: get('frags'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive'),
     encData: get('encData'), trainerData: get('trainerData'), trainerPics: get('trainerPics'), itemData: get('itemData') };
   tryFormat_(function() { [out.encData, out.trainerData, out.trainerPics, out.itemData].forEach(function(sh) { if (!sh.isSheetHidden()) sh.hideSheet(); }); });
   return out;
@@ -705,7 +709,7 @@ function ensureStructure(ss) {
     run.getRange(RUN.teamTitle, 1).setValue('⚔  Équipe actuelle');
     run.getRange(RUN.teamHead, 1, 1, 10).setValues([['Sprite', 'Nom', 'Pokémon', 'Niv.', 'PV', 'PV %', 'Statut', 'Objet', 'Talent', 'Attaques']]);
     run.getRange(RUN.tablesTitle, 1, 1, 16).setValues([['🏆  Top frags', '', '', '', '', '', '', '✝  Morts', '', '', '', '', '', '📊  Frags par split', '', '']]);
-    run.getRange(RUN.tablesHead, 1, 1, 16).setValues([['Rang', 'Nom', 'Pokémon', 'Frags', 'Leads', 'Combats', '', 'Nom', 'Pokémon', 'Niv.', 'Zone', 'Mort contre', '', 'Split', 'Frags', '']]);
+    run.getRange(RUN.tablesHead, 1, 1, 16).setValues([['Rang', 'Nom', 'Pokémon', 'Frags', 'Combats', 'Frags / combat', '', 'Nom', 'Pokémon', 'Niv.', 'Zone', 'Mort contre', '', 'Split', 'Frags', '']]);
   }
   // La mise en forme complète est appliquée à l'installation (ou si la page vient d'être créée).
   // Run n° : une run compte dès que le level cap 45 est atteint ; « Runs avant le suivi » se règle à la main.
@@ -715,10 +719,11 @@ function ensureStructure(ss) {
     if (run.getRange(RUN.info, 9).getValue() === '') run.getRange(RUN.info, 9).setValue(0);
     tryFormat_(function() { run.getRange(RUN.info, 9).setBackground(C_.manual).setFontColor(C_.gold).setFontWeight('bold').setHorizontalAlignment('center'); });
   }
+  if (str_(run.getRange(RUN.tablesHead, 5).getValue()) === 'Leads') run.getRange(RUN.tablesHead, 1, 1, 6).setValues([['Rang', 'Nom', 'Pokémon', 'Frags', 'Combats', 'Frags / combat']]);
   if (str_(run.getRange(RUN.teamHead, 1).getValue()) === 'Slot') run.getRange(RUN.teamHead, 1).setValue('Sprite');
-  if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '5') {
+  if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '6') {
     tryFormat_(function() { styleAll_(ss, s); });
-    PropertiesService.getDocumentProperties().setProperty('styleVersion', '5');
+    PropertiesService.getDocumentProperties().setProperty('styleVersion', '6');
   }
   return s;
 }
@@ -741,8 +746,8 @@ function card_(range, accent) {
 function gridLines_(range) { range.setBorder(null, null, null, null, null, true, C_.line, SpreadsheetApp.BorderStyle.SOLID); }
 
 function styleAll_(ss, s) {
-  var tabs = { run: C_.gold, pokemon: '#22c55e', fights: '#ef4444', trainers: '#3b82f6', encounters: '#10b981', items: '#a855f7', archive: '#64748b' };
-  ['run', 'pokemon', 'fights', 'trainers', 'encounters', 'items', 'archive'].forEach(function(k, i) {
+  var tabs = { run: C_.gold, frags: '#f59e0b', pokemon: '#22c55e', fights: '#ef4444', trainers: '#3b82f6', encounters: '#10b981', items: '#a855f7', archive: '#64748b' };
+  ['run', 'frags', 'pokemon', 'fights', 'trainers', 'encounters', 'items', 'archive'].forEach(function(k, i) {
     s[k].setTabColor(tabs[k]); ss.setActiveSheet(s[k]); ss.moveActiveSheet(i + 1);
     s[k].setHiddenGridlines(true);
   });
@@ -876,6 +881,7 @@ function drawGrid_(sh, grid, width) {
   tryFormat_(function() {
     range.setBackgrounds(grid.map(function(r) { return r.bg; })).setFontColors(grid.map(function(r) { return r.fc; }))
       .setFontWeights(grid.map(function(r) { return r.fw; })).setFontSizes(grid.map(function(r) { return r.fs; }))
+      .setHorizontalAlignments(grid.map(function(r) { return r.ha; }))
       .setFontFamily(FONT).setVerticalAlignment('middle').setWrap(false);
     sh.getRange(n + 1, 1, sh.getMaxRows() - n, Math.max(width, sh.getMaxColumns())).setBackground('#000000');
   });
@@ -888,7 +894,7 @@ function setHeights_(sh, grid) {
   }
 }
 function gridRow_(width, fill) {
-  return { v: fill_(width, ''), bg: fill_(width, fill || '#000000'), fc: fill_(width, '#ffffff'), fw: fill_(width, 'normal'), fs: fill_(width, 10), h: 21 };
+  return { v: fill_(width, ''), bg: fill_(width, fill || '#000000'), fc: fill_(width, '#ffffff'), fw: fill_(width, 'normal'), fs: fill_(width, 10), ha: fill_(width, 'left'), h: 21 };
 }
 
 /** 🎯 Dresseurs : blocs comme le doc « Colour Coded Trainer Battles » (étiquettes à gauche, un Pokémon par colonne). */
@@ -921,8 +927,9 @@ function renderTrainers_(sh, trainers, fought, pics) {
     var beaten = !!fought[key_(t.name)], boss = isBoss(t.name);
     function line(label, values, bg, bold, colors) {
       var r = gridRow_(W, '#000000');
-      r.v[0] = label; r.bg[0] = T_COLORS.label; r.fc[0] = T_COLORS.labelInk; r.fw[0] = 'bold';
+      r.v[0] = label; r.bg[0] = T_COLORS.label; r.fc[0] = T_COLORS.labelInk; r.fw[0] = 'bold'; r.ha[0] = 'center';
       for (var i = 0; i < 6; i++) {
+        r.ha[i + 1] = 'center';
         r.v[i + 1] = values[i] === undefined ? '' : values[i];
         var c = colors && colors[i];
         r.bg[i + 1] = c || bg; r.fc[i + 1] = c === '#4285f4' ? '#ffffff' : '#000000'; r.fw[i + 1] = bold || c ? 'bold' : 'normal';
@@ -930,11 +937,12 @@ function renderTrainers_(sh, trainers, fought, pics) {
       return r;
     }
     var nameRow = line('Dresseur', [t.name], beaten ? T_COLORS.beaten : boss ? T_COLORS.boss : T_COLORS.light, true);
+    nameRow.ha[1] = 'left';  // le nom déborde vers la droite au lieu d'être coupé
     if (beaten) { nameRow.v[7] = '✔ Battu'; nameRow.fc[7] = C_.greenInk; nameRow.fw[7] = 'bold'; }
     grid.push(nameRow);
-    if (t.random || !t.mons.length) { grid.push(line('Pokémon', ['Équipe aléatoire (voir doc officiel)'], T_COLORS.dark, true)); grid.push(gridRow_(W)); return; }
+    if (t.random || !t.mons.length) { var rr = line('Pokémon', ['Équipe aléatoire (voir le doc officiel)'], T_COLORS.dark, true); rr.ha[1] = 'left'; grid.push(rr); grid.push(gridRow_(W)); return; }
     var spr = line('Pokémon', t.mons.map(function(m) { return sprite_(m.species); }), '#ffffff'); spr.h = 72; sprites.push(grid.length);
-    var pic = t.pic && pics[t.pic.toUpperCase()];
+    var picUrl = trainerPicUrl(t.pic), pic = picUrl ? '=IMAGE("' + picUrl + '")' : (t.pic && pics[t.pic.toUpperCase()]);
     if (pic) { spr.v[7] = pic; spr.bg[7] = '#000000'; }
     grid.push(spr);
     var col = function(m) { return m.colors || {}; };
@@ -951,8 +959,6 @@ function renderTrainers_(sh, trainers, fought, pics) {
   tryFormat_(function() {
     sh.setHiddenGridlines(true); sh.setFrozenRows(1);
     [110, 150, 150, 150, 150, 150, 150, 110].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
-    sh.getRange(1, 2, grid.length, 6).setHorizontalAlignment('center');
-    sh.getRange(1, 1, grid.length, 1).setHorizontalAlignment('center');
     setHeights_(sh, grid);
   });
 }
@@ -1036,6 +1042,64 @@ function renderEncounters_(sh, enc, pokemonRows) {
   });
 }
 function baseSpecies_(s) { return str_(s).replace(/ \(contre .*\)$/, ''); }
+
+/** 🏆 Frags : classement complet (sprite, frags, combats, ratio, détail par split) + bilan par split. */
+var MEDALS = [['🥇', '#7a5c00'], ['🥈', '#4b5563'], ['🥉', '#6b3a17']];
+function fragRanking(pokemonRows, stats) {
+  var list = [];
+  pokemonRows.forEach(function(r) {
+    var name = str_(r[COL.name - 1]); if (!name) return;
+    var st = stats[name];
+    if (!st || (!st.frags && !st.fights)) return;
+    list.push({ name: name, species: str_(r[COL.species - 1]), status: str_(r[COL.status - 1]), st: st });
+  });
+  list.sort(function(a, b) { return b.st.frags - a.st.frags || a.st.fights - b.st.fights || a.name.localeCompare(b.name); });
+  return list;
+}
+function renderFrags_(sh, pokemonRows, stats, fights) {
+  var list = fragRanking(pokemonRows, stats), W = 8 + SPLITS.length, grid = [];
+  var totalF = list.reduce(function(t, x) { return t + x.st.frags; }, 0), perSplit = {};
+  (fights || []).forEach(function(r) { var sp = str_(r[1]); if (str_(r[0])) perSplit[sp] = (perSplit[sp] || 0) + 1; });
+  var title = gridRow_(W); title.v[0] = '🏆  CLASSEMENT DES FRAGS'; title.fc[0] = C_.gold; title.fw[0] = 'bold'; title.fs[0] = 18; title.h = 46; grid.push(title);
+  var sub = gridRow_(W); sub.v[0] = list.length ? totalF + ' frags au total · MVP : ' + list[0].name + ' (' + list[0].st.frags + ')' : 'Aucun combat enregistré pour l\'instant';
+  sub.fc[0] = C_.muted; sub.fw[0] = 'bold'; sub.fs[0] = 11; sub.h = 26; grid.push(sub);
+  grid.push(gridRow_(W));
+  var head = gridRow_(W, C_.head);
+  ['Rang', '', 'Nom', 'Pokémon', 'Statut', 'Frags', 'Combats', 'Frags / combat'].concat(SPLITS).forEach(function(t, i) { head.v[i] = t; head.fc[i] = C_.gold; head.fw[i] = 'bold'; head.ha[i] = 'center'; });
+  head.h = 32; grid.push(head);
+  list.forEach(function(x, i) {
+    var medal = MEDALS[i], r = gridRow_(W, medal ? medal[1] : (i % 2 ? C_.card2 : C_.card)), dead = x.status === STATUS.dead;
+    r.v = [medal ? medal[0] : '#' + (i + 1), sprite_(x.species), x.name, x.species, dead ? '✝ Mort' : x.status, x.st.frags, x.st.fights,
+      x.st.fights ? Math.round(x.st.frags / x.st.fights * 100) / 100 : 0].concat(SPLITS.map(function(sp) {
+        var f = x.st.splits[sp], c = x.st.splitFights[sp]; return c ? f + ' frag' + (f > 1 ? 's' : '') + ' · ' + c + ' cb' : '';
+      }));
+    r.ha = fill_(W, 'center'); r.ha[2] = 'left'; r.ha[3] = 'left';
+    r.fw[2] = 'bold'; r.fs[2] = 12; r.fw[5] = 'bold'; r.fs[5] = 14; r.fc[5] = C_.gold; r.fs[0] = medal ? 16 : 11; r.fw[0] = 'bold';
+    r.fc[3] = C_.muted; r.fc[4] = dead ? C_.redInk : C_.greenInk; r.fw[4] = 'bold';
+    if (dead) r.fc[2] = C_.redInk;
+    for (var k = 8; k < W; k++) { r.fs[k] = 9; if (r.v[k]) r.fc[k] = C_.text; }
+    r.h = 44; grid.push(r);
+  });
+  // Bilan par split
+  grid.push(gridRow_(W));
+  var st2 = gridRow_(W); st2.v[0] = '📊  PAR SPLIT'; st2.fc[0] = C_.gold; st2.fw[0] = 'bold'; st2.fs[0] = 14; st2.h = 34; grid.push(st2);
+  var h2 = gridRow_(W, C_.head); ['Split', '', 'MVP', '', '', 'Frags', 'Combats', ''].forEach(function(t, i) { h2.v[i] = t; h2.fc[i] = C_.gold; h2.fw[i] = 'bold'; h2.ha[i] = 'center'; }); h2.h = 28; grid.push(h2);
+  SPLITS.forEach(function(sp, i) {
+    var f = 0, best = null, fights = perSplit[sp] || 0;
+    list.forEach(function(x) { f += x.st.splits[sp]; if (x.st.splits[sp] > 0 && (!best || x.st.splits[sp] > best.st.splits[sp])) best = x; });
+    var r = gridRow_(W, i % 2 ? C_.card2 : C_.card);
+    r.v[0] = sp; r.fw[0] = 'bold'; r.v[1] = best ? sprite_(best.species) : ''; r.v[2] = best ? best.name + ' (' + best.st.splits[sp] + ')' : '—';
+    r.v[5] = f; r.fc[5] = C_.gold; r.fw[5] = 'bold'; r.v[6] = fights; r.ha = fill_(W, 'center'); r.ha[2] = 'left'; r.h = 36;
+    for (var k = 8; k < W; k++) r.bg[k] = '#000000';
+    grid.push(r);
+  });
+  drawGrid_(sh, grid, W);
+  tryFormat_(function() {
+    sh.setHiddenGridlines(true); sh.setFrozenRows(4);
+    [70, 56, 150, 140, 110, 70, 80, 100].concat(SPLITS.map(function() { return 110; })).forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
+    setHeights_(sh, grid);
+  });
+}
 
 // ---------------------------------------------------------------- Import officiel
 function readSheet_(id, name) {
@@ -1188,6 +1252,8 @@ function refreshAll(ss, s, summary, force) {
   if (rows.length && (changed_('hashSprites', speciesList) || force)) {
     s.pokemon.getRange(2, COL.sprite, rows.length, 1).setValues(speciesList.map(function(sp) { return [sprite_(sp)]; }));
   }
+  var fragKey = rows.map(function(r) { return [r[COL.name - 1], r[COL.species - 1], r[COL.status - 1]].join('|'); });
+  if (changed_('hashFrags', [fragKey, stats]) || force) tryFormat_(function() { renderFrags_(s.frags, rows, stats, fights); });
   var t = runTables(rows, stats);
   s.run.getRange(RUN.tablesFirst, 1, 15, 6).setValues(t.top);
   s.run.getRange(RUN.tablesFirst, 8, 15, 5).setValues(t.dead);
@@ -1328,7 +1394,7 @@ function applyPayload(ss, payload, now) {
 }
 
 // Export pour les tests Node (sans effet dans Apps Script).
-if (typeof module !== 'undefined') module.exports = { itemIconUrl: itemIconUrl, itemLayout: itemLayout, highlight_: highlight_, itemRows: itemRows, encounterLayout_: encounterLayout_, renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
+if (typeof module !== 'undefined') module.exports = { fragRanking: fragRanking, trainerPicUrl: trainerPicUrl, itemIconUrl: itemIconUrl, itemLayout: itemLayout, highlight_: highlight_, itemRows: itemRows, encounterLayout_: encounterLayout_, renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
   runSummary: runSummary, teamRows: teamRows, applyPayload: applyPayload, ensureStructure: ensureStructure, refreshAll: refreshAll,
   parseEncounterGrid: parseEncounterGrid, parseSpecialEncounters: parseSpecialEncounters, parseTrainerSheet: parseTrainerSheet,
   parseItemSheet: parseItemSheet, trainerRows: trainerRows, trainersFromRows: trainersFromRows, nextTrainer: nextTrainer,

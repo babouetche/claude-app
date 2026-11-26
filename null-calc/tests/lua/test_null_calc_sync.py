@@ -329,6 +329,25 @@ def main():
     L.execute("NullCalcSyncNow()")
     assert out.read_text(encoding="utf8") == before, "un Pokémon corrompu ne doit pas produire de données partielles"
 
+    # Sauvegarde d'état rechargée (début de partie) : même dresseur, mais les Pokémon connus ont disparu → nouvelle run.
+    mem.write(STORAGE + 4 + 30 * 84, bytes(84))
+    snap0 = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))
+    assert snap0.get("battle"), g.NULL_CALC_SYNC_LAST_ERROR
+    run_before = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))["battle"]["runId"]
+    fresh = box_mon(0x0F0F0F0F, 0xCAFEBABE, "Neuf", sid("Mudkip"), 0, 100, [mid("Tackle"), 0, 0, 0], [35, 0, 0, 0], (5,) * 6, 0x10)
+    mem.write(PARTY_COUNT, bytes([1]))
+    mem.write(PARTY, party_mon(fresh, 5, 20, (20, 10, 10, 10, 10, 10)))
+    mem.write(PARTY + 104, bytes(104))
+    mem.write(STORAGE + 4, bytes(84 * 30 * 14))
+    for i in range(2): mem.write(PARTY + (6 + i) * 104, bytes(104))
+    nb = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))["battle"]
+    assert nb["runId"] != run_before and nb["runId"].startswith("cafebabe-"), (run_before, nb["runId"])
+    assert nb["fights"] == [] and nb["runCount"] == 2 and nb["pastRuns"][0]["id"] == run_before, nb
+    # Relance du script : la run en cours est retrouvée, pas de nouvelle run.
+    L.execute(open(work / "lua" / "NullCalcSync.lua", encoding="utf8").read())
+    again = json.loads(g.NULL_CALC_SYNC_TEST.toJson(g.NULL_CALC_SYNC_TEST.snapshot()))["battle"]
+    assert again["runId"] == nb["runId"] and again["runCount"] == 2, again
+
     # Aucune partie chargée : rien n'est écrit.
     mem.write(STORAGE + 4 + 30 * 84, bytes(84))
     mem.write(PARTY_COUNT, bytes([0]))
