@@ -66,6 +66,9 @@ function fixture(mutate) {
     fixture(d => { d.battle.fights = fights; d.battle.runIndex = 3; });
     await page.goto(url + '?vue=cap');
     await page.waitForFunction(() => document.querySelector('.big') && document.querySelector('.big').textContent === '38', null, { timeout: 15000 });
+    // Numéro de run : depart + runs ayant atteint le cap 45 (ici aucune : Root Academy seulement)
+    await page.goto(url + '?vue=run&depart=24');
+    await page.waitForFunction(() => document.querySelector('.big') && document.querySelector('.big').textContent === '24', null, { timeout: 15000 });
     await page.goto(url + '?vue=dresseur');
     await page.waitForFunction(() => document.querySelector('.trainer .tname'), null, { timeout: 15000 });
     const nextName = await page.textContent('.trainer .tname');
@@ -75,6 +78,7 @@ function fixture(mutate) {
     fixture(d => { d.battle.fights = fights.concat([{ t: 9, team: teamOf('Leader Roxanne') }]); });
     await page.goto(url + '?vue=tout&fond=1');
     await page.waitForFunction(() => document.querySelectorAll('.big')[0] && document.querySelectorAll('.big')[0].textContent === '45', null, { timeout: 15000 });
+    await page.waitForFunction(() => document.querySelectorAll('.big')[1] && document.querySelectorAll('.big')[1].textContent === '1', null, { timeout: 15000 });
     const next2 = T.progress(trainers, fights.concat([{ t: 9, team: teamOf('Leader Roxanne') }])).next;
     await page.waitForFunction(n => document.querySelector('.trainer .tname').textContent.startsWith(n), next2.name);
     const trainerCells = await page.$$eval('.trainer .cell', els => els.length);
@@ -82,6 +86,6 @@ function fixture(mutate) {
     await imagesOk();
     if (shots) await page.screenshot({ path: path.join(shots, 'overlay-tout.png') });
     assert(!errors.length, errors.join(' | '));
-    console.log('OK: overlay — équipe verticale, objets en icônes, boîte 6×5, morts 6 par 6, prochain dresseur (' + next2.name + '), level cap 38→45, méga-gemmes sans icône remplacées.');
+    console.log('OK: overlay — équipe verticale, objets en icônes, boîte 6×5, morts 6 par 6, prochain dresseur (' + next2.name + '), level cap 38→45, méga-gemmes sans icône remplacées, compteur de runs au cap 45.');
   } finally { await browser.close(); if (fs.existsSync(out)) fs.unlinkSync(out); }
 })().catch(e => { console.error(e); process.exit(1); });

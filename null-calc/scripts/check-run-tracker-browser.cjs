@@ -47,7 +47,7 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     assert((await page.textContent('#run-status')).includes('Synchronisé'), 'Statut : ' + await page.textContent('#run-status'));
     assert((await page.textContent('.run-stat--dead .run-stat-value')) === '1', 'Compteur de morts');
     const overlayUrls = await page.$$eval('#run-overlay input', els => els.map(e => e.value));
-    assert(overlayUrls.length === 5 && overlayUrls.every(u => /\/docs\/overlay\.html\?vue=/.test(u)), 'Liens overlay : ' + overlayUrls);
+    assert(overlayUrls.length === 6 && overlayUrls.every(u => /\/docs\/overlay\.html\?vue=/.test(u)), 'Liens overlay : ' + overlayUrls);
     if (shots) await page.screenshot({ path: path.join(shots, 'run-tracker.png'), fullPage: true });
     // Level cap
     await page.click('.run-bosses summary');
@@ -84,7 +84,7 @@ function assert(cond, msg) { if (!cond) throw new Error(msg); }
     assert(await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('nullcalc_runBeaten') || '{}')).length === 0), 'boss remis à zéro');
     await page.click('#header-run-button');
     await page.waitForSelector('.run-newrun');
-    assert((await page.textContent('.run-newrun')).includes('tentative n°2'), 'bannière');
+    assert((await page.textContent('.run-newrun')).includes('run n°1'), 'bannière : partie arrêtée avant le cap 45, non comptée');
     if (shots) await page.screenshot({ path: path.join(shots, 'run-newrun.png') });
     // Combat détecté par le Lua (dresseur après Root Academy 4) : boss cochés et cap à jour automatiquement
     fixture(d => {

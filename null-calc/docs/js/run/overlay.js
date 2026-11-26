@@ -1,5 +1,5 @@
 // Overlay OBS : lit docs/run-data.js (écrit par lua/NullCalcSync.lua).
-// Vues : équipe (verticale), boîte, morts, prochain dresseur, level cap.
+// Vues : équipe (verticale), boîte, morts, prochain dresseur, level cap, numéro de run.
 (function(root) {
     "use strict";
     var params = new URLSearchParams(location.search);
@@ -16,7 +16,8 @@
     var pageSeconds = Math.max(2, Number(params.get("defilement")) || 5);
     var showItems = params.get("objets") !== "0";
     var direction = params.get("sens") === "ligne" ? "ligne" : "colonne";
-    var needsTrainers = view === "dresseur" || view === "cap" || view === "tout";
+    var startRun = Number(params.get("depart")) || 0;
+    var needsTrainers = view === "dresseur" || view === "cap" || view === "run" || view === "tout";
     document.documentElement.style.setProperty("--s", size);
     if (params.get("fond") === "1") document.body.classList.add("fond");
 
@@ -149,6 +150,12 @@
         return el("div", "big", p ? String(p.cap) : "…");
     }
 
+    // Numéro de run : runs déjà faites avant le suivi (depart=N) + runs qui ont atteint le level cap 45.
+    function runView(data) {
+        if (!trainers || !root.NullTrainers) return el("div", "big", "…");
+        return el("div", "big", String(startRun + root.NullTrainers.runCount(trainers, data.battle).total));
+    }
+
     function render(data) {
         var out = document.getElementById("overlay");
         out.innerHTML = "";
@@ -161,6 +168,7 @@
         if (view === "morts" || view === "tout") out.appendChild(paged("dead", "MORTS", data.dead));
         if (view === "dresseur" || view === "tout") out.appendChild(section("PROCHAIN DRESSEUR", trainerView(data)));
         if (view === "cap" || view === "tout") out.appendChild(section("LEVEL CAP", capView(data)));
+        if (view === "run" || view === "tout") out.appendChild(section("RUN", runView(data)));
     }
 
     // ------------------------------------------------------------- Données

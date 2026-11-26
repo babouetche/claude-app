@@ -567,6 +567,19 @@ local function trackFights(party)
 	end
 	local runIndex = 1
 	for i, r in ipairs(history.runs) do if r == run then runIndex = i end end
+	-- Runs précédentes (équipes battues) : le calculateur/l'overlay comptent celles qui ont atteint le level cap 45.
+	local pastRuns = {}
+	for _, r in ipairs(history.runs) do
+		if r ~= run then
+			local fl = {}
+			for i, f in ipairs(history.fights[r] or {}) do
+				local team = {}
+				for _, m in ipairs(f.team) do team[#team + 1] = { species = m.species, level = m.level } end
+				fl[i] = { t = f.t, team = team }
+			end
+			pastRuns[#pastRuns + 1] = { id = r, fights = fl }
+		end
+	end
 	local active, live = nil, nil
 	if battle and enemy and battle.sig == sigOf(enemy) then
 		live = readLive(party, enemy)
@@ -574,7 +587,7 @@ local function trackFights(party)
 		if live then active = { player = live.player[1].uid, enemy = live.enemy[1].index }
 		else active = { player = battle.player, enemy = battle.enemy } end
 	end
-	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy, active = active, live = live }
+	return { runId = run, runIndex = runIndex, runCount = #history.runs, fights = list, enemy = enemy, active = active, live = live, pastRuns = pastRuns }
 end
 
 pcall(loadHistory)

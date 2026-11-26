@@ -43,8 +43,9 @@
             // Nouvelle partie (autre numéro de dresseur) : boss et compteur remis à jour.
             var runId = Model.runIdOf(payload.data), previousRun = load(KEYS.runId, null);
             if (runId && previousRun && runId !== previousRun) {
+                // Run comptée seulement si la précédente a atteint le level cap 45 (Roxanne battue).
+                if (load(KEYS.beaten, {})["Leader Roxanne"]) save(KEYS.attempt, load(KEYS.attempt, 1) + 1);
                 save(KEYS.beaten, {});
-                save(KEYS.attempt, load(KEYS.attempt, 1) + 1);
                 save(KEYS.newRun, Date.now());
             }
             if (runId) save(KEYS.runId, runId);
@@ -244,7 +245,7 @@
 
         var newRunAt = load(KEYS.newRun, 0);
         if (newRunAt && Date.now() - newRunAt < 24 * 3600 * 1000) {
-            var banner = el("div", "run-newrun", "🔄 Nouvelle run détectée — tentative n°" + load(KEYS.attempt, 1) +
+            var banner = el("div", "run-newrun", "🔄 Nouvelle partie détectée — run n°" + load(KEYS.attempt, 1) + " (une run compte dès le level cap 45)" +
                 " : boss remis à zéro, anciens sets « [Run] » retirés, ancienne run archivée dans Google Sheets.");
             var ok = el("button", "btn btn-small", "OK"); ok.type = "button";
             ok.addEventListener("click", function() { save(KEYS.newRun, 0); render(); });
@@ -293,7 +294,7 @@
         d.appendChild(el("summary", "", "Overlay OBS (remplace PokemonNullDisplay)"));
         d.appendChild(el("p", "run-muted", "Dans OBS : Sources > + > Navigateur, décoche « Fichier local », colle un lien ci-dessous, largeur 900 × hauteur 300 (à ajuster). Le fond est transparent. Il suffit que mGBA tourne avec NullCalcSync.lua : l'overlay lit directement ses données, pas besoin du calculateur ni de PokemonNullDisplay.exe."));
         [["Équipe", "vue=equipe&taille=2"], ["Boîte", "vue=boite&taille=2&colonnes=6&lignes=5"], ["Morts", "vue=morts&taille=2&colonnes=6&lignes=1"],
-         ["Dresseur", "vue=dresseur&taille=2"], ["Level cap", "vue=cap&taille=2"]].forEach(function(v) {
+         ["Dresseur", "vue=dresseur&taille=2"], ["Level cap", "vue=cap&taille=2"], ["Run", "vue=run&taille=2&depart=0"]].forEach(function(v) {
             var url = new URL("overlay.html?" + v[1], document.baseURI).href;
             var row = el("div", "run-sheets-row"), input = el("input"), btn = el("button", "btn btn-small", "Copier");
             input.readOnly = true; input.value = url; btn.type = "button";
@@ -304,7 +305,7 @@
             });
             row.appendChild(el("strong", "", v[0])); row.appendChild(input); row.appendChild(btn); d.appendChild(row);
         });
-        d.appendChild(el("p", "run-muted", "Options dans le lien : taille=1 à 4, colonnes=N, lignes=N (défile toutes les 5 s au-delà), defilement=S, sens=ligne (équipe horizontale), objets=0 (sans objets), fond=1 (fond sombre)."));
+        d.appendChild(el("p", "run-muted", "Options dans le lien : taille=1 à 4, colonnes=N, lignes=N (défile toutes les 5 s au-delà), defilement=S, sens=ligne (équipe horizontale), objets=0 (sans objets), depart=N (vue Run : nombre de runs faites avant le suivi ; une run compte dès que le level cap 45 est atteint), fond=1 (fond sombre)."));
         return d;
     }
 

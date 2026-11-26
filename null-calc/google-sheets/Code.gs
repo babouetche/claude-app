@@ -23,7 +23,7 @@ var TRAINER_SHEETS = [['Roxanne Split', 'Roxanne'], ['Brawly Split', 'Brawly'], 
   ['Victory Road Split', 'Victory Road'], ['Pokémon League', 'Ligue'], ['Other', 'Autres']];
 var SPLITS = TRAINER_SHEETS.map(function(t) { return t[1]; });
 var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets', archive: '📦 Archives',
-  encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs', trainerPics: '⚙️ Images dresseurs' };
+  encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs', trainerPics: '⚙️ Images dresseurs', itemData: '⚙️ Données objets' };
 var LEGACY_NAMES = { 'Run': 'run', 'Pokémon': 'pokemon', 'Combats': 'fights' };
 
 var AUTO_HEADERS = ['UID', '#', 'Zone', 'Sprite', 'Pokémon', 'Nom', 'Niveau', 'Statut', 'Talent', 'Nature',
@@ -43,10 +43,15 @@ var TCOL = { name: 3, species: 5, level: 6, item: 7, ability: 8, nature: 9, move
 var DOC_HIGHLIGHTS = {"#ea9999": ["*of Ruin", "Sniper", "Unnerve", "Armor Tail", "Dazzling", "Queenly Majesty", "Quick Draw", "Shadow Tag", "Moody", "Serene Grace", "Stench", "Snow Cloak", "Sand Veil", "Innards Out", "of Ruin", "Stakeout", "Dancer", "Friend Guard"], "#d5a6bd": ["Belly Drum", "Explosion", "Misty Explosion", "Destiny Bond", "Pursuit", "Shell Smash", "Minimize", "Perish Song", "Revival Blessing", "Double Team", "Self-Destruct"], "#f9cb9c": ["Bright Powder", "Focus Band", "Quick Claw", "Scope Lens", "Weakness Policy", "Custap Berry", "King's Rock", "Berserk Gene", "Grip Claw", "Blunder Policy", "Binding Band"]};
 var HIGHLIGHT_LEGEND = [['#ea9999', 'Talent à surveiller'], ['#f9cb9c', 'Objet à surveiller'], ['#d5a6bd', 'Attaque à surveiller'], ['#ffe599', 'Lead en double'], ['#4285f4', 'Pokémon de soutien']];
 // Catégories d'objets dans l'ordre d'affichage ; dans chaque catégorie, l'ordre du doc officiel (ordre d'obtention).
-var ITEM_CATEGORIES = ['Objet tenu', 'Méga-gemme / spécial', 'Objet d\'évolution', 'CT / CS', 'Tuteur', 'Baie', 'Menthe', 'Ressource', 'Écaille Cœur', 'Mémoire', 'Boutique de la Ligue', 'Objet sauvage'];
-var REF_VERSION = '5';
+var ITEM_CATEGORIES = ['Objet tenu', 'Baie', 'Méga-gemme', 'Objet spécial', 'Mémoire', 'Objet d\'évolution', 'CT / CS', 'CT rachetable', 'Tuteur', 'Menthe', 'Ressource', 'Écaille Cœur', 'Boutique de la Ligue', 'Objet sauvage'];
+var ITEM_DATA_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Ligne', 'Colonne'];
+// Icônes d'objets : celles du jeu (numéro d'objet Null, dossier docs/img/items du dépôt), sinon PokeAPI.
+var ITEM_ICON_BASE = 'https://raw.githubusercontent.com/babouetche/claude-app/claude/busy-shannon-0cne71/null-calc/docs/img/items/';
+var ITEM_ICON_FALLBACK = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';
+var ITEM_ICON_IDS = {"pokeball":1,"greatball":2,"ultraball":3,"masterball":4,"premierball":5,"healball":6,"netball":7,"nestball":8,"diveball":9,"duskball":10,"timerball":11,"quickball":12,"repeatball":13,"luxuryball":14,"levelball":15,"lureball":16,"moonball":17,"friendball":18,"loveball":19,"fastball":20,"heavyball":21,"dreamball":22,"safariball":23,"sportball":24,"parkball":25,"beastball":26,"cherishball":27,"berryjuice":53,"bottlecap":133,"rarebone":154,"helixfossil":165,"domefossil":166,"oldamber":167,"rootfossil":168,"clawfossil":169,"armorfossil":170,"skullfossil":171,"coverfossil":172,"plumefossil":173,"jawfossil":174,"sailfossil":175,"fossilizedbird":176,"fossilizedfish":177,"fossilizeddrake":178,"fossilizeddino":179,"mail":199,"firestone":211,"waterstone":212,"thunderstone":213,"leafstone":214,"icestone":215,"sunstone":216,"moonstone":217,"shinystone":218,"duskstone":219,"dawnstone":220,"sweetapple":221,"tartapple":222,"crackedpot":223,"chippedpot":224,"dragonscale":227,"upgrade":228,"protector":229,"electirizer":230,"magmarizer":231,"dubiousdisc":232,"reapercloth":233,"prismscale":234,"whippeddream":235,"sachet":236,"ovalstone":237,"strawberrysweet":238,"lovesweet":239,"berrysweet":240,"cloversweet":241,"flowersweet":242,"starsweet":243,"ribbonsweet":244,"flameplate":250,"splashplate":251,"zapplate":252,"meadowplate":253,"icicleplate":254,"fistplate":255,"toxicplate":256,"earthplate":257,"skyplate":258,"mindplate":259,"insectplate":260,"stoneplate":261,"spookyplate":262,"dracoplate":263,"dreadplate":264,"ironplate":265,"pixieplate":266,"dousedrive":267,"shockdrive":268,"burndrive":269,"chilldrive":270,"firememory":271,"watermemory":272,"electricmemory":273,"grassmemory":274,"icememory":275,"fightingmemory":276,"poisonmemory":277,"groundmemory":278,"flyingmemory":279,"psychicmemory":280,"bugmemory":281,"rockmemory":282,"ghostmemory":283,"dragonmemory":284,"darkmemory":285,"steelmemory":286,"fairymemory":287,"rustedsword":288,"rustedshield":289,"redorb":290,"blueorb":291,"venusaurite":292,"charizarditex":293,"charizarditey":294,"blastoisinite":295,"beedrillite":296,"pidgeotite":297,"alakazite":298,"slowbronite":299,"gengarite":300,"kangaskhanite":301,"pinsirite":302,"gyaradosite":303,"aerodactylite":304,"mewtwonitex":305,"mewtwonitey":306,"ampharosite":307,"steelixite":308,"scizorite":309,"heracronite":310,"houndoominite":311,"tyranitarite":312,"sceptilite":313,"blazikenite":314,"swampertite":315,"gardevoirite":316,"sablenite":317,"mawilite":318,"aggronite":319,"medichamite":320,"manectite":321,"sharpedonite":322,"cameruptite":323,"altarianite":324,"banettite":325,"absolite":326,"glalitite":327,"salamencite":328,"metagrossite":329,"latiasite":330,"latiosite":331,"lopunnite":332,"garchompite":333,"lucarionite":334,"abomasite":335,"galladite":336,"audinite":337,"diancite":338,"normalgem":339,"firegem":340,"watergem":341,"electricgem":342,"grassgem":343,"icegem":344,"fightinggem":345,"poisongem":346,"groundgem":347,"flyinggem":348,"psychicgem":349,"buggem":350,"rockgem":351,"ghostgem":352,"dragongem":353,"darkgem":354,"steelgem":355,"fairygem":356,"normaliumz":357,"firiumz":358,"wateriumz":359,"electriumz":360,"grassiumz":361,"iciumz":362,"fightiniumz":363,"poisoniumz":364,"groundiumz":365,"flyiniumz":366,"psychiumz":367,"buginiumz":368,"rockiumz":369,"ghostiumz":370,"dragoniumz":371,"darkiniumz":372,"steeliumz":373,"fairiumz":374,"pikaniumz":375,"eeviumz":376,"snorliumz":377,"mewniumz":378,"decidiumz":379,"inciniumz":380,"primariumz":381,"lycaniumz":382,"mimikiumz":383,"kommoniumz":384,"tapuniumz":385,"solganiumz":386,"lunaliumz":387,"marshadiumz":388,"aloraichiumz":389,"pikashuniumz":390,"ultranecroziumz":391,"lightball":392,"leek":393,"thickclub":394,"luckypunch":395,"metalpowder":396,"quickpowder":397,"deepseascale":398,"deepseatooth":399,"souldew":400,"adamantorb":401,"lustrousorb":402,"griseousorb":403,"seaincense":404,"laxincense":405,"oddincense":406,"rockincense":407,"fullincense":408,"waveincense":409,"roseincense":410,"machobrace":418,"powerweight":419,"powerbracer":420,"powerbelt":421,"powerlens":422,"powerband":423,"poweranklet":424,"silkscarf":425,"charcoal":426,"mysticwater":427,"magnet":428,"miracleseed":429,"nevermeltice":430,"blackbelt":431,"poisonbarb":432,"softsand":433,"sharpbeak":434,"twistedspoon":435,"silverpowder":436,"hardstone":437,"spelltag":438,"dragonfang":439,"blackglasses":440,"metalcoat":441,"choiceband":442,"choicespecs":443,"choicescarf":444,"flameorb":445,"toxicorb":446,"damprock":447,"heatrock":448,"smoothrock":449,"icyrock":450,"electricseed":451,"psychicseed":452,"mistyseed":453,"grassyseed":454,"absorbbulb":455,"cellbattery":456,"luminousmoss":457,"snowball":458,"brightpowder":459,"whiteherb":460,"quickclaw":462,"mentalherb":464,"kingsrock":465,"focusband":469,"scopelens":471,"leftovers":472,"shellbell":473,"widelens":474,"muscleband":475,"wiseglasses":476,"expertbelt":477,"lightclay":478,"lifeorb":479,"powerherb":480,"focussash":481,"zoomlens":482,"metronome":483,"ironball":484,"laggingtail":485,"destinyknot":486,"blacksludge":487,"gripclaw":488,"stickybarb":489,"shedshell":490,"bigroot":491,"razorclaw":492,"razorfang":493,"eviolite":494,"floatstone":495,"rockyhelmet":496,"airballoon":497,"redcard":498,"ringtarget":499,"bindingband":500,"ejectbutton":501,"weaknesspolicy":502,"assaultvest":503,"safetygoggles":504,"adrenalineorb":505,"terrainextender":506,"protectivepads":507,"throatspray":508,"ejectpack":509,"heavydutyboots":510,"blunderpolicy":511,"roomservice":512,"utilityumbrella":513,"cheriberry":514,"chestoberry":515,"pechaberry":516,"rawstberry":517,"aspearberry":518,"leppaberry":519,"oranberry":520,"persimberry":521,"lumberry":522,"sitrusberry":523,"figyberry":524,"wikiberry":525,"magoberry":526,"aguavberry":527,"iapapaberry":528,"razzberry":529,"blukberry":530,"nanabberry":531,"wepearberry":532,"pinapberry":533,"pomegberry":534,"kelpsyberry":535,"qualotberry":536,"hondewberry":537,"grepaberry":538,"tamatoberry":539,"cornnberry":540,"magostberry":541,"rabutaberry":542,"nomelberry":543,"spelonberry":544,"pamtreberry":545,"watmelberry":546,"durinberry":547,"belueberry":548,"chilanberry":549,"occaberry":550,"passhoberry":551,"wacanberry":552,"rindoberry":553,"yacheberry":554,"chopleberry":555,"kebiaberry":556,"shucaberry":557,"cobaberry":558,"payapaberry":559,"tangaberry":560,"chartiberry":561,"kasibberry":562,"habanberry":563,"colburberry":564,"babiriberry":565,"roseliberry":566,"liechiberry":567,"ganlonberry":568,"salacberry":569,"petayaberry":570,"apicotberry":571,"lansatberry":572,"starfberry":573,"enigmaberry":574,"micleberry":575,"custapberry":576,"jabocaberry":577,"rowapberry":578,"keeberry":579,"marangaberry":580,"abilityshield":758,"clearamulet":759,"punchingglove":760,"covertcloak":761,"loadeddice":762,"auspiciousarmor":763,"boosterenergy":764,"maliciousarmor":768,"mirrorherb":769,"clefablite":774,"victreebelite":775,"starminite":776,"dragoninite":777,"meganiumite":778,"feraligite":779,"skarmorite":780,"froslassite":781,"emboarite":782,"excadrite":783,"scolipite":784,"scraftinite":785,"eelektrossite":786,"chandelurite":787,"chesnaughtite":788,"delphoxite":789,"greninjite":790,"pyroarite":791,"adamantcrystal":792,"griseouscore":793,"lustrousglobe":794,"berserkgene":798,"fairyfeather":799,"syrupyapple":800,"cornerstonemask":803,"wellspringmask":804,"hearthflamemask":805,"floettite":806,"malamarite":807,"barbaracite":808,"dragalgite":809,"hawluchanite":810,"zygardite":811,"drampanite":812,"falinksite":813,"raichunitex":818,"raichunitey":819,"chimechite":820};
+var REF_VERSION = '6';
 var ITEM_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Récupéré'];
-var ARCHIVE_HEADERS = ['Tentative', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
+var ARCHIVE_HEADERS = ['Run', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
 var STATUS_FR = { slp: 'Endormi', psn: 'Empoisonné', tox: 'Gravement empoisonné', brn: 'Brûlé', par: 'Paralysé', frz: 'Gelé', frb: 'Gelure' };
 var STATUS = { team: 'Équipe', ko: 'K.O. (équipe)', box: 'Boîte', dead: 'Mort', gone: 'Absent' };
 var METHODS_FR = { 'Land': 'Herbes', 'Fishing': 'Pêche', 'Surf': 'Surf', 'Rock Smash': 'Éclate-Roc', 'Other': 'Spécial' };
@@ -418,6 +423,7 @@ function capFromFights(foughtNames) {
   });
   var any = beaten.some(Boolean), i = beaten.indexOf(false), lastIdx = beaten.lastIndexOf(true);
   return { any: any, beaten: beaten.filter(Boolean).length, cap: i < 0 ? 100 : BOSS_CAPS[i][1], next: i < 0 ? 'Tous battus' : BOSS_CAPS[i][0],
+    reached: lastIdx < 0 ? BOSS_CAPS[0][1] : lastIdx + 1 < BOSS_CAPS.length ? BOSS_CAPS[lastIdx + 1][1] : 100,
     last: lastIdx < 0 ? '' : BOSS_CAPS[lastIdx][0] };
 }
 
@@ -471,37 +477,81 @@ function nextTrainer(trainers, fought) {
   return null;
 }
 
-/** Lignes de l'onglet Objets : un titre « ▸ Catégorie » puis ses objets (case « Récupéré »). */
-function itemRows(sorted, checked) {
-  var rows = [], cat = null;
-  sorted.forEach(function(i) {
-    if (i[0] !== cat) { cat = i[0]; rows.push(['▸ ' + cat, '', '', '']); }
-    rows.push(['', i[1], i[2], !!(checked && checked[i[0] + '|' + i[1] + '|' + i[2]])]);
-  });
-  return rows;
+var CATEGORY_COLORS = { 'Objet tenu': '#f9cb9c', 'Baie': '#ea9999', 'Méga-gemme': '#d5a6bd', 'Objet spécial': '#c27ba0', 'Mémoire': '#d9d2e9', 'Objet d\'évolution': '#b6d7a8',
+  'CT / CS': '#9fc5e8', 'CT rachetable': '#cfe2f3', 'Tuteur': '#a4c2f4', 'Menthe': '#b7e1cd', 'Ressource': '#ffe599', 'Écaille Cœur': '#f4cccc',
+  'Boutique de la Ligue': '#fce5cd', 'Objet sauvage': '#d9ead3' };
+var ITEM_COLS = [['✔', 34], ['', 44], ['Objet', 170], ['Lieu / info', 300]];
+var ITEMS_PER_BAND = 3;
+/** 🎒 Objets : un tableau par catégorie (case « Récupéré », icône, objet, lieu), 3 tableaux côte à côte par bande.
+ *  Renvoie la position de chaque case pour retrouver ce que tu as coché. */
+function itemLayout(items) {
+  var cats = [], by = {};
+  items.forEach(function(i) { if (!by[i[0]]) { by[i[0]] = []; cats.push(i[0]); } by[i[0]].push(i); });
+  var tables = [], top = 0;
+  for (var b = 0; b < cats.length; b += ITEMS_PER_BAND) {
+    var band = cats.slice(b, b + ITEMS_PER_BAND), h = 0;
+    band.forEach(function(c, k) { tables.push({ cat: c, items: by[c], row: top, col: k * 5 }); h = Math.max(h, by[c].length); });
+    top += 2 + h + 1;
+  }
+  return { tables: tables, height: Math.max(top, 1), width: ITEMS_PER_BAND * 5 };
 }
-var CATEGORY_COLORS = { 'Objet tenu': '#f9cb9c', 'Méga-gemme / spécial': '#d5a6bd', 'Objet d\'évolution': '#b6d7a8', 'CT / CS': '#9fc5e8', 'Tuteur': '#a4c2f4',
-  'Baie': '#ea9999', 'Menthe': '#b7e1cd', 'Ressource': '#ffe599', 'Écaille Cœur': '#f4cccc', 'Mémoire': '#d9d2e9', 'Boutique de la Ligue': '#fce5cd', 'Objet sauvage': '#d9ead3' };
-function styleItems_(sh, rows) {
-  var n = rows.length, bg = [], fc = [], fw = [], fs = [], band = 0, color = '#ffffff';
-  rows.forEach(function(r) {
-    if (/^▸ /.test(r[0])) { color = CATEGORY_COLORS[r[0].slice(2)] || '#cccccc'; band = 0; bg.push(fill_(4, '#262626')); fc.push(fill_(4, color)); fw.push(fill_(4, 'bold')); fs.push(fill_(4, 13)); return; }
-    band++;
-    bg.push([color, band % 2 ? '#1e293b' : '#172033', band % 2 ? '#1e293b' : '#172033', band % 2 ? '#1e293b' : '#172033']);
-    fc.push(['#000000', '#ffffff', C_.muted, '#ffffff']); fw.push(['normal', 'bold', 'normal', 'normal']); fs.push([10, 11, 10, 10]);
+function itemRows(sorted, checked) {
+  var L = itemLayout(sorted), out = [];
+  L.tables.forEach(function(t) { t.items.forEach(function(i, j) { out.push([i[0], i[1], i[2], t.row + 3 + j, t.col + 1, !!(checked && checked[i[0] + '|' + i[1] + '|' + i[2]])]); }); });
+  return out;
+}
+function renderItems_(sh, sorted, checked) {
+  var L = itemLayout(sorted), W = L.width, grid = [];
+  for (var r = 0; r < L.height; r++) { var g = gridRow_(W); g.h = 34; grid.push(g); }
+  L.tables.forEach(function(t) {
+    var color = CATEGORY_COLORS[t.cat] || '#cccccc', title = grid[t.row], head = grid[t.row + 1];
+    title.h = 32; head.h = 22;
+    for (var i = 0; i < 4; i++) {
+      title.bg[t.col + i] = color; title.fc[t.col + i] = '#000000'; title.fw[t.col + i] = 'bold';
+      head.v[t.col + i] = ITEM_COLS[i][0]; head.bg[t.col + i] = '#262626'; head.fc[t.col + i] = color; head.fw[t.col + i] = 'bold'; head.fs[t.col + i] = 9;
+    }
+    title.v[t.col] = t.cat + ' (' + t.items.length + ')'; title.fs[t.col] = 12;
+    t.items.forEach(function(it, j) {
+      var row = grid[t.row + 2 + j], dark = j % 2 ? '#172033' : '#1e293b';
+      // Tuteurs : ce sont des attaques, pas des objets → pas d'icône.
+      var icon = t.cat === 'Tuteur' ? '' : itemIconUrl(it[1]);
+      var vals = [!!(checked && checked[it[0] + '|' + it[1] + '|' + it[2]]), icon ? '=IMAGE("' + icon + '")' : '', it[1], it[2]];
+      for (var i = 0; i < 4; i++) { row.v[t.col + i] = vals[i]; row.bg[t.col + i] = i === 0 ? color : dark; row.fc[t.col + i] = i === 3 ? '#cbd5e1' : '#ffffff'; row.fw[t.col + i] = i === 2 ? 'bold' : 'normal'; row.fs[t.col + i] = i === 2 ? 11 : 10; }
+    });
+    grid[t.row + 2 + t.items.length] && (grid[t.row + 2 + t.items.length].h = grid[t.row + 2 + t.items.length].h);
   });
-  var range = sh.getRange(2, 1, n, 4);
-  range.setBackgrounds(bg).setFontColors(fc).setFontWeights(fw).setFontSizes(fs).setFontFamily(FONT).setVerticalAlignment('middle');
-  sh.setRowHeights(2, n, 28);
-  // Cases à cocher seulement sur les lignes d'objets (par blocs contigus).
-  var start = -1;
-  rows.concat([['▸ fin']]).forEach(function(r, i) {
-    var item = !/^▸ /.test(r[0]);
-    if (item && start < 0) start = i;
-    if (!item && start >= 0) { sh.getRange(2 + start, 4, i - start, 1).insertCheckboxes(); start = -1; }
+  drawGrid_(sh, grid, W);
+  tryFormat_(function() {
+    sh.setHiddenGridlines(true); sh.setFrozenRows(0);
+    for (var k = 0; k < ITEMS_PER_BAND; k++) { ITEM_COLS.forEach(function(c, i) { sh.setColumnWidth(k * 5 + i + 1, c[1]); }); sh.setColumnWidth(k * 5 + 5, 18); }
+    setHeights_(sh, grid);
+    L.tables.forEach(function(t) {
+      sh.getRange(t.row + 3, t.col + 1, t.items.length, 1).insertCheckboxes();
+      sh.getRange(t.row + 1, t.col + 1, 2 + t.items.length, 4).setBorder(true, true, true, true, null, null, CATEGORY_COLORS[t.cat] || '#cccccc', SpreadsheetApp.BorderStyle.SOLID_THICK);
+      sh.getRange(t.row + 2, t.col + 1, 1 + t.items.length, 2).setHorizontalAlignment('center');
+      sh.getRange(t.row + 3, t.col + 4, t.items.length, 1).setWrap(true);
+    });
   });
-  sh.getRange(2, 3, n, 1).setWrap(true);
-  sh.getRange(2, 4, n, 1).setHorizontalAlignment('center');
+}
+/** Ce que tu as coché : positions mémorisées dans l'onglet caché, sinon ancienne mise en page (liste). */
+function readItemChecks_(s) {
+  var checked = {}, n = s.itemData.getLastRow(), view = s.items.getLastRow() ? s.items.getRange(1, 1, s.items.getLastRow(), Math.max(s.items.getLastColumn ? s.items.getLastColumn() : 15, 15)).getValues() : [];
+  if (n > 1) {
+    s.itemData.getRange(2, 1, n - 1, 5).getValues().forEach(function(r) {
+      var row = view[Number(r[3]) - 1]; if (row && row[Number(r[4]) - 1] === true) checked[r[0] + '|' + r[1] + '|' + r[2]] = true;
+    });
+    return checked;
+  }
+  var cat = '';
+  view.slice(1).forEach(function(r) {
+    var a = str_(r[0]);
+    if (/^▸ /.test(a)) { cat = a.slice(2); return; }
+    if (a) cat = a;
+    if (r[3] === true) checked[cat + '|' + r[1] + '|' + r[2]] = true;
+  });
+  // Anciennes catégories renommées
+  Object.keys(checked).forEach(function(k) { if (/^Méga-gemme \/ spécial\|/.test(k)) checked[k.replace('Méga-gemme / spécial', /Memory\|/.test(k) ? 'Mémoire' : 'Méga-gemme')] = true; });
+  return checked;
 }
 
 /** Objets groupés par catégorie, dans l'ordre du doc officiel (ordre d'obtention) à l'intérieur. */
@@ -512,23 +562,43 @@ function sortItems(items) {
 
 // ---------------------------------------------------------------- Objets
 function parseItemSheet(name, values) {
-  var out = [];
-  function add(cat, item, loc) { item = str_(item); loc = str_(loc); if (item && !/^(Item|Berry|Move|Location|TRUE|FALSE)$/.test(item)) out.push([cat, item, loc]); }
+  var out = [], seen = {};
+  function add(cat, item, loc) {
+    item = str_(item); loc = str_(loc);
+    if (!item || /^(Item|Berry|Move|Location|Pokémon|TRUE|FALSE)$/.test(item)) return;
+    var k = cat + '|' + item + '|' + loc;
+    if (seen[k]) return;
+    seen[k] = true; out.push([cat, item, loc]);
+  }
   values = values || [];
   if (name === 'Held Items') values.forEach(function(r) { add('Objet tenu', r[1], r[2]); if (str_(r[4])) add('Baie', r[4], str_(r[5]) + (str_(r[6]) ? ' — quantité : ' + str_(r[6]) : '')); });
-  else if (name === 'TM/HMs and Move Tutors') values.forEach(function(r) { add('CT / CS', r[1], r[2]); add('Tuteur', r[4], r[5]); });
-  else if (name === 'Evolution Items') values.forEach(function(r) { if (/^All items/.test(str_(r[0]))) return; add('Objet d\'évolution', r[0], r[1]); });
-  else if (name === 'Special') values.forEach(function(r) {
-    add(/Memory$/.test(str_(r[1])) ? 'Mémoire' : 'Méga-gemme / spécial', r[1], r[2]);
-    add(/Memory$/.test(str_(r[3])) ? 'Mémoire' : 'Méga-gemme / spécial', r[3], r[4]);
-  });
-  else if (name === 'Resources') {
-    var right = 'Menthe';
+  else if (name === 'TM/HMs and Move Tutors') {
+    var right = 'Tuteur';
+    values.forEach(function(r) {
+      add('CT / CS', r[1], r[2]);
+      if (/^Rebuyable TMs/i.test(str_(r[4]))) { right = 'CT rachetable'; return; }
+      add(right, r[4], r[5]);
+    });
+  } else if (name === 'Evolution Items') values.forEach(function(r) { if (/^All items/.test(str_(r[0]))) return; add('Objet d\'évolution', r[0], r[1]); });
+  else if (name === 'Special') {
+    // Colonne de gauche : méga-gemmes. À droite : mémoires, puis objets spéciaux (masques, disques, Miroir Sacré),
+    // puis « Ability Changing » (des Pokémon, pas des objets : ignorés).
+    var section = 'Mémoire';
+    values.forEach(function(r) {
+      add('Méga-gemme', r[1], r[2]);
+      var b = str_(r[3]);
+      if (b === 'Item') { section = 'Objet spécial'; return; }
+      if (/^Ability Changing/i.test(b)) { section = ''; return; }
+      if (!section) return;
+      add(/Memory$/.test(b) ? 'Mémoire' : section, r[3], r[4]);
+    });
+  } else if (name === 'Resources') {
+    var res = 'Menthe';
     values.forEach(function(r) {
       if (/Heart Scale Locations/i.test(str_(r[0]))) return;
       if (str_(r[1]) && !/^(TRUE|FALSE)$/.test(str_(r[1]))) add('Écaille Cœur', 'Heart Scale', str_(r[1]) + (str_(r[2]) ? ' — ' + str_(r[2]) : ''));
-      if (str_(r[3]) === 'Other') { right = 'Ressource'; return; }
-      if (str_(r[4])) add(right, r[4], r[5]);
+      if (str_(r[3]) === 'Other') { res = 'Ressource'; return; }
+      if (str_(r[4])) add(res, r[4], r[5]);
     });
   } else if (name === 'Other') {
     values.forEach(function(r) {
@@ -537,6 +607,16 @@ function parseItemSheet(name, values) {
     });
   }
   return out;
+}
+
+/** Icône d'un objet (TM06 Rock Tomb → icône de CT). */
+function itemIconUrl(name) {
+  var n = str_(name), tm = /^(TM|HM)\s*(\d+)/i.exec(n), k = tm ? (tm[1] + tm[2]).toLowerCase() : n.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (/^gems?$/.test(k)) k = 'normalgem';
+  if (tm) return ITEM_ICON_FALLBACK + tm[1].toLowerCase() + '-normal.png';
+  if (ITEM_ICON_IDS[k]) return ITEM_ICON_BASE + ITEM_ICON_IDS[k] + '.png';
+  var slug = n.toLowerCase().replace(/['’.]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return slug ? ITEM_ICON_FALLBACK + slug + '.png' : '';
 }
 
 // ---------------------------------------------------------------- Tableau de bord
@@ -599,8 +679,8 @@ function sheets_(ss) {
     return ss.insertSheet(name);
   }
   var out = { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive'),
-    encData: get('encData'), trainerData: get('trainerData'), trainerPics: get('trainerPics') };
-  tryFormat_(function() { [out.encData, out.trainerData, out.trainerPics].forEach(function(sh) { if (!sh.isSheetHidden()) sh.hideSheet(); }); });
+    encData: get('encData'), trainerData: get('trainerData'), trainerPics: get('trainerPics'), itemData: get('itemData') };
+  tryFormat_(function() { [out.encData, out.trainerData, out.trainerPics, out.itemData].forEach(function(sh) { if (!sh.isSheetHidden()) sh.hideSheet(); }); });
   return out;
 }
 function tryFormat_(fn) { try { fn(); } catch (e) { if (typeof Logger !== 'undefined') Logger.log('Mise en forme ignorée : ' + e); } }
@@ -610,17 +690,17 @@ function ensureStructure(ss) {
   // Ancienne mise en page sans colonne Sprite : on l'insère avant « Pokémon » (les données suivent).
   var ph = s.pokemon.getRange(1, 1, 1, 6).getValues()[0];
   if (str_(ph[3]) === 'Pokémon' && str_(ph[4]) === 'Nom') s.pokemon.insertColumnBefore(4);
-  [[s.pokemon, headers_()], [s.fights, FIGHT_HEADERS], [s.encData, ENC_HEADERS], [s.trainerData, TRAINER_HEADERS], [s.items, ITEM_HEADERS], [s.archive, ARCHIVE_HEADERS]].forEach(function(p) {
+  [[s.pokemon, headers_()], [s.fights, FIGHT_HEADERS], [s.encData, ENC_HEADERS], [s.trainerData, TRAINER_HEADERS], [s.itemData, ITEM_DATA_HEADERS], [s.archive, ARCHIVE_HEADERS]].forEach(function(p) {
     var range = p[0].getRange(1, 1, 1, p[1].length);
     if (range.getValues()[0].join('|') !== p[1].join('|')) { range.setValues([p[1]]); created = true; }
   });
   var run = s.run;
   if (run.getRange(RUN.title, 1).getValue() !== 'POKÉMON NULL — SUIVI DE RUN') {
     created = true;
-    var attempt = run.getRange(RUN.info, 1).getValue() === 'Tentative n°' ? run.getRange(RUN.info, 2).getValue() || 1 : 1;
+    var attempt = /^(Tentative|Run) n°$/.test(str_(run.getRange(RUN.info, 1).getValue())) ? run.getRange(RUN.info, 2).getValue() || 1 : 1;
     tryFormat_(function() { run.clear(); run.getRange(1, 1, run.getMaxRows(), run.getMaxColumns()).breakApart(); });
     run.getRange(RUN.title, 1).setValue('POKÉMON NULL — SUIVI DE RUN');
-    run.getRange(RUN.info, 1, 1, 4).setValues([['Tentative n°', attempt, 'Dernière synchro', 'En attente du calculateur']]);
+    run.getRange(RUN.info, 1, 1, 4).setValues([['Run n°', attempt, 'Dernière synchro', 'En attente du calculateur']]);
     KPIS.forEach(function(k, i) { run.getRange(RUN.kpiLabel, 1 + i * 2).setValue(k); });
     run.getRange(RUN.teamTitle, 1).setValue('⚔  Équipe actuelle');
     run.getRange(RUN.teamHead, 1, 1, 10).setValues([['Sprite', 'Nom', 'Pokémon', 'Niv.', 'PV', 'PV %', 'Statut', 'Objet', 'Talent', 'Attaques']]);
@@ -628,6 +708,13 @@ function ensureStructure(ss) {
     run.getRange(RUN.tablesHead, 1, 1, 16).setValues([['Rang', 'Nom', 'Pokémon', 'Frags', 'Leads', 'Combats', '', 'Nom', 'Pokémon', 'Niv.', 'Zone', 'Mort contre', '', 'Split', 'Frags', '']]);
   }
   // La mise en forme complète est appliquée à l'installation (ou si la page vient d'être créée).
+  // Run n° : une run compte dès que le level cap 45 est atteint ; « Runs avant le suivi » se règle à la main.
+  if (str_(run.getRange(RUN.info, 1).getValue()) !== 'Run n°') run.getRange(RUN.info, 1).setValue('Run n°');
+  if (str_(run.getRange(RUN.info, 8).getValue()) !== 'Runs avant le suivi') {
+    run.getRange(RUN.info, 8).setValue('Runs avant le suivi');
+    if (run.getRange(RUN.info, 9).getValue() === '') run.getRange(RUN.info, 9).setValue(0);
+    tryFormat_(function() { run.getRange(RUN.info, 9).setBackground(C_.manual).setFontColor(C_.gold).setFontWeight('bold').setHorizontalAlignment('center'); });
+  }
   if (str_(run.getRange(RUN.teamHead, 1).getValue()) === 'Slot') run.getRange(RUN.teamHead, 1).setValue('Sprite');
   if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '5') {
     tryFormat_(function() { styleAll_(ss, s); });
@@ -769,12 +856,11 @@ function styleAll_(ss, s) {
   f.getRange(1, 1).setNote('Rempli automatiquement à chaque combat gagné (lead et frags compris). Tu peux corriger à la main : tes valeurs ne sont jamais écrasées.');
 
   // --- 🌿 Rencontres / 🎯 Dresseurs / 🎒 Objets / 📦 Archives
-  [[s.items, ITEM_HEADERS, [190, 210, 480, 90]], [s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
+  [[s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
     paintSheet_(p[0], p[1].length);
     p[0].setFrozenRows(1); tableHeader_(p[0].getRange(1, 1, 1, p[1].length)); p[0].setRowHeight(1, 36);
     p[2].forEach(function(w, i) { p[0].setColumnWidth(i + 1, w); });
   });
-  s.items.getRange(1, 4).setBackground(C_.manual);
 }
 
 // ---------------------------------------------------------------- Tableaux dessinés
@@ -1040,19 +1126,12 @@ function importReference(ss, s) {
     log.push(trainers.length + ' dresseurs');
   } catch (e) { log.push('Dresseurs non importés (' + e.message + ')'); }
   try {
-    var last = s.items.getLastRow(), checked = {}, cat = '';
-    if (last > 1) s.items.getRange(2, 1, last - 1, 4).getValues().forEach(function(r) {
-      var a = str_(r[0]);
-      if (/^▸ /.test(a)) { cat = a.slice(2); return; }
-      if (a) cat = a;
-      if (r[3] === true) checked[cat + '|' + r[1] + '|' + r[2]] = true;
-    });
-    var items = [];
+    var checked = readItemChecks_(s), items = [];
     ['Held Items', 'TM/HMs and Move Tutors', 'Evolution Items', 'Special', 'Resources', 'Other'].forEach(function(n) { items = items.concat(parseItemSheet(n, readSheet_(SOURCES.items, n))); });
     if (!items.length) throw new Error('aucun objet lu');
-    var rows = itemRows(sortItems(items), checked);
-    writeTable_(s.items, 4, rows);
-    tryFormat_(function() { styleItems_(s.items, rows); });
+    var sorted = sortItems(items);
+    renderItems_(s.items, sorted, checked);
+    writeTable_(s.itemData, ITEM_DATA_HEADERS.length, itemRows(sorted, checked).map(function(r) { return r.slice(0, 5); }));
     log.push(items.length + ' objets');
   } catch (e) { log.push('Objets non importés (' + e.message + ')'); }
   PropertiesService.getDocumentProperties().setProperty('referenceImport', new Date().toISOString() + ' — ' + log.join(', '));
@@ -1133,6 +1212,7 @@ function refreshAll(ss, s, summary, force) {
   else { try { summary = JSON.parse(PropertiesService.getDocumentProperties().getProperty('lastSummary') || 'null'); } catch (e) { summary = null; } }
   if (summary) {
     var cap = caps.any ? caps.cap : summary.cap, nextBoss = caps.any ? caps.next : summary.nextBoss, beaten = caps.any ? caps.beaten : summary.beaten;
+    s.run.getRange(RUN.info, 2).setValue(runNumber_(s, Math.max(Number(cap) || 0, caps.any ? caps.reached : 0)));
     s.run.getRange(RUN.kpiValue, 1, 1, 10).setValues([[summary.party + ' / 6', '', summary.captures, '', summary.dead, '', cap ? 'Niv. ' + cap : '—', '', nextBoss, '']]);
     s.run.getRange(RUN.kpiSub, 1, 1, 10).setValues([[summary.ko ? summary.ko + ' K.O.' : 'Tous debout', '', summary.box + ' en boîte', '', summary.dead ? 'Repose en paix' : 'Aucun mort', '',
       'Niv. max équipe : ' + summary.maxLevel, '', beaten + ' boss battu' + (beaten > 1 ? 's' : '') + (caps.any ? ' (Combats)' : ''), '']]);
@@ -1145,20 +1225,31 @@ function refreshAll(ss, s, summary, force) {
  * la run précédente est archivée dans 📦 Archives, puis Pokémon, Combats et le
  * tableau de bord repartent de zéro et la tentative augmente de 1.
  */
+var RUN_CAP = 45;
+/** Run n° = runs avant le suivi (case à régler) + runs terminées ayant atteint le cap 45 + la run en cours si elle l'a atteint. */
+function runNumber_(s, currentCap) {
+  var base = Number(s.run.getRange(RUN.info, 9).getValue()) || 0, done = Number(PropertiesService.getDocumentProperties().getProperty('runsDone')) || 0;
+  return base + done + (Number(currentCap) >= RUN_CAP ? 1 : 0);
+}
 function archiveRun_(ss, s, stamp) {
   var props = PropertiesService.getDocumentProperties();
   var last = s.pokemon.getLastRow(), rows = last > 1 ? s.pokemon.getRange(2, 1, last - 1, COL.sync).getValues().filter(function(r) { return str_(r[COL.name - 1]); }) : [];
   var fights = fightRows_(s).filter(function(r) { return r.some(function(c) { return str_(c); }); });
   var attempt = Number(s.run.getRange(RUN.info, 2).getValue()) || 1;
+  // La partie terminée compte comme une run seulement si elle a atteint le level cap 45.
+  var endCaps = capFromFights(fights.map(function(r) { return str_(r[0]); }).filter(Boolean)), lastSum = null;
+  try { lastSum = JSON.parse(props.getProperty('lastSummary') || 'null'); } catch (e) {}
+  var counted = Math.max(endCaps.any ? endCaps.reached : 0, (lastSum && Number(lastSum.cap)) || 0) >= RUN_CAP;
+  if (counted) props.setProperty('runsDone', String((Number(props.getProperty('runsDone')) || 0) + 1));
   if (rows.length || fights.length) {
     var stats = computeStats(fights), dead = rows.filter(function(r) { return r[COL.status - 1] === STATUS.dead; }).length;
     var frags = rows.reduce(function(t, r) { var st = stats[str_(r[COL.name - 1])]; return t + (st ? st.frags : 0); }, 0);
     var foughtNames = fights.map(function(r) { return str_(r[0]); }).filter(Boolean), caps = capFromFights(foughtNames);
-    var summary = [attempt, stamp, '▶ RÉSUMÉ', rows.length + ' captures · ' + dead + ' morts', caps.last ? 'Dernier boss battu : ' + caps.last : '',
+    var summary = [counted ? attempt : 'Non comptée', stamp, '▶ RÉSUMÉ', rows.length + ' captures · ' + dead + ' morts', caps.last ? 'Dernier boss battu : ' + caps.last : '',
       rows.reduce(function(m, r) { return Math.max(m, Number(r[COL.level - 1]) || 0); }, 0), '', frags, '', fights.length, ''];
     var out = [summary].concat(rows.map(function(r) {
       var st = stats[str_(r[COL.name - 1])] || { frags: 0, leads: 0, fights: 0 };
-      return [attempt, stamp, r[COL.name - 1], r[COL.species - 1], r[COL.zone - 1], r[COL.level - 1], r[COL.status - 1], st.frags, st.leads, st.fights, r[COL.deathCause - 1]];
+      return [counted ? attempt : 'Non comptée', stamp, r[COL.name - 1], r[COL.species - 1], r[COL.zone - 1], r[COL.level - 1], r[COL.status - 1], st.frags, st.leads, st.fights, r[COL.deathCause - 1]];
     }));
     var start = Math.max(s.archive.getLastRow(), 1) + 1;
     if (s.archive.getMaxRows() < start + out.length) s.archive.insertRowsAfter(s.archive.getMaxRows(), start + out.length - s.archive.getMaxRows());
@@ -1168,10 +1259,10 @@ function archiveRun_(ss, s, stamp) {
   if (last > 1) s.pokemon.getRange(2, 1, last - 1, COL.sync).clearContent();
   var fl = s.fights.getLastRow();
   if (fl > 1) s.fights.getRange(2, 1, fl - 1, FIGHT_HEADERS.length).clearContent();
-  s.run.getRange(RUN.info, 2).setValue(attempt + 1);
+  s.run.getRange(RUN.info, 2).setValue(runNumber_(s, 0));
   s.run.getRange(RUN.teamFirst, 1, 6, 10).clearContent();
   ['hashFought', 'hashCaptures', 'lastSummary'].forEach(function(k) { props.setProperty(k, ''); });
-  return { attempt: attempt + 1, archived: rows.length };
+  return { attempt: runNumber_(s, 0), archived: rows.length, counted: counted };
 }
 
 // Combats détectés par le Lua : une ligne par dresseur battu, avec lead et frags (dernier Pokémon qui a
@@ -1234,7 +1325,7 @@ function applyPayload(ss, payload, now) {
 }
 
 // Export pour les tests Node (sans effet dans Apps Script).
-if (typeof module !== 'undefined') module.exports = { highlight_: highlight_, itemRows: itemRows, encounterLayout_: encounterLayout_, renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
+if (typeof module !== 'undefined') module.exports = { itemIconUrl: itemIconUrl, itemLayout: itemLayout, highlight_: highlight_, itemRows: itemRows, encounterLayout_: encounterLayout_, renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
   runSummary: runSummary, teamRows: teamRows, applyPayload: applyPayload, ensureStructure: ensureStructure, refreshAll: refreshAll,
   parseEncounterGrid: parseEncounterGrid, parseSpecialEncounters: parseSpecialEncounters, parseTrainerSheet: parseTrainerSheet,
   parseItemSheet: parseItemSheet, trainerRows: trainerRows, trainersFromRows: trainersFromRows, nextTrainer: nextTrainer,

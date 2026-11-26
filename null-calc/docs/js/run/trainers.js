@@ -156,5 +156,14 @@
         return cache;
     }
 
-    return { cached: cached, auto: auto, BOSSES: BOSSES, keysOf: keysOf, buildTrainers: buildTrainers, matchTeam: matchTeam, progress: progress, groupName: groupName };
+    // Run comptée = level cap 45 atteint (Roxanne battue). Une tentative arrêtée avant n'est pas comptée.
+    var RUN_CAP = 45;
+    function runCount(trainers, battle) {
+        if (!trainers || !battle) return { done: 0, current: false, total: 0 };
+        var done = (battle.pastRuns || []).filter(function(r) { return progress(trainers, r.fights || []).cap >= RUN_CAP; }).length;
+        var current = progress(trainers, battle.fights || []).cap >= RUN_CAP;
+        return { done: done, current: current, total: done + (current ? 1 : 0) };
+    }
+
+    return { RUN_CAP: RUN_CAP, runCount: runCount, cached: cached, auto: auto, BOSSES: BOSSES, keysOf: keysOf, buildTrainers: buildTrainers, matchTeam: matchTeam, progress: progress, groupName: groupName };
 });

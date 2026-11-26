@@ -79,3 +79,10 @@ test('level cap : boss antérieurs au dernier combat détecté comptés comme ba
   const team = youngster.mons.map(m => ({ species: m.species, level: m.level }));
   assert.equal(T.progress(trainers, [{ t: 1, team }]).cap, 38);
 });
+
+test('compteur de runs : comptée seulement au level cap 45 (Roxanne battue)', () => {
+  const team = name => trainers.find(t => t.name === name).mons.map(m => ({ species: m.species, level: m.level }));
+  const rox = [{ t: 1, team: team('Leader Roxanne') }], early = [{ t: 1, team: team('Youngster Calvin') }];
+  assert.deepEqual(T.runCount(trainers, { fights: early, pastRuns: [{ fights: rox }, { fights: early }] }), { done: 1, current: false, total: 1 });
+  assert.deepEqual(T.runCount(trainers, { fights: rox, pastRuns: [] }), { done: 0, current: true, total: 1 });
+});

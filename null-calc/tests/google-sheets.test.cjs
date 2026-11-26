@@ -95,7 +95,11 @@ test('objets : catégories et lieux depuis les onglets officiels', () => {
   assert.equal(get('CT / CS', 'TM06 Rock Tomb')[0][2], 'From Roxanne after the Gym battle');
   assert.equal(get('Tuteur', 'Brick Break')[0][2], 'Slateport City (Top of the market)');
   assert.equal(get('Objet d\'évolution', 'Moon Stone').length, 1);
-  assert.equal(get('Méga-gemme / spécial', 'Ampharosite')[0][2], 'Verdanturf Tunnel B1F');
+  assert.equal(get('Méga-gemme', 'Ampharosite')[0][2], 'Verdanturf Tunnel B1F');
+  assert.ok(!all.some(i => ['Slowking', 'Darmanitan', 'Pokémon', 'Ability Changing'].includes(i[1])), 'pas de Pokémon dans les objets');
+  assert.ok(/\/null-calc\/docs\/img\/items\/\d+\.png$/.test(G.itemIconUrl('Leftovers')), 'icône du jeu');
+  assert.equal(G.itemIconUrl('TM06 Rock Tomb'), 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png');
+  assert.equal(G.itemIconUrl('Heart Scale').startsWith('https://raw.githubusercontent.com/'), true);
   assert.equal(get('Mémoire', 'Dark Memory').length, 1);
   assert.equal(get('Boutique de la Ligue', 'Choice Scarf')[0][2], '9 Écailles Cœur');
   assert.equal(get('Objet sauvage', 'Metal Powder')[0][2], 'Ditto — 100%');
@@ -158,7 +162,9 @@ test('première synchro : onglets créés, données officielles importées, stat
   assert.deepEqual(trRows[rival + 7].slice(0, 2), ['Attaques', 'Chilling Water']);
   assert.ok(trRows.some(r => r[0] === 'Route 103'), 'lieu en en-tête');
   // Objets avec cases « Récupéré »
-  assert.equal(v(items, 3, 4), false);
+  assert.deepEqual([v(items, 1, 1), v(items, 2, 3), v(items, 3, 1), v(items, 3, 3)].map(String), ['Objet tenu (' + v(items, 1, 1).match(/\d+/)[0] + ')', 'Objet', 'false', 'Miracle Seed']);
+  assert.ok(/^=IMAGE\("https:\/\/raw\.githubusercontent\.com\//.test(v(items, 3, 2)), 'icône à côté');
+  assert.ok(String(v(items, 1, 6)).startsWith('Baie'), 'catégories côte à côte');
 });
 
 test('synchros suivantes : mise à jour sur place, colonnes manuelles intactes, combats → frags, dresseurs battus', () => {
@@ -207,12 +213,11 @@ test('réimport : les cases « Récupéré » cochées sont conservées', () => 
   const ss = fakeSpreadsheet();
   G2.applyPayload(ss, payload(), new Date());
   const items = ss.sheets[S.items];
-  assert.equal(v(items, 2, 1), '▸ Objet tenu', 'titre de catégorie');
-  items.cells['3,4'] = { v: true };
-  const name = v(items, 3, 2);
+  items.cells['4,1'] = { v: true };
+  const name = v(items, 4, 3);
   G2.importReference(ss);
-  const rowIdx = Array.from({ length: items.getLastRow() - 1 }, (_, i) => i + 2).find(r => v(items, r, 2) === name);
-  assert.equal(v(items, rowIdx, 4), true);
+  const rowIdx = Array.from({ length: items.getLastRow() }, (_, i) => i + 1).find(r => v(items, r, 3) === name);
+  assert.equal(v(items, rowIdx, 1), true);
 });
 
 test('anciens noms d’onglets (v1) renommés sans perte', () => {
@@ -225,7 +230,7 @@ test('anciens noms d’onglets (v1) renommés sans perte', () => {
 });
 
 test('level cap déduit des combats (boss de « Mechanic Changes »)', () => {
-  assert.deepEqual(JSON.parse(JSON.stringify(G.capFromFights([]))), { any: false, beaten: 0, cap: 13, next: 'Youngster Ren', last: '' });
+  assert.deepEqual(JSON.parse(JSON.stringify(G.capFromFights([]))), { any: false, beaten: 0, cap: 13, next: 'Youngster Ren', last: '', reached: 13 });
   const c = G.capFromFights(['Youngster Ren', 'Youngster Levi', 'Lass Videl', 'Youngster Itachi', 'Leader Roxanne', 'Leader Brawly [Boss]', 'Ex Elite Four Glacia 1 [Boss]']);
   assert.deepEqual([c.cap, c.next, c.beaten], [59, 'Wattson', 7]);
   assert.equal(G.capFromFights(['Youngster Renato']).cap, 13, 'nom exact pour la Root Academy');
@@ -266,7 +271,8 @@ test('nouvelle run : ancienne run archivée, feuille remise à zéro, tentative 
   assert.deepEqual([v(arch, 3, 3), v(arch, 3, 8), v(arch, 3, 9)], ['Pyro', 5, 2]);
   assert.deepEqual([v(arch, 6, 3), v(arch, 6, 7), v(arch, 6, 11)], ['Rip', 'Mort', 'Youngster Ren']);
   // Nouvelle run propre
-  assert.equal(v(run, R.info, 2), 2, 'tentative n°2');
+  assert.equal(v(run, R.info, 2), 1, 'run n°1 terminée (Roxanne battue) ; la nouvelle ne compte pas avant le level cap 45');
+  assert.equal(v(run, R.info, 1), 'Run n°');
   assert.equal(pk.getLastRow(), 2);
   assert.deepEqual([v(pk, 2, C.species), v(pk, 2, 2), v(pk, 2, C.deathCause)], ['Mudkip', 1, '']);
   assert.equal(f.getLastRow(), 1, 'combats vidés (en-tête seul)');
@@ -330,7 +336,7 @@ test('sprites : noms de fichiers Showdown', () => {
 
 test('objets : groupés par catégorie, ordre du doc conservé', () => {
   const sorted = G.sortItems([['Baie', 'Oran', ''], ['Objet tenu', 'Miracle Seed', ''], ['Baie', 'Pecha', ''], ['Objet tenu', 'Silver Powder', ''], ['CT / CS', 'TM01', '']]);
-  assert.deepEqual(JSON.parse(JSON.stringify(sorted)).map(x => x[1]), ['Miracle Seed', 'Silver Powder', 'TM01', 'Oran', 'Pecha']);
+  assert.deepEqual(JSON.parse(JSON.stringify(sorted)).map(x => x[1]), ['Miracle Seed', 'Silver Powder', 'Oran', 'Pecha', 'TM01']);
 });
 
 test('combats détectés : lead et frags remplis automatiquement, stats calculées', () => {
@@ -368,4 +374,27 @@ test('dresseurs : couleurs du doc (règles + couleurs posées à la main) et ima
   assert.equal(G.highlight_(t.mons[1].moves[0]), '#d5a6bd', 'Belly Drum');
   assert.equal(G.highlight_(t.mons[1].moves[3]), '#ea9999', 'se termine par « of Ruin »');
   assert.equal(G.highlight_('Tackle'), '');
+});
+
+test('compteur de runs : une partie arrêtée avant le level cap 45 ne compte pas', () => {
+  const { G: G2 } = load(SOURCES);
+  const ss = fakeSpreadsheet();
+  const p1 = payload(); p1.runId = 'aaaa0001'; p1.bosses = { cap: 38, next: 'Leader Roxanne', beaten: ['Root Academy Trainer 4'] };
+  G2.applyPayload(ss, p1, new Date());
+  const run = ss.sheets[S.run];
+  run.cells[R.info + ',9'] = { v: 24 };                         // 24 runs faites avant le suivi
+  G2.applyPayload(ss, p1, new Date());
+  assert.equal(v(run, R.info, 2), 24, 'cap 38 : la run en cours ne compte pas encore');
+  const p1b = payload(); p1b.runId = 'aaaa0001'; p1b.bosses = { cap: 45, next: 'Leader Brawly', beaten: ['Leader Roxanne'] };
+  G2.applyPayload(ss, p1b, new Date());
+  assert.equal(v(run, R.info, 2), 25, 'cap 45 atteint : +1');
+  const p2 = payload(d => { d.party = [Object.assign({}, d.party[0], { uid: '11111111-0000beef' })]; d.box = []; d.dead = []; });
+  p2.runId = '0000beef'; p2.bosses = { cap: 13, next: 'Youngster Ren', beaten: [] };
+  G2.applyPayload(ss, p2, new Date());
+  assert.equal(v(run, R.info, 2), 25, 'nouvelle partie : toujours 25');
+  const p3 = payload(d => { d.party = [Object.assign({}, d.party[0], { uid: '22222222-0000cafe' })]; d.box = []; d.dead = []; });
+  p3.runId = '0000cafe'; p3.bosses = { cap: 13, next: 'Youngster Ren', beaten: [] };
+  G2.applyPayload(ss, p3, new Date());
+  assert.equal(v(run, R.info, 2), 25, 'partie arrêtée au cap 13 : non comptée');
+  assert.equal(v(ss.sheets[S.archive], ss.sheets[S.archive].getLastRow(), 1), 'Non comptée');
 });
