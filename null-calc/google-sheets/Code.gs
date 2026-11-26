@@ -22,7 +22,8 @@ var TRAINER_SHEETS = [['Roxanne Split', 'Roxanne'], ['Brawly Split', 'Brawly'], 
   ['Flannery Split', 'Flannery'], ['Winona Split', 'Winona'], ['Tate&Liza Split', 'Tate & Liza'], ['Steven Split', 'Steven'],
   ['Victory Road Split', 'Victory Road'], ['Pokémon League', 'Ligue'], ['Other', 'Autres']];
 var SPLITS = TRAINER_SHEETS.map(function(t) { return t[1]; });
-var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets', archive: '📦 Archives' };
+var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets', archive: '📦 Archives',
+  encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs' };
 var LEGACY_NAMES = { 'Run': 'run', 'Pokémon': 'pokemon', 'Combats': 'fights' };
 
 var AUTO_HEADERS = ['UID', '#', 'Zone', 'Sprite', 'Pokémon', 'Nom', 'Niveau', 'Statut', 'Talent', 'Nature',
@@ -34,12 +35,13 @@ var COL = { uid: 1, order: 2, zone: 3, sprite: 4, species: 5, name: 6, level: 7,
 COL.sync = COL.splits + SPLITS.length;
 var FIGHT_ROWS = 1000;
 var FIGHT_HEADERS = ['Dresseur', 'Split', 'Lead', 'Frags', 'Pokémon 2', 'Frags', 'Pokémon 3', 'Frags', 'Pokémon 4', 'Frags', 'Pokémon 5', 'Frags', 'Pokémon 6', 'Frags', 'Notes'];
-var ENC_HEADERS = ['Zone', 'Zone Nuzlocke', 'Méthode', 'Sprite', 'Pokémon', 'Niveau', 'Taux', 'Ma capture', 'Espèce déjà capturée'];
-var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Sprite', 'Pokémon', 'Niv.', 'Objet', 'Talent', 'Nature', 'Attaques', 'Battu', 'Niv. max', 'Conditions du combat'];
-var TCOL = { name: 3, species: 6, level: 7, beaten: 12, conditions: 14 };
+// Données brutes (onglets cachés) ; les onglets visibles 🎯 Dresseurs et 🌿 Rencontres sont des tableaux dessinés à partir d'elles.
+var ENC_HEADERS = ['Zone', 'Zone Nuzlocke', 'Méthode', 'Pokémon', 'Niveau', 'Taux'];
+var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Pokémon', 'Niv.', 'Objet', 'Talent', 'Nature', 'Attaques', 'Niv. max', 'Conditions'];
+var TCOL = { name: 3, species: 5, level: 6, item: 7, ability: 8, nature: 9, moves: 10, maxLevel: 11, conditions: 12 };
 // Catégories d'objets dans l'ordre d'affichage ; dans chaque catégorie, l'ordre du doc officiel (ordre d'obtention).
 var ITEM_CATEGORIES = ['Objet tenu', 'Méga-gemme / spécial', 'Objet d\'évolution', 'CT / CS', 'Tuteur', 'Baie', 'Menthe', 'Ressource', 'Écaille Cœur', 'Mémoire', 'Boutique de la Ligue', 'Objet sauvage'];
-var REF_VERSION = '3';
+var REF_VERSION = '4';
 var ITEM_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Récupéré'];
 var ARCHIVE_HEADERS = ['Tentative', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
 var STATUS_FR = { slp: 'Endormi', psn: 'Empoisonné', tox: 'Gravement empoisonné', brn: 'Brûlé', par: 'Paralysé', frz: 'Gelé', frb: 'Gelure' };
@@ -92,7 +94,7 @@ function doGet(e) {
   return ContentService.createTextOutput(body).setMimeType(ContentService.MimeType.JSON);
 }
 function conditionsMap(ss) {
-  var sh = ss.getSheetByName(SHEETS.trainers), out = {};
+  var sh = ss.getSheetByName(SHEETS.trainerData), out = {};
   if (!sh || sh.getLastRow() < 2) return out;
   trainersFromRows(sh.getRange(2, 1, sh.getLastRow() - 1, TRAINER_HEADERS.length).getValues()).forEach(function(t) { if (t.conditions) out[t.name] = t.conditions; });
   return out;
@@ -408,28 +410,32 @@ function capFromFights(foughtNames) {
 
 function isBoss(name) { return /\b(Leader|Elite Four|Champion|Rival)\b|\[Boss\]/i.test(name); }
 
-/** Lignes de l'onglet Dresseurs (une ligne par Pokémon adverse). */
-function trainerRows(trainers, fought) {
+/** Données des dresseurs (onglet caché, une ligne par Pokémon adverse). */
+function trainerRows(trainers) {
   var rows = [];
   trainers.forEach(function(t) {
-    var beaten = fought[key_(t.name)] ? '✔' : '';
     var maxLv = t.mons.reduce(function(m, x) { return Math.max(m, Number(x.level) || 0); }, 0) || '';
     var mons = t.mons.length ? t.mons : [null];
     mons.forEach(function(m, i) {
-      rows.push([i ? '' : t.split, i ? '' : t.area, i ? '' : t.name, m ? i + 1 : '', m ? sprite_(m.species) : '', m ? m.species : 'Équipe aléatoire (voir doc officiel)',
+      rows.push([i ? '' : t.split, i ? '' : t.area, i ? '' : t.name, m ? i + 1 : '', m ? m.species : 'Équipe aléatoire (voir doc officiel)',
         m ? (Number(m.level) || m.level) : '', m ? m.item : '', m ? m.ability : '', m ? m.nature : '', m ? m.moves.join(', ') : '',
-        i ? '' : beaten, i ? '' : maxLv, i ? '' : (t.conditions || []).join(' · ')]);
+        i ? '' : maxLv, i ? '' : (t.conditions || []).join(' · ')]);
     });
   });
   return rows;
 }
 
-/** Relit l'onglet Dresseurs (liste ordonnée). */
+/** Relit les données des dresseurs (liste ordonnée, Pokémon complets). */
 function trainersFromRows(rows) {
   var out = [], cur = null;
   rows.forEach(function(r) {
-    if (str_(r[2])) { cur = { split: str_(r[0]), area: str_(r[1]), name: str_(r[2]), maxLevel: 0, mons: [], conditions: str_(r[TCOL.conditions - 1]) }; out.push(cur); }
-    if (cur && r[3] !== '' && str_(r[TCOL.species - 1])) { cur.mons.push(str_(r[TCOL.species - 1])); cur.maxLevel = Math.max(cur.maxLevel, Number(r[TCOL.level - 1]) || 0); }
+    if (str_(r[2])) { cur = { split: str_(r[0]), area: str_(r[1]), name: str_(r[2]), maxLevel: 0, mons: [], random: false, conditions: str_(r[TCOL.conditions - 1]) }; out.push(cur); }
+    if (!cur) return;
+    if (r[3] === '' || r[3] === null) { if (/aléatoire/.test(str_(r[TCOL.species - 1]))) cur.random = true; return; }
+    if (!str_(r[TCOL.species - 1])) return;
+    cur.mons.push({ species: str_(r[TCOL.species - 1]), level: r[TCOL.level - 1], item: str_(r[TCOL.item - 1]), ability: str_(r[TCOL.ability - 1]),
+      nature: str_(r[TCOL.nature - 1]), moves: str_(r[TCOL.moves - 1]) ? str_(r[TCOL.moves - 1]).split(/,\s*/) : [] });
+    cur.maxLevel = Math.max(cur.maxLevel, Number(r[TCOL.level - 1]) || 0);
   });
   return out;
 }
@@ -536,7 +542,10 @@ function sheets_(ss) {
     for (var old in LEGACY_NAMES) if (LEGACY_NAMES[old] === key && ss.getSheetByName(old)) { sh = ss.getSheetByName(old); sh.setName(name); return sh; }
     return ss.insertSheet(name);
   }
-  return { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive') };
+  var out = { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive'),
+    encData: get('encData'), trainerData: get('trainerData') };
+  tryFormat_(function() { if (!out.encData.isSheetHidden()) out.encData.hideSheet(); if (!out.trainerData.isSheetHidden()) out.trainerData.hideSheet(); });
+  return out;
 }
 function tryFormat_(fn) { try { fn(); } catch (e) { if (typeof Logger !== 'undefined') Logger.log('Mise en forme ignorée : ' + e); } }
 
@@ -545,7 +554,7 @@ function ensureStructure(ss) {
   // Ancienne mise en page sans colonne Sprite : on l'insère avant « Pokémon » (les données suivent).
   var ph = s.pokemon.getRange(1, 1, 1, 6).getValues()[0];
   if (str_(ph[3]) === 'Pokémon' && str_(ph[4]) === 'Nom') s.pokemon.insertColumnBefore(4);
-  [[s.pokemon, headers_()], [s.fights, FIGHT_HEADERS], [s.encounters, ENC_HEADERS], [s.trainers, TRAINER_HEADERS], [s.items, ITEM_HEADERS], [s.archive, ARCHIVE_HEADERS]].forEach(function(p) {
+  [[s.pokemon, headers_()], [s.fights, FIGHT_HEADERS], [s.encData, ENC_HEADERS], [s.trainerData, TRAINER_HEADERS], [s.items, ITEM_HEADERS], [s.archive, ARCHIVE_HEADERS]].forEach(function(p) {
     var range = p[0].getRange(1, 1, 1, p[1].length);
     if (range.getValues()[0].join('|') !== p[1].join('|')) { range.setValues([p[1]]); created = true; }
   });
@@ -697,33 +706,18 @@ function styleAll_(ss, s) {
   [4, 6, 8, 10, 12, 14].forEach(function(c) { f.getRange(2, c, FIGHT_ROWS, 1).setHorizontalAlignment('center').setBackground(C_.card).setFontWeight('bold').setFontColor(C_.gold); });
   f.getRange(2, 15, FIGHT_ROWS, 1).setFontColor(C_.muted).setFontSize(9);
   gridLines_(f.getRange(2, 1, FIGHT_ROWS, FIGHT_HEADERS.length));
-  f.getRange(2, 1, FIGHT_ROWS, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInRange(s.trainers.getRange('C2:C'), true).setAllowInvalid(true).build());
+  f.getRange(2, 1, FIGHT_ROWS, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInRange(s.trainerData.getRange('C2:C'), true).setAllowInvalid(true).build());
   f.getRange(2, 2, FIGHT_ROWS, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(SPLITS, true).setAllowInvalid(true).build());
   var names = SpreadsheetApp.newDataValidation().requireValueInRange(pk.getRange(colLetter(COL.name) + '2:' + colLetter(COL.name)), true).setAllowInvalid(true).build();
   [3, 5, 7, 9, 11, 13].forEach(function(c) { f.getRange(2, c, FIGHT_ROWS, 1).setDataValidation(names); });
   f.getRange(1, 1).setNote('Rempli automatiquement à chaque combat gagné (lead et frags compris). Tu peux corriger à la main : tes valeurs ne sont jamais écrasées.');
 
   // --- 🌿 Rencontres / 🎯 Dresseurs / 🎒 Objets / 📦 Archives
-  [[s.encounters, ENC_HEADERS, [170, 150, 100, 56, 150, 64, 64, 240, 140]], [s.trainers, TRAINER_HEADERS, [100, 150, 240, 34, 56, 130, 50, 120, 120, 80, 330, 60, 70, 320]],
-   [s.items, ITEM_HEADERS, [190, 210, 480, 90]], [s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
+  [[s.items, ITEM_HEADERS, [190, 210, 480, 90]], [s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
     paintSheet_(p[0], p[1].length);
     p[0].setFrozenRows(1); tableHeader_(p[0].getRange(1, 1, 1, p[1].length)); p[0].setRowHeight(1, 36);
     p[2].forEach(function(w, i) { p[0].setColumnWidth(i + 1, w); });
   });
-  s.encounters.getRange('F2:G').setHorizontalAlignment('center');
-  s.encounters.getRange('G2:G').setNumberFormat('0.##"%"').setFontWeight('bold').setFontColor(C_.gold);
-  s.encounters.getRange('A2:A').setFontWeight('bold');
-  s.encounters.getRange('H1:I1').setBackground(C_.green).setFontColor(C_.greenInk);
-  s.encounters.setRowHeights(2, Math.max(s.encounters.getMaxRows() - 1, 1), 40);
-  s.trainers.getRange('D2:D').setHorizontalAlignment('center').setFontColor(C_.muted);
-  s.trainers.getRange('G2:G').setHorizontalAlignment('center').setFontWeight('bold');
-  s.trainers.getRange('L2:M').setHorizontalAlignment('center').setFontWeight('bold');
-  s.trainers.getRange('L1:L1').setBackground(C_.green).setFontColor(C_.greenInk);
-  s.trainers.getRange('N1:N1').setBackground(C_.orange).setFontColor(C_.orangeInk);
-  s.trainers.getRange('K2:K').setWrap(true).setFontSize(9);
-  s.trainers.getRange('N2:N').setWrap(true).setFontColor(C_.orangeInk).setFontWeight('bold');
-  s.trainers.getRange('A2:B').setFontColor(C_.muted);
-  s.trainers.setRowHeights(2, Math.max(s.trainers.getMaxRows() - 1, 1), 40);
   s.items.getRange(1, 4).setBackground(C_.manual);
   s.items.getRange('A2:A').setFontWeight('bold').setFontColor(C_.gold);
   s.items.getRange('B2:B').setFontWeight('bold');
@@ -731,6 +725,134 @@ function styleAll_(ss, s) {
   s.items.getRange('D2:D').setHorizontalAlignment('center');
   s.items.setRowHeights(2, Math.max(s.items.getMaxRows() - 1, 1), 26);
 }
+
+// ---------------------------------------------------------------- Tableaux dessinés
+// Écrit une grille complète (valeurs + couleurs + gras + tailles) en quelques appels.
+function drawGrid_(sh, grid, width) {
+  tryFormat_(function() { sh.clearConditionalFormatRules(); sh.getBandings().forEach(function(b) { b.remove(); }); });
+  sh.clear();
+  var n = grid.length;
+  if (sh.getMaxRows() < n + 1) sh.insertRowsAfter(sh.getMaxRows(), n + 1 - sh.getMaxRows());
+  if (sh.getMaxColumns() < width) sh.insertColumnsAfter(sh.getMaxColumns(), width - sh.getMaxColumns());
+  var range = sh.getRange(1, 1, n, width);
+  range.setValues(grid.map(function(r) { return r.v; }));
+  tryFormat_(function() {
+    range.setBackgrounds(grid.map(function(r) { return r.bg; })).setFontColors(grid.map(function(r) { return r.fc; }))
+      .setFontWeights(grid.map(function(r) { return r.fw; })).setFontSizes(grid.map(function(r) { return r.fs; }))
+      .setFontFamily(FONT).setVerticalAlignment('middle').setWrap(false);
+    sh.getRange(n + 1, 1, sh.getMaxRows() - n, Math.max(width, sh.getMaxColumns())).setBackground('#000000');
+  });
+}
+function gridRow_(width, fill) {
+  return { v: fill_(width, ''), bg: fill_(width, fill || '#000000'), fc: fill_(width, '#ffffff'), fw: fill_(width, 'normal'), fs: fill_(width, 10), h: 21 };
+}
+
+/** 🎯 Dresseurs : blocs comme le doc « Colour Coded Trainer Battles » (étiquettes à gauche, un Pokémon par colonne). */
+var T_COLORS = { label: '#666666', labelInk: '#ffd966', light: '#efefef', dark: '#d9d9d9', area: '#00ffff', cond: '#00ff00', beaten: '#b6d7a8', boss: '#ffe599' };
+function renderTrainers_(sh, trainers, fought) {
+  var W = 8, grid = [], sprites = [], split = null, area = null;
+  var title = gridRow_(W, '#000000');
+  title.v[0] = '🎯 DRESSEURS — d\'après « Colour Coded Trainer Battles » (PureGift)'; title.fc[0] = C_.gold; title.fw[0] = 'bold'; title.fs[0] = 14; title.h = 36;
+  grid.push(title);
+  trainers.forEach(function(t) {
+    if (t.split !== split) {
+      split = t.split; area = null;
+      var sr = gridRow_(W, '#000000'); sr.v[0] = '— SPLIT ' + String(split).toUpperCase() + ' —'; sr.fc[0] = C_.gold; sr.fw[0] = 'bold'; sr.fs[0] = 13; sr.h = 34;
+      grid.push(sr);
+    }
+    if (t.area !== area) {
+      area = t.area;
+      var ar = gridRow_(W, '#000000'); ar.v[0] = area; ar.fc[0] = T_COLORS.area; ar.fw[0] = 'bold'; ar.fs[0] = 11; ar.h = 26;
+      grid.push(ar);
+    }
+    if (t.conditions) {
+      var cr = gridRow_(W, T_COLORS.cond); cr.v[0] = '⚠ ' + t.conditions; cr.fc = fill_(W, '#000000'); cr.fw[0] = 'bold';
+      grid.push(cr);
+    }
+    var beaten = !!fought[key_(t.name)], boss = isBoss(t.name);
+    function line(label, values, bg, bold) {
+      var r = gridRow_(W, '#000000');
+      r.v[0] = label; r.bg[0] = T_COLORS.label; r.fc[0] = T_COLORS.labelInk; r.fw[0] = 'bold';
+      for (var i = 0; i < 6; i++) { r.v[i + 1] = values[i] === undefined ? '' : values[i]; r.bg[i + 1] = bg; r.fc[i + 1] = '#000000'; r.fw[i + 1] = bold ? 'bold' : 'normal'; }
+      return r;
+    }
+    var nameRow = line('Dresseur', [t.name], beaten ? T_COLORS.beaten : boss ? T_COLORS.boss : T_COLORS.light, true);
+    nameRow.v[7] = beaten ? '✔ Battu' : (t.maxLevel ? 'Niv. max ' + t.maxLevel : ''); nameRow.fc[7] = beaten ? C_.greenInk : C_.muted; nameRow.fw[7] = 'bold';
+    grid.push(nameRow);
+    if (t.random || !t.mons.length) { grid.push(line('Pokémon', ['Équipe aléatoire (voir doc officiel)'], T_COLORS.dark, true)); grid.push(gridRow_(W)); return; }
+    var spr = line('Pokémon', t.mons.map(function(m) { return sprite_(m.species); }), '#ffffff'); spr.h = 72; sprites.push(grid.length); grid.push(spr);
+    grid.push(line('', t.mons.map(function(m) { return m.species; }), T_COLORS.dark, true));
+    grid.push(line('Niveau', t.mons.map(function(m) { return m.level; }), T_COLORS.light));
+    grid.push(line('Objet', t.mons.map(function(m) { return m.item; }), T_COLORS.dark));
+    grid.push(line('Talent', t.mons.map(function(m) { return m.ability; }), T_COLORS.light));
+    grid.push(line('Nature', t.mons.map(function(m) { return m.nature; }), T_COLORS.dark));
+    for (var k = 0; k < 4; k++) grid.push(line(k ? '' : 'Attaques', t.mons.map(function(m) { return m.moves[k] || ''; }), k % 2 ? T_COLORS.dark : T_COLORS.light));
+    grid.push(gridRow_(W));
+  });
+  drawGrid_(sh, grid, W);
+  tryFormat_(function() {
+    sh.setHiddenGridlines(true); sh.setFrozenRows(1);
+    [110, 150, 150, 150, 150, 150, 150, 120].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
+    sh.getRange(1, 2, grid.length, 6).setHorizontalAlignment('center');
+    sh.getRange(1, 1, grid.length, 1).setHorizontalAlignment('center');
+    sh.setRowHeights(1, grid.length, 21);
+    grid.forEach(function(r, i) { if (r.h !== 21) sh.setRowHeight(i + 1, r.h); });
+  });
+}
+
+/** 🌿 Rencontres : un tableau par zone, à la verticale, avec sprites et clause des doublons (% recalculés). */
+var METHOD_COLORS = { 'Herbes': ['#93c47d', '#000000'], 'Pêche': ['#9fc5e8', '#000000'], 'Surf': ['#3d85c6', '#ffffff'], 'Éclate-Roc': ['#e6b8af', '#000000'],
+  'Spécial': ['#b4a7d6', '#000000'], 'Échange': ['#ffe599', '#000000'], 'Casino': ['#f9cb9c', '#000000'], 'Cadeau / fixe': ['#d5a6bd', '#000000'] };
+function renderEncounters_(sh, enc, pokemonRows) {
+  var W = 6, grid = [], owned = {}, byZone = {};
+  pokemonRows.forEach(function(r) {
+    var name = str_(r[COL.name - 1]); if (!name) return;
+    var sp = str_(r[COL.species - 1]), status = str_(r[COL.status - 1]);
+    owned[key_(sp)] = true;
+    var z = mapsecFor(r[COL.zone - 1]);
+    (byZone[z] = byZone[z] || []).push((status === STATUS.dead ? '✝ ' : '✔ ') + name + (name !== sp ? ' (' + sp + ')' : ''));
+  });
+  var head = gridRow_(W, C_.head);
+  ['Méthode', '%', 'Niv.', 'Sprite', 'Pokémon', 'Note'].forEach(function(t, i) { head.v[i] = t; head.fc[i] = C_.gold; head.fw[i] = 'bold'; });
+  head.h = 30; grid.push(head);
+  var zones = [], groups = {};
+  enc.forEach(function(e) { if (!groups[e.zone]) { groups[e.zone] = []; zones.push(e.zone); } groups[e.zone].push(e); });
+  zones.forEach(function(zone) {
+    var list = groups[zone], nz = list[0].nuzlocke || mapsecFor(zone), caught = byZone[nz] || [];
+    var zr = gridRow_(W, '#262626');
+    zr.v[0] = zone; zr.fc[0] = C_.gold; zr.fw[0] = 'bold'; zr.fs[0] = 12;
+    zr.v[4] = caught.length ? caught.join(', ') : 'Pas encore de capture';
+    zr.fc[4] = caught.length ? (/^✝/.test(caught[0]) ? C_.redInk : C_.greenInk) : C_.muted; zr.fw[4] = 'bold';
+    grid.push(zr);
+    // Clause des doublons : les espèces déjà capturées sont grisées et leur taux est redistribué aux autres.
+    var totals = {};
+    list.forEach(function(e) {
+      if (e.rate === '' || isNaN(e.rate)) return;
+      var t = totals[e.method] = totals[e.method] || { all: 0, free: 0 };
+      t.all += e.rate; if (!owned[key_(baseSpecies_(e.species))]) t.free += e.rate;
+    });
+    var lastMethod = null;
+    list.forEach(function(e) {
+      var dupe = !!owned[key_(baseSpecies_(e.species))], col = METHOD_COLORS[e.method] || ['#cccccc', '#000000'], t = totals[e.method];
+      var r = gridRow_(W, dupe ? '#595959' : col[0]);
+      r.fc = fill_(W, dupe ? '#bfbfbf' : col[1]);
+      var pct = e.rate === '' || isNaN(e.rate) ? '' : dupe ? 0 : t && t.free > 0 ? Math.round(e.rate * t.all / t.free * 10) / 10 : e.rate;
+      r.v = [e.method !== lastMethod ? e.method : '', pct === '' ? '' : pct + '%', e.level, sprite_(baseSpecies_(e.species)), e.species, dupe ? 'Déjà capturé' : ''];
+      r.fw[0] = 'bold'; r.fw[4] = 'bold';
+      lastMethod = e.method;
+      grid.push(r);
+    });
+    grid.push(gridRow_(W));
+  });
+  drawGrid_(sh, grid, W);
+  tryFormat_(function() {
+    sh.setHiddenGridlines(true); sh.setFrozenRows(1);
+    [130, 64, 64, 64, 190, 230].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
+    sh.getRange(1, 1, grid.length, 4).setHorizontalAlignment('center');
+    sh.setRowHeights(2, grid.length - 1, 36);
+  });
+}
+function baseSpecies_(s) { return str_(s).replace(/ \(contre .*\)$/, ''); }
 
 // ---------------------------------------------------------------- Import officiel
 function readSheet_(id, name) {
@@ -782,8 +904,7 @@ function importReference(ss, s) {
       .concat(parseEncounterGrid(readSheet_(SOURCES.encounters, 'Other Tables')))
       .concat(parseSpecialEncounters(readSheet_(SOURCES.encounters, 'Special Encounters')));
     if (!enc.length) throw new Error('aucune rencontre lue');
-    writeTable_(s.encounters, ENC_HEADERS.length, enc.map(function(e) { return [e.zone, mapsecFor(e.zone), e.method, sprite_(e.species.replace(/ \(contre .*\)$/, '')), e.species, e.level, e.rate, '', '']; }));
-    tryFormat_(function() { s.encounters.getRange(2, 1, enc.length, ENC_HEADERS.length).setBackgrounds(bandColors_(enc.map(function(e) { return e.zone; }), ENC_HEADERS.length)); });
+    writeTable_(s.encData, ENC_HEADERS.length, enc.map(function(e) { return [e.zone, mapsecFor(e.zone), e.method, e.species, e.level, e.rate]; }));
     log.push(enc.length + ' rencontres');
   } catch (e) { log.push('Rencontres non importées (' + e.message + ')'); }
   try {
@@ -800,7 +921,7 @@ function importReference(ss, s) {
       });
     });
     if (!trainers.length) throw new Error('aucun dresseur lu');
-    writeTable_(s.trainers, TRAINER_HEADERS.length, trainerRows(trainers, {}));
+    writeTable_(s.trainerData, TRAINER_HEADERS.length, trainerRows(trainers));
     log.push(trainers.length + ' dresseurs');
   } catch (e) { log.push('Dresseurs non importés (' + e.message + ')'); }
   try {
@@ -819,13 +940,20 @@ function importReference(ss, s) {
   } catch (e) { log.push('Objets non importés (' + e.message + ')'); }
   PropertiesService.getDocumentProperties().setProperty('referenceImport', new Date().toISOString() + ' — ' + log.join(', '));
   PropertiesService.getDocumentProperties().setProperty('refVersion', REF_VERSION);
+  ['hashFought', 'hashCaptures'].forEach(function(k) { PropertiesService.getDocumentProperties().setProperty(k, ''); });
   return log;
 }
 
 // ---------------------------------------------------------------- Mise à jour dynamique
 function fightRows_(s) { var n = s.fights.getLastRow(); return n > 1 ? s.fights.getRange(2, 1, n - 1, FIGHT_HEADERS.length).getValues() : []; }
 function pokemonRows_(s) { var n = s.pokemon.getLastRow(); return n > 1 ? s.pokemon.getRange(2, 1, n - 1, COL.deathCause).getValues() : []; }
-function trainerSheetRows_(s) { var n = s.trainers.getLastRow(); return n > 1 ? s.trainers.getRange(2, 1, n - 1, TRAINER_HEADERS.length).getValues() : []; }
+function trainerSheetRows_(s) { var n = s.trainerData.getLastRow(); return n > 1 ? s.trainerData.getRange(2, 1, n - 1, TRAINER_HEADERS.length).getValues() : []; }
+function encounterRows_(s) {
+  var n = s.encData.getLastRow();
+  return n > 1 ? s.encData.getRange(2, 1, n - 1, ENC_HEADERS.length).getValues().map(function(r) {
+    return { zone: str_(r[0]), nuzlocke: str_(r[1]), method: str_(r[2]), species: str_(r[3]), level: str_(r[4]), rate: r[5] === '' ? '' : Number(r[5]) };
+  }) : [];
+}
 
 // Remplit le split d'un combat à partir du nom du dresseur.
 function fillFightSplits_(s) {
@@ -873,36 +1001,15 @@ function refreshAll(ss, s, summary, force) {
   var fought = {}, foughtNames = {};
   fights.forEach(function(r) { if (str_(r[0])) { fought[key_(r[0])] = true; foughtNames[str_(r[0])] = true; } });
   var trows = trainerSheetRows_(s), trainers = trainersFromRows(trows);
-  if (trows.length && (changed_('hashFought', [Object.keys(fought).sort(), trows.length]) || force)) {
-    var owner = '', battu = trows.map(function(r) { if (str_(r[2])) owner = key_(r[2]); return [str_(r[2]) ? (fought[owner] ? '✔' : '') : '']; });
-    s.trainers.getRange(2, TCOL.beaten, battu.length, 1).setValues(battu);
-    tryFormat_(function() {
-      var who = '', groups = trows.map(function(r) { if (str_(r[2])) who = str_(r[2]); return who; });
-      s.trainers.getRange(2, 1, trows.length, TRAINER_HEADERS.length).setBackgrounds(bandColors_(groups, TRAINER_HEADERS.length, function(i) {
-        return fought[key_(groups[i])] ? C_.beaten : (isBoss(groups[i]) ? C_.boss : null);
-      }));
-      s.trainers.getRange(2, 3, trows.length, 1).setFontWeight('bold').setFontColor(C_.gold);
-    });
-  }
+  if (trows.length && (changed_('hashFought', [Object.keys(fought).sort(), trows.length]) || force)) renderTrainers_(s.trainers, trainers, fought);
   var next = nextTrainer(trainers, fought);
   s.run.getRange(RUN.kpiValue, 11).setValue(next ? next.name : (trainers.length ? 'Tous battus' : 'Liste à importer'));
   s.run.getRange(RUN.kpiSub, 11).setValue(next ? next.split + ' · ' + next.area + (next.maxLevel ? ' · Niv. max ' + next.maxLevel : '') : '');
 
-  // Rencontres : zones capturées / espèces possédées
-  var el = s.encounters.getLastRow();
+  // Rencontres : tableaux par zone (captures, clause des doublons)
+  var encRows = encounterRows_(s);
   var captures = rows.map(function(r) { return [r[COL.zone - 1], r[COL.species - 1], r[COL.name - 1], r[COL.status - 1]].join('|'); });
-  if (el > 1 && (changed_('hashCaptures', [captures, el]) || force)) {
-    var enc = s.encounters.getRange(2, 1, el - 1, 5).getValues().map(function(r) { return { zone: r[0], nuzlocke: str_(r[1]), species: str_(r[4]) }; });
-    s.encounters.getRange(2, 8, enc.length, 2).setValues(encounterStatus(enc, rows));
-    tryFormat_(function() {
-      var g = s.encounters.getRange('H2:H'), hcol = s.encounters.getRange('I2:I');
-      s.encounters.setConditionalFormatRules([
-        rule_().whenTextStartsWith('✝').setBackground(C_.red).setFontColor(C_.redInk).setRanges([g]).build(),
-        rule_().whenTextStartsWith('✔').setBackground(C_.green).setFontColor(C_.greenInk).setRanges([g]).build(),
-        rule_().whenTextEqualTo('Oui').setBackground(C_.orange).setFontColor(C_.orangeInk).setRanges([hcol]).build()
-      ]);
-    });
-  }
+  if (encRows.length && (changed_('hashCaptures', [captures, encRows.length]) || force)) renderEncounters_(s.encounters, encRows, rows);
   // Level cap / prochain boss : déduits de l'onglet Combats s'il contient un boss, sinon cases du calculateur.
   var caps = capFromFights(Object.keys(foughtNames));
   if (summary) PropertiesService.getDocumentProperties().setProperty('lastSummary', JSON.stringify(summary));
@@ -1004,13 +1111,13 @@ function applyPayload(ss, payload, now) {
   s.run.getRange(RUN.teamFirst, 1, 6, 10).setValues(teamRows(payload));
   // Première synchro sans données officielles : import unique.
   var docProps = PropertiesService.getDocumentProperties();
-  if ((s.encounters.getLastRow() < 2 && !docProps.getProperty('referenceImport')) || (docProps.getProperty('referenceImport') && docProps.getProperty('refVersion') !== REF_VERSION)) importReference(ss, s);
+  if ((s.encData.getLastRow() < 2 && !docProps.getProperty('referenceImport')) || (docProps.getProperty('referenceImport') && docProps.getProperty('refVersion') !== REF_VERSION)) importReference(ss, s);
   refreshAll(ss, s, runSummary(payload), false);
   return { rows: plan.updates.length + plan.appends.length };
 }
 
 // Export pour les tests Node (sans effet dans Apps Script).
-if (typeof module !== 'undefined') module.exports = { sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
+if (typeof module !== 'undefined') module.exports = { renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
   runSummary: runSummary, teamRows: teamRows, applyPayload: applyPayload, ensureStructure: ensureStructure, refreshAll: refreshAll,
   parseEncounterGrid: parseEncounterGrid, parseSpecialEncounters: parseSpecialEncounters, parseTrainerSheet: parseTrainerSheet,
   parseItemSheet: parseItemSheet, trainerRows: trainerRows, trainersFromRows: trainersFromRows, nextTrainer: nextTrainer,

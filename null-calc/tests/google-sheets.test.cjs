@@ -69,8 +69,8 @@ test('dresseurs : blocs officiels lus avec équipe, niveaux, objets, talents, na
   assert.deepEqual(rox[5], { species: 'Aerodactyl-Mega', level: '38', item: 'Aerodactylite', ability: 'Tough Claws', nature: 'Timid', moves: ['Rock Tomb', 'Wing Attack', 'Earthquake', 'Ancient Power'] });
   const rows = G.trainerRows(t, { leaderroxanne: true });
   const roxRow = rows.findIndex(r => r[2] === 'Leader Roxanne');
-  assert.deepEqual([rows[roxRow][11], rows[roxRow][12], rows[roxRow + 1][2]], ['✔', 38, '']);
-  assert.equal(rows.find(r => r[2] === 'Youngster Ren')[5], 'Équipe aléatoire (voir doc officiel)');
+  assert.deepEqual([rows[roxRow][10], rows[roxRow + 1][2]], [38, '']);
+  assert.equal(rows.find(r => r[2] === 'Youngster Ren')[4], 'Équipe aléatoire (voir doc officiel)');
   const relu = G.trainersFromRows(rows);
   assert.equal(relu.length, 5);
   assert.equal(G.nextTrainer(relu, { route103rival: true }).name, 'Youngster Ren');
@@ -133,17 +133,28 @@ test('première synchro : onglets créés, données officielles importées, stat
   assert.equal(v(run, R.teamFirst + 1, 7), 'K.O.');
   assert.equal(v(run, R.tablesFirst, 8), 'Rip', 'morts');
   // Rencontres : Pyro (Route 101), Zig/Boxy (Route 102 → absente de l'extrait), Rip (Route 103)
-  const encRows = Array.from({ length: enc.getLastRow() - 1 }, (_, i) => row(enc, i + 2, 9));
+  // Tableau par zone : en-tête de zone (capture) puis une ligne par Pokémon (%, niveau, sprite, nom)
+  const encRows = Array.from({ length: enc.getLastRow() }, (_, i) => row(enc, i + 1, 6));
   assert.ok(encRows.length > 100);
-  const r101 = encRows.find(r => r[0] === 'Route 101');
-  assert.equal(r101[7], '✔ Pyro (Torchic)');
-  assert.equal(encRows.find(r => r[0] === 'Route 103')[7], '✝ Rip (Poochyena)');
-  assert.equal(encRows.find(r => r[0] === 'Littleroot Town')[7], '');
-  assert.equal(encRows.find(r => r[4] === 'Shroomish')[8], '');
-  // Dresseurs
-  assert.equal(v(tr, 2, 3), 'Route 103 Rival');
-  assert.equal(v(tr, 2, 11), 'Chilling Water, Razor Shell, Grass Knot, Encore');
-  assert.equal(v(tr, 2, 6), 'Oshawott');
+  assert.deepEqual(encRows[0], ['Méthode', '%', 'Niv.', 'Sprite', 'Pokémon', 'Note']);
+  const zoneRow = z => encRows.find(r => r[0] === z && r[1] === '');
+  assert.equal(zoneRow('Route 101')[4], '✔ Pyro (Torchic)');
+  assert.equal(zoneRow('Route 103')[4], '✝ Rip (Poochyena)');
+  assert.equal(zoneRow('Littleroot Town')[4], 'Pas encore de capture');
+  const growlithe = encRows.find(r => r[4] === 'Growlithe');
+  assert.deepEqual([growlithe[1], growlithe[2], growlithe[3]], ['5%', '5', '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/growlithe.png")']);
+  // Données brutes conservées dans l'onglet caché
+  const data = ss.sheets[S.encData];
+  assert.deepEqual(row(data, 1, 6), ['Zone', 'Zone Nuzlocke', 'Méthode', 'Pokémon', 'Niveau', 'Taux']);
+  // Dresseurs : blocs du doc (étiquette à gauche, un Pokémon par colonne)
+  const trRows = Array.from({ length: tr.getLastRow() }, (_, i) => row(tr, i + 1, 8));
+  const rival = trRows.findIndex(r => r[0] === 'Dresseur' && r[1] === 'Route 103 Rival');
+  assert.ok(rival > 0, 'bloc du rival');
+  assert.deepEqual(trRows[rival + 1].slice(0, 2), ['Pokémon', '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/oshawott.png")']);
+  assert.deepEqual(trRows[rival + 2].slice(1, 4), ['Oshawott', 'Litten', 'Riolu']);
+  assert.deepEqual(trRows[rival + 3].slice(0, 4), ['Niveau', 10, 10, 11]);
+  assert.deepEqual(trRows[rival + 7].slice(0, 2), ['Attaques', 'Chilling Water']);
+  assert.ok(trRows.some(r => r[0] === 'Route 103'), 'lieu en en-tête');
   // Objets avec cases « Récupéré »
   assert.equal(v(items, 2, 4), false);
 });
@@ -182,7 +193,7 @@ test('synchros suivantes : mise à jour sur place, colonnes manuelles intactes, 
   assert.deepEqual([v(run, R.tablesFirst, 14), v(run, R.tablesFirst, 15)], ['Roxanne', 8.5]);
   assert.ok(String(v(run, R.tablesFirst, 16)).startsWith('█'));
   // Dresseurs battus + prochain dresseur
-  const battu = Array.from({ length: tr.getLastRow() - 1 }, (_, i) => [v(tr, i + 2, 3), v(tr, i + 2, 12)]).filter(x => x[0]);
+  const battu = Array.from({ length: tr.getLastRow() }, (_, i) => row(tr, i + 1, 8)).filter(r => r[0] === 'Dresseur').map(r => [r[1], r[7] === '✔ Battu' ? '✔' : '']);
   assert.deepEqual(battu, [['Route 103 Rival', '✔'], ['Youngster Ren', '✔'], ['Youngster Levi', '✔'], ['Hiker Marcster', ''], ['Leader Roxanne', '✔']]);
   assert.equal(v(run, R.kpiValue, 11), 'Tous battus', 'rien après Roxanne dans l\'extrait');
   // Level cap déduit des combats : Ren et Levi battus → prochain boss Lass Videl, cap 25
@@ -297,7 +308,7 @@ test('dresseurs : conditions de combat (gauntlet, B2B, météo permanente, PV de
   assert.deepEqual(c.F, []);
   assert.deepEqual(t.map(x => x.area), ['Route 119', 'Route 119', 'Route 119', 'Route 119', 'Route 119', 'Fortree Gym'], 'une condition n\'est pas un lieu');
   const rows = G.trainerRows(t, {});
-  assert.equal(rows.find(r => r[2] === 'E')[13], 'Gauntlet · Typhlosion-Hisui 61HP | Primarina 153HP');
+  assert.equal(rows.find(r => r[2] === 'E')[11], 'Gauntlet · Typhlosion-Hisui 61HP | Primarina 153HP');
   assert.equal(G.trainersFromRows(rows).find(x => x.name === 'E').conditions, 'Gauntlet · Typhlosion-Hisui 61HP | Primarina 153HP');
 });
 
