@@ -23,7 +23,7 @@ var TRAINER_SHEETS = [['Roxanne Split', 'Roxanne'], ['Brawly Split', 'Brawly'], 
   ['Victory Road Split', 'Victory Road'], ['Pokémon League', 'Ligue'], ['Other', 'Autres']];
 var SPLITS = TRAINER_SHEETS.map(function(t) { return t[1]; });
 var SHEETS = { run: '🏠 Run', pokemon: '🐾 Pokémon', fights: '⚔️ Combats', encounters: '🌿 Rencontres', trainers: '🎯 Dresseurs', items: '🎒 Objets', archive: '📦 Archives',
-  encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs' };
+  encData: '⚙️ Données rencontres', trainerData: '⚙️ Données dresseurs', trainerPics: '⚙️ Images dresseurs' };
 var LEGACY_NAMES = { 'Run': 'run', 'Pokémon': 'pokemon', 'Combats': 'fights' };
 
 var AUTO_HEADERS = ['UID', '#', 'Zone', 'Sprite', 'Pokémon', 'Nom', 'Niveau', 'Statut', 'Talent', 'Nature',
@@ -37,11 +37,14 @@ var FIGHT_ROWS = 1000;
 var FIGHT_HEADERS = ['Dresseur', 'Split', 'Lead', 'Frags', 'Pokémon 2', 'Frags', 'Pokémon 3', 'Frags', 'Pokémon 4', 'Frags', 'Pokémon 5', 'Frags', 'Pokémon 6', 'Frags', 'Notes'];
 // Données brutes (onglets cachés) ; les onglets visibles 🎯 Dresseurs et 🌿 Rencontres sont des tableaux dessinés à partir d'elles.
 var ENC_HEADERS = ['Zone', 'Zone Nuzlocke', 'Méthode', 'Pokémon', 'Niveau', 'Taux'];
-var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Pokémon', 'Niv.', 'Objet', 'Talent', 'Nature', 'Attaques', 'Niv. max', 'Conditions'];
-var TCOL = { name: 3, species: 5, level: 6, item: 7, ability: 8, nature: 9, moves: 10, maxLevel: 11, conditions: 12 };
+var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Pokémon', 'Niv.', 'Objet', 'Talent', 'Nature', 'Attaques', 'Niv. max', 'Conditions', 'Couleurs', 'Image dresseur'];
+var TCOL = { name: 3, species: 5, level: 6, item: 7, ability: 8, nature: 9, moves: 10, maxLevel: 11, conditions: 12, colors: 13, pic: 14 };
+// Mises en évidence du doc « Colour Coded » (ses règles de mise en forme conditionnelle) : « *x » = se termine par x.
+var DOC_HIGHLIGHTS = {"#ea9999": ["*of Ruin", "Sniper", "Unnerve", "Armor Tail", "Dazzling", "Queenly Majesty", "Quick Draw", "Shadow Tag", "Moody", "Serene Grace", "Stench", "Snow Cloak", "Sand Veil", "Innards Out", "of Ruin", "Stakeout", "Dancer", "Friend Guard"], "#d5a6bd": ["Belly Drum", "Explosion", "Misty Explosion", "Destiny Bond", "Pursuit", "Shell Smash", "Minimize", "Perish Song", "Revival Blessing", "Double Team", "Self-Destruct"], "#f9cb9c": ["Bright Powder", "Focus Band", "Quick Claw", "Scope Lens", "Weakness Policy", "Custap Berry", "King's Rock", "Berserk Gene", "Grip Claw", "Blunder Policy", "Binding Band"]};
+var HIGHLIGHT_LEGEND = [['#ea9999', 'Talent à surveiller'], ['#f9cb9c', 'Objet à surveiller'], ['#d5a6bd', 'Attaque à surveiller'], ['#ffe599', 'Lead en double'], ['#4285f4', 'Pokémon de soutien']];
 // Catégories d'objets dans l'ordre d'affichage ; dans chaque catégorie, l'ordre du doc officiel (ordre d'obtention).
 var ITEM_CATEGORIES = ['Objet tenu', 'Méga-gemme / spécial', 'Objet d\'évolution', 'CT / CS', 'Tuteur', 'Baie', 'Menthe', 'Ressource', 'Écaille Cœur', 'Mémoire', 'Boutique de la Ligue', 'Objet sauvage'];
-var REF_VERSION = '4';
+var REF_VERSION = '5';
 var ITEM_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Récupéré'];
 var ARCHIVE_HEADERS = ['Tentative', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
 var STATUS_FR = { slp: 'Endormi', psn: 'Empoisonné', tox: 'Gravement empoisonné', brn: 'Brûlé', par: 'Paralysé', frz: 'Gelé', frb: 'Gelure' };
@@ -344,18 +347,25 @@ function conditionText_(t) { return String(t).replace(/\s*\n\s*/g, ' — ').trim
 function conditionKey_(t) { return String(t).replace(/^(start|end) of\s+/i, '').replace(/^(perma(nent)?)\s+/i, '').split(/[\s(+\-|]/)[0].toLowerCase(); }
 
 /** Onglet « X Split » officiel (blocs verticaux) → dresseurs, avec les conditions de combat. */
-function parseTrainerSheet(values, split, backgrounds) {
+var PLAIN_BG = ['', '#ffffff', '#efefef', '#d9d9d9', '#000000', '#666666', '#f3f3f3'];
+function parseTrainerSheet(values, split, backgrounds, formulas) {
   var out = [], area = '', cur = null, mode = null, moveRows = 0, slots = [], active = [], pending = [], b2b = 0, b2bText = '';
-  function set(field, rest) { rest.forEach(function(v, i) { if (slots[i]) slots[i][field] = v; }); }
+  var row = 0;
+  // Couleur posée à la main dans le doc (lead en double, Pokémon de soutien…) sur la case du Pokémon i.
+  function color(i) { var c = backgrounds && Array.isArray(backgrounds[row]) ? String(backgrounds[row][i + 1] || '').toLowerCase() : ''; return PLAIN_BG.indexOf(c) < 0 ? c : ''; }
+  function paint(field, i) { var c = color(i); if (c && slots[i]) { slots[i].colors = slots[i].colors || {}; if (field === 'moves') (slots[i].colors.m = slots[i].colors.m || {})[slots[i].moves.length - 1] = c; else slots[i].colors[field] = c; } }
+  function set(field, rest) { rest.forEach(function(v, i) { if (slots[i]) { slots[i][field] = v; paint(field[0], i); } }); }
   function setSpecies(rest) {
     if (!cur) return;
     slots = rest.map(function(s) { return s && s !== 'None' ? { species: s, level: '', item: '', ability: '', nature: '', moves: [] } : null; });
+    slots.forEach(function(sl, i) { if (sl) paint('s', i); });
     cur.mons = slots.filter(Boolean);
   }
-  function addMoves(rest) { rest.forEach(function(v, i) { if (slots[i] && v && v !== 'None') slots[i].moves.push(v); }); }
-  (values || []).forEach(function(row, r) {
-    var a = str_(row[0]), rest = [1, 2, 3, 4, 5, 6].map(function(i) { return str_(row[i]); }), any = rest.some(Boolean);
-    var bg = backgrounds && backgrounds[r] ? backgrounds[r][0] : '';
+  function addMoves(rest) { rest.forEach(function(v, i) { if (slots[i] && v && v !== 'None') { slots[i].moves.push(v); paint('moves', i); } }); }
+  (values || []).forEach(function(rowValues, r) {
+    row = r;
+    var a = str_(rowValues[0]), rest = [1, 2, 3, 4, 5, 6].map(function(i) { return str_(rowValues[i]); }), any = rest.some(Boolean);
+    var bg = backgrounds && Array.isArray(backgrounds[r]) ? backgrounds[r][0] : "";
     if (a === 'Name') {
       var conds = active.map(function(c) { return c.text; }).concat(pending);
       if (b2b > 0) { conds.push(b2bText); b2b--; }
@@ -363,7 +373,10 @@ function parseTrainerSheet(values, split, backgrounds) {
       out.push(cur); slots = []; mode = null; pending = [];
       return;
     }
-    if (a === 'Pokémon') { mode = 'species'; if (any) { setSpecies(rest); mode = null; } return; }
+    if (a === 'Pokémon') {
+      // Image du dresseur : formule VLOOKUP("TRAINER_PIC_…", Sprites!…) à droite de l'équipe.
+      if (cur && formulas && Array.isArray(formulas[r])) formulas[r].forEach(function(f) { var m = /"(TRAINER_PIC_[A-Za-z0-9_]+)"/.exec(String(f || '')); if (m && !cur.pic) cur.pic = m[1]; });
+      mode = 'species'; if (any) { setSpecies(rest); mode = null; } return; }
     if (mode === 'species' && !a) { setSpecies(rest); mode = null; return; }
     if (a === 'Level') { set('level', rest); mode = null; return; }
     if (a === 'Held Item') { set('item', rest); mode = null; return; }
@@ -419,22 +432,32 @@ function trainerRows(trainers) {
     mons.forEach(function(m, i) {
       rows.push([i ? '' : t.split, i ? '' : t.area, i ? '' : t.name, m ? i + 1 : '', m ? m.species : 'Équipe aléatoire (voir doc officiel)',
         m ? (Number(m.level) || m.level) : '', m ? m.item : '', m ? m.ability : '', m ? m.nature : '', m ? m.moves.join(', ') : '',
-        i ? '' : maxLv, i ? '' : (t.conditions || []).join(' · ')]);
+        i ? '' : maxLv, i ? '' : (t.conditions || []).join(' · '), m && m.colors ? JSON.stringify(m.colors) : '', i ? '' : (t.pic || '')]);
     });
   });
   return rows;
+}
+
+function parseColors_(v) { try { return v ? JSON.parse(v) : {}; } catch (e) { return {}; } }
+/** Couleur d'une case comme dans le doc : couleur posée à la main, sinon règle « nom → couleur ». */
+function highlight_(text, manual) {
+  if (manual) return manual;
+  var t = str_(text);
+  if (!t) return '';
+  for (var c in DOC_HIGHLIGHTS) if (DOC_HIGHLIGHTS[c].some(function(x) { return x.charAt(0) === '*' ? t.slice(-x.length + 1) === x.slice(1) : t === x; })) return c;
+  return '';
 }
 
 /** Relit les données des dresseurs (liste ordonnée, Pokémon complets). */
 function trainersFromRows(rows) {
   var out = [], cur = null;
   rows.forEach(function(r) {
-    if (str_(r[2])) { cur = { split: str_(r[0]), area: str_(r[1]), name: str_(r[2]), maxLevel: 0, mons: [], random: false, conditions: str_(r[TCOL.conditions - 1]) }; out.push(cur); }
+    if (str_(r[2])) { cur = { split: str_(r[0]), area: str_(r[1]), name: str_(r[2]), maxLevel: 0, mons: [], random: false, conditions: str_(r[TCOL.conditions - 1]), pic: str_(r[TCOL.pic - 1]) }; out.push(cur); }
     if (!cur) return;
     if (r[3] === '' || r[3] === null) { if (/aléatoire/.test(str_(r[TCOL.species - 1]))) cur.random = true; return; }
     if (!str_(r[TCOL.species - 1])) return;
     cur.mons.push({ species: str_(r[TCOL.species - 1]), level: r[TCOL.level - 1], item: str_(r[TCOL.item - 1]), ability: str_(r[TCOL.ability - 1]),
-      nature: str_(r[TCOL.nature - 1]), moves: str_(r[TCOL.moves - 1]) ? str_(r[TCOL.moves - 1]).split(/,\s*/) : [] });
+      nature: str_(r[TCOL.nature - 1]), moves: str_(r[TCOL.moves - 1]) ? str_(r[TCOL.moves - 1]).split(/,\s*/) : [], colors: parseColors_(r[TCOL.colors - 1]) });
     cur.maxLevel = Math.max(cur.maxLevel, Number(r[TCOL.level - 1]) || 0);
   });
   return out;
@@ -446,6 +469,39 @@ function nextTrainer(trainers, fought) {
   trainers.forEach(function(t, i) { if (fought[key_(t.name)]) last = i; });
   for (var i = last + 1; i < trainers.length; i++) if (!fought[key_(trainers[i].name)]) return trainers[i];
   return null;
+}
+
+/** Lignes de l'onglet Objets : un titre « ▸ Catégorie » puis ses objets (case « Récupéré »). */
+function itemRows(sorted, checked) {
+  var rows = [], cat = null;
+  sorted.forEach(function(i) {
+    if (i[0] !== cat) { cat = i[0]; rows.push(['▸ ' + cat, '', '', '']); }
+    rows.push(['', i[1], i[2], !!(checked && checked[i[0] + '|' + i[1] + '|' + i[2]])]);
+  });
+  return rows;
+}
+var CATEGORY_COLORS = { 'Objet tenu': '#f9cb9c', 'Méga-gemme / spécial': '#d5a6bd', 'Objet d\'évolution': '#b6d7a8', 'CT / CS': '#9fc5e8', 'Tuteur': '#a4c2f4',
+  'Baie': '#ea9999', 'Menthe': '#b7e1cd', 'Ressource': '#ffe599', 'Écaille Cœur': '#f4cccc', 'Mémoire': '#d9d2e9', 'Boutique de la Ligue': '#fce5cd', 'Objet sauvage': '#d9ead3' };
+function styleItems_(sh, rows) {
+  var n = rows.length, bg = [], fc = [], fw = [], fs = [], band = 0, color = '#ffffff';
+  rows.forEach(function(r) {
+    if (/^▸ /.test(r[0])) { color = CATEGORY_COLORS[r[0].slice(2)] || '#cccccc'; band = 0; bg.push(fill_(4, '#262626')); fc.push(fill_(4, color)); fw.push(fill_(4, 'bold')); fs.push(fill_(4, 13)); return; }
+    band++;
+    bg.push([color, band % 2 ? '#1e293b' : '#172033', band % 2 ? '#1e293b' : '#172033', band % 2 ? '#1e293b' : '#172033']);
+    fc.push(['#000000', '#ffffff', C_.muted, '#ffffff']); fw.push(['normal', 'bold', 'normal', 'normal']); fs.push([10, 11, 10, 10]);
+  });
+  var range = sh.getRange(2, 1, n, 4);
+  range.setBackgrounds(bg).setFontColors(fc).setFontWeights(fw).setFontSizes(fs).setFontFamily(FONT).setVerticalAlignment('middle');
+  sh.setRowHeights(2, n, 28);
+  // Cases à cocher seulement sur les lignes d'objets (par blocs contigus).
+  var start = -1;
+  rows.concat([['▸ fin']]).forEach(function(r, i) {
+    var item = !/^▸ /.test(r[0]);
+    if (item && start < 0) start = i;
+    if (!item && start >= 0) { sh.getRange(2 + start, 4, i - start, 1).insertCheckboxes(); start = -1; }
+  });
+  sh.getRange(2, 3, n, 1).setWrap(true);
+  sh.getRange(2, 4, n, 1).setHorizontalAlignment('center');
 }
 
 /** Objets groupés par catégorie, dans l'ordre du doc officiel (ordre d'obtention) à l'intérieur. */
@@ -543,8 +599,8 @@ function sheets_(ss) {
     return ss.insertSheet(name);
   }
   var out = { run: get('run'), pokemon: get('pokemon'), fights: get('fights'), encounters: get('encounters'), trainers: get('trainers'), items: get('items'), archive: get('archive'),
-    encData: get('encData'), trainerData: get('trainerData') };
-  tryFormat_(function() { if (!out.encData.isSheetHidden()) out.encData.hideSheet(); if (!out.trainerData.isSheetHidden()) out.trainerData.hideSheet(); });
+    encData: get('encData'), trainerData: get('trainerData'), trainerPics: get('trainerPics') };
+  tryFormat_(function() { [out.encData, out.trainerData, out.trainerPics].forEach(function(sh) { if (!sh.isSheetHidden()) sh.hideSheet(); }); });
   return out;
 }
 function tryFormat_(fn) { try { fn(); } catch (e) { if (typeof Logger !== 'undefined') Logger.log('Mise en forme ignorée : ' + e); } }
@@ -719,11 +775,6 @@ function styleAll_(ss, s) {
     p[2].forEach(function(w, i) { p[0].setColumnWidth(i + 1, w); });
   });
   s.items.getRange(1, 4).setBackground(C_.manual);
-  s.items.getRange('A2:A').setFontWeight('bold').setFontColor(C_.gold);
-  s.items.getRange('B2:B').setFontWeight('bold');
-  s.items.getRange('C2:C').setWrap(true).setFontColor(C_.muted);
-  s.items.getRange('D2:D').setHorizontalAlignment('center');
-  s.items.setRowHeights(2, Math.max(s.items.getMaxRows() - 1, 1), 26);
 }
 
 // ---------------------------------------------------------------- Tableaux dessinés
@@ -749,11 +800,16 @@ function gridRow_(width, fill) {
 
 /** 🎯 Dresseurs : blocs comme le doc « Colour Coded Trainer Battles » (étiquettes à gauche, un Pokémon par colonne). */
 var T_COLORS = { label: '#666666', labelInk: '#ffd966', light: '#efefef', dark: '#d9d9d9', area: '#00ffff', cond: '#00ff00', beaten: '#b6d7a8', boss: '#ffe599' };
-function renderTrainers_(sh, trainers, fought) {
+function renderTrainers_(sh, trainers, fought, pics) {
+  pics = pics || {};
   var W = 8, grid = [], sprites = [], split = null, area = null;
   var title = gridRow_(W, '#000000');
   title.v[0] = '🎯 DRESSEURS — d\'après « Colour Coded Trainer Battles » (PureGift)'; title.fc[0] = C_.gold; title.fw[0] = 'bold'; title.fs[0] = 14; title.h = 36;
   grid.push(title);
+  var legend = gridRow_(W, '#000000');
+  HIGHLIGHT_LEGEND.forEach(function(l, i) { legend.v[i + 1] = l[1]; legend.bg[i + 1] = l[0]; legend.fc[i + 1] = l[0] === '#4285f4' ? '#ffffff' : '#000000'; legend.fw[i + 1] = 'bold'; legend.fs[i + 1] = 9; });
+  legend.v[0] = 'Légende'; legend.fc[0] = C_.muted; legend.h = 24;
+  grid.push(legend);
   trainers.forEach(function(t) {
     if (t.split !== split) {
       split = t.split; area = null;
@@ -770,29 +826,38 @@ function renderTrainers_(sh, trainers, fought) {
       grid.push(cr);
     }
     var beaten = !!fought[key_(t.name)], boss = isBoss(t.name);
-    function line(label, values, bg, bold) {
+    function line(label, values, bg, bold, colors) {
       var r = gridRow_(W, '#000000');
       r.v[0] = label; r.bg[0] = T_COLORS.label; r.fc[0] = T_COLORS.labelInk; r.fw[0] = 'bold';
-      for (var i = 0; i < 6; i++) { r.v[i + 1] = values[i] === undefined ? '' : values[i]; r.bg[i + 1] = bg; r.fc[i + 1] = '#000000'; r.fw[i + 1] = bold ? 'bold' : 'normal'; }
+      for (var i = 0; i < 6; i++) {
+        r.v[i + 1] = values[i] === undefined ? '' : values[i];
+        var c = colors && colors[i];
+        r.bg[i + 1] = c || bg; r.fc[i + 1] = c === '#4285f4' ? '#ffffff' : '#000000'; r.fw[i + 1] = bold || c ? 'bold' : 'normal';
+      }
       return r;
     }
     var nameRow = line('Dresseur', [t.name], beaten ? T_COLORS.beaten : boss ? T_COLORS.boss : T_COLORS.light, true);
-    nameRow.v[7] = beaten ? '✔ Battu' : (t.maxLevel ? 'Niv. max ' + t.maxLevel : ''); nameRow.fc[7] = beaten ? C_.greenInk : C_.muted; nameRow.fw[7] = 'bold';
+    if (beaten) { nameRow.v[7] = '✔ Battu'; nameRow.fc[7] = C_.greenInk; nameRow.fw[7] = 'bold'; }
     grid.push(nameRow);
     if (t.random || !t.mons.length) { grid.push(line('Pokémon', ['Équipe aléatoire (voir doc officiel)'], T_COLORS.dark, true)); grid.push(gridRow_(W)); return; }
-    var spr = line('Pokémon', t.mons.map(function(m) { return sprite_(m.species); }), '#ffffff'); spr.h = 72; sprites.push(grid.length); grid.push(spr);
-    grid.push(line('', t.mons.map(function(m) { return m.species; }), T_COLORS.dark, true));
+    var spr = line('Pokémon', t.mons.map(function(m) { return sprite_(m.species); }), '#ffffff'); spr.h = 72; sprites.push(grid.length);
+    var pic = t.pic && pics[t.pic.toUpperCase()];
+    if (pic) { spr.v[7] = pic; spr.bg[7] = '#000000'; }
+    grid.push(spr);
+    var col = function(m) { return m.colors || {}; };
+    grid.push(line('', t.mons.map(function(m) { return m.species; }), T_COLORS.dark, true, t.mons.map(function(m) { return col(m).s; })));
     grid.push(line('Niveau', t.mons.map(function(m) { return m.level; }), T_COLORS.light));
-    grid.push(line('Objet', t.mons.map(function(m) { return m.item; }), T_COLORS.dark));
-    grid.push(line('Talent', t.mons.map(function(m) { return m.ability; }), T_COLORS.light));
+    grid.push(line('Objet', t.mons.map(function(m) { return m.item; }), T_COLORS.dark, false, t.mons.map(function(m) { return highlight_(m.item, col(m).i); })));
+    grid.push(line('Talent', t.mons.map(function(m) { return m.ability; }), T_COLORS.light, false, t.mons.map(function(m) { return highlight_(m.ability, col(m).a); })));
     grid.push(line('Nature', t.mons.map(function(m) { return m.nature; }), T_COLORS.dark));
-    for (var k = 0; k < 4; k++) grid.push(line(k ? '' : 'Attaques', t.mons.map(function(m) { return m.moves[k] || ''; }), k % 2 ? T_COLORS.dark : T_COLORS.light));
+    for (var k = 0; k < 4; k++) grid.push(line(k ? '' : 'Attaques', t.mons.map(function(m) { return m.moves[k] || ''; }), k % 2 ? T_COLORS.dark : T_COLORS.light, false,
+      t.mons.map(function(m) { return highlight_(m.moves[k], (col(m).m || {})[k]); })));
     grid.push(gridRow_(W));
   });
   drawGrid_(sh, grid, W);
   tryFormat_(function() {
     sh.setHiddenGridlines(true); sh.setFrozenRows(1);
-    [110, 150, 150, 150, 150, 150, 150, 120].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
+    [110, 150, 150, 150, 150, 150, 150, 110].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
     sh.getRange(1, 2, grid.length, 6).setHorizontalAlignment('center');
     sh.getRange(1, 1, grid.length, 1).setHorizontalAlignment('center');
     sh.setRowHeights(1, grid.length, 21);
@@ -800,11 +865,13 @@ function renderTrainers_(sh, trainers, fought) {
   });
 }
 
-/** 🌿 Rencontres : un tableau par zone, à la verticale, avec sprites et clause des doublons (% recalculés). */
+/** 🌿 Rencontres : zones les unes à côté des autres ; dans chaque zone, un tableau par méthode (Herbes, Pêche, Surf…) côte à côte.
+ *  Sprites, % recalculés avec la clause des doublons (espèce déjà capturée = grisée, 0 %). */
 var METHOD_COLORS = { 'Herbes': ['#93c47d', '#000000'], 'Pêche': ['#9fc5e8', '#000000'], 'Surf': ['#3d85c6', '#ffffff'], 'Éclate-Roc': ['#e6b8af', '#000000'],
   'Spécial': ['#b4a7d6', '#000000'], 'Échange': ['#ffe599', '#000000'], 'Casino': ['#f9cb9c', '#000000'], 'Cadeau / fixe': ['#d5a6bd', '#000000'] };
-function renderEncounters_(sh, enc, pokemonRows) {
-  var W = 6, grid = [], owned = {}, byZone = {};
+var ENC_COLS = [['%', 54], ['Niv.', 48], ['', 54], ['Pokémon', 130]];
+function encounterLayout_(enc, pokemonRows) {
+  var owned = {}, byZone = {};
   pokemonRows.forEach(function(r) {
     var name = str_(r[COL.name - 1]); if (!name) return;
     var sp = str_(r[COL.species - 1]), status = str_(r[COL.status - 1]);
@@ -812,44 +879,67 @@ function renderEncounters_(sh, enc, pokemonRows) {
     var z = mapsecFor(r[COL.zone - 1]);
     (byZone[z] = byZone[z] || []).push((status === STATUS.dead ? '✝ ' : '✔ ') + name + (name !== sp ? ' (' + sp + ')' : ''));
   });
-  var head = gridRow_(W, C_.head);
-  ['Méthode', '%', 'Niv.', 'Sprite', 'Pokémon', 'Note'].forEach(function(t, i) { head.v[i] = t; head.fc[i] = C_.gold; head.fw[i] = 'bold'; });
-  head.h = 30; grid.push(head);
   var zones = [], groups = {};
-  enc.forEach(function(e) { if (!groups[e.zone]) { groups[e.zone] = []; zones.push(e.zone); } groups[e.zone].push(e); });
-  zones.forEach(function(zone) {
-    var list = groups[zone], nz = list[0].nuzlocke || mapsecFor(zone), caught = byZone[nz] || [];
-    var zr = gridRow_(W, '#262626');
-    zr.v[0] = zone; zr.fc[0] = C_.gold; zr.fw[0] = 'bold'; zr.fs[0] = 12;
-    zr.v[4] = caught.length ? caught.join(', ') : 'Pas encore de capture';
-    zr.fc[4] = caught.length ? (/^✝/.test(caught[0]) ? C_.redInk : C_.greenInk) : C_.muted; zr.fw[4] = 'bold';
-    grid.push(zr);
-    // Clause des doublons : les espèces déjà capturées sont grisées et leur taux est redistribué aux autres.
-    var totals = {};
-    list.forEach(function(e) {
-      if (e.rate === '' || isNaN(e.rate)) return;
-      var t = totals[e.method] = totals[e.method] || { all: 0, free: 0 };
-      t.all += e.rate; if (!owned[key_(baseSpecies_(e.species))]) t.free += e.rate;
+  enc.forEach(function(e) {
+    if (!groups[e.zone]) { groups[e.zone] = { name: e.zone, nuzlocke: e.nuzlocke || mapsecFor(e.zone), methods: [], byMethod: {} }; zones.push(groups[e.zone]); }
+    var z = groups[e.zone];
+    if (!z.byMethod[e.method]) { z.byMethod[e.method] = []; z.methods.push(e.method); }
+    z.byMethod[e.method].push(e);
+  });
+  zones.forEach(function(z) { z.caught = byZone[z.nuzlocke] || []; });
+  return { zones: zones, owned: owned };
+}
+function renderEncounters_(sh, enc, pokemonRows) {
+  var L = encounterLayout_(enc, pokemonRows), zones = L.zones, owned = L.owned;
+  var colWidths = [], tables = [], height = 4;
+  zones.forEach(function(z) { z.methods.forEach(function(m) { height = Math.max(height, 4 + z.byMethod[m].length); }); });
+  // Colonnes : pour chaque zone, 4 colonnes par méthode, puis une colonne vide de séparation.
+  var x = 0;
+  zones.forEach(function(z) {
+    z.x = x;
+    z.methods.forEach(function(m) { tables.push({ zone: z, method: m, x: x }); ENC_COLS.forEach(function(c) { colWidths.push(c[1]); }); x += 4; });
+    colWidths.push(18); x += 1;
+  });
+  var W = Math.max(x, 1), grid = [];
+  for (var r = 0; r < height; r++) grid.push(gridRow_(W, '#000000'));
+  zones.forEach(function(z) {
+    var w = z.methods.length * 4, caught = z.caught;
+    for (var i = 0; i < w; i++) { grid[0].bg[z.x + i] = '#262626'; grid[1].bg[z.x + i] = '#262626'; }
+    grid[0].v[z.x] = z.name; grid[0].fc[z.x] = C_.gold; grid[0].fw[z.x] = 'bold'; grid[0].fs[z.x] = 13;
+    grid[1].v[z.x] = caught.length ? caught.join(', ') : 'Pas encore de capture';
+    grid[1].fc[z.x] = caught.length ? (/^✝/.test(caught[0]) ? C_.redInk : C_.greenInk) : C_.muted; grid[1].fw[z.x] = 'bold'; grid[1].fs[z.x] = 11;
+  });
+  tables.forEach(function(t) {
+    var list = t.zone.byMethod[t.method], col = METHOD_COLORS[t.method] || ['#cccccc', '#000000'], all = 0, free = 0;
+    list.forEach(function(e) { if (e.rate === '' || isNaN(e.rate)) return; all += e.rate; if (!owned[key_(baseSpecies_(e.species))]) free += e.rate; });
+    for (var i = 0; i < 4; i++) {
+      grid[2].bg[t.x + i] = col[0]; grid[2].fc[t.x + i] = col[1]; grid[2].fw[t.x + i] = 'bold';
+      grid[3].v[t.x + i] = ENC_COLS[i][0]; grid[3].bg[t.x + i] = '#1f1f1f'; grid[3].fc[t.x + i] = col[0]; grid[3].fw[t.x + i] = 'bold'; grid[3].fs[t.x + i] = 9;
+    }
+    grid[2].v[t.x] = t.method; grid[2].fs[t.x] = 11;
+    list.forEach(function(e, k) {
+      var row = grid[4 + k], dupe = !!owned[key_(baseSpecies_(e.species))];
+      var pct = e.rate === '' || isNaN(e.rate) ? '' : dupe ? 0 : free > 0 ? Math.round(e.rate * all / free * 10) / 10 : e.rate;
+      var vals = [pct === '' ? '' : pct + '%', e.level, sprite_(baseSpecies_(e.species)), e.species];
+      for (var i = 0; i < 4; i++) {
+        row.v[t.x + i] = vals[i]; row.bg[t.x + i] = dupe ? '#595959' : col[0]; row.fc[t.x + i] = dupe ? '#bfbfbf' : col[1];
+        row.fw[t.x + i] = i === 3 || i === 0 ? 'bold' : 'normal'; row.fs[t.x + i] = i === 3 ? 11 : 10;
+      }
     });
-    var lastMethod = null;
-    list.forEach(function(e) {
-      var dupe = !!owned[key_(baseSpecies_(e.species))], col = METHOD_COLORS[e.method] || ['#cccccc', '#000000'], t = totals[e.method];
-      var r = gridRow_(W, dupe ? '#595959' : col[0]);
-      r.fc = fill_(W, dupe ? '#bfbfbf' : col[1]);
-      var pct = e.rate === '' || isNaN(e.rate) ? '' : dupe ? 0 : t && t.free > 0 ? Math.round(e.rate * t.all / t.free * 10) / 10 : e.rate;
-      r.v = [e.method !== lastMethod ? e.method : '', pct === '' ? '' : pct + '%', e.level, sprite_(baseSpecies_(e.species)), e.species, dupe ? 'Déjà capturé' : ''];
-      r.fw[0] = 'bold'; r.fw[4] = 'bold';
-      lastMethod = e.method;
-      grid.push(r);
-    });
-    grid.push(gridRow_(W));
   });
   drawGrid_(sh, grid, W);
   tryFormat_(function() {
-    sh.setHiddenGridlines(true); sh.setFrozenRows(1);
-    [130, 64, 64, 64, 190, 230].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
-    sh.getRange(1, 1, grid.length, 4).setHorizontalAlignment('center');
-    sh.setRowHeights(2, grid.length - 1, 36);
+    sh.setHiddenGridlines(true); sh.setFrozenRows(4);
+    colWidths.forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
+    sh.setRowHeight(1, 30); sh.setRowHeight(2, 24); sh.setRowHeight(3, 26); sh.setRowHeight(4, 20);
+    if (height > 4) sh.setRowHeights(5, height - 4, 40);
+    // Contour épais autour de chaque tableau (méthode) et de chaque zone, pour bien les distinguer.
+    tables.forEach(function(t) {
+      sh.getRange(3, t.x + 1, 2 + t.zone.byMethod[t.method].length, 4).setBorder(true, true, true, true, null, null, '#000000', SpreadsheetApp.BorderStyle.SOLID_THICK);
+      sh.getRange(3, t.x + 1, 2, 4).setHorizontalAlignment('center');
+      sh.getRange(5, t.x + 1, t.zone.byMethod[t.method].length, 3).setHorizontalAlignment('center');
+    });
+    zones.forEach(function(z) { sh.getRange(1, z.x + 1, 2, z.methods.length * 4).setBorder(true, true, true, true, null, null, C_.gold, SpreadsheetApp.BorderStyle.SOLID_MEDIUM); });
   });
 }
 function baseSpecies_(s) { return str_(s).replace(/ \(contre .*\)$/, ''); }
@@ -877,6 +967,22 @@ function bandColors_(groups, width, special) {
     var color = (special && special(i)) || (g % 2 ? C_.band2 : C_.band1);
     out.push(fill_(width, color));
   });
+  return out;
+}
+
+// Onglet « Sprites » du doc : images des dresseurs (TRAINER_PIC_…), recopiées telles quelles dans un onglet caché.
+function copyTrainerPics_(src, dest) {
+  try {
+    var sh = src.getSheetByName('Sprites'); if (!sh) return;
+    var vals = sh.getRange(1, 1, sh.getLastRow(), 2).getValues().filter(function(r) { return /^TRAINER_PIC_/.test(str_(r[0])); });
+    if (!vals.length) return;
+    dest.clear();
+    dest.getRange(1, 1, vals.length, 2).setValues(vals);
+  } catch (e) { if (typeof Logger !== 'undefined') Logger.log('Images des dresseurs non copiées : ' + e); }
+}
+function trainerPicMap_(sh) {
+  var out = {};
+  try { var n = sh.getLastRow(); if (n) sh.getRange(1, 1, n, 2).getValues().forEach(function(r) { if (str_(r[0])) out[str_(r[0]).toUpperCase()] = r[1]; }); } catch (e) {}
   return out;
 }
 
@@ -913,11 +1019,13 @@ function importReference(ss, s) {
       if (trainers.length) return;
       var src; try { src = SpreadsheetApp.openById(id); } catch (err) { return; }
       loadSpriteOverrides_(src);
+      copyTrainerPics_(src, s.trainerPics);
       TRAINER_SHEETS.forEach(function(t) {
         var sh = src.getSheetByName(t[0]); if (!sh) return;
-        var range = sh.getDataRange(), bgs = null;
+        var range = sh.getDataRange(), bgs = null, fx = null;
         try { bgs = range.getBackgrounds(); } catch (err) { bgs = null; }
-        trainers = trainers.concat(parseTrainerSheet(range.getValues(), t[1], bgs));
+        try { fx = range.getFormulas(); } catch (err) { fx = null; }
+        trainers = trainers.concat(parseTrainerSheet(range.getValues(), t[1], bgs, fx));
       });
     });
     if (!trainers.length) throw new Error('aucun dresseur lu');
@@ -925,17 +1033,19 @@ function importReference(ss, s) {
     log.push(trainers.length + ' dresseurs');
   } catch (e) { log.push('Dresseurs non importés (' + e.message + ')'); }
   try {
-    var last = s.items.getLastRow(), checked = {};
-    if (last > 1) s.items.getRange(2, 1, last - 1, 4).getValues().forEach(function(r) { if (r[3] === true) checked[r[0] + '|' + r[1] + '|' + r[2]] = true; });
+    var last = s.items.getLastRow(), checked = {}, cat = '';
+    if (last > 1) s.items.getRange(2, 1, last - 1, 4).getValues().forEach(function(r) {
+      var a = str_(r[0]);
+      if (/^▸ /.test(a)) { cat = a.slice(2); return; }
+      if (a) cat = a;
+      if (r[3] === true) checked[cat + '|' + r[1] + '|' + r[2]] = true;
+    });
     var items = [];
     ['Held Items', 'TM/HMs and Move Tutors', 'Evolution Items', 'Special', 'Resources', 'Other'].forEach(function(n) { items = items.concat(parseItemSheet(n, readSheet_(SOURCES.items, n))); });
     if (!items.length) throw new Error('aucun objet lu');
-    var rows = sortItems(items).map(function(i) { return [i[0], i[1], i[2], !!checked[i[0] + '|' + i[1] + '|' + i[2]]]; });
+    var rows = itemRows(sortItems(items), checked);
     writeTable_(s.items, 4, rows);
-    tryFormat_(function() {
-      s.items.getRange(2, 4, rows.length, 1).insertCheckboxes();
-      s.items.getRange(2, 1, rows.length, 4).setBackgrounds(bandColors_(rows.map(function(r) { return r[0]; }), 4));
-    });
+    tryFormat_(function() { styleItems_(s.items, rows); });
     log.push(items.length + ' objets');
   } catch (e) { log.push('Objets non importés (' + e.message + ')'); }
   PropertiesService.getDocumentProperties().setProperty('referenceImport', new Date().toISOString() + ' — ' + log.join(', '));
@@ -1001,7 +1111,7 @@ function refreshAll(ss, s, summary, force) {
   var fought = {}, foughtNames = {};
   fights.forEach(function(r) { if (str_(r[0])) { fought[key_(r[0])] = true; foughtNames[str_(r[0])] = true; } });
   var trows = trainerSheetRows_(s), trainers = trainersFromRows(trows);
-  if (trows.length && (changed_('hashFought', [Object.keys(fought).sort(), trows.length]) || force)) renderTrainers_(s.trainers, trainers, fought);
+  if (trows.length && (changed_('hashFought', [Object.keys(fought).sort(), trows.length]) || force)) renderTrainers_(s.trainers, trainers, fought, trainerPicMap_(s.trainerPics));
   var next = nextTrainer(trainers, fought);
   s.run.getRange(RUN.kpiValue, 11).setValue(next ? next.name : (trainers.length ? 'Tous battus' : 'Liste à importer'));
   s.run.getRange(RUN.kpiSub, 11).setValue(next ? next.split + ' · ' + next.area + (next.maxLevel ? ' · Niv. max ' + next.maxLevel : '') : '');
@@ -1117,7 +1227,7 @@ function applyPayload(ss, payload, now) {
 }
 
 // Export pour les tests Node (sans effet dans Apps Script).
-if (typeof module !== 'undefined') module.exports = { renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
+if (typeof module !== 'undefined') module.exports = { highlight_: highlight_, itemRows: itemRows, encounterLayout_: encounterLayout_, renderTrainers_: renderTrainers_, renderEncounters_: renderEncounters_, sortItems: sortItems, spriteId: spriteId, conditionsMap: conditionsMap, TCOL: TCOL, addDetectedFights_: addDetectedFights_, planPokemonRows: planPokemonRows, computeStats: computeStats, runTables: runTables, validatePayload: validatePayload,
   runSummary: runSummary, teamRows: teamRows, applyPayload: applyPayload, ensureStructure: ensureStructure, refreshAll: refreshAll,
   parseEncounterGrid: parseEncounterGrid, parseSpecialEncounters: parseSpecialEncounters, parseTrainerSheet: parseTrainerSheet,
   parseItemSheet: parseItemSheet, trainerRows: trainerRows, trainersFromRows: trainersFromRows, nextTrainer: nextTrainer,
