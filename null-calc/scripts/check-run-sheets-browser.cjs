@@ -49,7 +49,7 @@ ctx.SpreadsheetApp.getActiveSpreadsheet = () => sheet;
     assert.equal(pk.cells['2,6'].v, 'Pyro'); assert.equal(pk.cells['5,8'].v, 'Mort');
     assert.equal(run.cells['5,5'].v, 1, 'compteur de morts');
     assert.equal(run.cells['5,11'].v, 'Route 103 Rival', 'prochain dresseur');
-    assert.ok(sheet.sheets['🌿 Rencontres'].getLastRow() > 50, 'rencontres officielles importées');
+    assert.ok(sheet.sheets['⚙️ Données rencontres'].getLastRow() > 50, 'rencontres officielles importées');
     assert.equal(posts, 1, 'un seul envoi pour des données identiques');
     // Sans changement dans le jeu, aucun nouvel envoi
     await page.waitForTimeout(4000);
