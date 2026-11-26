@@ -293,7 +293,7 @@ test('combats détectés par le Lua : ajoutés une fois dans Combats, split remp
   const p1 = payload(); p1.fights = [{ name: 'Root Academy Trainer #1', t: 1 }, { name: 'Route 103 Rival', t: 2 }];
   G2.applyPayload(ss, p1, new Date());
   const f = ss.sheets[S.fights];
-  assert.deepEqual([v(f, 2, 1), v(f, 2, 2), v(f, 3, 1)], ['Root Academy Trainer #1', 'Roxanne', 'Route 103 Rival']);
+  assert.deepEqual([v(f, 2, 1), v(f, 2, 2), v(f, 3, 1)], ['Youngster Ren', 'Roxanne', 'Route 103 Rival'], 'nom du doc pour la Root Academy');
   assert.equal(v(f, 2, 15), 'Détecté automatiquement');
   f.cells['3,3'] = { v: 'Pyro' };
   const p2 = payload(); p2.fights = p1.fights.concat([{ name: 'Leader Roxanne', t: 3 }]);

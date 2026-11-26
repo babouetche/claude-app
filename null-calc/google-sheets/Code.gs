@@ -1267,11 +1267,14 @@ function archiveRun_(ss, s, stamp) {
 
 // Combats détectés par le Lua : une ligne par dresseur battu, avec lead et frags (dernier Pokémon qui a
 // attaqué quand l'adversaire tombe K.O.). Une ligne existante n'est complétée que si le lead est vide.
+// Le calculateur nomme les dresseurs aléatoires « Root Academy Trainer #N » ; le doc leur donne leur vrai nom.
+var ROOT_ACADEMY_NAMES = { 1: 'Youngster Ren', 2: 'Youngster Levi', 3: 'Lass Videl', 4: 'Youngster Itachi' };
+function docTrainerName_(name) { var m = /^Root Academy Trainer #(\d)$/.exec(str_(name)); return m && ROOT_ACADEMY_NAMES[m[1]] ? ROOT_ACADEMY_NAMES[m[1]] : str_(name); }
 function fightCells_(f) {
   var cells = fill_(FIGHT_HEADERS.length - 1, ''), frags = {}, order = [];
   (f.frags || []).forEach(function(k) { var n = str_(k && k.name); if (!n) return; if (!(n in frags)) order.push(n); frags[n] = (frags[n] || 0) + (Number(k.n) || 0); });
   var lead = str_(f.lead);
-  cells[0] = str_(f.name);
+  cells[0] = docTrainerName_(f.name);
   if (lead) { cells[2] = lead; cells[3] = frags[lead] || 0; }
   var col = 4;
   order.filter(function(n) { return n !== lead; }).slice(0, 5).forEach(function(n) { cells[col] = n; cells[col + 1] = frags[n]; col += 2; });
@@ -1282,7 +1285,7 @@ function addDetectedFights_(s, fights) {
   var have = {}, rows = [], existing = fightRows_(s), lastFilled = 0;
   existing.forEach(function(r, i) { if (str_(r[0])) { have[key_(r[0])] = i; lastFilled = i + 1; } });
   fights.forEach(function(f) {
-    var name = str_(f && f.name);
+    var name = docTrainerName_(f && f.name);
     if (!name) return;
     var cells = fightCells_(f);
     if (have.hasOwnProperty(key_(name))) {
