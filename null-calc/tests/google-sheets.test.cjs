@@ -133,19 +133,18 @@ test('première synchro : onglets créés, données officielles importées, stat
   assert.equal(v(run, R.teamFirst + 1, 7), 'K.O.');
   assert.equal(v(run, R.tablesFirst, 8), 'Rip', 'morts');
   // Rencontres : Pyro (Route 101), Zig/Boxy (Route 102 → absente de l'extrait), Rip (Route 103)
-  // Zones côte à côte (ligne 1 : nom, ligne 2 : capture) ; dans chaque zone, une table par méthode (ligne 3) : %, Niv., sprite, Pokémon
-  const W = 2000, cell = (r, c) => v(enc, r, c);
-  const cols = Array.from({ length: W }, (_, i) => i + 1);
-  const zoneCol = z => cols.find(c => cell(1, c) === z);
-  assert.equal(cell(2, zoneCol('Route 101')), '✔ Pyro (Torchic)');
-  assert.equal(cell(2, zoneCol('Route 103')), '✝ Rip (Poochyena)');
-  assert.equal(cell(2, zoneCol('Littleroot Town')), 'Pas encore de capture');
-  const lt = zoneCol('Littleroot Town');
-  assert.equal(cell(3, lt), 'Herbes');
-  assert.ok(cols.some(c => c > lt && c < zoneCol('Littleroot Grove') && cell(3, c) === 'Pêche'), 'Pêche à côté des Herbes, même zone');
-  assert.ok(zoneCol('Littleroot Grove') > lt, 'zones à la suite, à l\'horizontale');
-  const gRow = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].find(r => cell(r, lt + 3) === 'Growlithe');
-  assert.deepEqual([cell(gRow, lt), cell(gRow, lt + 1), cell(gRow, lt + 2)], ['5%', '5', '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/growlithe.png")']);
+  // Zones les unes sous les autres (nom, capture) ; dans une zone, une table par méthode côte à côte : %, Niv., sprite, Pokémon
+  const cell = (r, c) => v(enc, r, c), last = enc.getLastRow();
+  const zoneRow = z => Array.from({ length: last }, (_, i) => i + 1).find(r => cell(r, 1) === z && cell(r + 1, 1) !== '' && cell(r + 2, 1) !== '');
+  assert.equal(cell(zoneRow('Route 101') + 1, 1), '✔ Pyro (Torchic)');
+  assert.equal(cell(zoneRow('Route 103') + 1, 1), '✝ Rip (Poochyena)');
+  const lt = zoneRow('Littleroot Town');
+  assert.equal(cell(lt + 1, 1), 'Pas encore de capture');
+  assert.equal(cell(lt + 2, 1), 'Herbes');
+  assert.equal(cell(lt + 2, 6), 'Pêche', 'Pêche à côté des Herbes');
+  assert.ok(zoneRow('Littleroot Grove') > lt, 'zone suivante en dessous');
+  const gRow = Array.from({ length: 20 }, (_, i) => lt + 4 + i).find(r => cell(r, 4) === 'Growlithe');
+  assert.deepEqual([cell(gRow, 1), cell(gRow, 2), cell(gRow, 3)], ['5%', '5', '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/growlithe.png")']);
   // Données brutes conservées dans l'onglet caché
   const data = ss.sheets[S.encData];
   assert.deepEqual(row(data, 1, 6), ['Zone', 'Zone Nuzlocke', 'Méthode', 'Pokémon', 'Niveau', 'Taux']);

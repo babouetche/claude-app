@@ -794,6 +794,13 @@ function drawGrid_(sh, grid, width) {
     sh.getRange(n + 1, 1, sh.getMaxRows() - n, Math.max(width, sh.getMaxColumns())).setBackground('#000000');
   });
 }
+// Hauteurs de lignes par séries identiques (peu d'appels).
+function setHeights_(sh, grid) {
+  var start = 0;
+  for (var i = 1; i <= grid.length; i++) {
+    if (i === grid.length || grid[i].h !== grid[start].h) { sh.setRowHeights(start + 1, i - start, grid[start].h); start = i; }
+  }
+}
 function gridRow_(width, fill) {
   return { v: fill_(width, ''), bg: fill_(width, fill || '#000000'), fc: fill_(width, '#ffffff'), fw: fill_(width, 'normal'), fs: fill_(width, 10), h: 21 };
 }
@@ -860,8 +867,7 @@ function renderTrainers_(sh, trainers, fought, pics) {
     [110, 150, 150, 150, 150, 150, 150, 110].forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
     sh.getRange(1, 2, grid.length, 6).setHorizontalAlignment('center');
     sh.getRange(1, 1, grid.length, 1).setHorizontalAlignment('center');
-    sh.setRowHeights(1, grid.length, 21);
-    grid.forEach(function(r, i) { if (r.h !== 21) sh.setRowHeight(i + 1, r.h); });
+    setHeights_(sh, grid);
   });
 }
 
@@ -891,55 +897,56 @@ function encounterLayout_(enc, pokemonRows) {
 }
 function renderEncounters_(sh, enc, pokemonRows) {
   var L = encounterLayout_(enc, pokemonRows), zones = L.zones, owned = L.owned;
-  var colWidths = [], tables = [], height = 4;
-  zones.forEach(function(z) { z.methods.forEach(function(m) { height = Math.max(height, 4 + z.byMethod[m].length); }); });
-  // Colonnes : pour chaque zone, 4 colonnes par méthode, puis une colonne vide de séparation.
-  var x = 0;
+  // Zones les unes sous les autres ; dans une zone, les méthodes côte à côte (4 colonnes chacune + 1 colonne de séparation).
+  var slots = zones.reduce(function(m, z) { return Math.max(m, z.methods.length); }, 1), W = slots * 5, grid = [], tables = [], zoneTops = [];
+  var colWidths = [];
+  for (var k = 0; k < slots; k++) { ENC_COLS.forEach(function(c) { colWidths.push(c[1]); }); colWidths.push(18); }
   zones.forEach(function(z) {
-    z.x = x;
-    z.methods.forEach(function(m) { tables.push({ zone: z, method: m, x: x }); ENC_COLS.forEach(function(c) { colWidths.push(c[1]); }); x += 4; });
-    colWidths.push(18); x += 1;
-  });
-  var W = Math.max(x, 1), grid = [];
-  for (var r = 0; r < height; r++) grid.push(gridRow_(W, '#000000'));
-  zones.forEach(function(z) {
-    var w = z.methods.length * 4, caught = z.caught;
-    for (var i = 0; i < w; i++) { grid[0].bg[z.x + i] = '#262626'; grid[1].bg[z.x + i] = '#262626'; }
-    grid[0].v[z.x] = z.name; grid[0].fc[z.x] = C_.gold; grid[0].fw[z.x] = 'bold'; grid[0].fs[z.x] = 13;
-    grid[1].v[z.x] = caught.length ? caught.join(', ') : 'Pas encore de capture';
-    grid[1].fc[z.x] = caught.length ? (/^✝/.test(caught[0]) ? C_.redInk : C_.greenInk) : C_.muted; grid[1].fw[z.x] = 'bold'; grid[1].fs[z.x] = 11;
-  });
-  tables.forEach(function(t) {
-    var list = t.zone.byMethod[t.method], col = METHOD_COLORS[t.method] || ['#cccccc', '#000000'], all = 0, free = 0;
-    list.forEach(function(e) { if (e.rate === '' || isNaN(e.rate)) return; all += e.rate; if (!owned[key_(baseSpecies_(e.species))]) free += e.rate; });
-    for (var i = 0; i < 4; i++) {
-      grid[2].bg[t.x + i] = col[0]; grid[2].fc[t.x + i] = col[1]; grid[2].fw[t.x + i] = 'bold';
-      grid[3].v[t.x + i] = ENC_COLS[i][0]; grid[3].bg[t.x + i] = '#1f1f1f'; grid[3].fc[t.x + i] = col[0]; grid[3].fw[t.x + i] = 'bold'; grid[3].fs[t.x + i] = 9;
-    }
-    grid[2].v[t.x] = t.method; grid[2].fs[t.x] = 11;
-    list.forEach(function(e, k) {
-      var row = grid[4 + k], dupe = !!owned[key_(baseSpecies_(e.species))];
-      var pct = e.rate === '' || isNaN(e.rate) ? '' : dupe ? 0 : free > 0 ? Math.round(e.rate * all / free * 10) / 10 : e.rate;
-      var vals = [pct === '' ? '' : pct + '%', e.level, sprite_(baseSpecies_(e.species)), e.species];
+    var top = grid.length, rowsCount = z.methods.reduce(function(m, me) { return Math.max(m, z.byMethod[me].length); }, 0), w = z.methods.length * 5 - 1;
+    zoneTops.push({ zone: z, top: top, width: w });
+    var h1 = gridRow_(W), h2 = gridRow_(W);
+    for (var i = 0; i < w; i++) { h1.bg[i] = '#262626'; h2.bg[i] = '#262626'; }
+    h1.v[0] = z.name; h1.fc[0] = C_.gold; h1.fw[0] = 'bold'; h1.fs[0] = 13; h1.h = 30;
+    var caught = z.caught;
+    h2.v[0] = caught.length ? caught.join(', ') : 'Pas encore de capture';
+    h2.fc[0] = caught.length ? (/^✝/.test(caught[0]) ? C_.redInk : C_.greenInk) : C_.muted; h2.fw[0] = 'bold'; h2.fs[0] = 11; h2.h = 24;
+    grid.push(h1, h2);
+    var mh = gridRow_(W), lab = gridRow_(W); mh.h = 26; lab.h = 20;
+    var body = []; for (var r = 0; r < rowsCount; r++) { var br = gridRow_(W); br.h = 40; body.push(br); }
+    z.methods.forEach(function(m, k) {
+      var x = k * 5, list = z.byMethod[m], col = METHOD_COLORS[m] || ['#cccccc', '#000000'], all = 0, free = 0;
+      tables.push({ row: grid.length, x: x, n: list.length });
+      list.forEach(function(e) { if (e.rate === '' || isNaN(e.rate)) return; all += e.rate; if (!owned[key_(baseSpecies_(e.species))]) free += e.rate; });
       for (var i = 0; i < 4; i++) {
-        row.v[t.x + i] = vals[i]; row.bg[t.x + i] = dupe ? '#595959' : col[0]; row.fc[t.x + i] = dupe ? '#bfbfbf' : col[1];
-        row.fw[t.x + i] = i === 3 || i === 0 ? 'bold' : 'normal'; row.fs[t.x + i] = i === 3 ? 11 : 10;
+        mh.bg[x + i] = col[0]; mh.fc[x + i] = col[1]; mh.fw[x + i] = 'bold';
+        lab.v[x + i] = ENC_COLS[i][0]; lab.bg[x + i] = '#1f1f1f'; lab.fc[x + i] = col[0]; lab.fw[x + i] = 'bold'; lab.fs[x + i] = 9;
       }
+      mh.v[x] = m; mh.fs[x] = 11;
+      list.forEach(function(e, j) {
+        var row = body[j], dupe = !!owned[key_(baseSpecies_(e.species))];
+        var pct = e.rate === '' || isNaN(e.rate) ? '' : dupe ? 0 : free > 0 ? Math.round(e.rate * all / free * 10) / 10 : e.rate;
+        var vals = [pct === '' ? '' : pct + '%', e.level, sprite_(baseSpecies_(e.species)), e.species];
+        for (var i = 0; i < 4; i++) {
+          row.v[x + i] = vals[i]; row.bg[x + i] = dupe ? '#595959' : col[0]; row.fc[x + i] = dupe ? '#bfbfbf' : col[1];
+          row.fw[x + i] = i === 3 || i === 0 ? 'bold' : 'normal'; row.fs[x + i] = i === 3 ? 11 : 10;
+        }
+      });
     });
+    grid.push(mh, lab);
+    body.forEach(function(b) { grid.push(b); });
+    var gap = gridRow_(W); gap.h = 16; grid.push(gap);
   });
+  if (!grid.length) grid.push(gridRow_(W));
   drawGrid_(sh, grid, W);
   tryFormat_(function() {
-    sh.setHiddenGridlines(true); sh.setFrozenRows(4);
+    sh.setHiddenGridlines(true); sh.setFrozenRows(0);
     colWidths.forEach(function(w, i) { sh.setColumnWidth(i + 1, w); });
-    sh.setRowHeight(1, 30); sh.setRowHeight(2, 24); sh.setRowHeight(3, 26); sh.setRowHeight(4, 20);
-    if (height > 4) sh.setRowHeights(5, height - 4, 40);
-    // Contour épais autour de chaque tableau (méthode) et de chaque zone, pour bien les distinguer.
+    setHeights_(sh, grid);
     tables.forEach(function(t) {
-      sh.getRange(3, t.x + 1, 2 + t.zone.byMethod[t.method].length, 4).setBorder(true, true, true, true, null, null, '#000000', SpreadsheetApp.BorderStyle.SOLID_THICK);
-      sh.getRange(3, t.x + 1, 2, 4).setHorizontalAlignment('center');
-      sh.getRange(5, t.x + 1, t.zone.byMethod[t.method].length, 3).setHorizontalAlignment('center');
+      sh.getRange(t.row + 1, t.x + 1, 2 + t.n, 4).setBorder(true, true, true, true, null, null, '#000000', SpreadsheetApp.BorderStyle.SOLID_THICK);
+      sh.getRange(t.row + 1, t.x + 1, 2 + t.n, 3).setHorizontalAlignment('center');
     });
-    zones.forEach(function(z) { sh.getRange(1, z.x + 1, 2, z.methods.length * 4).setBorder(true, true, true, true, null, null, C_.gold, SpreadsheetApp.BorderStyle.SOLID_MEDIUM); });
+    zoneTops.forEach(function(z) { sh.getRange(z.top + 1, 1, 2, z.width).setBorder(true, true, true, true, null, null, C_.gold, SpreadsheetApp.BorderStyle.SOLID_MEDIUM); });
   });
 }
 function baseSpecies_(s) { return str_(s).replace(/ \(contre .*\)$/, ''); }
