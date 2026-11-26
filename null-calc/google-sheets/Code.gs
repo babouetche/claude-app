@@ -39,7 +39,7 @@ var TRAINER_HEADERS = ['Split', 'Lieu', 'Dresseur', '#', 'Sprite', 'Pokémon', '
 var TCOL = { name: 3, species: 6, level: 7, beaten: 12, conditions: 14 };
 // Catégories d'objets dans l'ordre d'affichage ; dans chaque catégorie, l'ordre du doc officiel (ordre d'obtention).
 var ITEM_CATEGORIES = ['Objet tenu', 'Méga-gemme / spécial', 'Objet d\'évolution', 'CT / CS', 'Tuteur', 'Baie', 'Menthe', 'Ressource', 'Écaille Cœur', 'Mémoire', 'Boutique de la Ligue', 'Objet sauvage'];
-var REF_VERSION = '2';
+var REF_VERSION = '3';
 var ITEM_HEADERS = ['Catégorie', 'Objet', 'Lieu / info', 'Récupéré'];
 var ARCHIVE_HEADERS = ['Tentative', 'Fin de la run', 'Nom', 'Pokémon', 'Zone', 'Niveau', 'Statut', 'Frags', 'Leads', 'Combats', 'Mort contre'];
 var STATUS_FR = { slp: 'Endormi', psn: 'Empoisonné', tox: 'Gravement empoisonné', brn: 'Brûlé', par: 'Paralysé', frz: 'Gelé', frb: 'Gelure' };
@@ -56,10 +56,12 @@ var MAPSECS = ['Littleroot Town', 'Oldale Town', 'Dewford Town', 'Lavaridge Town
   'Petalburg Grove', 'Verdanturf Tunnel', 'Verdanturf Grotto', 'Altering Grove', 'Route 102 Grove', 'Rustboro Grove'];
 for (var r_ = 101; r_ <= 134; r_++) MAPSECS.push('Route ' + r_);
 
-// Palette (reprend les couleurs du calculateur)
-var C_ = { navy: '#1f2a44', navy2: '#2c3a5e', gold: '#f2c14e', white: '#ffffff', ink: '#1b1f2a', muted: '#6b7280',
-  band1: '#ffffff', band2: '#f3f5fa', green: '#d8f3e0', greenInk: '#17663a', red: '#f9d6d9', redInk: '#9b1c2c',
-  orange: '#fde7c8', orangeInk: '#8a4b00', blue: '#dbe8ff', blueInk: '#1d4ea8', grey: '#e5e7eb', manual: '#fff4d6', beaten: '#eef7f0' };
+// Palette sombre (même style que le calculateur et l'overlay)
+var C_ = { bg: '#0f172a', card: '#1e293b', card2: '#172033', line: '#334155', head: '#0b1220', text: '#e2e8f0', muted: '#94a3b8',
+  gold: '#f2c14e', navy: '#0b1220', navy2: '#1e293b', white: '#ffffff', ink: '#e2e8f0',
+  band1: '#1e293b', band2: '#172033', green: '#14532d', greenInk: '#86efac', red: '#7f1d1d', redInk: '#fca5a5',
+  orange: '#78350f', orangeInk: '#fcd34d', blue: '#1e3a8a', blueInk: '#93c5fd', grey: '#334155', manual: '#3b3014', beaten: '#123524', boss: '#3a2e10' };
+var FONT = 'Lexend';
 
 function headers_() { return AUTO_HEADERS.concat(MANUAL_HEADERS, STAT_HEADERS, SPLITS, [SYNC_HEADER]); }
 
@@ -164,11 +166,10 @@ function spriteId(species) {
   return plainId_(base) + (forme ? '-' + plainId_(forme) : '');
 }
 function spriteUrl(species) { var id = spriteId(species); return id ? SPRITE_BASE + id + '.png' : ''; }
-/** Image dans la cellule (pas de formule : marche quelle que soit la langue de la feuille). */
+/** Sprite : =IMAGE("url") (un seul argument, donc valable quelle que soit la langue de la feuille). Instantané, contrairement aux images insérées une par une. */
 function sprite_(species) {
   var url = spriteUrl(species);
-  if (!url) return '';
-  try { return SpreadsheetApp.newCellImage().setSourceUrl(url).setAltTextTitle(str_(species)).build(); } catch (e) { return ''; }
+  return url ? '=IMAGE("' + url + '")' : '';
 }
 function displayName(mon) { return mon.nickname && String(mon.nickname).trim() ? String(mon.nickname).trim() : mon.species; }
 function colLetter(n) { var s = ''; while (n > 0) { var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; }
@@ -563,130 +564,172 @@ function ensureStructure(ss) {
   }
   // La mise en forme complète est appliquée à l'installation (ou si la page vient d'être créée).
   if (str_(run.getRange(RUN.teamHead, 1).getValue()) === 'Slot') run.getRange(RUN.teamHead, 1).setValue('Sprite');
-  if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '4') {
+  if (created || PropertiesService.getDocumentProperties().getProperty('styleVersion') !== '5') {
     tryFormat_(function() { styleAll_(ss, s); });
-    PropertiesService.getDocumentProperties().setProperty('styleVersion', '4');
+    PropertiesService.getDocumentProperties().setProperty('styleVersion', '5');
   }
   return s;
 }
 
-function header_(range) { range.setFontWeight('bold').setBackground(C_.navy).setFontColor(C_.white).setVerticalAlignment('middle').setHorizontalAlignment('center').setWrap(true); }
+
+// Fond sombre, police et alignement communs à un onglet entier.
+function paintSheet_(sh, cols, rows) {
+  rows = rows || sh.getMaxRows();
+  sh.getRange(1, 1, rows, Math.max(cols, sh.getMaxColumns())).setBackground(C_.bg).setFontColor(C_.text).setFontFamily(FONT).setFontSize(10).setVerticalAlignment('middle');
+}
+function tableHeader_(range) {
+  range.setFontWeight('bold').setBackground(C_.head).setFontColor(C_.gold).setFontSize(10).setVerticalAlignment('middle').setHorizontalAlignment('center').setWrap(true)
+    .setBorder(null, null, true, null, null, null, C_.gold, SpreadsheetApp.BorderStyle.SOLID_MEDIUM);
+}
+function header_(range) { tableHeader_(range); }
 function rule_() { return SpreadsheetApp.newConditionalFormatRule(); }
+function card_(range, accent) {
+  range.setBackground(C_.card).setBorder(true, true, true, true, null, null, accent || C_.line, SpreadsheetApp.BorderStyle.SOLID);
+}
+function gridLines_(range) { range.setBorder(null, null, null, null, null, true, C_.line, SpreadsheetApp.BorderStyle.SOLID); }
 
 function styleAll_(ss, s) {
   var tabs = { run: C_.gold, pokemon: '#22c55e', fights: '#ef4444', trainers: '#3b82f6', encounters: '#10b981', items: '#a855f7', archive: '#64748b' };
   ['run', 'pokemon', 'fights', 'trainers', 'encounters', 'items', 'archive'].forEach(function(k, i) {
     s[k].setTabColor(tabs[k]); ss.setActiveSheet(s[k]); ss.moveActiveSheet(i + 1);
+    s[k].setHiddenGridlines(true);
   });
   ss.getSheets().forEach(function(sh) { if (sh.getName() === 'Feuille 1' || sh.getName() === 'Sheet1') { if (sh.getLastRow() === 0) ss.deleteSheet(sh); } });
   ss.setActiveSheet(s.run);
 
-  // --- 🏠 Run
+  // --- 🏠 Run : tableau de bord
   var run = s.run;
-  run.setHiddenGridlines(true);
-  run.getRange(1, 1, 40, 16).setFontFamily('Roboto').setFontColor(C_.ink).setVerticalAlignment('middle');
-  run.getRange(RUN.title, 1, 1, 16).merge().setBackground(C_.navy).setFontColor(C_.gold).setFontSize(20).setFontWeight('bold').setHorizontalAlignment('center');
-  run.setRowHeight(RUN.title, 52);
-  run.getRange(RUN.info, 1, 1, 16).setBackground(C_.navy2).setFontColor(C_.white).setFontSize(10);
-  run.getRange(RUN.info, 2).setBackground(C_.manual).setFontColor(C_.ink).setFontWeight('bold').setHorizontalAlignment('center');
-  run.getRange(RUN.info, 4, 1, 3).merge().setFontWeight('bold');
-  run.setRowHeight(3, 10); run.setRowHeight(7, 14); run.setRowHeight(16, 14);
+  paintSheet_(run, 16, 60);
+  [86, 130, 120, 52, 84, 64, 96, 120, 120, 300, 120, 150, 16, 120, 56, 160].forEach(function(w, i) { run.setColumnWidth(i + 1, w); });
+  run.getRange(RUN.title, 1, 1, 16).merge().setBackground(C_.head).setFontColor(C_.gold).setFontSize(22).setFontWeight('bold').setHorizontalAlignment('center')
+    .setBorder(null, null, true, null, null, null, C_.gold, SpreadsheetApp.BorderStyle.SOLID_THICK);
+  run.setRowHeight(RUN.title, 58);
+  run.getRange(RUN.info, 1, 1, 16).setBackground(C_.head).setFontColor(C_.muted).setFontSize(10);
+  run.getRange(RUN.info, 2).setFontColor(C_.gold).setFontWeight('bold').setHorizontalAlignment('center').setFontSize(12);
+  run.getRange(RUN.info, 4, 1, 3).merge().setFontColor(C_.text).setFontWeight('bold');
+  run.setRowHeight(RUN.info, 26); run.setRowHeight(3, 14); run.setRowHeight(7, 18); run.setRowHeight(16, 18);
+  var kpiColors = [C_.blueInk, C_.greenInk, C_.redInk, C_.gold, C_.orangeInk, '#c4b5fd'];
   KPIS.forEach(function(k, i) {
     var c = 1 + i * 2;
     [RUN.kpiLabel, RUN.kpiValue, RUN.kpiSub].forEach(function(r) { run.getRange(r, c, 1, 2).merge(); });
     run.getRange(RUN.kpiLabel, c).setFontSize(9).setFontColor(C_.muted).setFontWeight('bold').setHorizontalAlignment('center');
-    run.getRange(RUN.kpiValue, c).setFontSize(i >= 4 ? 11 : 22).setFontWeight('bold').setHorizontalAlignment('center').setWrap(true).setFontColor(i === 2 ? C_.redInk : C_.navy);
+    run.getRange(RUN.kpiValue, c).setFontSize(i >= 4 ? 12 : 24).setFontWeight('bold').setHorizontalAlignment('center').setWrap(true).setFontColor(kpiColors[i]);
     run.getRange(RUN.kpiSub, c).setFontSize(9).setFontColor(C_.muted).setHorizontalAlignment('center').setWrap(true);
-    run.getRange(RUN.kpiLabel, c, 3, 2).setBackground(C_.band2).setBorder(true, true, true, true, null, null, '#c7cede', SpreadsheetApp.BorderStyle.SOLID);
+    card_(run.getRange(RUN.kpiLabel, c, 3, 2), kpiColors[i]);
   });
-  run.setRowHeight(RUN.kpiValue, 42);
+  run.setRowHeight(RUN.kpiLabel, 22); run.setRowHeight(RUN.kpiValue, 46); run.setRowHeight(RUN.kpiSub, 22);
   [[RUN.teamTitle, 1], [RUN.tablesTitle, 1], [RUN.tablesTitle, 8], [RUN.tablesTitle, 14]].forEach(function(p) {
-    run.getRange(p[0], p[1]).setFontSize(13).setFontWeight('bold').setFontColor(C_.navy);
+    run.getRange(p[0], p[1]).setFontSize(14).setFontWeight('bold').setFontColor(C_.gold);
   });
-  header_(run.getRange(RUN.teamHead, 1, 1, 10));
-  header_(run.getRange(RUN.tablesHead, 1, 1, 6)); header_(run.getRange(RUN.tablesHead, 8, 1, 5)); header_(run.getRange(RUN.tablesHead, 14, 1, 3));
+  run.setRowHeight(RUN.teamTitle, 30); run.setRowHeight(RUN.tablesTitle, 30);
+  tableHeader_(run.getRange(RUN.teamHead, 1, 1, 10));
+  tableHeader_(run.getRange(RUN.tablesHead, 1, 1, 6)); tableHeader_(run.getRange(RUN.tablesHead, 8, 1, 5)); tableHeader_(run.getRange(RUN.tablesHead, 14, 1, 3));
   run.getRange(RUN.tablesHead, 15, 1, 2).merge();
-  run.getRange(RUN.teamFirst, 6, 6, 1).setNumberFormat('0%').setHorizontalAlignment('center');
-  run.setRowHeights(RUN.teamFirst, 6, 40);
-  run.getRange(RUN.teamFirst, 1, 6, 10).setBorder(true, true, true, true, null, true, '#e2e6ef', SpreadsheetApp.BorderStyle.SOLID);
-  run.getRange(RUN.tablesFirst, 1, 15, 6).setBorder(true, true, true, true, null, true, '#e2e6ef', SpreadsheetApp.BorderStyle.SOLID);
-  run.getRange(RUN.tablesFirst, 8, 15, 5).setBorder(true, true, true, true, null, true, '#e2e6ef', SpreadsheetApp.BorderStyle.SOLID);
-  run.getRange(RUN.tablesFirst, 14, SPLITS.length, 3).setBorder(true, true, true, true, null, true, '#e2e6ef', SpreadsheetApp.BorderStyle.SOLID);
-  run.getRange(RUN.tablesFirst, 16, SPLITS.length, 1).setFontColor('#3b82f6');
+  card_(run.getRange(RUN.teamFirst, 1, 6, 10)); gridLines_(run.getRange(RUN.teamFirst, 1, 6, 10));
+  run.setRowHeights(RUN.teamFirst, 6, 44);
+  run.getRange(RUN.teamFirst, 2, 6, 1).setFontWeight('bold').setFontSize(11);
+  run.getRange(RUN.teamFirst, 3, 6, 1).setFontColor(C_.muted);
+  run.getRange(RUN.teamFirst, 4, 6, 4).setHorizontalAlignment('center');
+  run.getRange(RUN.teamFirst, 6, 6, 1).setNumberFormat('0%').setFontWeight('bold');
+  run.getRange(RUN.teamFirst, 10, 6, 1).setWrap(true).setFontSize(9);
+  [[1, 6], [8, 5]].forEach(function(t) { var r = run.getRange(RUN.tablesFirst, t[0], 15, t[1]); card_(r); gridLines_(r); });
+  var sp = run.getRange(RUN.tablesFirst, 14, SPLITS.length, 3); card_(sp); gridLines_(sp);
+  run.setRowHeights(RUN.tablesFirst, 15, 24);
+  run.getRange(RUN.tablesFirst, 16, SPLITS.length, 1).setFontColor(C_.gold);
   run.getRange(RUN.tablesFirst, 1, 15, 1).setHorizontalAlignment('center');
+  run.getRange(RUN.tablesFirst, 2, 15, 1).setFontWeight('bold');
   run.getRange(RUN.tablesFirst, 4, 15, 3).setHorizontalAlignment('center');
-  [70, 110, 110, 55, 80, 65, 110, 110, 110, 280, 110, 140, 16, 110, 55, 150].forEach(function(w, i) { run.setColumnWidth(i + 1, w); });
-  var hp = run.getRange(RUN.teamFirst, 6, 6, 1), st = run.getRange(RUN.teamFirst, 7, 6, 1), dead = run.getRange(RUN.tablesFirst, 8, 15, 5);
+  run.getRange(RUN.tablesFirst, 4, 15, 1).setFontColor(C_.gold).setFontWeight('bold');
+  run.getRange(RUN.tablesFirst, 8, 15, 1).setFontWeight('bold').setFontColor(C_.redInk);
+  run.getRange(RUN.tablesFirst, 15, SPLITS.length, 1).setHorizontalAlignment('center').setFontWeight('bold');
+  var hp = run.getRange(RUN.teamFirst, 6, 6, 1), st = run.getRange(RUN.teamFirst, 7, 6, 1);
   run.setConditionalFormatRules([
-    rule_().whenCellEmpty().setBackground(C_.white).setRanges([hp]).build(),
+    rule_().whenCellEmpty().setBackground(C_.card).setRanges([hp]).build(),
     rule_().whenNumberLessThanOrEqualTo(0.25).setBackground(C_.red).setFontColor(C_.redInk).setRanges([hp]).build(),
     rule_().whenNumberLessThanOrEqualTo(0.5).setBackground(C_.orange).setFontColor(C_.orangeInk).setRanges([hp]).build(),
     rule_().whenNumberGreaterThan(0.5).setBackground(C_.green).setFontColor(C_.greenInk).setRanges([hp]).build(),
-    rule_().whenTextEqualTo('K.O.').setBackground(C_.red).setFontColor(C_.redInk).setRanges([st]).build(),
+    rule_().whenTextEqualTo('K.O.').setBackground(C_.red).setFontColor(C_.redInk).setBold(true).setRanges([st]).build(),
     rule_().whenTextEqualTo('OK').setFontColor(C_.greenInk).setRanges([st]).build(),
-    rule_().whenCellNotEmpty().setBackground('#fdf2f3').setRanges([dead]).build()
+    rule_().whenCellNotEmpty().setBackground(C_.orange).setFontColor(C_.orangeInk).setRanges([st]).build()
   ]);
 
   // --- 🐾 Pokémon
   var pk = s.pokemon, h = headers_(), rows = Math.max(pk.getMaxRows() - 1, 1);
+  paintSheet_(pk, h.length);
   pk.setFrozenRows(1); pk.setFrozenColumns(COL.name);
-  header_(pk.getRange(1, 1, 1, h.length));
-  pk.getRange(1, COL.deathCause).setBackground('#b7791f');
-  pk.setRowHeight(1, 36);
+  tableHeader_(pk.getRange(1, 1, 1, h.length));
+  pk.getRange(1, COL.deathCause).setBackground(C_.manual);
+  pk.setRowHeight(1, 40);
   pk.hideColumns(COL.uid);
-  pk.getRange(2, COL.deathCause, rows, 1).setBackground(C_.manual);
-  pk.getRange(2, COL.frags, rows, 3).setFontWeight('bold').setHorizontalAlignment('center');
-  pk.getRange(2, COL.iv, rows, 7).setHorizontalAlignment('center');
-  var W = { 'UID': 80, '#': 36, 'Zone': 150, 'Sprite': 52, 'Pokémon': 120, 'Nom': 110, 'Niveau': 50, 'Statut': 105, 'Talent': 115, 'Nature': 75,
-    'Moy. IV': 58, 'Type PC': 80, 'Objet': 110, 'Attaques': 270, 'Nv capture': 70, 'Mort contre': 170 };
+  pk.getRange(2, 1, rows, h.length).setHorizontalAlignment('center');
+  pk.getRange(2, COL.zone, rows, 1).setHorizontalAlignment('left').setFontColor(C_.muted);
+  pk.getRange(2, COL.name, rows, 1).setFontWeight('bold').setFontSize(11).setHorizontalAlignment('left');
+  pk.getRange(2, COL.species, rows, 1).setHorizontalAlignment('left');
+  pk.getRange(2, h.indexOf('Attaques') + 1, rows, 1).setHorizontalAlignment('left').setWrap(true).setFontSize(9);
+  pk.getRange(2, COL.deathCause, rows, 1).setBackground(C_.manual).setFontColor(C_.orangeInk);
+  pk.getRange(2, COL.frags, rows, 3).setFontWeight('bold').setFontColor(C_.gold);
+  var W = { 'UID': 80, '#': 40, 'Zone': 150, 'Sprite': 56, 'Pokémon': 120, 'Nom': 120, 'Niveau': 56, 'Statut': 110, 'Talent': 115, 'Nature': 80,
+    'Moy. IV': 62, 'Type PC': 80, 'Objet': 115, 'Attaques': 280, 'Nv capture': 74, 'Mort contre': 170 };
   W[SYNC_HEADER] = 140;
-  h.forEach(function(name, i) { pk.setColumnWidth(i + 1, W[name] || (/^IV /.test(name) ? 46 : 64)); });
-  pk.setRowHeights(2, rows, 34);
+  h.forEach(function(name, i) { pk.setColumnWidth(i + 1, W[name] || (/^IV /.test(name) ? 46 : 70)); });
+  pk.setRowHeights(2, rows, 42);
+  try { pk.getBandings().forEach(function(b) { b.remove(); }); pk.getRange(1, 1, rows + 1, h.length).applyRowBanding().setHeaderRowColor(C_.head).setFirstRowColor(C_.card).setSecondRowColor(C_.card2); } catch (e) {}
   var statusRange = pk.getRange(2, COL.status, rows, 1), ivRange = pk.getRange(2, COL.iv, rows, 6);
   var statusRules = [[STATUS.team, C_.green, C_.greenInk], [STATUS.ko, C_.orange, C_.orangeInk], [STATUS.box, C_.blue, C_.blueInk],
     [STATUS.dead, C_.red, C_.redInk], [STATUS.gone, C_.grey, C_.muted]].map(function(x) {
     return rule_().whenTextEqualTo(x[0]).setBackground(x[1]).setFontColor(x[2]).setBold(true).setRanges([statusRange]).build();
   });
   pk.setConditionalFormatRules(statusRules.concat([
-    rule_().setGradientMinpointWithValue('#f8b4b4', SpreadsheetApp.InterpolationType.NUMBER, '0')
-      .setGradientMidpointWithValue('#fff3c4', SpreadsheetApp.InterpolationType.NUMBER, '15')
-      .setGradientMaxpointWithValue('#9ae6b4', SpreadsheetApp.InterpolationType.NUMBER, '31').setRanges([ivRange]).build()
+    rule_().setGradientMinpointWithValue('#7f1d1d', SpreadsheetApp.InterpolationType.NUMBER, '0')
+      .setGradientMidpointWithValue('#713f12', SpreadsheetApp.InterpolationType.NUMBER, '15')
+      .setGradientMaxpointWithValue('#14532d', SpreadsheetApp.InterpolationType.NUMBER, '31').setRanges([ivRange]).build()
   ]));
 
   // --- ⚔️ Combats
   var f = s.fights;
-  f.setFrozenRows(1); header_(f.getRange(1, 1, 1, FIGHT_HEADERS.length)); f.setRowHeight(1, 32);
-  [210, 110, 110, 50, 110, 50, 110, 50, 110, 50, 110, 50, 110, 50, 240].forEach(function(w, i) { f.setColumnWidth(i + 1, w); });
-  f.getRange(2, 2, FIGHT_ROWS, 1).setFontColor(C_.muted);
-  [4, 6, 8, 10, 12, 14].forEach(function(c) { f.getRange(2, c, FIGHT_ROWS, 1).setHorizontalAlignment('center').setBackground(C_.band2).setFontWeight('bold'); });
+  paintSheet_(f, FIGHT_HEADERS.length);
+  f.setFrozenRows(1); tableHeader_(f.getRange(1, 1, 1, FIGHT_HEADERS.length)); f.setRowHeight(1, 36);
+  [220, 110, 120, 54, 120, 54, 120, 54, 120, 54, 120, 54, 120, 54, 200].forEach(function(w, i) { f.setColumnWidth(i + 1, w); });
+  f.setRowHeights(2, FIGHT_ROWS, 28);
+  f.getRange(2, 1, FIGHT_ROWS, 1).setFontWeight('bold').setFontColor(C_.gold);
+  f.getRange(2, 2, FIGHT_ROWS, 1).setFontColor(C_.muted).setHorizontalAlignment('center');
+  f.getRange(2, 3, FIGHT_ROWS, 1).setFontWeight('bold');
+  [4, 6, 8, 10, 12, 14].forEach(function(c) { f.getRange(2, c, FIGHT_ROWS, 1).setHorizontalAlignment('center').setBackground(C_.card).setFontWeight('bold').setFontColor(C_.gold); });
+  f.getRange(2, 15, FIGHT_ROWS, 1).setFontColor(C_.muted).setFontSize(9);
+  gridLines_(f.getRange(2, 1, FIGHT_ROWS, FIGHT_HEADERS.length));
   f.getRange(2, 1, FIGHT_ROWS, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInRange(s.trainers.getRange('C2:C'), true).setAllowInvalid(true).build());
   f.getRange(2, 2, FIGHT_ROWS, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(SPLITS, true).setAllowInvalid(true).build());
   var names = SpreadsheetApp.newDataValidation().requireValueInRange(pk.getRange(colLetter(COL.name) + '2:' + colLetter(COL.name)), true).setAllowInvalid(true).build();
   [3, 5, 7, 9, 11, 13].forEach(function(c) { f.getRange(2, c, FIGHT_ROWS, 1).setDataValidation(names); });
-  f.getRange(1, 1).setNote('Choisis le dresseur dans la liste : le split se remplit tout seul. Mets ensuite le lead et chaque Pokémon utilisé avec ses frags.');
+  f.getRange(1, 1).setNote('Rempli automatiquement à chaque combat gagné (lead et frags compris). Tu peux corriger à la main : tes valeurs ne sont jamais écrasées.');
 
-  // --- 🌿 Rencontres / 🎯 Dresseurs / 🎒 Objets
-  [[s.encounters, ENC_HEADERS, [170, 150, 95, 52, 150, 60, 60, 230, 130]], [s.trainers, TRAINER_HEADERS, [100, 160, 250, 30, 52, 130, 45, 120, 120, 75, 340, 55, 65, 320]],
-   [s.items, ITEM_HEADERS, [180, 200, 460, 85]], [s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
-    p[0].setFrozenRows(1); header_(p[0].getRange(1, 1, 1, p[1].length)); p[0].setRowHeight(1, 32);
+  // --- 🌿 Rencontres / 🎯 Dresseurs / 🎒 Objets / 📦 Archives
+  [[s.encounters, ENC_HEADERS, [170, 150, 100, 56, 150, 64, 64, 240, 140]], [s.trainers, TRAINER_HEADERS, [100, 150, 240, 34, 56, 130, 50, 120, 120, 80, 330, 60, 70, 320]],
+   [s.items, ITEM_HEADERS, [190, 210, 480, 90]], [s.archive, ARCHIVE_HEADERS, [80, 130, 120, 120, 150, 55, 110, 55, 55, 65, 180]]].forEach(function(p) {
+    paintSheet_(p[0], p[1].length);
+    p[0].setFrozenRows(1); tableHeader_(p[0].getRange(1, 1, 1, p[1].length)); p[0].setRowHeight(1, 36);
     p[2].forEach(function(w, i) { p[0].setColumnWidth(i + 1, w); });
-    p[0].getRange(2, 1, Math.max(p[0].getMaxRows() - 1, 1), p[1].length).setVerticalAlignment('middle').setFontSize(10);
   });
   s.encounters.getRange('F2:G').setHorizontalAlignment('center');
-  s.encounters.getRange('G2:G').setNumberFormat('0.##"%"');
-  s.encounters.getRange('H1:I1').setBackground('#0f766e');
-  s.encounters.setRowHeights(2, Math.max(s.encounters.getMaxRows() - 1, 1), 34);
+  s.encounters.getRange('G2:G').setNumberFormat('0.##"%"').setFontWeight('bold').setFontColor(C_.gold);
+  s.encounters.getRange('A2:A').setFontWeight('bold');
+  s.encounters.getRange('H1:I1').setBackground(C_.green).setFontColor(C_.greenInk);
+  s.encounters.setRowHeights(2, Math.max(s.encounters.getMaxRows() - 1, 1), 40);
   s.trainers.getRange('D2:D').setHorizontalAlignment('center').setFontColor(C_.muted);
   s.trainers.getRange('G2:G').setHorizontalAlignment('center').setFontWeight('bold');
   s.trainers.getRange('L2:M').setHorizontalAlignment('center').setFontWeight('bold');
-  s.trainers.getRange('L1:L1').setBackground('#0f766e');
-  s.trainers.getRange('N1:N1').setBackground('#15803d');
-  s.trainers.getRange('K2:K').setWrap(true);
-  s.trainers.getRange('N2:N').setWrap(true).setFontColor('#15803d').setFontWeight('bold');
-  s.trainers.setRowHeights(2, Math.max(s.trainers.getMaxRows() - 1, 1), 34);
-  s.items.getRange(1, 4).setBackground('#b7791f');
-  s.items.getRange('A2:A').setFontWeight('bold').setFontColor(C_.navy2);
-  s.items.getRange('C2:C').setWrap(true);
+  s.trainers.getRange('L1:L1').setBackground(C_.green).setFontColor(C_.greenInk);
+  s.trainers.getRange('N1:N1').setBackground(C_.orange).setFontColor(C_.orangeInk);
+  s.trainers.getRange('K2:K').setWrap(true).setFontSize(9);
+  s.trainers.getRange('N2:N').setWrap(true).setFontColor(C_.orangeInk).setFontWeight('bold');
+  s.trainers.getRange('A2:B').setFontColor(C_.muted);
+  s.trainers.setRowHeights(2, Math.max(s.trainers.getMaxRows() - 1, 1), 40);
+  s.items.getRange(1, 4).setBackground(C_.manual);
+  s.items.getRange('A2:A').setFontWeight('bold').setFontColor(C_.gold);
+  s.items.getRange('B2:B').setFontWeight('bold');
+  s.items.getRange('C2:C').setWrap(true).setFontColor(C_.muted);
+  s.items.getRange('D2:D').setHorizontalAlignment('center');
+  s.items.setRowHeights(2, Math.max(s.items.getMaxRows() - 1, 1), 26);
 }
 
 // ---------------------------------------------------------------- Import officiel
@@ -836,9 +879,9 @@ function refreshAll(ss, s, summary, force) {
     tryFormat_(function() {
       var who = '', groups = trows.map(function(r) { if (str_(r[2])) who = str_(r[2]); return who; });
       s.trainers.getRange(2, 1, trows.length, TRAINER_HEADERS.length).setBackgrounds(bandColors_(groups, TRAINER_HEADERS.length, function(i) {
-        return fought[key_(groups[i])] ? C_.beaten : (isBoss(groups[i]) ? '#fff7e0' : null);
+        return fought[key_(groups[i])] ? C_.beaten : (isBoss(groups[i]) ? C_.boss : null);
       }));
-      s.trainers.getRange(2, 3, trows.length, 1).setFontWeight('bold');
+      s.trainers.getRange(2, 3, trows.length, 1).setFontWeight('bold').setFontColor(C_.gold);
     });
   }
   var next = nextTrainer(trainers, fought);

@@ -118,7 +118,7 @@ test('première synchro : onglets créés, données officielles importées, stat
   const pk = ss.sheets[S.pokemon], run = ss.sheets[S.run], enc = ss.sheets[S.encounters], tr = ss.sheets[S.trainers], items = ss.sheets[S.items];
   const r2 = row(pk, 2);
   assert.deepEqual([r2[0], r2[1], r2[4], r2[5], r2[7]], ['12345678-cafebabe', 1, 'Torchic', 'Pyro', 'Équipe']);
-  assert.equal(r2[3].sprite, 'https://play.pokemonshowdown.com/sprites/gen5/torchic.png', 'sprite à côté du nom');
+  assert.equal(r2[3], '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/torchic.png")', 'sprite à côté du nom');
   assert.deepEqual(r2.slice(10, 17), [31, 30, 29, 27, 26, 28, 28.5]);
   assert.equal(row(pk, 5)[7], 'Mort');
   // Tableau de bord
@@ -168,7 +168,7 @@ test('synchros suivantes : mise à jour sur place, colonnes manuelles intactes, 
   }), new Date());
   assert.equal(pk.getLastRow(), 5, 'aucune ligne en double');
   assert.deepEqual([row(pk, 2)[4], row(pk, 2)[6], row(pk, 2)[1]], ['Combusken', 15, 1]);
-  assert.equal(row(pk, 2)[3].sprite, 'https://play.pokemonshowdown.com/sprites/gen5/combusken.png', 'sprite mis à jour à l\'évolution');
+  assert.equal(row(pk, 2)[3], '=IMAGE("https://play.pokemonshowdown.com/sprites/gen5/combusken.png")', 'sprite mis à jour à l\'évolution');
   assert.equal(row(pk, 3)[7], 'Mort');
   assert.equal(v(pk, 3, C.deathCause), 'Youngster Ren', 'saisie manuelle conservée');
   assert.equal(row(pk, 4)[7], 'Absent');
